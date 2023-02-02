@@ -51,7 +51,6 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
   public HomeScene(Pane root, AppWindow appWindow, double width, double height) {
     super(root, appWindow, width, height);
     this.appWindow = appWindow;
-
   }
 
   /**
