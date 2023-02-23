@@ -1,5 +1,4 @@
-package seg.group13;
-import org.apache.logging.log4j.Level;
+package comp2211.seg;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
