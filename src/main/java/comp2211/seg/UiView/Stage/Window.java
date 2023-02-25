@@ -72,8 +72,8 @@ public class Window {
    *
    * @return scene
    */
-  public Scene getScene() {
-    return scene;
+  public Stage getStage() {
+    return stage;
   }
 
   /**

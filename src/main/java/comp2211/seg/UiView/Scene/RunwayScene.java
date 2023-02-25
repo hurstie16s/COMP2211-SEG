@@ -72,8 +72,12 @@ public class RunwayScene extends SceneAbstract{
       angley = angleYProperty.get();
     });
     setOnMouseDragged(event ->{
-      angleXProperty.set(anglex - (y-event.getSceneY()));
-      angleYProperty.set(angley - (x-event.getSceneX()));
+      angleXProperty.set(anglex - y + event.getSceneY());
+      angleYProperty.set(angley + x - event.getSceneX());
+    });
+    setOnScroll(event -> {
+      camera.translateZProperty().set(camera.getTranslateZ()+event.getDeltaY());
+
     });
   }
 
@@ -82,7 +86,7 @@ public class RunwayScene extends SceneAbstract{
     material.setDiffuseMap(new Image(new FileInputStream("src/main/resources/images/runway.jpg")));
     //import these from runway somehow
     double width = 30;
-    double height = 100;
+    double height = 300;
     Box box = new Box(width,height,1);
     box.setMaterial(material);
     return box;
@@ -99,10 +103,10 @@ public class RunwayScene extends SceneAbstract{
       Rotate yRotate;
       root.getTransforms().addAll(
               xRotate = new Rotate(0,Rotate.X_AXIS),
-              yRotate = new Rotate(0,Rotate.Y_AXIS)
+              yRotate = new Rotate(0,Rotate.Z_AXIS)
       );
-      xRotate.angleProperty().bindBidirectional(angleXProperty);
-      yRotate.angleProperty().bindBidirectional(angleYProperty);
+      xRotate.angleProperty().bind(angleXProperty);
+      yRotate.angleProperty().bind(angleYProperty);
 
       root.getChildren().add(makeRunway());
     } catch (FileNotFoundException e) {
