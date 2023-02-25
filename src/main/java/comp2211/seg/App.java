@@ -27,7 +27,7 @@ public class App extends Application {
 
     instance = this;
     this.stage = stage;
-
+    //
     displayHomeView();
   }
 
