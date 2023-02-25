@@ -2,10 +2,10 @@ package comp2211.seg.UiView.Stage;
 
 import comp2211.seg.App;
 import comp2211.seg.UiView.Scene.HomeScene;
+import comp2211.seg.UiView.Scene.RunwayScene;
 import comp2211.seg.UiView.Scene.SceneAbstract;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -22,6 +22,8 @@ public class Window {
   private SceneAbstract currentScene;
   private Scene scene;
 
+  public Pane root;
+
   public Window(Stage stage, int width, int height) {
     this.stage = stage;
     this.width = width;
@@ -29,12 +31,7 @@ public class Window {
 
     // Setup window
     setupStage();
-    setupDefaultScene();
-    startHomeScene();
-  }
-
-  public void startHomeScene() {
-    loadScene(new HomeScene(this));
+    startRunwayScene();
   }
 
   private void setupResources() {
@@ -47,21 +44,22 @@ public class Window {
     stage.setOnCloseRequest(ev -> App.getInstance().shutdown());
   }
 
-  /** Setup the default scene (an empty black scene) when no scene is loaded */
-  public void setupDefaultScene() {
-    this.scene = new Scene(new Pane(), width, height, Color.BLACK);
-    stage.setScene(this.scene);
+  /** Start the main/home scene */
+  public void startHomeScene() {
+    loadScene(new HomeScene(new Pane(width,height)));
+  }
+  /** Start the runway scene */
+  public void startRunwayScene() {
+    loadScene(new RunwayScene(new Pane(width,height)));
   }
 
   public void loadScene(SceneAbstract newScene) {
     // Cleanup remains of the previous scene
     cleanup();
-
     // Create the new scene and set it up
     newScene.build();
     currentScene = newScene;
-    scene = newScene.setScene();
-    stage.setScene(scene);
+    stage.setScene(currentScene);
 
     // Initialise the scene when ready
     Platform.runLater(() -> currentScene.initialise());
@@ -82,7 +80,7 @@ public class Window {
    * @return width
    */
   public int getWidth() {
-    return this.width;
+    return width;
   }
 
   /**
@@ -91,11 +89,11 @@ public class Window {
    * @return height
    */
   public int getHeight() {
-    return this.height;
+    return height;
   }
   public void cleanup(){
     //clearlisteners
-    currentScene = null;
+    //root.getChildren().removeAll(root.getChildren());
   }
 }
 

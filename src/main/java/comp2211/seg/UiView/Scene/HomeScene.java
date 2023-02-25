@@ -1,6 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.App;
+import comp2211.seg.UiView.Stage.Pane;
 import comp2211.seg.UiView.Stage.Window;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
@@ -11,14 +12,14 @@ public class HomeScene extends SceneAbstract{
   private static final Logger logger = LogManager.getLogger(HomeScene.class);
 
   private static BorderPane borderPane;
-  public HomeScene(Window window) {
-    super(window);
-    logger.info("creating");
+
+  public HomeScene(Pane root) {
+    super(root);
   }
 
   @Override
   public void initialise() {
-    scene.setOnKeyPressed((keyEvent -> {
+    setOnKeyPressed((keyEvent -> {
       if(keyEvent.getCode().equals(KeyCode.ESCAPE)) {
         App.getInstance().shutdown();
       }

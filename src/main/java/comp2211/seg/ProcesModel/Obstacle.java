@@ -1,4 +1,4 @@
 package comp2211.seg.ProcesModel;
 
-public class Obsticle {
+public class Obstacle {
 }

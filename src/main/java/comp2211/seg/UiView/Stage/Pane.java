@@ -12,8 +12,8 @@ public class Pane extends StackPane {
 
   private static final Logger logger = LogManager.getLogger(Pane.class);
 
-  private final int width;
-  private final int height;
+  private final double width;
+  private final double height;
   private double scalar = 1;
   private final boolean autoScale = true;
 
@@ -23,10 +23,12 @@ public class Pane extends StackPane {
    * @param width width
    * @param height height
    */
-  public Pane(int width, int height) {
+  public Pane(double width, double height) {
     super();
     this.width = width;
     this.height = height;
+    setMaxHeight(height);
+    setMaxWidth(width);
 
     //getStyleClass().add("pane");
     setAlignment(Pos.TOP_LEFT);
@@ -80,5 +82,12 @@ public class Pane extends StackPane {
     scale.setPivotX(0);
     scale.setPivotY(0);
     getTransforms().setAll(translate, scale);
+  }
+  public double getParentWidth(){
+    return width;
+  }
+
+  public double getParentHeight(){
+    return width;
   }
 }
