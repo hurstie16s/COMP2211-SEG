@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="Started on MVC.V in progress" />
+    <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/comp2211/seg/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/comp2211/seg/App.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,7 +47,7 @@
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
         <option name="accountId" value="d02c298a-90d7-4c91-bbbc-805ea9e62dba" />
-        <option name="url" value="https://github.com/AleksPilski/COMP2211-SEG.git" />
+        <option name="url" value="https://github.com/hurstie16s/COMP2211-SEG" />
       </UrlAndAccount>
     </option>
   </component>
@@ -176,7 +179,7 @@
       <workItem from="1677250672378" duration="11863000" />
       <workItem from="1677267820387" duration="122000" />
       <workItem from="1677289034610" duration="6789000" />
-      <workItem from="1677296106464" duration="2935000" />
+      <workItem from="1677296106464" duration="3292000" />
     </task>
     <task id="LOCAL-00001" summary="Initial setup of environment">
       <created>1677120536038</created>
@@ -241,7 +244,21 @@
       <option name="project" value="LOCAL" />
       <updated>1677298728856</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Started on MVC.V in progress">
+      <created>1677299286506</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1677299286506</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Started on MVC.V in progress">
+      <created>1677299335467</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1677299335467</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
