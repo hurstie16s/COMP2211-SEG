@@ -28,6 +28,7 @@ public class RunwayScene extends SceneAbstract{
   protected Group root;
   protected Window window;
   protected Camera camera;
+  private Boolean view = false;
 
   private double x;
   private double y;
@@ -46,6 +47,7 @@ public class RunwayScene extends SceneAbstract{
 
   @Override
   public void initialise() {
+    /**
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
@@ -79,6 +81,25 @@ public class RunwayScene extends SceneAbstract{
       camera.translateZProperty().set(camera.getTranslateZ()+event.getDeltaY());
 
     });
+     */
+    setOnKeyPressed((keyEvent -> {
+      switch (keyEvent.getCode()){
+        case ESCAPE:
+          window.startHomeScene();
+          break;
+        case T:
+          view = !view;
+          if (view){
+            angleXProperty.set(0);
+            angleYProperty.set(90);
+          }
+          else{
+            angleXProperty.set(90);
+            angleYProperty.set(90);
+
+          }
+      }
+    }));
   }
 
   public Box makeRunway() throws FileNotFoundException {
@@ -98,6 +119,7 @@ public class RunwayScene extends SceneAbstract{
       camera = new PerspectiveCamera();
       camera.translateXProperty().set(-window.getWidth()/2);
       camera.translateYProperty().set(-window.getHeight()/2);
+      angleYProperty.set(90);
       setCamera(camera);
       Rotate xRotate;
       Rotate yRotate;
