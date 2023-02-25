@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 public class Pane extends StackPane {
 
   private static final Logger logger = LogManager.getLogger(Pane.class);
-
   private final double width;
   private final double height;
   private double scalar = 1;
@@ -52,7 +51,6 @@ public class Pane extends StackPane {
     if (!autoScale) {
       return;
     }
-
     // Work out the scale factor height and width
     var scaleFactorHeight = getHeight() / height;
     var scaleFactorWidth = getWidth() / width;
