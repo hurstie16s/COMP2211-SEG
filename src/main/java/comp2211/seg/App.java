@@ -33,8 +33,8 @@ public class App extends Application {
 
   public void displayHomeView() {
     logger.info("Opening Window");
-    int width = 400;
-    int height = 400;
+    int width = 1920;
+    int height = 1080;
     new Window(stage, width, height);
     stage.show();
 

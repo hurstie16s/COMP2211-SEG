@@ -85,8 +85,8 @@ public class RunwayScene extends SceneAbstract{
     PhongMaterial material = new PhongMaterial();
     material.setDiffuseMap(new Image(new FileInputStream("src/main/resources/images/runway.jpg")));
     //import these from runway somehow
-    double width = 30;
-    double height = 300;
+    double width = 100;
+    double height = 1100;
     Box box = new Box(width,height,1);
     box.setMaterial(material);
     return box;

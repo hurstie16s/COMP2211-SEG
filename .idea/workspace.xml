@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="added keyboard control for panning, and mouse control for rotation">
+    <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="fixed rotation and added scrolling (for zoom)">
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/App.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/RunwayScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/RunwayScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/Window.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/comp2211/seg/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/comp2211/seg/App.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -299,7 +301,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677312877416</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="fixed rotation and added scrolling (for zoom)">
+      <created>1677313703916</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1677313703916</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -355,7 +364,8 @@
     <MESSAGE value="Reworked scenes to make the code simpler" />
     <MESSAGE value="created the runway view and added a 3d runway&#10;(can't yet rotate or pan/scroll)" />
     <MESSAGE value="added keyboard control for panning, and mouse control for rotation" />
-    <option name="LAST_COMMIT_MESSAGE" value="added keyboard control for panning, and mouse control for rotation" />
+    <MESSAGE value="fixed rotation and added scrolling (for zoom)" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed rotation and added scrolling (for zoom)" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/COMP2211_SEG$App__1_.ic" NAME="App (1) Coverage Results" MODIFIED="1677250886729" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
