@@ -1,21 +1,14 @@
 package comp2211.seg.UiView.Scene;
 
-import comp2211.seg.App;
-import comp2211.seg.UiView.Stage.Pane;
-import comp2211.seg.UiView.Stage.Window;
+import comp2211.seg.UiView.Stage.AppWindow;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Camera;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +19,7 @@ import java.io.FileNotFoundException;
 public class RunwayScene extends SceneAbstract{
   private static final Logger logger = LogManager.getLogger(RunwayScene.class);
   protected Group root;
-  protected Window window;
+  protected AppWindow appWindow;
   protected Camera camera;
   private Boolean view = false;
 
@@ -38,10 +31,10 @@ public class RunwayScene extends SceneAbstract{
   private final DoubleProperty angleYProperty = new SimpleDoubleProperty();
 
 
-  public RunwayScene(Group root, Window window) {
-    super(root, window);
+  public RunwayScene(Group root, AppWindow appWindow) {
+    super(root, appWindow);
     this.root = root;
-    this.window = window;
+    this.appWindow = appWindow;
   }
 
 
@@ -51,7 +44,7 @@ public class RunwayScene extends SceneAbstract{
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
-          window.startHomeScene();
+          appWindow.startHomeScene();
           break;
         case W:
           camera.translateYProperty().set(camera.getTranslateY()+10);
@@ -85,7 +78,7 @@ public class RunwayScene extends SceneAbstract{
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
-          window.startHomeScene();
+          appWindow.startHomeScene();
           break;
         case T:
           view = !view;
@@ -117,8 +110,8 @@ public class RunwayScene extends SceneAbstract{
     try {
 
       camera = new PerspectiveCamera();
-      camera.translateXProperty().set(-window.getWidth()/2);
-      camera.translateYProperty().set(-window.getHeight()/2);
+      camera.translateXProperty().set(-appWindow.getWidth()/2);
+      camera.translateYProperty().set(-appWindow.getHeight()/2);
       angleYProperty.set(90);
       setCamera(camera);
       Rotate xRotate;

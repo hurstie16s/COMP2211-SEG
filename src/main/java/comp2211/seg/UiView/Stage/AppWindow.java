@@ -7,15 +7,13 @@ import comp2211.seg.UiView.Scene.SceneAbstract;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Window {
+public class AppWindow {
 
-  private static final Logger logger = LogManager.getLogger(Window.class);
+  private static final Logger logger = LogManager.getLogger(AppWindow.class);
 
   private final Stage stage;
   private final int width;
@@ -25,21 +23,22 @@ public class Window {
 
   public Pane root;
 
-  public Window(Stage stage, int width, int height) {
+  public AppWindow(Stage stage, int width, int height) {
     this.stage = stage;
     this.width = width;
     this.height = height;
 
-    // Setup window
+    // Setup appWindow
     setupStage();
-    startRunwayScene();
+    startHomeScene();
+    //startRunwayScene();
   }
 
   private void setupResources() {
     logger.info("Loading resources"); //no resources used atm i.e. CSS/FXML
   }
   public void setupStage() {
-    stage.setTitle("Window");
+    stage.setTitle("AppWindow");
     stage.setMinWidth(width);
     stage.setMinHeight(height);
     stage.setOnCloseRequest(ev -> App.getInstance().shutdown());
@@ -77,7 +76,7 @@ public class Window {
   }
 
   /**
-   * Get the width of the Game Window
+   * Get the width of the Game AppWindow
    *
    * @return width
    */
@@ -86,7 +85,7 @@ public class Window {
   }
 
   /**
-   * Get the height of the Game Window
+   * Get the height of the Game AppWindow
    *
    * @return height
    */

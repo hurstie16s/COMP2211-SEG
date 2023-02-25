@@ -1,10 +1,13 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.App;
+import comp2211.seg.UiView.Stage.AppWindow;
 import comp2211.seg.UiView.Stage.Pane;
-import comp2211.seg.UiView.Stage.Window;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,8 +16,12 @@ public class HomeScene extends SceneAbstract{
 
   private static BorderPane borderPane;
 
-  public HomeScene(Pane root,Window window) {
-    super(root, window);
+  public AppWindow appWindow;
+
+  public HomeScene(Pane root, AppWindow appWindow) {
+    super(root,appWindow);
+    this.appWindow = appWindow;
+
   }
 
   @Override
@@ -28,7 +35,17 @@ public class HomeScene extends SceneAbstract{
   public void build() {
     super.build();
     logger.info("building");
+    mainPane.getStyleClass().add("home-background");
     borderPane = new BorderPane();
     mainPane.getChildren().add(borderPane);
+
+    var buttonBox = new VBox();
+    buttonBox.setAlignment(Pos.CENTER);
+    var nextSceneButton = new Button("Next");
+    buttonBox.getChildren().addAll(nextSceneButton);
+    borderPane.setCenter(buttonBox);
+
+
+    nextSceneButton.setOnAction((e) -> appWindow.startRunwayScene());
   }
 }

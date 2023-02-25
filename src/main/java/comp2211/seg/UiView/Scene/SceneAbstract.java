@@ -1,11 +1,9 @@
 package comp2211.seg.UiView.Scene;
 
+import comp2211.seg.UiView.Stage.AppWindow;
 import comp2211.seg.UiView.Stage.Pane;
-import comp2211.seg.UiView.Stage.Window;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
@@ -21,18 +19,18 @@ public abstract class SceneAbstract extends Scene{
 
   protected StackPane mainPane;
 
-  public SceneAbstract(Pane root, Window window) {
-    super(root, window.getWidth(), window.getHeight(),Color.BLACK);
+  public SceneAbstract(Pane root, AppWindow appWindow) {
+    super(root, appWindow.getWidth(), appWindow.getHeight(),Color.BLACK);
     this.root = root;
   }
-  public SceneAbstract(Parent parent, Window window) {
-    super(parent, window.getWidth(), window.getHeight(),Color.BLACK);
+  public SceneAbstract(Parent parent, AppWindow appWindow) {
+    super(parent, appWindow.getWidth(), appWindow.getHeight(),Color.BLACK);
 
   }
 
   public abstract void initialise();
   public void build() {
-    getStylesheets().add(Objects.requireNonNull(getClass().getResource("/stylesheet.css")).toExternalForm());
+    getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/stylesheet.css")).toExternalForm());
     mainPane = new StackPane();
     mainPane.setMaxWidth(getWidth());
     mainPane.setMaxHeight(getHeight());
