@@ -88,6 +88,6 @@ public class Pane extends StackPane {
   }
 
   public double getParentHeight(){
-    return width;
+    return height;
   }
 }

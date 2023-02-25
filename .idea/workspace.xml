@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="fixed rotation and added scrolling (for zoom)">
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/RunwayScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/RunwayScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/Pane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/Pane.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/comp2211/seg/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/comp2211/seg/App.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,7 +40,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
