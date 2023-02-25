@@ -1,0 +1,4 @@
+.home-background {
+    -fx-background-image: url("../resources/images/heathrowRunway.jpg");
+    -fx-background-size: cover;
+}
