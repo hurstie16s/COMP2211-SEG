@@ -55,7 +55,7 @@ public class Window {
 
   public void loadScene(SceneAbstract newScene) {
     // Cleanup remains of the previous scene
-    // cleanup();
+    cleanup();
 
     // Create the new scene and set it up
     newScene.build();
@@ -92,6 +92,10 @@ public class Window {
    */
   public int getHeight() {
     return this.height;
+  }
+  public void cleanup(){
+    //clearlisteners
+    currentScene = null;
   }
 }
 

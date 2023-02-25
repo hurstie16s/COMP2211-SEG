@@ -1,11 +1,9 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.App;
-import comp2211.seg.UiView.Stage.Pane;
 import comp2211.seg.UiView.Stage.Window;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +28,6 @@ public class HomeScene extends SceneAbstract{
     super.build();
     logger.info("building");
     borderPane = new BorderPane();
-    stackPane.getChildren().add(borderPane);
+    mainPane.getChildren().add(borderPane);
   }
 }

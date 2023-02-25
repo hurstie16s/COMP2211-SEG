@@ -3,7 +3,6 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.UiView.Stage.Pane;
 import comp2211.seg.UiView.Stage.Window;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +18,7 @@ public abstract class SceneAbstract {
   protected Pane root;
   protected Scene scene;
 
-  protected StackPane stackPane;
+  protected StackPane mainPane;
 
   public SceneAbstract(Window window) {
     this.window = window;
@@ -28,11 +27,10 @@ public abstract class SceneAbstract {
   public void build() {
     root = new Pane(window.getWidth(), window.getHeight());
 
-    stackPane = new StackPane();
-    stackPane.setMaxWidth(window.getWidth());
-    stackPane.setMaxHeight(window.getHeight());
-    root.getChildren().add(stackPane);
-
+    mainPane = new StackPane();
+    mainPane.setMaxWidth(window.getWidth());
+    mainPane.setMaxHeight(window.getHeight());
+    root.getChildren().add(mainPane);
 
   }
 
