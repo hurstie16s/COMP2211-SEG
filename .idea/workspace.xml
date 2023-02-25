@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="Reworked scenes to make the code simpler">
+    <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="created the runway view and added a 3d runway&#10;(can't yet rotate or pan/scroll)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/HomeScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/HomeScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/RunwayScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/RunwayScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/SceneAbstract.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/SceneAbstract.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/Window.java" afterDir="false" />
@@ -87,6 +88,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\david\IdeaProjects\runwaytool\src\main\resources\images" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="comp2211.seg.UiView.Stage" />
     </key>
@@ -283,7 +287,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677309180491</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="created the runway view and added a 3d runway&#10;(can't yet rotate or pan/scroll)">
+      <created>1677310931752</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1677310931752</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -337,7 +348,8 @@
     <MESSAGE value="Started on MVC.V in progress" />
     <MESSAGE value="clearup added" />
     <MESSAGE value="Reworked scenes to make the code simpler" />
-    <option name="LAST_COMMIT_MESSAGE" value="Reworked scenes to make the code simpler" />
+    <MESSAGE value="created the runway view and added a 3d runway&#10;(can't yet rotate or pan/scroll)" />
+    <option name="LAST_COMMIT_MESSAGE" value="created the runway view and added a 3d runway&#10;(can't yet rotate or pan/scroll)" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/COMP2211_SEG$App__1_.ic" NAME="App (1) Coverage Results" MODIFIED="1677250886729" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">

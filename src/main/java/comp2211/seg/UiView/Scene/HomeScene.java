@@ -13,8 +13,8 @@ public class HomeScene extends SceneAbstract{
 
   private static BorderPane borderPane;
 
-  public HomeScene(Pane root) {
-    super(root);
+  public HomeScene(Pane root,Window window) {
+    super(root, window);
   }
 
   @Override

@@ -47,12 +47,12 @@ public class Window {
 
   /** Start the main/home scene */
   public void startHomeScene() {
-    loadScene(new HomeScene(new Pane(width,height)));
+    loadScene(new HomeScene(new Pane(width,height),this));
   }
   /** Start the runway scene */
   public void startRunwayScene() {
     Group group = new Group();
-    loadScene(new RunwayScene(group,width,height));
+    loadScene(new RunwayScene(group,this));
   }
 
   public void loadScene(SceneAbstract newScene) {

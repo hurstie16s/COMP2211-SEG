@@ -21,12 +21,13 @@ public abstract class SceneAbstract extends Scene{
 
   protected StackPane mainPane;
 
-  public SceneAbstract(Pane root) {
-    super(root, root.getParentWidth(), root.getParentHeight(),Color.BLACK);
+  public SceneAbstract(Pane root, Window window) {
+    super(root, window.getWidth(), window.getHeight(),Color.BLACK);
     this.root = root;
   }
-  public SceneAbstract(Parent parent, double width,double height) {
-    super(parent, width, height,Color.BLACK);
+  public SceneAbstract(Parent parent, Window window) {
+    super(parent, window.getWidth(), window.getHeight(),Color.BLACK);
+
   }
 
   public abstract void initialise();
