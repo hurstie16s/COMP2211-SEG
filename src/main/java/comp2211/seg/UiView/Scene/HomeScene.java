@@ -28,6 +28,7 @@ public class HomeScene extends SceneAbstract{
   }
   public void build() {
     super.build();
+    logger.info("building");
     borderPane = new BorderPane();
     stackPane.getChildren().add(borderPane);
   }

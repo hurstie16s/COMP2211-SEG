@@ -26,7 +26,6 @@ public abstract class SceneAbstract {
   }
   public abstract void initialise();
   public void build() {
-    logger.info("building");
     root = new Pane(window.getWidth(), window.getHeight());
 
     stackPane = new StackPane();
