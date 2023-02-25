@@ -8,9 +8,14 @@ import org.apache.logging.log4j.Logger;
 
 public class App extends Application {
 
+  /** Base resolution width */
+  private final int width = 1280;//1920
+  /** Base resolution height */
+  private final int height = 720;//1080
+  private static final Logger logger = LogManager.getLogger(App.class);
   private static App instance;
   private Stage stage;
-  private static final Logger logger = LogManager.getLogger(App.class);
+
 
   public static void main(String[] args) {
     logger.info("Starting");
@@ -33,8 +38,6 @@ public class App extends Application {
 
   public void displayHomeView() {
     logger.info("Opening Window");
-    int width = 1920;
-    int height = 1080;
     new Window(stage, width, height);
     stage.show();
 

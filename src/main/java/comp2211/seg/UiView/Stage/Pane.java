@@ -7,7 +7,6 @@ import javafx.scene.transform.Translate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 public class Pane extends StackPane {
 
   private static final Logger logger = LogManager.getLogger(Pane.class);
@@ -88,6 +87,6 @@ public class Pane extends StackPane {
   }
 
   public double getParentHeight(){
-    return width;
+    return height;
   }
 }
