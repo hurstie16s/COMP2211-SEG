@@ -28,7 +28,6 @@ public class Pane extends StackPane {
     this.height = height;
     setMaxHeight(height);
     setMaxWidth(width);
-
     //getStyleClass().add("pane");
     setAlignment(Pos.TOP_LEFT);
   }
