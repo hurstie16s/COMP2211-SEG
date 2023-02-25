@@ -5,6 +5,7 @@ import comp2211.seg.UiView.Scene.HomeScene;
 import comp2211.seg.UiView.Scene.RunwayScene;
 import comp2211.seg.UiView.Scene.SceneAbstract;
 import javafx.application.Platform;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -50,7 +51,8 @@ public class Window {
   }
   /** Start the runway scene */
   public void startRunwayScene() {
-    loadScene(new RunwayScene(new Pane(width,height)));
+    Group group = new Group();
+    loadScene(new RunwayScene(group,width,height));
   }
 
   public void loadScene(SceneAbstract newScene) {

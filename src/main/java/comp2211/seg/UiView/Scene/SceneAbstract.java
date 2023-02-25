@@ -25,6 +25,9 @@ public abstract class SceneAbstract extends Scene{
     super(root, root.getParentWidth(), root.getParentHeight(),Color.BLACK);
     this.root = root;
   }
+  public SceneAbstract(Parent parent, double width,double height) {
+    super(parent, width, height,Color.BLACK);
+  }
 
   public abstract void initialise();
   public void build() {
