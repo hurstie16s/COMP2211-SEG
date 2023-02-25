@@ -1,6 +1,6 @@
 package comp2211.seg;
 
-import comp2211.seg.UiView.HomeView;
+import comp2211.seg.UiView.Stage.Window;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -32,10 +32,10 @@ public class App extends Application {
   }
 
   public void displayHomeView() {
-    logger.info("Opening HomeView");
-    //int width = 200;
-    //int height = 200;
-    new HomeView(stage); //, width, height);
+    logger.info("Opening Window");
+    int width = 400;
+    int height = 400;
+    new Window(stage, width, height);
     stage.show();
 
   }
