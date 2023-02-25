@@ -26,18 +26,8 @@ public class HomeScene extends SceneAbstract{
       }
     }));
   }
-
-  @Override
   public void build() {
-    logger.info("building");
-    root = new Pane(window.getWidth(), window.getHeight());
-
-    var stackPane = new StackPane();
-    stackPane.setMaxWidth(window.getWidth());
-    stackPane.setMaxHeight(window.getHeight());
-    stackPane.getStyleClass().add("home-background");
-    root.getChildren().add(stackPane);
-
+    super.build();
     borderPane = new BorderPane();
     stackPane.getChildren().add(borderPane);
   }

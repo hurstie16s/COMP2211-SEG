@@ -5,8 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/Controller/Control.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/Controller/Interfaces/Temp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/ProcesModel/Obsticle.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/ProcesModel/Runway.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/RunwayScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/comp2211/seg/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/comp2211/seg/App.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/HomeScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/HomeScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/SceneAbstract.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/SceneAbstract.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +26,9 @@
         <option value="Tag Library Descriptor" />
         <option value="XML Properties File" />
         <option value="FxmlFile" />
-        <option value="Class" />
         <option value="CSS File" />
+        <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -37,6 +44,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -179,7 +187,7 @@
       <workItem from="1677250672378" duration="11863000" />
       <workItem from="1677267820387" duration="122000" />
       <workItem from="1677289034610" duration="6789000" />
-      <workItem from="1677296106464" duration="3292000" />
+      <workItem from="1677296106464" duration="5374000" />
     </task>
     <task id="LOCAL-00001" summary="Initial setup of environment">
       <created>1677120536038</created>
@@ -258,7 +266,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677299335467</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Started on MVC.V in progress">
+      <created>1677299524412</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1677299524412</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
