@@ -11,14 +11,14 @@ import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class HomeScene extends SceneAbstract{
-  private static final Logger logger = LogManager.getLogger(HomeScene.class);
+public class InputScene extends SceneAbstract{
+  private static final Logger logger = LogManager.getLogger(InputScene.class);
 
   private static BorderPane borderPane;
 
   public AppWindow appWindow;
 
-  public HomeScene(Pane root, AppWindow appWindow) {
+  public InputScene(Pane root, AppWindow appWindow) {
     super(root,appWindow);
     this.appWindow = appWindow;
 

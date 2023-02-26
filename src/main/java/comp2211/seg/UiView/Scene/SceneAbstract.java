@@ -31,7 +31,13 @@ public abstract class SceneAbstract extends Scene{
 
 
   public abstract void initialise();
+
+  /**
+   * Generic build method to create the basic requirements for a JavaFX Scene
+   * This is used to define a generic structure used by all the children
+   */
   public void build() {
+    logger.info("building1234");
     getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/stylesheet.css")).toExternalForm());
     mainPane = new StackPane();
     mainPane.setMaxWidth(width);
@@ -44,10 +50,8 @@ public abstract class SceneAbstract extends Scene{
 
     root.setMaxWidth(width);
     root.setMaxHeight(height);
-
     root.setMinWidth(width);
     root.setMinHeight(height);
-
   }
 
 }

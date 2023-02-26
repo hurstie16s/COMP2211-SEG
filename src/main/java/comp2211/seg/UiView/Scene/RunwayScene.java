@@ -50,7 +50,7 @@ public class RunwayScene extends SceneAbstract {
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
-          appWindow.startHomeScene();
+          appWindow.startMainScene();
           break;
         case W:
           group.translateYProperty().set(group.getTranslateY()+10);
@@ -88,7 +88,7 @@ public class RunwayScene extends SceneAbstract {
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
-          appWindow.startHomeScene();
+          appWindow.startMainScene();
           break;
         case T:
           toggleView();
@@ -147,10 +147,9 @@ public class RunwayScene extends SceneAbstract {
     box.setMaterial(material);
     return box;
   }
-
+  @Override
   public void build() {
     try {
-
       camera = new PerspectiveCamera();
       angleXProperty.set(-90);
       angleYProperty.set(-180);

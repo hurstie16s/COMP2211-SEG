@@ -1,7 +1,7 @@
 package comp2211.seg.UiView.Stage;
 
 import comp2211.seg.App;
-import comp2211.seg.UiView.Scene.HomeScene;
+import comp2211.seg.UiView.Scene.InputScene;
 import comp2211.seg.UiView.Scene.MainScene;
 import comp2211.seg.UiView.Scene.RunwayScene;
 import comp2211.seg.UiView.Scene.SceneAbstract;
@@ -46,7 +46,7 @@ public class AppWindow {
 
   /** Start the home scene */
   public void startHomeScene() {
-    loadScene(new HomeScene(new Pane(width,height),this));
+    loadScene(new InputScene(new Pane(width,height),this));
   }
 
   /** Start the main scene */
