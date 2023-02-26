@@ -1,12 +1,15 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.UiView.Stage.AppWindow;
+import comp2211.seg.UiView.Stage.Pane;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
@@ -16,47 +19,53 @@ import org.apache.logging.log4j.Logger;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class RunwayScene extends SceneAbstract{
+public class RunwayScene extends SceneAbstract {
   private static final Logger logger = LogManager.getLogger(RunwayScene.class);
-  protected Group root;
+  protected Group group;
   protected AppWindow appWindow;
-  protected Camera camera;
+  protected PerspectiveCamera camera;
   private Boolean view = false;
 
   private double x;
   private double y;
   private double anglex = 0;
   private double angley = 0;
+  protected double runwaywidth = 1200;
+  protected double runwayheight = 100;
   private final DoubleProperty angleXProperty = new SimpleDoubleProperty();
   private final DoubleProperty angleYProperty = new SimpleDoubleProperty();
+  private final DoubleProperty angleZProperty = new SimpleDoubleProperty();
 
 
-  public RunwayScene(Group root, AppWindow appWindow) {
+  public RunwayScene(Pane root, AppWindow appWindow) {
     super(root, appWindow);
-    this.root = root;
+
+    this.group = new Group();
     this.appWindow = appWindow;
+    width = root.getParentWidth()-20;
+    height = root.getParentHeight()-20;
   }
 
-
-  @Override
-  public void initialise() {
-    /**
+  public void initControls(){
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
           appWindow.startHomeScene();
           break;
         case W:
-          camera.translateYProperty().set(camera.getTranslateY()+10);
+          group.translateYProperty().set(group.getTranslateY()+10);
           break;
         case A:
-          camera.translateXProperty().set(camera.getTranslateX()+10);
+          group.translateXProperty().set(group.getTranslateX()+10);
           break;
         case S:
-          camera.translateYProperty().set(camera.getTranslateY()-10);
+          group.translateYProperty().set(group.getTranslateY()-10);
           break;
         case D:
-          camera.translateXProperty().set(camera.getTranslateX()-10);
+          group.translateXProperty().set(group.getTranslateX()-10);
+          break;
+        case T:
+          toggleView();
           break;
       }
     }));
@@ -64,44 +73,77 @@ public class RunwayScene extends SceneAbstract{
       x = event.getSceneX();
       y = event.getSceneY();
       anglex = angleXProperty.get();
-      angley = angleYProperty.get();
+      angley = angleZProperty.get();
     });
     setOnMouseDragged(event ->{
       angleXProperty.set(anglex - y + event.getSceneY());
-      angleYProperty.set(angley + x - event.getSceneX());
+      angleZProperty.set(angley + x - event.getSceneX());
     });
     setOnScroll(event -> {
       camera.translateZProperty().set(camera.getTranslateZ()+event.getDeltaY());
 
     });
-     */
+  }
+  public void initBaseControls(){
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
           appWindow.startHomeScene();
           break;
         case T:
-          view = !view;
-          if (view){
-            angleXProperty.set(0);
-            angleYProperty.set(90);
-          }
-          else{
-            angleXProperty.set(90);
-            angleYProperty.set(90);
-
-          }
+          toggleView();
+          break;
       }
     }));
+
+  }
+  @Override
+  public void initialise() {
+    initBaseControls();
+  }
+  public void toggleView(){
+
+    view = !view;
+    if (view){
+      angleXProperty.set(0);
+      angleZProperty.set(-90);
+    }
+    else{
+      angleXProperty.set(-90);
+      angleZProperty.set(-90);
+
+    }
   }
 
+  /**
+   * @param x distance from the start of the runway
+   * @param y distance from the centre of the runway (to the left side)
+   * @param w width of the object (from side to side) - in the y axis
+   * @param l length of the object (from start to end) - in the x axis
+   * @param d height of the object
+   * @param color colour of the bounding box
+   */
+  public void addObject(double x,double y,double w,double l,double d,Color color){
+
+    double scaleFactor = width/runwaywidth;
+
+    PhongMaterial material = new PhongMaterial();
+    material.setDiffuseColor(color);
+    //import these from runway somehow
+    Box box = new Box(w*scaleFactor,l*scaleFactor,d*scaleFactor);
+    box.translateYProperty().set((width/2)-(l*scaleFactor/2)-(x*scaleFactor));
+    box.translateXProperty().set(-(y*scaleFactor));
+    box.translateZProperty().set(1+(d*scaleFactor/2));
+    box.setMaterial(material);
+    group.getChildren().add(box);
+
+
+  }
   public Box makeRunway() throws FileNotFoundException {
     PhongMaterial material = new PhongMaterial();
     material.setDiffuseMap(new Image(new FileInputStream("src/main/resources/images/runway.jpg")));
     //import these from runway somehow
-    double width = 100;
-    double height = 1100;
-    Box box = new Box(width,height,1);
+    Box box = new Box(width*runwayheight/runwaywidth,width,1);
     box.setMaterial(material);
     return box;
   }
@@ -110,20 +152,32 @@ public class RunwayScene extends SceneAbstract{
     try {
 
       camera = new PerspectiveCamera();
-      camera.translateXProperty().set(-appWindow.getWidth()/2);
-      camera.translateYProperty().set(-appWindow.getHeight()/2);
-      angleYProperty.set(90);
+      angleXProperty.set(-90);
+      angleYProperty.set(-180);
+      angleZProperty.set(-90);
       setCamera(camera);
       Rotate xRotate;
       Rotate yRotate;
-      root.getTransforms().addAll(
+      Rotate zRotate;
+      group.getTransforms().addAll(
               xRotate = new Rotate(0,Rotate.X_AXIS),
-              yRotate = new Rotate(0,Rotate.Z_AXIS)
+              yRotate = new Rotate(0,Rotate.Y_AXIS),
+              zRotate = new Rotate(0,Rotate.Z_AXIS)
       );
       xRotate.angleProperty().bind(angleXProperty);
       yRotate.angleProperty().bind(angleYProperty);
+      zRotate.angleProperty().bind(angleZProperty);
+      root.getChildren().add(group);
+      root.setMaxWidth(width);
+      root.setMaxHeight(height);
+      root.setMinWidth(width);
+      root.setMinHeight(height);
+      root.setBackground(new Background(new BackgroundFill(Color.BLACK,null,null)));
+      group.translateXProperty().set(width/2-(width*runwayheight/runwaywidth)/2+10);
+      group.translateYProperty().set(height/2-width/2+10);
+      group.getChildren().add(makeRunway());
+      addObject(0,0,100,150,50,Color.AQUA);
 
-      root.getChildren().add(makeRunway());
     } catch (FileNotFoundException e) {
       logger.error(e);
     }

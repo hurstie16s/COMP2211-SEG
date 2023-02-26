@@ -5,19 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/ProcessDataModel/RunwayCalculations.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/style/stylesheet.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/MainScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/Controller/Control.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/Controller/Control.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/ProcesModel/Obstacle.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/ProcesModel/Runway.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/HomeScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/HomeScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/RunwayScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/RunwayScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/SceneAbstract.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/SceneAbstract.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/AppWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/stylesheet.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/comp2211/seg/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/comp2211/seg/App.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/AppWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/AppWindow.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,8 +24,8 @@
         <option value="XML Properties File" />
         <option value="FxmlFile" />
         <option value="CSS File" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>

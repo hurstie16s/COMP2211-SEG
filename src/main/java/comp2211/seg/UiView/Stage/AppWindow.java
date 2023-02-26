@@ -2,10 +2,10 @@ package comp2211.seg.UiView.Stage;
 
 import comp2211.seg.App;
 import comp2211.seg.UiView.Scene.HomeScene;
+import comp2211.seg.UiView.Scene.MainScene;
 import comp2211.seg.UiView.Scene.RunwayScene;
 import comp2211.seg.UiView.Scene.SceneAbstract;
 import javafx.application.Platform;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +30,7 @@ public class AppWindow {
 
     // Setup appWindow
     setupStage();
-    startHomeScene();
+    startMainScene();
     //startRunwayScene();
   }
 
@@ -44,15 +44,20 @@ public class AppWindow {
     stage.setOnCloseRequest(ev -> App.getInstance().shutdown());
   }
 
-  /** Start the main/home scene */
+  /** Start the home scene */
   public void startHomeScene() {
     loadScene(new HomeScene(new Pane(width,height),this));
   }
+
+  /** Start the main scene */
+  public void startMainScene() {
+    loadScene(new MainScene(new Pane(width,height),this));
+  }
   /** Start the runway scene */
   public void startRunwayScene() {
-    Group group = new Group();
-    loadScene(new RunwayScene(group,this));
+    loadScene(new RunwayScene(new Pane(getWidth(),getHeight()),this));
   }
+
 
   public void loadScene(SceneAbstract newScene) {
     // Cleanup remains of the previous scene
