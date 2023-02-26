@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="Merged scenes into one compound view, and added maths to render in obstacles" />
+    <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/MainScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/RunwayScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/RunwayScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/SceneAbstract.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/SceneAbstract.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/AppWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/AppWindow.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -352,14 +358,7 @@
       <option name="project" value="LOCAL" />
       <updated>1677335426369</updated>
     </task>
-    <task id="LOCAL-00025" summary="Merged scenes into one compound view, and added maths to render in obstacles">
-      <created>1677445805961</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1677445805961</updated>
-    </task>
-    <option name="localTasksCounter" value="26" />
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -418,8 +417,7 @@
     <MESSAGE value="fixed rotation and added scrolling (for zoom)" />
     <MESSAGE value="made app resolution private final" />
     <MESSAGE value="new branch MVC first commit" />
-    <MESSAGE value="Merged scenes into one compound view, and added maths to render in obstacles" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merged scenes into one compound view, and added maths to render in obstacles" />
+    <option name="LAST_COMMIT_MESSAGE" value="new branch MVC first commit" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
