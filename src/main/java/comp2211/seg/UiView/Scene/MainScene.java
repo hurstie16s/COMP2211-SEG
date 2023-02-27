@@ -1,7 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
-import comp2211.seg.UiView.Stage.AppWindow;
-import comp2211.seg.UiView.Stage.Pane;
+import comp2211.seg.Controller.Stage.AppWindow;
+import comp2211.seg.Controller.Stage.Pane;
 import javafx.scene.layout.GridPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,13 +11,15 @@ public class MainScene extends SceneAbstract{
     protected SceneAbstract scene1;
     protected RunwayScene scene2;
     protected RunwayScene scene3;
+    protected AppWindow appWindow;
 
 
     public MainScene(Pane root, AppWindow appWindow) {
         super(root, appWindow);
-        scene1 = new HomeScene(new Pane(appWindow.getWidth(),appWindow.getHeight()/2.0),appWindow);
+        scene1 = new InputScene(new Pane(appWindow.getWidth(),appWindow.getHeight()/2.0),appWindow);
         scene2 = new RunwayScene(new Pane(appWindow.getWidth()/2.0,appWindow.getHeight()/2.0),appWindow);
         scene3 = new RunwayScene(new Pane(appWindow.getWidth()/2.0,appWindow.getHeight()/2.0),appWindow);
+        this.appWindow = appWindow;
     }
 
     @Override
@@ -50,12 +52,9 @@ public class MainScene extends SceneAbstract{
         layout.setMaxHeight(height);
         layout.setMaxWidth(width);
         layout.setMinWidth(width);
-        mainPane.setMinHeight(height);
-        mainPane.setMaxHeight(height);
-        mainPane.setMaxWidth(width);
-        mainPane.setMinWidth(width);
         //mainPane.getChildren().add(scene2.getRoot());
         mainPane.getChildren().add(layout);
+        layout2.setOnMousePressed((e) -> appWindow.startRunwayScene());
 
 
 
