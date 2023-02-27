@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="fixed rotation and added scrolling (for zoom)">
+    <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="Added JUnit dependancy to pom.xml.&#10;Added Test Sources Root">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -190,7 +190,10 @@
       <workItem from="1677289034610" duration="6789000" />
       <workItem from="1677296106464" duration="5374000" />
       <workItem from="1677326849387" duration="43000" />
-      <workItem from="1677326908349" duration="634000" />
+      <workItem from="1677326908349" duration="1368000" />
+      <workItem from="1677329569009" duration="350000" />
+      <workItem from="1677340480048" duration="51000" />
+      <workItem from="1677414187973" duration="14000" />
     </task>
     <task id="LOCAL-00001" summary="Initial setup of environment">
       <created>1677120536038</created>
@@ -311,7 +314,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677313703916</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Added JUnit dependancy to pom.xml.&#10;Added Test Sources Root">
+      <created>1677328926403</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1677328926403</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -368,7 +378,8 @@
     <MESSAGE value="created the runway view and added a 3d runway&#10;(can't yet rotate or pan/scroll)" />
     <MESSAGE value="added keyboard control for panning, and mouse control for rotation" />
     <MESSAGE value="fixed rotation and added scrolling (for zoom)" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed rotation and added scrolling (for zoom)" />
+    <MESSAGE value="Added JUnit dependancy to pom.xml.&#10;Added Test Sources Root" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added JUnit dependancy to pom.xml.&#10;Added Test Sources Root" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/COMP2211_SEG$App__1_.ic" NAME="App (1) Coverage Results" MODIFIED="1677250886729" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
