@@ -4,8 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="Modified the layout of the main scene and added functions to make layout features">
+    <list default="true" id="0e0d56dd-191b-43d2-a8a6-d9abd5003dc1" name="Changes" comment="added to RunwayCalculations template">
+      <change afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/Controller/Stage/AppWindow.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/Controller/Stage/Pane.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/ProcessDataModel/RunwayCalculations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/ProcessDataModel/RunwayCalculations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/HomeScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/InputScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/MainScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/MainScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/RunwayScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/RunwayScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/SceneAbstract.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Scene/SceneAbstract.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/AppWindow.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/comp2211/seg/UiView/Stage/Pane.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/comp2211/seg/App.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +47,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="views" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -372,7 +383,21 @@
       <option name="project" value="LOCAL" />
       <updated>1677456501357</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="rebase">
+      <created>1677458150030</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1677458150030</updated>
+    </task>
+    <task id="LOCAL-00028" summary="added to RunwayCalculations template">
+      <created>1677505737845</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1677505737845</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -408,7 +433,19 @@
         </entry>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -433,7 +470,9 @@
     <MESSAGE value="new branch MVC first commit" />
     <MESSAGE value="minor changes" />
     <MESSAGE value="Modified the layout of the main scene and added functions to make layout features" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modified the layout of the main scene and added functions to make layout features" />
+    <MESSAGE value="rebase" />
+    <MESSAGE value="added to RunwayCalculations template" />
+    <option name="LAST_COMMIT_MESSAGE" value="added to RunwayCalculations template" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">

@@ -1,6 +1,6 @@
 package comp2211.seg;
 
-import comp2211.seg.UiView.Stage.AppWindow;
+import comp2211.seg.Controller.Stage.AppWindow;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;

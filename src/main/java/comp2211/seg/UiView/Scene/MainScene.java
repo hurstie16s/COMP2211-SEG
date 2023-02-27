@@ -1,7 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
-import comp2211.seg.UiView.Stage.AppWindow;
-import comp2211.seg.UiView.Stage.Pane;
+import comp2211.seg.Controller.Stage.AppWindow;
+import comp2211.seg.Controller.Stage.Pane;
 import javafx.scene.layout.GridPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

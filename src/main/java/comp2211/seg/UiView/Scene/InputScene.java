@@ -1,8 +1,8 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.App;
-import comp2211.seg.UiView.Stage.AppWindow;
-import comp2211.seg.UiView.Stage.Pane;
+import comp2211.seg.Controller.Stage.AppWindow;
+import comp2211.seg.Controller.Stage.Pane;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

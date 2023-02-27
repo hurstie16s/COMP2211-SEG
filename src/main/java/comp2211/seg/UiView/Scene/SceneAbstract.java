@@ -1,7 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
-import comp2211.seg.UiView.Stage.AppWindow;
-import comp2211.seg.UiView.Stage.Pane;
+import comp2211.seg.Controller.Stage.AppWindow;
+import comp2211.seg.Controller.Stage.Pane;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
