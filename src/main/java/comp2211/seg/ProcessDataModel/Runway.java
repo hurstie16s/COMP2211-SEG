@@ -1,5 +1,6 @@
 package comp2211.seg.ProcessDataModel;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -22,6 +23,8 @@ public class Runway {
     private final SimpleDoubleProperty dispThreshold = new SimpleDoubleProperty();
 
     private final ArrayList<Obstacle> runwayObstacles = new ArrayList<>();
+
+    private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
 
     // End of Inputs
 
