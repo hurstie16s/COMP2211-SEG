@@ -6,14 +6,41 @@ import javafx.scene.layout.GridPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * MainScene class represents the main graphical user
+ * interface for the airport runway operations system.
+ * It extends the abstract SceneAbstract class.
+ */
 public class MainScene extends SceneAbstract{
+
     private static final Logger logger = LogManager.getLogger(MainScene.class);
+
+    /**
+     * The input scene for the main interface.
+     */
     protected SceneAbstract scene1;
+
+    /**
+     * The first runway scene for the main interface.
+     */
     protected RunwayScene scene2;
+
+    /**
+     * The second runway scene for the main interface.
+     */
     protected RunwayScene scene3;
+
+    /**
+     * The main application window for the interface.
+     */
     protected AppWindow appWindow;
 
-
+    /**
+     * Constructs a new MainScene object.
+     *
+     * @param root      the root handler pane for the scene
+     * @param appWindow the main application window
+     */
     public MainScene(HandlerPane root, AppWindow appWindow) {
         super(root, appWindow);
         scene1 = new InputScene(new HandlerPane(appWindow.getWidth(),appWindow.getHeight()/2.0),appWindow);
@@ -22,11 +49,19 @@ public class MainScene extends SceneAbstract{
         this.appWindow = appWindow;
     }
 
+    /**
+     * Initializes the main scene by adding event listeners
+     * and setting up the GUI components.
+     */
     @Override
     public void initialise() {
-
+        //add events here
     }
 
+    /**
+     * Builds the main scene by adding the GUI components
+     * to the root handler pane.
+     */
     public void build() {
         super.build();
         logger.info("building main scene");
@@ -52,11 +87,8 @@ public class MainScene extends SceneAbstract{
         layout.setMaxHeight(height);
         layout.setMaxWidth(width);
         layout.setMinWidth(width);
-        //mainPane.getChildren().add(scene2.getRoot());
         mainPane.getChildren().add(layout);
         layout2.setOnMousePressed((e) -> appWindow.startRunwayScene());
-
-
-
     }
 }
+
