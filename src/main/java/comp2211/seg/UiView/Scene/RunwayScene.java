@@ -10,6 +10,7 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -18,6 +19,7 @@ import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -47,7 +49,23 @@ public class RunwayScene extends SceneAbstract {
     this.appWindow = appWindow;
     width = root.getParentWidth()-20;
     height = root.getParentHeight()-20;
+
+    Pane arrowPane = new Pane();
+    root.getChildren().add(arrowPane);
+    RunwayArrow toraArrow = new RunwayArrow(5, 100, "TORA");
+    arrowPane.getChildren().add(toraArrow);
+
   }
+
+//  public void topRunwayArrow () {
+//
+//    Pane labelPane = new Pane();
+//    root.getChildren().add(labelPane);
+//    Line line = new Line(10, 40, 12, 50);
+//    line.setStrokeWidth(5);
+//    line.setStroke(Color.BEIGE);
+//    labelPane.getChildren().addAll(line);
+//  }
 
   public void initControls(){
     setOnKeyPressed((keyEvent -> {
