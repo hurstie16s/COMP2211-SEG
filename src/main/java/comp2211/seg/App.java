@@ -3,6 +3,7 @@ package comp2211.seg;
 import comp2211.seg.Controller.Stage.AppWindow;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -45,6 +46,7 @@ public class App extends Application {
     var javaVersion = SystemInfo.javaVersion();
     var javafxVersion = SystemInfo.javafxVersion();
     logger.info("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
+    logger.atLevel(Level.ALL);
 
     instance = this;
     this.stage = stage;

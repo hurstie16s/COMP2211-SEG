@@ -7,6 +7,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,7 +57,12 @@ public abstract class SceneAbstract extends Scene{
    */
   public void build() {
     logger.info("building1234");
-    getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/stylesheet.css")).toExternalForm());
+    try {
+      getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/stylesheet.css")).toExternalForm());
+
+    }catch (Exception e){
+      logger.error(e);
+    }
     mainPane = new StackPane();
     mainPane.setMaxWidth(width);
     mainPane.setMaxHeight(height);
