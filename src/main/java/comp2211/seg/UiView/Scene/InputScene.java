@@ -3,11 +3,14 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.App;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -15,10 +18,12 @@ import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Objects;
+
 /**
  * This class represents the scene where user inputs data and performs calculations.
  */
-public class InputScene extends SceneAbstract{
+public class InputScene extends SceneAbstract {
   /**
    * Logger object used for logging messages.
    */
@@ -31,15 +36,16 @@ public class InputScene extends SceneAbstract{
    * The AppWindow object for the scene.
    */
   public AppWindow appWindow;
-  /**
 
   /**
+   * /**
    * Constructor for the InputScene class.
-   * @param root the root handler pane for the scene
+   *
+   * @param root      the root handler pane for the scene
    * @param appWindow the application window for the scene
    */
   public InputScene(HandlerPane root, AppWindow appWindow) {
-    super(root,appWindow);
+    super(root, appWindow);
     this.appWindow = appWindow;
   }
 
@@ -51,7 +57,7 @@ public class InputScene extends SceneAbstract{
   @Override
   public void initialise() {
     setOnKeyPressed((keyEvent -> {
-      if(keyEvent.getCode().equals(KeyCode.ESCAPE)) {
+      if (keyEvent.getCode().equals(KeyCode.ESCAPE)) {
         App.getInstance().shutdown();
       }
     }));
@@ -71,36 +77,29 @@ public class InputScene extends SceneAbstract{
     var inputs = new VBox();
     var calculations = new VBox();
     var outputs = new VBox();
-    layout.getChildren().addAll(inputs,calculations,outputs);
+    layout.getChildren().addAll(inputs, calculations, outputs);
 
-    TextField entry1 = (TextField)makeTextField(inputs,"Entry 1");
-    TextField entry2 = (TextField)makeTextField(inputs,"Entry 2");
-    var calculation1 = makeButton(calculations, "Calculation 1");
-    var calculation2 = makeButton(calculations, "Calculation 2");
-    var output1 = makeOutputLabel(outputs, "Output 1");
-    var output2 = makeOutputLabel(outputs, "Output 2");
-    var output3 = makeOutputLabel(outputs, "Output 3");
+    makeTextField(inputs, "Runway Designator", appWindow.runway.runwayDesignatorProperty(), "[0-9]|0[1-9]|[1-2][0-9]|3[0-6]");
+    makeTextField(inputs, "TORA", appWindow.runway.toraProperty());
+    makeTextField(inputs, "TODA", appWindow.runway.todaProperty());
+    makeTextField(inputs, "ASDA", appWindow.runway.asdaProperty());
+    makeTextField(inputs, "LDA", appWindow.runway.ldaProperty());
+    makeTextField(inputs, "Display Threshold", appWindow.runway.dispThresholdProperty());
+
+    var landingMode = makeButton(calculations, "Landing Mode", appWindow.runway.landingModeProperty());
+    var direction = makeButton(calculations, "Direction", appWindow.runway.directionProperty());
+
+    var output1 = makeOutputLabel(outputs, "Output 1", appWindow.runway.output1Property());
     output1.setText("Example output");
-    output2.setText("Example output 2");
-    output3.setText("Example output 3");
 
-    calculation1.setOnAction(e -> {
-      try {
-        int x = Integer.parseInt(entry1.getText());
-        int y = Integer.parseInt(entry2.getText());
-        String result = String.valueOf((x + y));
-        output1.setText(result);
-      } catch (NumberFormatException numberFormatException) {
-        displayErrorMessage("Error","Input must be integer");
-      }
-    });
 
     mainPane.getChildren().add(layout);
   }
 
   /**
    * Displays an error message dialog box with the specified title and message.
-   * @param title the title of the dialog box
+   *
+   * @param title   the title of the dialog box
    * @param message the message to display in the dialog box
    */
   private void displayErrorMessage(String title, String message) {
@@ -113,53 +112,113 @@ public class InputScene extends SceneAbstract{
 
   /**
    * Creates a new TextField with the specified label and adds it to the given parent Pane.
+   *
    * @param parent the Pane to add the TextField to.
-   * @param label the label to use for the TextField.
+   * @param label  the label to use for the TextField.
    * @return the created TextField Node.
    */
-public Node makeTextField(javafx.scene.layout.Pane parent, String label){
+  public Node makeTextField(javafx.scene.layout.Pane parent, String label, SimpleStringProperty property, String regex) {
     HBox segment = new HBox();
     Label text = new Label(label);
     TextField entry = new TextField();
-    text.setMinWidth(width/5);
-    text.setMaxWidth(width/5);
-    segment.getChildren().addAll(text,entry);
-    entry.setMinWidth(width/5);
-    entry.setMaxWidth(width/5);
+    text.setMinWidth(width / 5);
+    text.setMaxWidth(width / 5);
+    segment.getChildren().addAll(text, entry);
+    entry.setMinWidth(width / 5);
+    entry.setMaxWidth(width / 5);
     parent.getChildren().add(segment);
+    entry.textProperty().addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+        if (t1.matches("|0")) {
+          property.set("36");
+        } else {
+          if (t1.matches(regex)) {
+            property.set(t1);
+          } else {
+            displayErrorMessage("Invalid Entry", label + " must match " + regex);
+            entry.setText(s);
+          }
+        }
+      }
+    });
+    return entry;
+  }
+
+  /**
+   * Creates a new TextField with the specified label and adds it to the given parent Pane.
+   *
+   * @param parent the Pane to add the TextField to.
+   * @param label  the label to use for the TextField.
+   * @return the created TextField Node.
+   */
+  public Node makeTextField(javafx.scene.layout.Pane parent, String label, SimpleDoubleProperty property) {
+    HBox segment = new HBox();
+    Label text = new Label(label);
+    TextField entry = new TextField();
+    text.setMinWidth(width / 5);
+    text.setMaxWidth(width / 5);
+    segment.getChildren().addAll(text, entry);
+    entry.setMinWidth(width / 5);
+    entry.setMaxWidth(width / 5);
+    parent.getChildren().add(segment);
+    entry.textProperty().addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+        if (Objects.equals(t1, "")) {
+          property.set(0);
+        } else {
+          try {
+            property.set(Double.parseDouble(t1));
+          } catch (Exception e) {
+            displayErrorMessage("Invalid Entry", label + " must be a number");
+            entry.setText(s);
+          }
+        }
+      }
+    });
     return entry;
   }
 
   /**
    * Creates a new Button with the specified label and adds it to the given parent Pane.
+   *
    * @param parent the Pane to add the Button to.
-   * @param label the label to use for the Button.
+   * @param label  the label to use for the Button.
    * @return the created Button Node.
    */
-  public Button makeButton(javafx.scene.layout.Pane parent, String label){
-    Button button = new Button(label);
-    button.setMinWidth(width/5);
-    button.setMaxWidth(width/5);
+  public ToggleButton makeButton(javafx.scene.layout.Pane parent, String label, SimpleBooleanProperty property) {
+    ToggleButton button = new ToggleButton(label);
+    button.setMinWidth(width / 5);
+    button.setMaxWidth(width / 5);
     parent.getChildren().add(button);
+    property.bind(button.selectedProperty());
     return button;
   }
 
   /**
    * Creates a new Label and a Label for displaying data with the specified label and adds them to the given parent Pane.
+   *
    * @param parent the Pane to add the Labels to.
-   * @param label the label to use for the Labels.
+   * @param label  the label to use for the Labels.
    * @return the created Label Node for displaying data.
    */
-  public Label makeOutputLabel(javafx.scene.layout.Pane parent, String label){
+  public Label makeOutputLabel(javafx.scene.layout.Pane parent, String label, SimpleDoubleProperty property) {
     HBox segment = new HBox();
     Label title = new Label(label);
-    title.setMinWidth(width/5);
-    title.setMaxWidth(width/5);
+    title.setMinWidth(width / 5);
+    title.setMaxWidth(width / 5);
     Label data = new Label();
-    data.setMinWidth(width/5);
-    data.setMaxWidth(width/5);
-    segment.getChildren().addAll(title,data);
+    data.setMinWidth(width / 5);
+    data.setMaxWidth(width / 5);
+    segment.getChildren().addAll(title, data);
     parent.getChildren().add(segment);
+    property.addListener(new ChangeListener<Number>() {
+      @Override
+      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+        data.setText(String.valueOf(property.getValue()));
+      }
+    });
     return data;
   }
 }

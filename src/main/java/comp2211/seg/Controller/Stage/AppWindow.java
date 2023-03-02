@@ -1,15 +1,22 @@
 package comp2211.seg.Controller.Stage;
 
 import comp2211.seg.App;
+import comp2211.seg.ProcessDataModel.Obstacle;
+import comp2211.seg.ProcessDataModel.Runway;
 import comp2211.seg.UiView.Scene.InputScene;
 import comp2211.seg.UiView.Scene.MainScene;
 import comp2211.seg.UiView.Scene.RunwayScene;
 import comp2211.seg.UiView.Scene.SceneAbstract;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
 
 /**
  * The AppWindow class is responsible for managing the application's window and scenes.
@@ -26,6 +33,12 @@ public class AppWindow {
 
     public HandlerPane root;
 
+    public Runway runway;
+
+
+
+
+
     /**
      * Constructs an AppWindow object with the specified stage, width, and height.
      *
@@ -37,6 +50,7 @@ public class AppWindow {
         this.stage = stage;
         this.width = width;
         this.height = height;
+        runway = new Runway();
 
         // Setup appWindow
         setupStage();

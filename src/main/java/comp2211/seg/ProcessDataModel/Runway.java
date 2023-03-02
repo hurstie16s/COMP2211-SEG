@@ -1,8 +1,11 @@
 package comp2211.seg.ProcessDataModel;
 
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import java.util.ArrayList;
 
@@ -15,18 +18,23 @@ public class Runway {
     when viewed from the direction of approach. For example,
     if the azimuth of the centre-line is 153 then the runway designator will be 15
      */
-    private final SimpleStringProperty runwayDesignator = new SimpleStringProperty();
-    private final SimpleDoubleProperty tora = new SimpleDoubleProperty();
-    private final SimpleDoubleProperty toda = new SimpleDoubleProperty();
-    private final SimpleDoubleProperty asda = new SimpleDoubleProperty();
-    private final SimpleDoubleProperty lda = new SimpleDoubleProperty();
-    private final SimpleDoubleProperty dispThreshold = new SimpleDoubleProperty();
+    private final SimpleStringProperty runwayDesignator = new SimpleStringProperty("36");
+    private final SimpleDoubleProperty tora = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty toda = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty asda = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty lda = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty dispThreshold = new SimpleDoubleProperty(0);
 
     private final ArrayList<Obstacle> runwayObstacles = new ArrayList<>();
 
     private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
 
+
+    private final SimpleBooleanProperty direction = new SimpleBooleanProperty(true);
+
     // End of Inputs
+
+
 
     // Typical values, may become variable down the line
     // Constants
@@ -40,13 +48,24 @@ public class Runway {
     private SimpleDoubleProperty output2 = new SimpleDoubleProperty(0);
     private SimpleDoubleProperty output3 = new SimpleDoubleProperty(0);
 
-    public Runway(String runwayDesignator, double tora, double toda, double asda, double lda, double dispThreshold) {
-        this.runwayDesignator.set(runwayDesignator);
-        this.tora.set(tora);
-        this.toda.set(toda);
-        this.asda.set(asda);
-        this.lda.set(lda);
-        this.dispThreshold.set(dispThreshold);
+    public Runway() {
+        for (Property prop: new Property[] {
+                runwayDesignator,
+                tora,
+                toda,
+                asda,
+                lda,
+                dispThreshold,
+                landingMode,
+                direction
+        }) {
+            prop.addListener(new ChangeListener() {
+                @Override
+                public void changed(ObservableValue observableValue, Object o, Object t1) {
+                    recalculate();
+                }
+            });
+        }
     }
 
     public void addObstacle(Obstacle obstacleToAdd) {
@@ -59,14 +78,134 @@ public class Runway {
         // re-calculate values?
     }
 
-    public void calculateLandOver() {}
+    public void recalculate(){
+        if (landingMode.get()){
+            if (direction.get()){
+                calculateLandOver();
 
-    public void calculateLandTowards() {}
+            } else {
+                calculateLandTowards();
 
-    public void calculateTakeOffToward() {}
+            }
+        } else {
 
-    public void calculateTakeOffAway() {}
+            if (direction.get()){
+                calculateTakeOffAway();
 
-    // Setters
+            } else {
+                calculateTakeOffToward();
+
+            }
+        }
+    }
+
+    public void calculateLandOver() {
+        output1.set(tora.get());
+    }
+
+    public void calculateLandTowards() {
+        output1.set(toda.get());
+    }
+
+    public void calculateTakeOffToward() {
+        output1.set(Double.parseDouble(runwayDesignator.get()));}
+
+    public void calculateTakeOffAway() {
+        output1.set(asda.get());}
+
+
+
+
     // Getters
+    public double getTora() {
+        return tora.get();
+    }
+
+    public SimpleDoubleProperty toraProperty() {
+        return tora;
+    }
+
+    public double getToda() {
+        return toda.get();
+    }
+
+    public SimpleDoubleProperty todaProperty() {
+        return toda;
+    }
+
+    public double getAsda() {
+        return asda.get();
+    }
+
+    public SimpleDoubleProperty asdaProperty() {
+        return asda;
+    }
+
+    public double getLda() {
+        return lda.get();
+    }
+
+    public SimpleDoubleProperty ldaProperty() {
+        return lda;
+    }
+
+    public double getDispThreshold() {
+        return dispThreshold.get();
+    }
+
+    public SimpleDoubleProperty dispThresholdProperty() {
+        return dispThreshold;
+    }
+
+    public ArrayList<Obstacle> getRunwayObstacles() {
+        return runwayObstacles;
+    }
+
+    public boolean isLandingMode() {
+        return landingMode.get();
+    }
+
+    public SimpleBooleanProperty landingModeProperty() {
+        return landingMode;
+    }
+
+    public double getOutput1() {
+        return output1.get();
+    }
+
+    public SimpleDoubleProperty output1Property() {
+        return output1;
+    }
+
+    public double getOutput2() {
+        return output2.get();
+    }
+
+    public SimpleDoubleProperty output2Property() {
+        return output2;
+    }
+
+    public double getOutput3() {
+        return output3.get();
+    }
+
+    public SimpleDoubleProperty output3Property() {
+        return output3;
+    }
+
+    public String getRunwayDesignator() {
+        return runwayDesignator.get();
+    }
+
+    public SimpleStringProperty runwayDesignatorProperty() {
+        return runwayDesignator;
+    }
+
+    public boolean isDirection() {
+        return direction.get();
+    }
+
+    public SimpleBooleanProperty directionProperty() {
+        return direction;
+    }
 }
