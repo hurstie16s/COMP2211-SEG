@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * The AppWindow class is responsible for managing the application's window and scenes.
+ */
 public class AppWindow {
 
     private static final Logger logger = LogManager.getLogger(AppWindow.class);
@@ -23,6 +26,13 @@ public class AppWindow {
 
     public HandlerPane root;
 
+    /**
+     * Constructs an AppWindow object with the specified stage, width, and height.
+     *
+     * @param stage the primary stage of the application
+     * @param width the width of the application's window
+     * @param height the height of the application's window
+     */
     public AppWindow(Stage stage, int width, int height) {
         this.stage = stage;
         this.width = width;
@@ -34,9 +44,16 @@ public class AppWindow {
         //startRunwayScene();
     }
 
+    /**
+     * Loads any required resources for the application.
+     */
     private void setupResources() {
         logger.info("Loading resources"); //no resources used atm i.e. CSS/FXML
     }
+
+    /**
+     * Sets up the primary stage of the application.
+     */
     public void setupStage() {
         stage.setTitle("AppWindow");
         stage.setMinWidth(width);
@@ -44,21 +61,32 @@ public class AppWindow {
         stage.setOnCloseRequest(ev -> App.getInstance().shutdown());
     }
 
-    /** Start the home scene */
+    /**
+     * Starts the home scene.
+     */
     public void startHomeScene() {
         loadScene(new InputScene(new HandlerPane(width,height),this));
     }
 
-    /** Start the main scene */
+    /**
+     * Starts the main scene.
+     */
     public void startMainScene() {
         loadScene(new MainScene(new HandlerPane(width,height),this));
     }
-    /** Start the runway scene */
+
+    /**
+     * Starts the runway scene.
+     */
     public void startRunwayScene() {
         loadScene(new RunwayScene(new HandlerPane(getWidth(),getHeight()),this));
     }
 
-
+    /**
+     * Loads a new scene.
+     *
+     * @param newScene the scene to load
+     */
     public void loadScene(SceneAbstract newScene) {
         // Cleanup remains of the previous scene
         cleanup();
@@ -72,33 +100,37 @@ public class AppWindow {
     }
 
     /**
-     * Get the current scene being displayed
+     * Gets the primary stage of the application.
      *
-     * @return scene
+     * @return the primary stage of the application
      */
     public Stage getStage() {
         return stage;
     }
 
     /**
-     * Get the width of the Game AppWindow
+     * Gets the width of the application's window.
      *
-     * @return width
+     * @return the width of the application's window
      */
     public int getWidth() {
         return width;
     }
 
     /**
-     * Get the height of the Game AppWindow
+     * Gets the height of the application's window.
      *
-     * @return height
+     * @return the height of the application's window
      */
     public int getHeight() {
         return height;
     }
+
+    /**
+     * Cleans up the remains of the previous scene.
+     */
     public void cleanup(){
-        //clearlisteners
+        //clear listeners
         //root.getChildren().removeAll(root.getChildren());
     }
 }
