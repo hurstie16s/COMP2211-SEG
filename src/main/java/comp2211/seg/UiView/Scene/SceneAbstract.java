@@ -12,16 +12,32 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
-/** Handles common functionality between all scenes. */
+/**
+ * This abstract class serves as a template for all JavaFX scenes.
+ * It extends the JavaFX Scene class
+ * and contains common functionality shared by all scenes.
+ */
 public abstract class SceneAbstract extends Scene{
 
   private static final Logger logger = LogManager.getLogger(SceneAbstract.class);
+
+  /** The root node of the scene.*/
   protected HandlerPane root;
 
+  /**The main pane of the scene.*/
   protected StackPane mainPane;
+
+  /** The width of the scene.*/
   protected double width;
+
+  /** The height of the scene.*/
   protected double height;
 
+  /**
+   * Constructor to create a SceneAbstract object.
+   * @param root the root pane of the scene
+   * @param appWindow the application window of the scene
+   */
   public SceneAbstract(HandlerPane root, AppWindow appWindow) {
     super(root, root.getParentWidth(), root.getParentHeight(),Color.BLACK);
     this.root = root;
@@ -29,7 +45,9 @@ public abstract class SceneAbstract extends Scene{
     this.height = root.getParentHeight();
   }
 
-
+  /**
+   * Abstract method for initialization.
+   */
   public abstract void initialise();
 
   /**
