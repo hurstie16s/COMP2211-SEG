@@ -2,6 +2,7 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import comp2211.seg.UiView.Overlay.RunwayArrow;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.AmbientLight;
@@ -14,6 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
@@ -52,8 +54,11 @@ public class RunwayScene extends SceneAbstract {
 
     Pane arrowPane = new Pane();
     root.getChildren().add(arrowPane);
-    RunwayArrow toraArrow = new RunwayArrow(5, 100, "TORA");
-    arrowPane.getChildren().add(toraArrow);
+
+    RunwayArrow arrow = new RunwayArrow("TORA");
+    arrow.setXOffset(100);
+    arrow.setLength(100);
+    arrowPane.getChildren().addAll(arrow);
 
   }
 
