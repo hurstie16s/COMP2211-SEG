@@ -1,7 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.Pane;
+import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -16,13 +16,13 @@ import java.util.Objects;
 public abstract class SceneAbstract extends Scene{
 
   private static final Logger logger = LogManager.getLogger(SceneAbstract.class);
-  protected Pane root;
+  protected HandlerPane root;
 
   protected StackPane mainPane;
   protected double width;
   protected double height;
 
-  public SceneAbstract(Pane root, AppWindow appWindow) {
+  public SceneAbstract(HandlerPane root, AppWindow appWindow) {
     super(root, root.getParentWidth(), root.getParentHeight(),Color.BLACK);
     this.root = root;
     this.width = root.getParentWidth();

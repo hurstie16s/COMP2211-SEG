@@ -2,7 +2,7 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.App;
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.Pane;
+import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -21,7 +21,7 @@ public class InputScene extends SceneAbstract{
 
   public AppWindow appWindow;
 
-  public InputScene(Pane root, AppWindow appWindow) {
+  public InputScene(HandlerPane root, AppWindow appWindow) {
     super(root,appWindow);
     this.appWindow = appWindow;
 

@@ -1,7 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.Pane;
+import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.AmbientLight;
@@ -40,7 +40,7 @@ public class RunwayScene extends SceneAbstract {
   private final DoubleProperty angleZProperty = new SimpleDoubleProperty();
 
 
-  public RunwayScene(Pane root, AppWindow appWindow) {
+  public RunwayScene(HandlerPane root, AppWindow appWindow) {
     super(root, appWindow);
 
     this.group = new Group();

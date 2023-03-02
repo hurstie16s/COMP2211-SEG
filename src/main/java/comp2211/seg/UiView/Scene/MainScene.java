@@ -1,7 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.Pane;
+import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.scene.layout.GridPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,11 +14,11 @@ public class MainScene extends SceneAbstract{
     protected AppWindow appWindow;
 
 
-    public MainScene(Pane root, AppWindow appWindow) {
+    public MainScene(HandlerPane root, AppWindow appWindow) {
         super(root, appWindow);
-        scene1 = new InputScene(new Pane(appWindow.getWidth(),appWindow.getHeight()/2.0),appWindow);
-        scene2 = new RunwayScene(new Pane(appWindow.getWidth()/2.0,appWindow.getHeight()/2.0),appWindow);
-        scene3 = new RunwayScene(new Pane(appWindow.getWidth()/2.0,appWindow.getHeight()/2.0),appWindow);
+        scene1 = new InputScene(new HandlerPane(appWindow.getWidth(),appWindow.getHeight()/2.0),appWindow);
+        scene2 = new RunwayScene(new HandlerPane(appWindow.getWidth()/2.0,appWindow.getHeight()/2.0),appWindow);
+        scene3 = new RunwayScene(new HandlerPane(appWindow.getWidth()/2.0,appWindow.getHeight()/2.0),appWindow);
         this.appWindow = appWindow;
     }
 

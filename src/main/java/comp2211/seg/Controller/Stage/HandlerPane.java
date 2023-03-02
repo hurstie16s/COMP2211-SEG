@@ -7,21 +7,21 @@ import javafx.scene.transform.Translate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Pane extends StackPane {
+public class HandlerPane extends StackPane {
 
-    private static final Logger logger = LogManager.getLogger(Pane.class);
+    private static final Logger logger = LogManager.getLogger(HandlerPane.class);
     private final double width;
     private final double height;
     private double scalar = 1;
     private final boolean autoScale = true;
 
     /**
-     * Create a new scalable Pane with the given drawing width and height.
+     * Create a new scalable HandlerPane with the given drawing width and height.
      *
      * @param width width
      * @param height height
      */
-    public Pane(double width, double height) {
+    public HandlerPane(double width, double height) {
         super();
         this.width = width;
         this.height = height;

@@ -21,7 +21,7 @@ public class AppWindow {
     private SceneAbstract currentScene;
     private Scene scene;
 
-    public Pane root;
+    public HandlerPane root;
 
     public AppWindow(Stage stage, int width, int height) {
         this.stage = stage;
@@ -46,16 +46,16 @@ public class AppWindow {
 
     /** Start the home scene */
     public void startHomeScene() {
-        loadScene(new InputScene(new Pane(width,height),this));
+        loadScene(new InputScene(new HandlerPane(width,height),this));
     }
 
     /** Start the main scene */
     public void startMainScene() {
-        loadScene(new MainScene(new Pane(width,height),this));
+        loadScene(new MainScene(new HandlerPane(width,height),this));
     }
     /** Start the runway scene */
     public void startRunwayScene() {
-        loadScene(new RunwayScene(new Pane(getWidth(),getHeight()),this));
+        loadScene(new RunwayScene(new HandlerPane(getWidth(),getHeight()),this));
     }
 
 
