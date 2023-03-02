@@ -7,6 +7,12 @@ import javafx.scene.transform.Translate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * This class represents a custom JavaFX StackPane that provides scaling and positioning functionality. It includes a logger,
+ * width and height values for the pane, a scalar value for scaling, and a boolean for auto-scaling. The HandlerPane class
+ * overrides the layoutChildren method to calculate the scale factor, scale the pane, and translate it into position. It also
+ * provides methods to get the parent width and height.
+ */
 public class HandlerPane extends StackPane {
 
     private static final Logger logger = LogManager.getLogger(HandlerPane.class);
@@ -16,10 +22,10 @@ public class HandlerPane extends StackPane {
     private final boolean autoScale = true;
 
     /**
-     * Create a new scalable HandlerPane with the given drawing width and height.
+     * Constructor for the HandlerPane class. It sets the maximum height and width of the pane, as well as its alignment.
      *
-     * @param width width
-     * @param height height
+     * @param width The maximum width of the pane.
+     * @param height The maximum height of the pane.
      */
     public HandlerPane(double width, double height) {
         super();
@@ -27,22 +33,21 @@ public class HandlerPane extends StackPane {
         this.height = height;
         setMaxHeight(height);
         setMaxWidth(width);
-        //getStyleClass().add("pane");
         setAlignment(Pos.TOP_LEFT);
     }
 
     /**
-     * Update the scalar being used by this draw pane
+     * Sets the scalar value of the pane, which determines how much the pane is scaled.
      *
-     * @param scalar scalar
+     * @param scalar The new scalar value.
      */
     protected void setScalar(double scalar) {
         this.scalar = scalar;
     }
 
     /**
-     * Use a Graphics Transformation to scale everything inside this pane. Padding is added to the
-     * edges to maintain the correct aspect ratio and keep the display centred.
+     * Overrides the layoutChildren method of the StackPane class. It calculates the scale factor of the pane, sets the scalar
+     * value, sets up the scale, calculates the padding needed for positioning, and applies the transformation.
      */
     @Override
     public void layoutChildren() {
@@ -51,6 +56,7 @@ public class HandlerPane extends StackPane {
         if (!autoScale) {
             return;
         }
+
         // Work out the scale factor height and width
         var scaleFactorHeight = getHeight() / height;
         var scaleFactorWidth = getWidth() / width;
@@ -79,10 +85,21 @@ public class HandlerPane extends StackPane {
         scale.setPivotY(0);
         getTransforms().setAll(translate, scale);
     }
+
+    /**
+     * Returns the maximum width of the pane.
+     *
+     * @return The maximum width of the pane.
+     */
     public double getParentWidth(){
         return width;
     }
 
+    /**
+     * Returns the maximum height of the pane.
+     *
+     * @return The maximum height of the pane.
+     */
     public double getParentHeight(){
         return height;
     }
