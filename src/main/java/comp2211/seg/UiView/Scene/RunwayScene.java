@@ -22,24 +22,85 @@ import org.apache.logging.log4j.Logger;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+/**
+ * RunwayScene class represents the runway scene of the airport
+ * runway operations system.
+ * It extends the abstract SceneAbstract class.
+ */
 public class RunwayScene extends SceneAbstract {
   private static final Logger logger = LogManager.getLogger(RunwayScene.class);
+
+  /**
+   * The group object that holds the 3D models for the runway scene.
+   */
   protected Group group;
+
+  /**
+   * The main application window for the interface.
+   */
   protected AppWindow appWindow;
+
+  /**
+   * The camera used to view the runway scene.
+   */
   protected PerspectiveCamera camera;
+
+  /**
+   * A boolean flag indicating whether the scene is in "view" mode.
+   */
   private Boolean view = false;
 
+  /**
+   * The x-coordinate of the mouse when it is clicked.
+   */
   private double x;
+
+  /**
+   * The y-coordinate of the mouse when it is clicked.
+   */
   private double y;
+
+  /**
+   * The x angle of rotation of the runway scene.
+   */
   private double anglex = 0;
+
+  /**
+   * The y angle of rotation of the runway scene.
+   */
   private double angley = 0;
+
+  /**
+   * The length of the runway.
+   */
   protected double runwaylength = 1200;
+
+  /**
+   * The width of the runway.
+   */
   protected double runwaywidth = 100;
+
+  /**
+   * A DoubleProperty object representing the x angle of rotation of the runway scene.
+   */
   private final DoubleProperty angleXProperty = new SimpleDoubleProperty();
+
+  /**
+   * A DoubleProperty object representing the y angle of rotation of the runway scene.
+   */
   private final DoubleProperty angleYProperty = new SimpleDoubleProperty();
+
+  /**
+   * A DoubleProperty object representing the z angle of rotation of the runway scene.
+   */
   private final DoubleProperty angleZProperty = new SimpleDoubleProperty();
 
-
+  /**
+   * Constructs a new RunwayScene object.
+   *
+   * @param root      the root handler pane for the scene
+   * @param appWindow the main application window
+   */
   public RunwayScene(HandlerPane root, AppWindow appWindow) {
     super(root, appWindow);
 
@@ -49,6 +110,10 @@ public class RunwayScene extends SceneAbstract {
     height = root.getParentHeight()-20;
   }
 
+  /**
+   * Initializes the mouse and keyboard event listeners for
+   * the runway scene.
+   */
   public void initControls(){
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
@@ -87,6 +152,9 @@ public class RunwayScene extends SceneAbstract {
 
     });
   }
+  /**
+   * Initializes the base keyboard event listeners for the runway scene.
+   */
   public void initBaseControls(){
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
@@ -98,14 +166,20 @@ public class RunwayScene extends SceneAbstract {
           break;
       }
     }));
-
   }
+
+  /**
+   * Initializes the scene by setting up the base keyboard event listeners.
+   */
   @Override
   public void initialise() {
     initBaseControls();
   }
-  public void toggleView(){
 
+  /**
+   * Toggles the "view" mode of the runway scene, which changes the camera angle to view the scene from above or from the side.
+   */
+  public void toggleView(){
     view = !view;
     if (view){
       angleXProperty.set(0);
@@ -119,12 +193,14 @@ public class RunwayScene extends SceneAbstract {
   }
 
   /**
-   * @param x distance from the start of the runway
-   * @param y distance from the centre of the runway (to the left side)
-   * @param w width of the object (from side to side) - in the y axis
-   * @param l length of the object (from start to end) - in the x axis
-   * @param d height of the object
-   * @param color colour of the bounding box
+   * Adds a cuboid object to the runway scene.
+   *
+   * @param x     the distance from the start of the runway
+   * @param y     the distance from the centre of the runway (to the left side)
+   * @param w     the width of the object (from side to side) - in the y axis
+   * @param l     the length of the object (from start to end) - in the x axis
+   * @param d     the height of the object
+   * @param color the colour of the bounding box
    */
   public void addCuboid(double x, double y, double w, double l, double d, Color color){
 
@@ -139,10 +215,16 @@ public class RunwayScene extends SceneAbstract {
     box.translateZProperty().set((d*scaleFactor/2));
     box.setMaterial(material);
     group.getChildren().add(box);
-
-
   }
 
+  /**
+   * Creates a prism MeshView object with the specified coordinates, faces, and color.
+   *
+   * @param coords the coordinates of the vertices of the prism
+   * @param faces  the indices of the vertices used to construct each face of the prism
+   * @param color  the color of the prism
+   * @return the MeshView object representing the prism
+   */
   public MeshView makePrism(float [] coords, int[] faces, Color color){
 
     PhongMaterial material = new PhongMaterial();
@@ -155,17 +237,19 @@ public class RunwayScene extends SceneAbstract {
     mv.setMaterial(material);
     return mv;
   }
+
   /**
-   * @param x distance from the start of the runway
-   * @param y distance from the centre of the runway (to the left side)
-   * @param w width of the object (from side to side) - in the y axis
-   * @param l length of the object (from start to end) - in the x axis
-   * @param d height of the object
-   * @param color colour of the object
+   * Adds a triangular prism object to the runway scene.
+   *
+   * @param x         the distance from the start of the runway
+   * @param y         the distance from the centre of the runway (to the left side)
+   * @param w         the width of the object (from side to side) - in the y axis
+   * @param l         the length of the object (from start to end) - in the x axis
+   * @param d         the height of the object
+   * @param color     the colour of the object
    * @param direction the direction the ramp is facing
    */
   public void addTriangularPrism(double x, double y, double w, double l, double d, Color color, boolean direction){
-
 
     double scaleFactor = width/ runwaylength;
 
@@ -212,12 +296,16 @@ public class RunwayScene extends SceneAbstract {
               1, 0, 5, 0, 4, 0,
               1, 0, 2, 0, 5, 0,
       }, color);
-
     }
     group.getChildren().add(mv);
-
-
   }
+
+  /**
+   * Creates a 3D box representing the runway, textured with
+   * an image of a runway.
+   * @return The created 3D box.
+   * @throws FileNotFoundException If the image of the runway is not found.
+   */
   public Box makeRunway() throws FileNotFoundException {
     PhongMaterial material = new PhongMaterial();
     material.setDiffuseMap(new Image(new FileInputStream("src/main/resources/images/runway.jpg")));
@@ -227,10 +315,14 @@ public class RunwayScene extends SceneAbstract {
     box.setMaterial(material);
     return box;
   }
+
+  /**
+   * Builds the scene, adding the 3D objects to the scene and
+   * initializing camera and rotation controls.
+   */
   @Override
   public void build() {
     try {
-
       AmbientLight light = new AmbientLight();
       light.setLightOn(true);
       group.getChildren().add(light);
@@ -267,5 +359,4 @@ public class RunwayScene extends SceneAbstract {
     }
     logger.info("building");
   }
-
 }
