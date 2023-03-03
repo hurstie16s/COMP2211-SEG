@@ -10,6 +10,24 @@ import javafx.beans.value.ObservableValue;
 import java.util.ArrayList;
 
 public class Runway {
+
+
+    private SimpleDoubleProperty clearwayRightWidth = new SimpleDoubleProperty(500);
+    private SimpleDoubleProperty clearwayRightHeight = new SimpleDoubleProperty(150);
+    private SimpleDoubleProperty clearwayLeftWidth = new SimpleDoubleProperty(500);
+    private SimpleDoubleProperty clearwayLeftHeight = new SimpleDoubleProperty(150);
+    private SimpleDoubleProperty stopwayRight = new SimpleDoubleProperty(150);
+    private SimpleDoubleProperty stopwayLeft = new SimpleDoubleProperty(150);
+    private SimpleDoubleProperty stripEndRight = new SimpleDoubleProperty(60);
+    private SimpleDoubleProperty stripEndLeft = new SimpleDoubleProperty(60);
+    private SimpleDoubleProperty RESARightWidth = new SimpleDoubleProperty(240);
+    private SimpleDoubleProperty RESARightHeight = new SimpleDoubleProperty(90);
+    private SimpleDoubleProperty RESALeftWidth = new SimpleDoubleProperty(240);
+    private SimpleDoubleProperty RESALeftHeight = new SimpleDoubleProperty(90);
+
+
+
+
     //Inputs
 
     /*
@@ -19,15 +37,15 @@ public class Runway {
     if the azimuth of the centre-line is 153 then the runway designator will be 15
      */
     private final SimpleStringProperty runwayDesignator = new SimpleStringProperty("36");
-    private final SimpleDoubleProperty tora = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty tora = new SimpleDoubleProperty(10000);
     private final SimpleDoubleProperty toda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty asda = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty lda = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty lda = new SimpleDoubleProperty(800);
     private final SimpleDoubleProperty dispThreshold = new SimpleDoubleProperty(0);
 
     private final ArrayList<Obstacle> runwayObstacles = new ArrayList<>();
 
-    private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
+    private final SimpleBooleanProperty landing = new SimpleBooleanProperty(true);
 
 
     private final SimpleBooleanProperty direction = new SimpleBooleanProperty(true);
@@ -48,6 +66,13 @@ public class Runway {
     private SimpleDoubleProperty output2 = new SimpleDoubleProperty(0);
     private SimpleDoubleProperty output3 = new SimpleDoubleProperty(0);
 
+
+    private SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
+
+
+    private SimpleDoubleProperty runwayWidth = new SimpleDoubleProperty(60);
+
+
     public Runway() {
         for (Property prop: new Property[] {
                 runwayDesignator,
@@ -56,15 +81,10 @@ public class Runway {
                 asda,
                 lda,
                 dispThreshold,
-                landingMode,
+                landing,
                 direction
         }) {
-            prop.addListener(new ChangeListener() {
-                @Override
-                public void changed(ObservableValue observableValue, Object o, Object t1) {
-                    recalculate();
-                }
-            });
+            prop.addListener((observableValue, o, t1) -> recalculate());
         }
     }
 
@@ -79,7 +99,8 @@ public class Runway {
     }
 
     public void recalculate(){
-        if (landingMode.get()){
+        if (landing.get()){
+            runwayLength.set(lda.get());
             if (direction.get()){
                 calculateLandOver();
 
@@ -88,7 +109,7 @@ public class Runway {
 
             }
         } else {
-
+            runwayLength.set(tora.get());
             if (direction.get()){
                 calculateTakeOffAway();
 
@@ -161,12 +182,12 @@ public class Runway {
         return runwayObstacles;
     }
 
-    public boolean isLandingMode() {
-        return landingMode.get();
+    public boolean getLanding() {
+        return landing.get();
     }
 
-    public SimpleBooleanProperty landingModeProperty() {
-        return landingMode;
+    public SimpleBooleanProperty landingProperty() {
+        return landing;
     }
 
     public double getOutput1() {
@@ -207,5 +228,117 @@ public class Runway {
 
     public SimpleBooleanProperty directionProperty() {
         return direction;
+    }
+
+    public double getRunwayLength() {
+        return runwayLength.get();
+    }
+
+    public SimpleDoubleProperty runwayLengthProperty() {
+        return runwayLength;
+    }
+
+    public double getRunwayWidth() {
+        return runwayWidth.get();
+    }
+
+    public SimpleDoubleProperty runwayWidthProperty() {
+        return runwayWidth;
+    }
+
+    public double getClearwayRightWidth() {
+        return clearwayRightWidth.get();
+    }
+
+    public SimpleDoubleProperty clearwayRightWidthProperty() {
+        return clearwayRightWidth;
+    }
+
+    public double getClearwayRightHeight() {
+        return clearwayRightHeight.get();
+    }
+
+    public SimpleDoubleProperty clearwayRightHeightProperty() {
+        return clearwayRightHeight;
+    }
+
+    public double getClearwayLeftWidth() {
+        return clearwayLeftWidth.get();
+    }
+
+    public SimpleDoubleProperty clearwayLeftWidthProperty() {
+        return clearwayLeftWidth;
+    }
+
+    public double getClearwayLeftHeight() {
+        return clearwayLeftHeight.get();
+    }
+
+    public SimpleDoubleProperty clearwayLeftHeightProperty() {
+        return clearwayLeftHeight;
+    }
+
+    public double getStopwayRight() {
+        return stopwayRight.get();
+    }
+
+    public SimpleDoubleProperty stopwayRightProperty() {
+        return stopwayRight;
+    }
+
+    public double getStopwayLeft() {
+        return stopwayLeft.get();
+    }
+
+    public SimpleDoubleProperty stopwayLeftProperty() {
+        return stopwayLeft;
+    }
+
+    public double getStripEndRight() {
+        return stripEndRight.get();
+    }
+
+    public SimpleDoubleProperty stripEndRightProperty() {
+        return stripEndRight;
+    }
+
+    public double getStripEndLeft() {
+        return stripEndLeft.get();
+    }
+
+    public SimpleDoubleProperty stripEndLeftProperty() {
+        return stripEndLeft;
+    }
+
+    public double getRESARightWidth() {
+        return RESARightWidth.get();
+    }
+
+    public SimpleDoubleProperty RESARightWidthProperty() {
+        return RESARightWidth;
+    }
+
+    public double getRESARightHeight() {
+        return RESARightHeight.get();
+    }
+
+    public SimpleDoubleProperty RESARightHeightProperty() {
+        return RESARightHeight;
+    }
+
+    public double getRESALeftWidth() {
+        return RESALeftWidth.get();
+    }
+
+    public SimpleDoubleProperty RESALeftWidthProperty() {
+        return RESALeftWidth;
+    }
+
+    public double getRESALeftHeight() {
+        return RESALeftHeight.get();
+    }
+
+    public SimpleDoubleProperty RESALeftHeightProperty() {
+        return RESALeftHeight;
     }
 }
