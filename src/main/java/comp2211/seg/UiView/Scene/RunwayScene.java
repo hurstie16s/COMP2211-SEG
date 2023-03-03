@@ -2,6 +2,7 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.AmbientLight;
@@ -14,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.MeshView;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
@@ -70,15 +72,8 @@ public class RunwayScene extends SceneAbstract {
    */
   private double angley = 0;
 
-  /**
-   * The length of the runway.
-   */
-  protected double runwaylength = 1200;
+  protected SimpleDoubleProperty scaleFactor = new SimpleDoubleProperty();
 
-  /**
-   * The width of the runway.
-   */
-  protected double runwaywidth = 100;
 
   /**
    * A DoubleProperty object representing the x angle of rotation of the runway scene.
@@ -95,6 +90,15 @@ public class RunwayScene extends SceneAbstract {
    */
   private final DoubleProperty angleZProperty = new SimpleDoubleProperty();
 
+
+
+
+
+
+
+
+
+
   /**
    * Constructs a new RunwayScene object.
    *
@@ -106,8 +110,8 @@ public class RunwayScene extends SceneAbstract {
 
     this.group = new Group();
     this.appWindow = appWindow;
-    width = root.getParentWidth()-20;
-    height = root.getParentHeight()-20;
+    width = root.getParentWidth();
+    height = root.getParentHeight();
   }
 
   /**
@@ -173,7 +177,7 @@ public class RunwayScene extends SceneAbstract {
    */
   @Override
   public void initialise() {
-    initBaseControls();
+    initControls();
   }
 
   /**
@@ -182,12 +186,10 @@ public class RunwayScene extends SceneAbstract {
   public void toggleView(){
     view = !view;
     if (view){
-      angleXProperty.set(0);
-      angleZProperty.set(-90);
+      angleXProperty.set(90);
     }
     else{
-      angleXProperty.set(-90);
-      angleZProperty.set(-90);
+      angleXProperty.set(0);
 
     }
   }
@@ -196,23 +198,26 @@ public class RunwayScene extends SceneAbstract {
    * Adds a cuboid object to the runway scene.
    *
    * @param x     the distance from the start of the runway
-   * @param y     the distance from the centre of the runway (to the left side)
+   * @param y     the distance from the centre of the runway
+   * @param z     the distance above the runway
    * @param w     the width of the object (from side to side) - in the y axis
    * @param l     the length of the object (from start to end) - in the x axis
    * @param d     the height of the object
    * @param color the colour of the bounding box
    */
-  public void addCuboid(double x, double y, double w, double l, double d, Color color){
+  public void addCuboid(DoubleBinding x, DoubleBinding y, DoubleBinding z, DoubleBinding w, DoubleBinding l, DoubleBinding d, Color color){
 
-    double scaleFactor = width/ runwaylength;
 
     PhongMaterial material = new PhongMaterial();
     material.setDiffuseColor(color);
     //import these from runway somehow
-    Box box = new Box(w*scaleFactor,l*scaleFactor,d*scaleFactor);
-    box.translateYProperty().set((width/2)-(l*scaleFactor/2)-(x*scaleFactor));
-    box.translateXProperty().set((y*scaleFactor));
-    box.translateZProperty().set((d*scaleFactor/2));
+    Box box = new Box(0,0,0);
+    box.translateXProperty().bind(x.multiply(scaleFactor));
+    box.translateYProperty().bind(y.multiply(scaleFactor));
+    box.translateZProperty().bind(z.multiply(scaleFactor));
+    box.widthProperty().bind(w.multiply(scaleFactor));
+    box.heightProperty().bind(l.multiply(scaleFactor));
+    box.depthProperty().bind(d.multiply(scaleFactor));
     box.setMaterial(material);
     group.getChildren().add(box);
   }
@@ -238,67 +243,6 @@ public class RunwayScene extends SceneAbstract {
     return mv;
   }
 
-  /**
-   * Adds a triangular prism object to the runway scene.
-   *
-   * @param x         the distance from the start of the runway
-   * @param y         the distance from the centre of the runway (to the left side)
-   * @param w         the width of the object (from side to side) - in the y axis
-   * @param l         the length of the object (from start to end) - in the x axis
-   * @param d         the height of the object
-   * @param color     the colour of the object
-   * @param direction the direction the ramp is facing
-   */
-  public void addTriangularPrism(double x, double y, double w, double l, double d, Color color, boolean direction){
-
-    double scaleFactor = width/ runwaylength;
-
-    float left = (float) (y * scaleFactor + w * scaleFactor/2);
-    float right = (float) (y * scaleFactor - w * scaleFactor/2);
-    float start = (float) ((width/2) - x * scaleFactor);
-    float end = (float) ((width/2)- x * scaleFactor - l * scaleFactor);
-    float bottom = 0;
-    float top = (float) (d * scaleFactor);
-    MeshView mv;
-    if (direction) {
-      mv = makePrism(new float[]{
-              left, start, bottom,
-              left, end, bottom,
-              left, end, top,
-              right, start, bottom,
-              right, end, bottom,
-              right, end, top
-      }, new int[]{
-              0, 0, 2, 0, 1, 0,
-              3, 0, 4, 0, 5, 0,
-              0, 0, 4, 0, 3, 0,
-              0, 0, 1, 0, 4, 0,
-              0, 0, 3, 0, 5, 0,
-              0, 0, 5, 0, 2, 0,
-              1, 0, 5, 0, 4, 0,
-              1, 0, 2, 0, 5, 0,
-      }, color);
-    } else {
-       mv = makePrism(new float[]{
-              left, start, bottom,
-              left, end, bottom,
-              left, start, top,
-              right, start, bottom,
-              right, end, bottom,
-              right, start, top
-      }, new int[]{
-              0, 0, 2, 0, 1, 0,
-              3, 0, 4, 0, 5, 0,
-              0, 0, 4, 0, 3, 0,
-              0, 0, 1, 0, 4, 0,
-              0, 0, 3, 0, 5, 0,
-              0, 0, 5, 0, 2, 0,
-              1, 0, 5, 0, 4, 0,
-              1, 0, 2, 0, 5, 0,
-      }, color);
-    }
-    group.getChildren().add(mv);
-  }
 
   /**
    * Creates a 3D box representing the runway, textured with
@@ -308,12 +252,32 @@ public class RunwayScene extends SceneAbstract {
    */
   public Box makeRunway() throws FileNotFoundException {
     PhongMaterial material = new PhongMaterial();
-    material.setDiffuseMap(new Image(new FileInputStream("src/main/resources/images/runway.jpg")));
+    material.setDiffuseMap(new Image(new FileInputStream("src/main/resources/images/runway.png")));
     //import these from runway somehow
-    Box box = new Box(width* runwaywidth / runwaylength,width,1);
-    box.translateZProperty().set(-1);
+    Box box = new Box(0,0,5);
+    box.widthProperty().bind(appWindow.runway.runwayLengthProperty().multiply(scaleFactor));
+    box.heightProperty().bind(appWindow.runway.runwayWidthProperty().multiply(scaleFactor));
     box.setMaterial(material);
     return box;
+  }
+
+  public void configureCamera(){
+    AmbientLight light = new AmbientLight();
+    light.setLightOn(true);
+    group.getChildren().add(light);
+    camera = new PerspectiveCamera();
+    setCamera(camera);
+    Rotate xRotate;
+    Rotate yRotate;
+    Rotate zRotate;
+    group.getTransforms().addAll(
+            xRotate = new Rotate(0,Rotate.X_AXIS),
+            yRotate = new Rotate(0,Rotate.Y_AXIS),
+            zRotate = new Rotate(0,Rotate.Z_AXIS)
+    );
+    xRotate.angleProperty().bind(angleXProperty);
+    yRotate.angleProperty().bind(angleYProperty);
+    zRotate.angleProperty().bind(angleZProperty);
   }
 
   /**
@@ -323,40 +287,109 @@ public class RunwayScene extends SceneAbstract {
   @Override
   public void build() {
     try {
-      AmbientLight light = new AmbientLight();
-      light.setLightOn(true);
-      group.getChildren().add(light);
-      camera = new PerspectiveCamera();
-      angleXProperty.set(-90);
-      angleYProperty.set(-180);
-      angleZProperty.set(-90);
-      setCamera(camera);
-      Rotate xRotate;
-      Rotate yRotate;
-      Rotate zRotate;
-      group.getTransforms().addAll(
-              xRotate = new Rotate(0,Rotate.X_AXIS),
-              yRotate = new Rotate(0,Rotate.Y_AXIS),
-              zRotate = new Rotate(0,Rotate.Z_AXIS)
-      );
-      xRotate.angleProperty().bind(angleXProperty);
-      yRotate.angleProperty().bind(angleYProperty);
-      zRotate.angleProperty().bind(angleZProperty);
+      configureCamera();
+      scaleFactor.set(0.3);
       root.getChildren().add(group);
       root.setMaxWidth(width);
       root.setMaxHeight(height);
       root.setMinWidth(width);
       root.setMinHeight(height);
       root.setBackground(new Background(new BackgroundFill(Color.BLACK,null,null)));
-      group.translateXProperty().set(width/2-(width* runwaywidth / runwaylength)/2+10);
-      group.translateYProperty().set(height/2-width/2+10);
+      makeCGA();
       group.getChildren().add(makeRunway());
-      addCuboid(0,0, runwaywidth,150,50,Color.AQUA);
-      addTriangularPrism(150,0, runwaywidth,150,50,Color.RED,false);
+      group.translateYProperty().bind(scaleFactor.multiply(-105).add(height/2));
+
+
+
+      addTopView();
+      //addTriangularPrism(150,0, runwaywidth,150,50,Color.RED,false);
 
     } catch (FileNotFoundException e) {
       logger.error(e);
     }
     logger.info("building");
+  }
+
+  public void addTopView(){
+    //Clearway Right
+    addCuboid(
+            appWindow.runway.runwayLengthProperty().multiply(0.5).add( appWindow.runway.clearwayRightWidthProperty().divide(2)),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            appWindow.runway.clearwayRightWidthProperty().multiply(1),
+            appWindow.runway.clearwayRightHeightProperty().multiply(1),
+            new SimpleDoubleProperty(5).multiply(1),
+            Color.TAN);
+
+    //Clearway Left
+    addCuboid(
+            appWindow.runway.runwayLengthProperty().multiply(-0.5).add( appWindow.runway.clearwayLeftWidthProperty().divide(-2)),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            appWindow.runway.clearwayLeftWidthProperty().multiply(1),
+            appWindow.runway.clearwayLeftHeightProperty().multiply(1),
+            new SimpleDoubleProperty(5).multiply(1),
+            Color.TAN);
+
+
+    //Stopway Left
+    addCuboid(
+            appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.stopwayLeftProperty().divide(-2)),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            appWindow.runway.stopwayLeftProperty().multiply(1),
+            appWindow.runway.runwayWidthProperty().multiply(1),
+            new SimpleDoubleProperty(10).multiply(1),
+            Color.DARKGREY);
+
+    //Stopway Right
+    addCuboid(
+            appWindow.runway.runwayLengthProperty().multiply(0.5).add(appWindow.runway.stopwayRightProperty().divide(2)),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            appWindow.runway.stopwayRightProperty().multiply(1),
+            appWindow.runway.runwayWidthProperty().multiply(1),
+            new SimpleDoubleProperty(10).multiply(1),
+            Color.DARKGREY);
+
+
+    //RESA Right
+    addCuboid(
+            appWindow.runway.runwayLengthProperty().multiply(0.5).add( appWindow.runway.stopwayRightProperty()).add(appWindow.runway.stripEndRightProperty()).add(appWindow.runway.RESARightWidthProperty().divide(2)),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            appWindow.runway.RESARightWidthProperty().multiply(1),
+            appWindow.runway.RESARightHeightProperty().multiply(1),
+            new SimpleDoubleProperty(10).multiply(1),
+            Color.LIGHTGRAY);
+
+    //RESA Left
+    addCuboid(
+            appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract( appWindow.runway.stopwayLeftProperty()).subtract(appWindow.runway.stripEndLeftProperty()).subtract(appWindow.runway.RESALeftWidthProperty().divide(2)),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            appWindow.runway.RESALeftWidthProperty().multiply(1),
+            appWindow.runway.RESALeftHeightProperty().multiply(1),
+            new SimpleDoubleProperty(10).multiply(1),
+            Color.LIGHTGRAY);
+
+
+
+
+  }
+  public void makeCGA(){
+
+    //Cleared and graded area
+    ClearedGradedArea cga = new ClearedGradedArea(group);
+    cga.leftProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract( appWindow.runway.stopwayLeftProperty()).subtract(appWindow.runway.stripEndLeftProperty()).multiply(scaleFactor));
+    cga.leftStartProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).multiply(scaleFactor));
+    cga.leftEndProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).add(150).multiply(scaleFactor));
+    cga.rightProperty().bind(appWindow.runway.runwayLengthProperty().multiply(0.5).add( appWindow.runway.stopwayLeftProperty()).add(appWindow.runway.stripEndLeftProperty()).multiply(scaleFactor));
+    cga.rightStartProperty().bind(appWindow.runway.runwayLengthProperty().multiply(0.5).multiply(scaleFactor));
+    cga.rightEndProperty().bind(appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(150).multiply(scaleFactor));
+    cga.innerHeightProperty().bind(scaleFactor.multiply(-75));
+    cga.outerHeightProperty().bind(scaleFactor.multiply(-105));
+
+    group.getChildren().add(cga);
   }
 }
