@@ -4,6 +4,7 @@ import comp2211.seg.App;
 import comp2211.seg.Controller.Interfaces.Temp;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import comp2211.seg.ProcessDataModel.Airport;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
@@ -30,6 +31,7 @@ public class HomeScene extends SceneAbstract implements Temp {
    * The main application window for the interface.
    */
   protected AppWindow appWindow;
+  protected TextField nameEntry;
 
   /**
    * Constructor to create a HomeScene object.
@@ -53,9 +55,7 @@ public class HomeScene extends SceneAbstract implements Temp {
         App.getInstance().shutdown();
       }
       if(keyEvent.getCode().equals(KeyCode.ENTER)) {
-        //TO DO: create Airport class with default or entry name,
-        //[mainPane.getStyleClass().add("home-background")] to use if continue on this scene to add runways;
-        //for now ignore the entry and move to MainScene
+        appWindow.addAirport(new Airport(nameEntry.getText()));
         Platform.runLater(appWindow::startMainScene);
       }
     }));
@@ -74,7 +74,7 @@ public class HomeScene extends SceneAbstract implements Temp {
     projectInfo.setFill(Color.WHITE);
     Text entryInfo = new Text(HOME_SCENE_INFO);
     entryInfo.setFill(Color.WHITE);
-    TextField nameEntry = new TextField();
+    nameEntry = new TextField();
     nameEntry.setPromptText("new airport name");
     nameEntry.setStyle("-fx-prompt-text-fill: gray;");
 
