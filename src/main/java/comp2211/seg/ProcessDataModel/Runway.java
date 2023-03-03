@@ -37,7 +37,7 @@ public class Runway {
     if the azimuth of the centre-line is 153 then the runway designator will be 15
      */
     private final SimpleStringProperty runwayDesignator = new SimpleStringProperty("36");
-    private final SimpleDoubleProperty tora = new SimpleDoubleProperty(1000);
+    private final SimpleDoubleProperty tora = new SimpleDoubleProperty(10000);
     private final SimpleDoubleProperty toda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty asda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty lda = new SimpleDoubleProperty(800);

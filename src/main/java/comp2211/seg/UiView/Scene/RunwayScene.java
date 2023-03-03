@@ -280,7 +280,7 @@ public class RunwayScene extends SceneAbstract {
       makeCGA();
       group.getChildren().add(makeRunway());
       group.translateYProperty().bind(scaleFactor.multiply(-105).add(height/2));
-
+      scaleFactor.bind(widthProperty().divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftWidthProperty()).add(appWindow.runway.clearwayRightWidthProperty())));
 
       Obstacle obstacle = new Obstacle("Test",20,300);
       obstacle.widthProperty().set(30);
