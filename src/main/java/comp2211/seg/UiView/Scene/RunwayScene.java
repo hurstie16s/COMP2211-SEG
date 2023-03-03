@@ -76,7 +76,9 @@ public class RunwayScene extends SceneAbstract {
    */
   private double angley = 0;
 
-  protected SimpleDoubleProperty scaleFactor = new SimpleDoubleProperty();
+  protected SimpleDoubleProperty scaleFactor = new SimpleDoubleProperty(0.5);
+  protected SimpleDoubleProperty scaleFactorHeight = new SimpleDoubleProperty(2);
+  protected SimpleDoubleProperty scaleFactorDepth = new SimpleDoubleProperty(4);
 
 
   /**
@@ -219,11 +221,11 @@ public class RunwayScene extends SceneAbstract {
     //import these from runway somehow
     Box box = new Box(0,0,0);
     box.translateXProperty().bind(x.multiply(scaleFactor));
-    box.translateYProperty().bind(y.multiply(scaleFactor));
-    box.translateZProperty().bind(z.multiply(scaleFactor));
+    box.translateYProperty().bind(y.multiply(scaleFactorHeight));
+    box.translateZProperty().bind(z.subtract(d.divide(2)).multiply(scaleFactorDepth));
     box.widthProperty().bind(w.multiply(scaleFactor));
-    box.heightProperty().bind(l.multiply(scaleFactor));
-    box.depthProperty().bind(d.multiply(scaleFactor));
+    box.heightProperty().bind(l.multiply(scaleFactorHeight));
+    box.depthProperty().bind(d.multiply(scaleFactorDepth));
     box.setMaterial(material);
     group.getChildren().add(box);
   }
@@ -234,18 +236,35 @@ public class RunwayScene extends SceneAbstract {
   /**
    * Creates a 3D box representing the runway, textured with
    * an image of a runway.
-   * @return The created 3D box.
    * @throws FileNotFoundException If the image of the runway is not found.
    */
-  public Box makeRunway() throws FileNotFoundException {
+  public void makeRunway() {
+
     PhongMaterial material = new PhongMaterial();
-    material.setDiffuseMap(new Image(new FileInputStream("src/main/resources/images/runway.png")));
+    material.setDiffuseColor(Color.GREY);
     //import these from runway somehow
     Box box = new Box(0,0,runwayOffset.get());
     box.widthProperty().bind(appWindow.runway.runwayLengthProperty().multiply(scaleFactor));
-    box.heightProperty().bind(appWindow.runway.runwayWidthProperty().multiply(scaleFactor));
+    box.heightProperty().bind(appWindow.runway.runwayWidthProperty().multiply(scaleFactorHeight));
+    box.depthProperty().bind(runwayOffset.multiply(scaleFactorDepth));
+    box.translateZProperty().bind(runwayOffset.divide(-2).multiply(scaleFactorDepth));
     box.setMaterial(material);
-    return box;
+
+    group.getChildren().add(box);
+    try {
+      material = new PhongMaterial();
+      material.setDiffuseMap(new Image(new FileInputStream("src/main/resources/images/runway.png")));
+      //import these from runway somehow
+      Box overlay = new Box(0,0,0);
+      overlay.widthProperty().bind(appWindow.runway.runwayLengthProperty().multiply(scaleFactor));
+      overlay.heightProperty().bind(appWindow.runway.runwayWidthProperty().multiply(scaleFactorHeight));
+      overlay.setMaterial(material);
+      overlay.translateZProperty().set(1);
+      group.getChildren().add(overlay);
+
+    }catch (Exception e){
+      logger.error(e);
+    }
   }
 
   public void configureCamera(){
@@ -284,33 +303,29 @@ public class RunwayScene extends SceneAbstract {
    */
   @Override
   public void build() {
-    try {
-      makeBackground();
-      configureCamera();
-      scaleFactor.set(0.3);
-      root.getChildren().add(group);
-      root.setMaxWidth(width);
-      root.setMaxHeight(height);
-      root.setMinWidth(width);
-      root.setMinHeight(height);
-      root.setBackground(new Background(new BackgroundFill(Color.BLACK,null,null)));
-      //root.getStyleClass().add("runway-background");
+    makeBackground();
+    configureCamera();
+    scaleFactor.set(0.3);
+    root.getChildren().add(group);
+    root.setMaxWidth(width);
+    root.setMaxHeight(height);
+    root.setMinWidth(width);
+    root.setMinHeight(height);
+    root.setBackground(new Background(new BackgroundFill(Color.BLACK,null,null)));
+    //root.getStyleClass().add("runway-background");
 
-      makeCGA();
-      group.getChildren().add(makeRunway());
-      scaleFactor.bind(widthProperty().subtract(border).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftWidthProperty()).add(appWindow.runway.clearwayRightWidthProperty())));
+    makeCGA();
+    addTopView();
+    makeRunway();
+    scaleFactor.bind(widthProperty().subtract(border).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftWidthProperty()).add(appWindow.runway.clearwayRightWidthProperty())));
+    scaleFactorHeight.bind(heightProperty().subtract(border).divide(210));
 
-      Obstacle obstacle = new Obstacle("Test",20,300);
-      obstacle.widthProperty().set(30);
-      obstacle.lengthProperty().set(40);
-      renderObstacle(obstacle);
+    Obstacle obstacle = new Obstacle("Test",10,300);
+    obstacle.widthProperty().set(30);
+    obstacle.lengthProperty().set(40);
+    renderObstacle(obstacle);
 
 
-      addTopView();
-
-    } catch (FileNotFoundException e) {
-      logger.error(e);
-    }
     logger.info("building");
   }
 
@@ -318,7 +333,7 @@ public class RunwayScene extends SceneAbstract {
     addCuboid(
             obstacle.distFromThresholdProperty().multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
-            runwayOffset.add(obstacle.heightProperty()).divide(2),
+            obstacle.heightProperty().multiply(1),
             obstacle.widthProperty().multiply(1),
             obstacle.lengthProperty().multiply(1),
             obstacle.heightProperty().multiply(1),
@@ -329,13 +344,14 @@ public class RunwayScene extends SceneAbstract {
     group.getChildren().add(new Slope(
             obstacle,
             new SimpleDoubleProperty(0).multiply(1),
-            runwayOffset.divide(2),
+            new SimpleDoubleProperty(0).multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             obstacle.heightProperty().multiply(1),
             Color.DARKCYAN,
             appWindow.runway.directionProperty(),
-            scaleFactor
-
+            scaleFactor,
+            scaleFactorHeight,
+            scaleFactorDepth
     ));
 
   }
@@ -417,8 +433,8 @@ public class RunwayScene extends SceneAbstract {
     cga.rightProperty().bind(appWindow.runway.runwayLengthProperty().multiply(0.5).add( appWindow.runway.stopwayLeftProperty()).add(appWindow.runway.stripEndLeftProperty()).multiply(scaleFactor));
     cga.rightStartProperty().bind(appWindow.runway.runwayLengthProperty().multiply(0.5).multiply(scaleFactor));
     cga.rightEndProperty().bind(appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(150).multiply(scaleFactor));
-    cga.innerHeightProperty().bind(scaleFactor.multiply(-75));
-    cga.outerHeightProperty().bind(scaleFactor.multiply(-105));
+    cga.innerHeightProperty().bind(scaleFactorHeight.multiply(-75));
+    cga.outerHeightProperty().bind(scaleFactorHeight.multiply(-105));
 
     group.getChildren().add(cga);
   }
