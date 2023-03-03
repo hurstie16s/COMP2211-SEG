@@ -18,7 +18,7 @@ public interface Temp {
       "Josh Willson\n" +
       "jjrw1g21\n";
 
-  public static final String HOME_SCENE_INFO = "To start, enter name of a new airport followed be ENTER\n" +
+  public static final String HOME_SCENE_INFO = "To start, enter name of a new airport followed by ENTER\n" +
       "or just press ENTER to accept default settings\n" +
       "Press ESC to exit application.";
 }
