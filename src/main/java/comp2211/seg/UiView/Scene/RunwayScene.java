@@ -14,9 +14,12 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -261,6 +264,18 @@ public class RunwayScene extends SceneAbstract {
     yRotate.angleProperty().bind(angleYProperty);
     zRotate.angleProperty().bind(angleZProperty);
   }
+  public void makeBackground(){
+    Polygon background = new Polygon();
+    background.getPoints().addAll(
+            width/2, height/2,
+            -width/2, height/2,
+            -width/2,  -height/2,
+            width/2,  -height/2
+
+    );
+    background.setFill(Color.DARKGREEN);
+    group.getChildren().add(background);
+  }
 
   /**
    * Builds the scene, adding the 3D objects to the scene and
@@ -269,6 +284,7 @@ public class RunwayScene extends SceneAbstract {
   @Override
   public void build() {
     try {
+      makeBackground();
       configureCamera();
       scaleFactor.set(0.3);
       root.getChildren().add(group);
@@ -277,9 +293,10 @@ public class RunwayScene extends SceneAbstract {
       root.setMinWidth(width);
       root.setMinHeight(height);
       root.setBackground(new Background(new BackgroundFill(Color.BLACK,null,null)));
+      //root.getStyleClass().add("runway-background");
+
       makeCGA();
       group.getChildren().add(makeRunway());
-      group.translateYProperty().bind(scaleFactor.multiply(-105).add(height/2));
       scaleFactor.bind(widthProperty().divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftWidthProperty()).add(appWindow.runway.clearwayRightWidthProperty())));
 
       Obstacle obstacle = new Obstacle("Test",20,300);
