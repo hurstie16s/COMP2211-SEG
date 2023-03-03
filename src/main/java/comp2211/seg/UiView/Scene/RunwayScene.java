@@ -94,6 +94,8 @@ public class RunwayScene extends SceneAbstract {
    */
   private final DoubleProperty angleZProperty = new SimpleDoubleProperty();
 
+  private SimpleDoubleProperty border = new SimpleDoubleProperty(10);
+
 
 
 
@@ -152,7 +154,7 @@ public class RunwayScene extends SceneAbstract {
       angley = angleZProperty.get();
     });
     setOnMouseDragged(event ->{
-      angleXProperty.set(anglex + y - event.getSceneY());
+      angleXProperty.set(Math.min(Math.max(anglex + y - event.getSceneY(),90),180));
       angleZProperty.set(angley - x + event.getSceneX());
     });
     setOnScroll(event -> {
@@ -265,15 +267,14 @@ public class RunwayScene extends SceneAbstract {
     zRotate.angleProperty().bind(angleZProperty);
   }
   public void makeBackground(){
-    Polygon background = new Polygon();
-    background.getPoints().addAll(
-            width/2, height/2,
-            -width/2, height/2,
-            -width/2,  -height/2,
-            width/2,  -height/2
-
-    );
-    background.setFill(Color.DARKGREEN);
+    Box background = new Box(width,height,0);
+    PhongMaterial material = new PhongMaterial();
+    try {
+      material.setDiffuseMap(new Image(new FileInputStream("src/main/resources/images/grass.jpg")));
+    } catch (Exception e){
+      material.setDiffuseColor(Color.DARKGREEN);
+    }
+    background.setMaterial(material);
     group.getChildren().add(background);
   }
 
@@ -297,7 +298,7 @@ public class RunwayScene extends SceneAbstract {
 
       makeCGA();
       group.getChildren().add(makeRunway());
-      scaleFactor.bind(widthProperty().divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftWidthProperty()).add(appWindow.runway.clearwayRightWidthProperty())));
+      scaleFactor.bind(widthProperty().subtract(border).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftWidthProperty()).add(appWindow.runway.clearwayRightWidthProperty())));
 
       Obstacle obstacle = new Obstacle("Test",20,300);
       obstacle.widthProperty().set(30);
