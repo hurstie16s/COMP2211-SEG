@@ -15,4 +15,30 @@ public class Obstacle {
         this.distFromThreshold.set(distFromThreshold);
     }
 
+    //Getters
+    public String getObstacleDesignator() {
+        return this.obstacleDesignator.get();
+    }
+
+    public SimpleStringProperty obstacleDesignatorProperty() {
+        return this.obstacleDesignator;
+    }
+
+    public double getHeight() {
+        return this.height.get();
+    }
+
+    public SimpleDoubleProperty heightProperty() {
+        return this.height;
+    }
+
+    public double getDistFromThreshold() {
+        return this.distFromThreshold.get();
+    }
+
+    public SimpleDoubleProperty distFromThresholdProperty() {
+        return this.distFromThreshold;
+    }
+
+
 }

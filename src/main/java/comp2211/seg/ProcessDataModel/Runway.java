@@ -100,17 +100,34 @@ public class Runway {
     }
 
     public void calculateLandOver() {
+        //tora.set(Original TORA - Blast protection - Distance from threshold - Displaced threshold);
+        //asda.set((R) TORA + stopway);
+        //toda.set((R) TORA + clearway);
+        //lda.set(Original LDA - Distance from threshold - Slope calculation - strip end);
         output1.set(tora.get());
     }
 
     public void calculateLandTowards() {
+        //tora.set(Distance from threshold - slope calculation - Strip end);
+        //asda.set((R) TORA);
+        //toda.set((R) TORA);
+        //lda.set(Distance from threshold - RESA - Strip end);
         output1.set(toda.get());
     }
 
     public void calculateTakeOffToward() {
-        output1.set(Double.parseDouble(runwayDesignator.get()));}
+        //tora.set(Distance from threshold - slope calculation - Strip end);
+        //asda.set((R) TORA);
+        //toda.set((R) TORA);
+        //lda.set(Distance from threshold - RESA - Strip end);
+        output1.set(Double.parseDouble(runwayDesignator.get()));
+    }
 
     public void calculateTakeOffAway() {
+        //tora.set(Original TORA - Blast protection - Distance from threshold - Displaced threshold);
+        //asda.set((R) TORA + stopway);
+        //toda.set((R) TORA + clearway);
+        //lda.set(Original LDA - Distance from threshold - Slope calculation - strip end);
         output1.set(asda.get());}
 
 
