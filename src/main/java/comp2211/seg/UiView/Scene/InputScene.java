@@ -3,7 +3,6 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.App;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,14 +10,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.util.Objects;
 
 /**
@@ -87,7 +83,7 @@ public class InputScene extends SceneAbstract {
     makeTextField(inputs, "LDA", appWindow.runway.ldaProperty());
     makeTextField(inputs, "Display Threshold", appWindow.runway.dispThresholdProperty());
 
-    var landingMode = makeButton(calculations, "Landing Mode", appWindow.runway.landingModeProperty());
+    var landingMode = makeButton(calculations, "Landing Mode", appWindow.runway.landingProperty());
     var direction = makeButton(calculations, "Direction", appWindow.runway.directionProperty());
 
     var output1 = makeOutputLabel(outputs, "Output 1", appWindow.runway.output1Property());
@@ -143,6 +139,13 @@ public class InputScene extends SceneAbstract {
         }
       }
     });
+    property.addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+        entry.setText(t1);
+      }
+    });
+    entry.setText(property.getValue());
     return entry;
   }
 
@@ -178,6 +181,13 @@ public class InputScene extends SceneAbstract {
         }
       }
     });
+    property.addListener(new ChangeListener<Number>() {
+      @Override
+      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+        entry.setText(Double.toString(t1.doubleValue()));
+      }
+    });
+    entry.setText(property.getValue().toString());
     return entry;
   }
 
@@ -193,7 +203,8 @@ public class InputScene extends SceneAbstract {
     button.setMinWidth(width / 5);
     button.setMaxWidth(width / 5);
     parent.getChildren().add(button);
-    property.bind(button.selectedProperty());
+    property.bindBidirectional(button.selectedProperty());
+
     return button;
   }
 
