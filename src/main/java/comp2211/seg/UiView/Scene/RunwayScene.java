@@ -26,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Objects;
 
 /**
  * RunwayScene class represents the runway scene of the airport
@@ -253,7 +254,7 @@ public class RunwayScene extends SceneAbstract {
     group.getChildren().add(box);
     try {
       material = new PhongMaterial();
-      material.setDiffuseMap(new Image(new FileInputStream("src/main/resources/images/runway.png")));
+      material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/runway.png")).toExternalForm()));
       //import these from runway somehow
       Box overlay = new Box(0,0,0);
       overlay.widthProperty().bind(appWindow.runway.runwayLengthProperty().multiply(scaleFactor));
@@ -289,7 +290,7 @@ public class RunwayScene extends SceneAbstract {
     Box background = new Box(width,height,0);
     PhongMaterial material = new PhongMaterial();
     try {
-      material.setDiffuseMap(new Image(new FileInputStream("src/main/resources/images/grass.jpg")));
+      material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
     } catch (Exception e){
       material.setDiffuseColor(Color.DARKGREEN);
     }
