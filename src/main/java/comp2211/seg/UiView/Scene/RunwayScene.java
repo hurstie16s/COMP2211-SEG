@@ -2,6 +2,9 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import comp2211.seg.ProcessDataModel.Obstacle;
+import comp2211.seg.UiView.Scene.RunwayComponents.ClearedGradedArea;
+import comp2211.seg.UiView.Scene.RunwayComponents.Slope;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -14,9 +17,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.MeshView;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,6 +30,7 @@ import java.io.FileNotFoundException;
  * It extends the abstract SceneAbstract class.
  */
 public class RunwayScene extends SceneAbstract {
+  private SimpleDoubleProperty runwayOffset = new SimpleDoubleProperty(5);
   private static final Logger logger = LogManager.getLogger(RunwayScene.class);
 
   /**
@@ -222,26 +223,7 @@ public class RunwayScene extends SceneAbstract {
     group.getChildren().add(box);
   }
 
-  /**
-   * Creates a prism MeshView object with the specified coordinates, faces, and color.
-   *
-   * @param coords the coordinates of the vertices of the prism
-   * @param faces  the indices of the vertices used to construct each face of the prism
-   * @param color  the color of the prism
-   * @return the MeshView object representing the prism
-   */
-  public MeshView makePrism(float [] coords, int[] faces, Color color){
 
-    PhongMaterial material = new PhongMaterial();
-    material.setDiffuseColor(color);
-    TriangleMesh mesh = new TriangleMesh();
-    mesh.getPoints().addAll(coords);
-    mesh.getFaces().addAll(faces);
-    mesh.getTexCoords().addAll(1,1);
-    MeshView mv = new MeshView(mesh);
-    mv.setMaterial(material);
-    return mv;
-  }
 
 
   /**
@@ -254,7 +236,7 @@ public class RunwayScene extends SceneAbstract {
     PhongMaterial material = new PhongMaterial();
     material.setDiffuseMap(new Image(new FileInputStream("src/main/resources/images/runway.png")));
     //import these from runway somehow
-    Box box = new Box(0,0,5);
+    Box box = new Box(0,0,runwayOffset.get());
     box.widthProperty().bind(appWindow.runway.runwayLengthProperty().multiply(scaleFactor));
     box.heightProperty().bind(appWindow.runway.runwayWidthProperty().multiply(scaleFactor));
     box.setMaterial(material);
@@ -300,14 +282,44 @@ public class RunwayScene extends SceneAbstract {
       group.translateYProperty().bind(scaleFactor.multiply(-105).add(height/2));
 
 
+      Obstacle obstacle = new Obstacle("Test",20,300);
+      obstacle.widthProperty().set(30);
+      obstacle.lengthProperty().set(40);
+      renderObstacle(obstacle);
+
 
       addTopView();
-      //addTriangularPrism(150,0, runwaywidth,150,50,Color.RED,false);
 
     } catch (FileNotFoundException e) {
       logger.error(e);
     }
     logger.info("building");
+  }
+
+  public void renderObstacle(Obstacle obstacle){
+    addCuboid(
+            obstacle.distFromThresholdProperty().multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            runwayOffset.add(obstacle.heightProperty()).divide(2),
+            obstacle.widthProperty().multiply(1),
+            obstacle.lengthProperty().multiply(1),
+            obstacle.heightProperty().multiply(1),
+            Color.DARKRED
+
+            );
+
+    group.getChildren().add(new Slope(
+            obstacle,
+            new SimpleDoubleProperty(0).multiply(1),
+            runwayOffset.divide(2),
+            appWindow.runway.runwayWidthProperty().multiply(1),
+            obstacle.heightProperty().multiply(1),
+            Color.DARKCYAN,
+            appWindow.runway.directionProperty(),
+            scaleFactor
+
+    ));
+
   }
 
   public void addTopView(){
