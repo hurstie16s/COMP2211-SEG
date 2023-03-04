@@ -12,16 +12,13 @@ import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 
 public class Slope extends MeshView {
-    private Color color;
-    private SimpleBooleanProperty direction;
-    private SimpleFloatProperty end = new SimpleFloatProperty();
-    private SimpleFloatProperty start = new SimpleFloatProperty();
-    private SimpleFloatProperty front = new SimpleFloatProperty();
-    private SimpleFloatProperty back = new SimpleFloatProperty();
-    private SimpleFloatProperty bottom = new SimpleFloatProperty();
-    private SimpleFloatProperty top = new SimpleFloatProperty();
+    private final SimpleBooleanProperty direction;
+    private final SimpleFloatProperty front = new SimpleFloatProperty();
+    private final SimpleFloatProperty back = new SimpleFloatProperty();
+    private final SimpleFloatProperty bottom = new SimpleFloatProperty();
+    private final SimpleFloatProperty top = new SimpleFloatProperty();
     private SimpleDoubleProperty scaleFactor = new SimpleDoubleProperty();
-    private Obstacle obstacle;
+    private final Obstacle obstacle;
     /**
      * Adds a triangular prism object to the runway scene.
      *
@@ -33,8 +30,7 @@ public class Slope extends MeshView {
      * @param color     the colour of the object
      * @param direction the direction the ramp is facing
      */
-    public Slope(Obstacle obstacle, DoubleBinding y, DoubleBinding z, DoubleBinding w, DoubleBinding h, Color color, SimpleBooleanProperty direction, SimpleDoubleProperty scaleFactor){
-        this.color = color;
+    public Slope(Obstacle obstacle, DoubleBinding y, DoubleBinding z, DoubleBinding w, DoubleBinding h, Color color, SimpleBooleanProperty direction, SimpleDoubleProperty scaleFactor, SimpleDoubleProperty scaleFactorHeight, SimpleDoubleProperty scaleFactorDepth){
         this.scaleFactor = scaleFactor;
         this.obstacle = obstacle;
         PhongMaterial material = new PhongMaterial();
@@ -43,6 +39,8 @@ public class Slope extends MeshView {
         this.direction = direction;
 
         DoubleBinding x = obstacle.distFromThresholdProperty().multiply(1).subtract(obstacle.widthProperty().divide(2));
+        SimpleFloatProperty end = new SimpleFloatProperty();
+        SimpleFloatProperty start = new SimpleFloatProperty();
         for (Property prop: new Property[] {
                 front,
                 back,
@@ -55,12 +53,12 @@ public class Slope extends MeshView {
             prop.addListener((observableValue, o, t1) -> redraw());
         }
 
-        front.bind(y.multiply(scaleFactor).add(w.multiply(scaleFactor).divide(2)));
-        back.bind(y.multiply(scaleFactor).subtract(w.multiply(scaleFactor).divide(2)));
+        front.bind(y.multiply(scaleFactorHeight).add(w.multiply(scaleFactorHeight).divide(2)));
+        back.bind(y.multiply(scaleFactorHeight).subtract(w.multiply(scaleFactorHeight).divide(2)));
         start.bind(x.multiply(scaleFactor));
         end.bind(x.multiply(scaleFactor).subtract(h.multiply(scaleFactor).multiply(49)));
-        bottom.bind(z.multiply(scaleFactor));
-        top.bind(h.add(z).multiply(scaleFactor));
+        bottom.bind(z.multiply(scaleFactorDepth));
+        top.bind(h.add(z).multiply(scaleFactorDepth));
 
 
 
@@ -72,7 +70,6 @@ public class Slope extends MeshView {
      *
      * @param coords the coordinates of the vertices of the prism
      * @param faces  the indices of the vertices used to construct each face of the prism
-     * @return the MeshView object representing the prism
      */
     public void makePrism(float [] coords, int[] faces){
 
