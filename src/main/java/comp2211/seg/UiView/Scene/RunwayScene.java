@@ -96,7 +96,9 @@ public class RunwayScene extends SceneAbstract {
    */
   private final DoubleProperty angleZProperty = new SimpleDoubleProperty();
 
-  private SimpleDoubleProperty border = new SimpleDoubleProperty(10);
+  private SimpleDoubleProperty borderHorizontal = new SimpleDoubleProperty(10);
+  private SimpleDoubleProperty borderVertical = new SimpleDoubleProperty(200);
+
 
 
 
@@ -120,6 +122,27 @@ public class RunwayScene extends SceneAbstract {
     this.appWindow = appWindow;
     width = root.getParentWidth();
     height = root.getParentHeight();
+
+    Pane arrowPane = new Pane();
+    root.getChildren().add(arrowPane);
+    buildLabels();
+
+  }
+
+  public void buildLabels() {
+    Pane labelPane = new Pane();
+    //Lengths and xOffsets need binding to back-end variables, work hasn't been done yet so constants used
+    RunwayArrow TODARightLabel = new RunwayArrowRight("TODA", Color.RED, scaleFactor, 100, 25, 3000);
+    RunwayArrow ASDARightLabel = new RunwayArrowRight("ASDA", Color.BLUE,scaleFactor, 100, 100, 2500);
+    RunwayArrow TORARightLabel = new RunwayArrowRight("TORA", Color.YELLOW, scaleFactor, 100, 175, 2000);
+    RunwayArrow LDARightLabel = new RunwayArrowRight("LDA", Color.GREEN, scaleFactor, 100, 250, 1500);
+
+    RunwayArrow TODALeftLabel = new RunwayArrowLeft("TODA", Color.RED, scaleFactor, 100, 650, 3000);
+    RunwayArrow ASDALeftLabel = new RunwayArrowLeft("ASDA", Color.BLUE,scaleFactor, 100, 575, 2500);
+    RunwayArrow TORALeftLabel = new RunwayArrowLeft("TORA", Color.YELLOW, scaleFactor, 100, 500, 2000);
+    RunwayArrow LDARLeftLabel = new RunwayArrowLeft("LDA", Color.GREEN, scaleFactor, 100, 420, 1500);
+    labelPane.getChildren().addAll(TODARightLabel, ASDARightLabel, TORARightLabel, LDARightLabel, TODALeftLabel, ASDALeftLabel, TORALeftLabel, LDARLeftLabel);
+    root.getChildren().add(labelPane);
   }
 
   /**
@@ -317,8 +340,8 @@ public class RunwayScene extends SceneAbstract {
     makeCGA();
     addTopView();
     makeRunway();
-    scaleFactor.bind(widthProperty().subtract(border).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftWidthProperty()).add(appWindow.runway.clearwayRightWidthProperty())));
-    scaleFactorHeight.bind(heightProperty().subtract(border).divide(210));
+    scaleFactor.bind(widthProperty().subtract(borderHorizontal).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftWidthProperty()).add(appWindow.runway.clearwayRightWidthProperty())));
+    scaleFactorHeight.bind(heightProperty().subtract(borderVertical).divide(210));
 
     Obstacle obstacle = new Obstacle("Test",10,300);
     obstacle.widthProperty().set(30);
