@@ -3,53 +3,108 @@ package comp2211.seg.ProcessDataModel;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+/**
+ * An Obstacle object representing an obstacle on a runway.
+ */
 public class Obstacle {
 
+    /** The designator of the obstacle. */
     private final SimpleStringProperty obstacleDesignator = new SimpleStringProperty();
 
-
+    /** The height of the obstacle. */
     private final SimpleDoubleProperty height = new SimpleDoubleProperty();
+
+    /** The width of the obstacle. */
     private final SimpleDoubleProperty width = new SimpleDoubleProperty();
+
+    /** The length of the obstacle. */
     private final SimpleDoubleProperty length = new SimpleDoubleProperty();
 
-    public double getDistFromThreshold() {
-        return distFromThreshold.get();
-    }
-
-    public SimpleDoubleProperty distFromThresholdProperty() {
-        return distFromThreshold;
-    }
-
+    /** The distance of the obstacle from the runway threshold. */
     private final SimpleDoubleProperty distFromThreshold = new SimpleDoubleProperty();
 
+    /**
+     * Creates a new Obstacle object with the specified designator, height, and distance from the runway threshold.
+     *
+     * @param obstacleDesignator the designator of the obstacle
+     * @param height the height of the obstacle
+     * @param distFromThreshold the distance of the obstacle from the runway threshold
+     */
     public Obstacle(String obstacleDesignator, double height, double distFromThreshold) {
         this.obstacleDesignator.set(obstacleDesignator);
         this.height.set(height);
         this.distFromThreshold.set(distFromThreshold);
     }
 
-
+    /**
+     * Returns the height of the obstacle.
+     *
+     * @return the height of the obstacle
+     */
     public double getHeight() {
         return height.get();
     }
 
+    /**
+     * Returns the SimpleDoubleProperty representing the height of the obstacle.
+     *
+     * @return the SimpleDoubleProperty representing the height of the obstacle
+     */
     public SimpleDoubleProperty heightProperty() {
         return height;
     }
 
+    /**
+     * Returns the width of the obstacle.
+     *
+     * @return the width of the obstacle
+     */
     public double getWidth() {
         return width.get();
     }
 
+    /**
+     * Returns the SimpleDoubleProperty representing the width of the obstacle.
+     *
+     * @return the SimpleDoubleProperty representing the width of the obstacle
+     */
     public SimpleDoubleProperty widthProperty() {
         return width;
     }
 
+    /**
+     * Returns the length of the obstacle.
+     *
+     * @return the length of the obstacle
+     */
     public double getLength() {
         return length.get();
     }
 
+    /**
+     * Returns the SimpleDoubleProperty representing the length of the obstacle.
+     *
+     * @return the SimpleDoubleProperty representing the length of the obstacle
+     */
     public SimpleDoubleProperty lengthProperty() {
         return length;
+    }
+
+    /**
+     * Returns the distance of the obstacle from the runway threshold.
+     *
+     * @return the distance of the obstacle from the runway threshold
+     */
+    public double getDistFromThreshold() {
+        return distFromThreshold.get();
+    }
+
+    /**
+     * Returns the SimpleDoubleProperty representing the distance of the obstacle from the runway threshold.
+     *
+     * @return the SimpleDoubleProperty representing the distance of the obstacle from the runway threshold
+     */
+    public SimpleDoubleProperty distFromThresholdProperty() {
+        return distFromThreshold;
     }
 }
