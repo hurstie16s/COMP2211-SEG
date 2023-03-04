@@ -11,7 +11,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
@@ -22,7 +21,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
-import java.util.Objects;
 
 /**
  * RunwayScene class represents the runway scene of the airport
@@ -72,11 +70,9 @@ public class RunwayScene extends SceneAbstract {
    * The y angle of rotation of the runway scene.
    */
   private double angley = 0;
-
   protected SimpleDoubleProperty scaleFactor = new SimpleDoubleProperty(0.5);
   protected SimpleDoubleProperty scaleFactorHeight = new SimpleDoubleProperty(2);
   protected SimpleDoubleProperty scaleFactorDepth = new SimpleDoubleProperty(4);
-
 
   /**
    * A DoubleProperty object representing the x angle of rotation of the runway scene.
@@ -94,15 +90,6 @@ public class RunwayScene extends SceneAbstract {
   private final DoubleProperty angleZProperty = new SimpleDoubleProperty();
 
   private SimpleDoubleProperty borderx = new SimpleDoubleProperty(10);
-
-
-
-
-
-
-
-
-
 
   /**
    * Constructs a new RunwayScene object.
@@ -212,7 +199,6 @@ public class RunwayScene extends SceneAbstract {
    */
   public void addCuboid(DoubleBinding x, DoubleBinding y, DoubleBinding z, DoubleBinding w, DoubleBinding l, DoubleBinding d, Color color){
 
-
     PhongMaterial material = new PhongMaterial();
     material.setDiffuseColor(color);
     //import these from runway somehow
@@ -227,16 +213,12 @@ public class RunwayScene extends SceneAbstract {
     group.getChildren().add(box);
   }
 
-
-
-
   /**
    * Creates a 3D box representing the runway, textured with
    * an image of a runway.
    * @throws FileNotFoundException If the image of the runway is not found.
    */
   public void makeRunway() {
-
     PhongMaterial material = new PhongMaterial();
     material.setDiffuseColor(Color.GREY);
     //import these from runway somehow
@@ -266,7 +248,12 @@ public class RunwayScene extends SceneAbstract {
      */
   }
 
-  public void configureCamera(){
+  /**
+   * Configures the camera by adding ambient light, creating a perspective camera,
+   * and setting up rotations for the group.
+   * Binds angle properties to corresponding rotate angles.
+   */
+  public void configureCamera() {
     AmbientLight light = new AmbientLight();
     light.setLightOn(true);
     group.getChildren().add(light);
@@ -276,18 +263,21 @@ public class RunwayScene extends SceneAbstract {
     Rotate yRotate;
     Rotate zRotate;
     group.getTransforms().addAll(
-            xRotate = new Rotate(0,Rotate.X_AXIS),
-            yRotate = new Rotate(0,Rotate.Y_AXIS),
-            zRotate = new Rotate(0,Rotate.Z_AXIS)
+        xRotate = new Rotate(0,Rotate.X_AXIS),
+        yRotate = new Rotate(0,Rotate.Y_AXIS),
+        zRotate = new Rotate(0,Rotate.Z_AXIS)
     );
     xRotate.angleProperty().bind(angleXProperty);
     yRotate.angleProperty().bind(angleYProperty);
     zRotate.angleProperty().bind(angleZProperty);
   }
-  public void makeBackground(){
+  /**
+   * Creates a background box, adds a phong material and sets it to the group.
+   */
+  public void makeBackground() {
     Box background = new Box(width,height,0);
     PhongMaterial material = new PhongMaterial();
-    //material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
+//material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
     material.setDiffuseColor(Color.GREEN);
     background.setMaterial(material);
     group.getChildren().add(background);
@@ -321,10 +311,13 @@ public class RunwayScene extends SceneAbstract {
     obstacle.lengthProperty().set(40);
     renderObstacle(obstacle);
 
-
     logger.info("building");
   }
 
+  /**
+   * Renders an obstacle as a cuboid and a slope, and adds them to the 3D scene.
+   * @param obstacle The obstacle to render.
+   */
   public void renderObstacle(Obstacle obstacle){
     addCuboid(
             obstacle.distFromThresholdProperty().multiply(1),
@@ -334,7 +327,6 @@ public class RunwayScene extends SceneAbstract {
             obstacle.lengthProperty().multiply(1),
             obstacle.heightProperty().multiply(1),
             Color.DARKRED
-
             );
 
     group.getChildren().add(new Slope(
@@ -352,6 +344,9 @@ public class RunwayScene extends SceneAbstract {
 
   }
 
+  /**
+   * Adds the top view of the runway to the 3D scene.
+   */
   public void addTopView(){
     //Clearway Right
     addCuboid(
@@ -414,13 +409,15 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.RESALeftHeightProperty().multiply(1),
             new SimpleDoubleProperty(10).multiply(1),
             Color.LIGHTGRAY);
-
-
-
-
   }
+  /**
+   * Creates the Cleared and Graded Area (CGA) and adds it to the 3D group.
+   * The CGA is constructed using a {@link ClearedGradedArea} object.
+   * The properties of the CGA are bound to the corresponding properties
+   * of the Runway object and the scaling factors.
+   * @see ClearedGradedArea
+   */
   public void makeCGA(){
-
     //Cleared and graded area
     ClearedGradedArea cga = new ClearedGradedArea(group);
     cga.leftProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract( appWindow.runway.stopwayLeftProperty()).subtract(appWindow.runway.stripEndLeftProperty()).multiply(scaleFactor));
