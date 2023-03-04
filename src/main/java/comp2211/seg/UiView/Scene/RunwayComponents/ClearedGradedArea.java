@@ -35,7 +35,7 @@ public class ClearedGradedArea extends Polygon {
         }) {
             prop.addListener((observableValue, o, t1) -> redraw());
         }
-        setFill(Color.FIREBRICK);
+        setFill(Color.BLUE);
     }
     public void redraw(){
         getPoints().removeAll(getPoints());
