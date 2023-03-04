@@ -14,17 +14,13 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Objects;
 
@@ -97,7 +93,7 @@ public class RunwayScene extends SceneAbstract {
    */
   private final DoubleProperty angleZProperty = new SimpleDoubleProperty();
 
-  private SimpleDoubleProperty border = new SimpleDoubleProperty(10);
+  private SimpleDoubleProperty borderx = new SimpleDoubleProperty(10);
 
 
 
@@ -252,6 +248,7 @@ public class RunwayScene extends SceneAbstract {
     box.setMaterial(material);
 
     group.getChildren().add(box);
+    /*
     try {
       material = new PhongMaterial();
       material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/runway.png")).toExternalForm()));
@@ -266,6 +263,7 @@ public class RunwayScene extends SceneAbstract {
     }catch (Exception e){
       logger.error(e);
     }
+     */
   }
 
   public void configureCamera(){
@@ -289,11 +287,8 @@ public class RunwayScene extends SceneAbstract {
   public void makeBackground(){
     Box background = new Box(width,height,0);
     PhongMaterial material = new PhongMaterial();
-    try {
-      material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
-    } catch (Exception e){
-      material.setDiffuseColor(Color.DARKGREEN);
-    }
+    //material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
+    material.setDiffuseColor(Color.GREEN);
     background.setMaterial(material);
     group.getChildren().add(background);
   }
@@ -318,8 +313,8 @@ public class RunwayScene extends SceneAbstract {
     makeCGA();
     addTopView();
     makeRunway();
-    scaleFactor.bind(widthProperty().subtract(border).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftWidthProperty()).add(appWindow.runway.clearwayRightWidthProperty())));
-    scaleFactorHeight.bind(heightProperty().subtract(border).divide(210));
+    scaleFactor.bind(widthProperty().subtract(borderx).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftWidthProperty()).add(appWindow.runway.clearwayRightWidthProperty())));
+    scaleFactorHeight.bind(heightProperty().subtract(borderx).divide(420));
 
     Obstacle obstacle = new Obstacle("Test",10,300);
     obstacle.widthProperty().set(30);
