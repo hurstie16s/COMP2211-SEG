@@ -11,14 +11,35 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 
+/**
+ * A custom JavaFX MeshView representing a triangular prism object representing
+ * a slope obstacle in a runway scene.
+ * The class inherits from MeshView and adds properties
+ * and methods specific to Slope objects.
+ */
 public class Slope extends MeshView {
+
+    /** The direction of the ramp. */
     private final SimpleBooleanProperty direction;
+
+    /** The distance from the centre of the runway (to the left side) of the ramp. */
     private final SimpleFloatProperty front = new SimpleFloatProperty();
+
+    /** The distance from the centre of the runway (to the right side) of the ramp. */
     private final SimpleFloatProperty back = new SimpleFloatProperty();
+
+    /** The distance of the bottom of the ramp from the ground. */
     private final SimpleFloatProperty bottom = new SimpleFloatProperty();
+
+    /** The distance of the top of the ramp from the ground. */
     private final SimpleFloatProperty top = new SimpleFloatProperty();
+
+    /** The scaling factor of the ramp. */
     private SimpleDoubleProperty scaleFactor = new SimpleDoubleProperty();
+
+    /** The obstacle causing the ramp. */
     private final Obstacle obstacle;
+
     /**
      * Adds a triangular prism object to the runway scene.
      *
@@ -59,10 +80,6 @@ public class Slope extends MeshView {
         end.bind(x.multiply(scaleFactor).subtract(h.multiply(scaleFactor).multiply(49)));
         bottom.bind(z.multiply(scaleFactorDepth));
         top.bind(h.add(z).multiply(scaleFactorDepth));
-
-
-
-
     }
 
     /**
@@ -72,8 +89,6 @@ public class Slope extends MeshView {
      * @param faces  the indices of the vertices used to construct each face of the prism
      */
     public void makePrism(float [] coords, int[] faces){
-
-
         TriangleMesh mesh = new TriangleMesh();
         mesh.getPoints().addAll(coords);
         mesh.getFaces().addAll(faces);
@@ -81,6 +96,13 @@ public class Slope extends MeshView {
         setMesh(mesh);
     }
 
+    /**
+     * Redraws the slope by calculating the start and end points
+     * of the ramp and updating the mesh with the new vertices.
+     * The method uses the current values of the properties
+     * to compute the start and end points, and then creates a new
+     * triangular prism MeshView object with the updated vertices and faces.
+     */
     public void redraw(){
         float tempStart;
         float tempEnd;
@@ -90,7 +112,6 @@ public class Slope extends MeshView {
         } else {
             tempStart = (float) (obstacle.distFromThresholdProperty().get() + (obstacle.widthProperty().divide(2)).get());
             tempEnd = (float) (tempStart + obstacle.getHeight()*49);
-
         }
 
         float difference = tempStart-tempEnd;
@@ -99,7 +120,6 @@ public class Slope extends MeshView {
                 tempEnd = tempStart + 240;
             }else{
                 tempEnd = tempStart - 240;
-
             }
         }
         tempStart = (float) (tempStart * scaleFactor.get());
