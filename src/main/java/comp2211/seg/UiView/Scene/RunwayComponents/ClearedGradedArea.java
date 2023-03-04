@@ -39,8 +39,7 @@ public class ClearedGradedArea extends Polygon {
     }
     public void redraw(){
         getPoints().removeAll(getPoints());
-        getPoints().addAll(new Double[]{
-                left.get(), innerHeight.get(),
+        getPoints().addAll(left.get(), innerHeight.get(),
                 leftStart.get(), innerHeight.get(),
                 leftEnd.get(), outerHeight.get(),
                 rightEnd.get(), outerHeight.get(),
@@ -51,9 +50,7 @@ public class ClearedGradedArea extends Polygon {
                 rightEnd.get(), -outerHeight.get(),
                 leftEnd.get(), -outerHeight.get(),
                 leftStart.get(), -innerHeight.get(),
-                left.get(), -innerHeight.get(),
-
-        });
+                left.get(), -innerHeight.get());
 
     }
     public double getInnerHeight() {
