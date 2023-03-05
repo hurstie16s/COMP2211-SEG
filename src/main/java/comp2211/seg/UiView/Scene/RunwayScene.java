@@ -8,9 +8,6 @@ import comp2211.seg.UiView.Scene.RunwayComponents.Slope;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Bounds;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
@@ -434,6 +431,16 @@ public class RunwayScene extends SceneAbstract {
     group.getChildren().add(cga);
   }
 
+  /**
+   * Creates a horizontal line in a 3D space, represented by a Box object.
+   *
+   * @param start The binding for the starting position of the line on the x-axis.
+   * @param length The binding for the length of the line on the x-axis.
+   * @param height The binding for the height of the line on the y and z-axis.
+   * @param thickness The thickness of the line on the y and z-axis.
+   * @param color The color of the line.
+   * @return A Box object representing the horizontal line.
+   */
   public Box makeLineHorizontal(DoubleBinding start, DoubleBinding length, DoubleBinding height, double thickness, Color color){
 
     Box box = new Box(length.get(),thickness,thickness);
@@ -448,6 +455,15 @@ public class RunwayScene extends SceneAbstract {
     return box;
   }
 
+  /**
+   * Creates a vertical line in a 3D space, represented by a Group object containing a rotated Box.
+   *
+   * @param start The binding for the starting position of the line on the x-axis.
+   * @param height The binding for the height of the line on the y-axis.
+   * @param thickness The thickness of the line on the x and y-axis.
+   * @param color The color of the line.
+   * @return A Group object containing a rotated Box representing the vertical line.
+   */
   public Group makeLineVertical(DoubleBinding start, DoubleBinding height, double thickness, Color color){
     Group boxRotateGroup = new Group();
 
@@ -465,6 +481,19 @@ public class RunwayScene extends SceneAbstract {
     return boxRotateGroup;
   }
 
+  /**
+   * Adds a label to a given Group object, along with horizontal and vertical lines to create a rectangular
+   * background for the label. The rectangular background is created using four Box objects, two horizontal and two
+   * vertical, and is positioned based on the start and length parameters. The label is centered horizontally within
+   * the rectangular background.
+   *
+   * @param start The binding for the starting position of the rectangular background on the x-axis.
+   * @param length The binding for the length of the rectangular background on the x-axis.
+   * @param height The height of the rectangular background on the y-axis.
+   * @param group The Group object to which the label and rectangular background will be added.
+   * @param color The color of the label text and rectangular background.
+   * @param name The text of the label.
+   */
   public void addLabel(DoubleBinding start, DoubleBinding length, double height, Group group, Color color, String name){
     Group labelRotateGroup = new Group();
     Text label = new Text(name);
@@ -521,13 +550,15 @@ public class RunwayScene extends SceneAbstract {
             1,
             Color.WHITE
     );
-
-
-
     group.getChildren().addAll(labelRotateGroup,leftHorizontal,rightHorizontal,leftVertical,rightVertical);
 
   }
 
+
+  /**
+   * Adds labels to the 3D space represented by the Group object, by calling the addLabel() method with the
+   * appropriate parameters. The labels are added to a new Group object, which is then added to the main Group object.
+   */
   public void addLabels(){
     Group labels = new Group();
     group.getChildren().add(labels);
