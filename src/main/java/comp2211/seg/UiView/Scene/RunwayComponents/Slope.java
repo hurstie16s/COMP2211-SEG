@@ -35,7 +35,7 @@ public class Slope extends MeshView {
     private final SimpleFloatProperty top = new SimpleFloatProperty();
 
     /** The scaling factor of the ramp. */
-    private SimpleDoubleProperty scaleFactor = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty scaleFactor;
 
     /** The obstacle causing the ramp. */
     private final Obstacle obstacle;
@@ -44,7 +44,6 @@ public class Slope extends MeshView {
      * Adds a triangular prism object to the runway scene.
      *
      * @param obstacle  the obstacle causing the issue
-     * @param y         the distance from the centre of the runway (to the left side)
      * @param y         the height above the runway
      * @param w         the width of the runway
      * @param h         the height of the object
@@ -78,8 +77,8 @@ public class Slope extends MeshView {
         back.bind(y.multiply(scaleFactorHeight).subtract(w.multiply(scaleFactorHeight).divide(2)));
         start.bind(x.multiply(scaleFactor));
         end.bind(x.multiply(scaleFactor).subtract(h.multiply(scaleFactor).multiply(49)));
-        bottom.bind(z.multiply(scaleFactorDepth));
-        top.bind(h.add(z).multiply(scaleFactorDepth));
+        bottom.bind(z.multiply(scaleFactorDepth).multiply(-1));
+        top.bind(h.add(z).multiply(scaleFactorDepth).multiply(-1));
     }
 
     /**

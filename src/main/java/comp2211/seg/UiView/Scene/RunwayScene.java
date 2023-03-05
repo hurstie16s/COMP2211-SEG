@@ -16,11 +16,11 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileNotFoundException;
 
 /**
  * RunwayScene class represents the runway scene of the airport
@@ -28,7 +28,7 @@ import java.io.FileNotFoundException;
  * It extends the abstract SceneAbstract class.
  */
 public class RunwayScene extends SceneAbstract {
-  private SimpleDoubleProperty runwayOffset = new SimpleDoubleProperty(5);
+  private final SimpleDoubleProperty runwayOffset = new SimpleDoubleProperty(5);
   private static final Logger logger = LogManager.getLogger(RunwayScene.class);
 
   /**
@@ -89,7 +89,7 @@ public class RunwayScene extends SceneAbstract {
    */
   private final DoubleProperty angleZProperty = new SimpleDoubleProperty();
 
-  private SimpleDoubleProperty borderx = new SimpleDoubleProperty(10);
+  private final SimpleDoubleProperty borderx = new SimpleDoubleProperty(10);
 
   /**
    * Constructs a new RunwayScene object.
@@ -140,13 +140,10 @@ public class RunwayScene extends SceneAbstract {
       angley = angleZProperty.get();
     });
     setOnMouseDragged(event ->{
-      angleXProperty.set(Math.min(Math.max(anglex + y - event.getSceneY(),90),180));
+      angleXProperty.set(Math.min(Math.max(anglex + y - event.getSceneY(),-90),0));
       angleZProperty.set(angley - x + event.getSceneX());
     });
-    setOnScroll(event -> {
-      camera.translateZProperty().set(camera.getTranslateZ()+event.getDeltaY());
-
-    });
+    setOnScroll(event -> camera.translateZProperty().set(camera.getTranslateZ()+event.getDeltaY()));
   }
   /**
    * Initializes the base keyboard event listeners for the runway scene.
@@ -178,7 +175,7 @@ public class RunwayScene extends SceneAbstract {
   public void toggleView(){
     view = !view;
     if (view){
-      angleXProperty.set(90);
+      angleXProperty.set(-90);
     }
     else{
       angleXProperty.set(0);
@@ -205,7 +202,7 @@ public class RunwayScene extends SceneAbstract {
     Box box = new Box(0,0,0);
     box.translateXProperty().bind(x.multiply(scaleFactor));
     box.translateYProperty().bind(y.multiply(scaleFactorHeight));
-    box.translateZProperty().bind(z.subtract(d.divide(2)).multiply(scaleFactorDepth));
+    box.translateZProperty().bind(z.subtract(d.divide(2)).multiply(scaleFactorDepth).multiply(-1));
     box.widthProperty().bind(w.multiply(scaleFactor));
     box.heightProperty().bind(l.multiply(scaleFactorHeight));
     box.depthProperty().bind(d.multiply(scaleFactorDepth));
@@ -216,7 +213,6 @@ public class RunwayScene extends SceneAbstract {
   /**
    * Creates a 3D box representing the runway, textured with
    * an image of a runway.
-   * @throws FileNotFoundException If the image of the runway is not found.
    */
   public void makeRunway() {
     PhongMaterial material = new PhongMaterial();
@@ -226,7 +222,7 @@ public class RunwayScene extends SceneAbstract {
     box.widthProperty().bind(appWindow.runway.runwayLengthProperty().multiply(scaleFactor));
     box.heightProperty().bind(appWindow.runway.runwayWidthProperty().multiply(scaleFactorHeight));
     box.depthProperty().bind(runwayOffset.multiply(scaleFactorDepth));
-    box.translateZProperty().bind(runwayOffset.divide(-2).multiply(scaleFactorDepth));
+    box.translateZProperty().bind(runwayOffset.divide(2).multiply(scaleFactorDepth));
     box.setMaterial(material);
 
     group.getChildren().add(box);
@@ -310,6 +306,7 @@ public class RunwayScene extends SceneAbstract {
     obstacle.widthProperty().set(30);
     obstacle.lengthProperty().set(40);
     renderObstacle(obstacle);
+    addLabels();
 
     logger.info("building");
   }
@@ -430,5 +427,108 @@ public class RunwayScene extends SceneAbstract {
     cga.outerHeightProperty().bind(scaleFactorHeight.multiply(-105));
 
     group.getChildren().add(cga);
+  }
+
+  public Box makeLineHorizontal(DoubleBinding start, DoubleBinding length, DoubleBinding height, double thickness, Color color){
+
+    Box box = new Box(length.get(),thickness,thickness);
+    box.translateXProperty().bind(start.add(length.divide(2)).multiply(scaleFactor));
+    box.translateYProperty().bind(height);
+    box.translateZProperty().bind(height);
+    box.widthProperty().bind(length.multiply(scaleFactor));
+
+    PhongMaterial material = new PhongMaterial();
+    material.setDiffuseColor(color);
+    box.setMaterial(material);
+    return box;
+  }
+
+  public Group makeLineVertical(DoubleBinding start, DoubleBinding height, double thickness, Color color){
+    Group boxRotateGroup = new Group();
+
+    Box box = new Box(thickness,thickness,100);
+    box.translateXProperty().bind(start.multiply(scaleFactor));
+    box.translateZProperty().bind(box.depthProperty().divide(-2));
+    box.depthProperty().set(Math.sqrt(Math.pow(height.get(),2)*2));
+    height.addListener((observableValue, number, t1) -> box.depthProperty().set(Math.sqrt(Math.pow(height.get(),2)*2)));
+
+    PhongMaterial material = new PhongMaterial();
+    material.setDiffuseColor(color);
+    box.setMaterial(material);
+    boxRotateGroup.getChildren().add(box);
+    boxRotateGroup.getTransforms().add(new Rotate(-45,Rotate.X_AXIS));
+    return boxRotateGroup;
+  }
+
+  public void addLabel(DoubleBinding start, DoubleBinding length, double height, Group group, Color color, String name){
+    Group labelRotateGroup = new Group();
+    Text label = new Text(name);
+    label.setFill(color);
+    label.xProperty().set(-label.getLayoutBounds().getWidth()/2);
+    //label.setFont(Font.font("Calibri",20));
+
+
+    Rotate xRotate;
+    Rotate yRotate;
+    Rotate zRotate;
+    labelRotateGroup.getTransforms().addAll(
+            xRotate = new Rotate(0,Rotate.X_AXIS),
+            yRotate = new Rotate(0,Rotate.Y_AXIS),
+            zRotate = new Rotate(0,Rotate.Z_AXIS)
+    );
+    xRotate.angleProperty().bind(angleXProperty.multiply(-1));
+    yRotate.angleProperty().bind(angleZProperty.multiply(-1));
+    zRotate.angleProperty().bind(angleYProperty.multiply(-1));
+    labelRotateGroup.getChildren().add(label);
+    labelRotateGroup.translateXProperty().bind(start.subtract(length).divide(-2).multiply(scaleFactor));
+    labelRotateGroup.translateYProperty().bind(heightProperty().multiply(-0.5 * height).add(label.getLayoutBounds().getHeight()/4));
+    labelRotateGroup.translateZProperty().bind(heightProperty().multiply(-0.5 * height).add(label.getLayoutBounds().getHeight()/4));
+
+
+    Box leftHorizontal = makeLineHorizontal(
+            start,
+            length.divide(2).subtract(new SimpleDoubleProperty(label.getLayoutBounds().getWidth()/2).divide(scaleFactor)),
+            heightProperty().multiply(0.5*height).multiply(-1),
+            2,
+            Color.WHITE
+    );
+
+    Box rightHorizontal = makeLineHorizontal(
+            start.add(length.divide(2).add(new SimpleDoubleProperty(label.getLayoutBounds().getWidth()/2).divide(scaleFactor))),
+            length.divide(2).subtract(new SimpleDoubleProperty(label.getLayoutBounds().getWidth()/2).divide(scaleFactor)),
+            heightProperty().multiply(0.5*height).multiply(-1),
+            2,
+            Color.WHITE
+    );
+    Group leftVertical = makeLineVertical(
+            start,
+            heightProperty().multiply(0.5*height).multiply(-1),
+            1,
+            Color.WHITE
+    );
+
+    Group rightVertical = makeLineVertical(
+            start.add(length),
+            heightProperty().multiply(0.5*height).multiply(-1),
+            1,
+            Color.WHITE
+    );
+
+    group.getChildren().addAll(labelRotateGroup,leftHorizontal,rightHorizontal,leftVertical,rightVertical);
+
+
+  }
+
+  public void addLabels(){
+    Group labels = new Group();
+    group.getChildren().add(labels);
+    addLabel(
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(1000).multiply(1),
+            0.5,
+            labels,
+            Color.WHITE,
+            "Test"
+    );
   }
 }
