@@ -11,8 +11,11 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -22,6 +25,8 @@ import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * RunwayScene class represents the runway scene of the airport
@@ -71,9 +76,11 @@ public class RunwayScene extends SceneAbstract {
    * The y angle of rotation of the runway scene.
    */
   private double angley = 0;
+
   protected SimpleDoubleProperty scaleFactor = new SimpleDoubleProperty(0.5);
   protected SimpleDoubleProperty scaleFactorHeight = new SimpleDoubleProperty(2);
   protected SimpleDoubleProperty scaleFactorDepth = new SimpleDoubleProperty(4);
+
 
   /**
    * A DoubleProperty object representing the x angle of rotation of the runway scene.
@@ -105,6 +112,27 @@ public class RunwayScene extends SceneAbstract {
     this.appWindow = appWindow;
     width = root.getParentWidth();
     height = root.getParentHeight();
+
+    Pane arrowPane = new Pane();
+    root.getChildren().add(arrowPane);
+    buildLabels();
+
+  }
+
+  public void buildLabels() {
+    Pane labelPane = new Pane();
+    //Lengths and xOffsets need binding to back-end variables, work hasn't been done yet so constants used
+    RunwayArrow TODARightLabel = new RunwayArrowRight("TODA", Color.RED, scaleFactor, 100, 25, 3000);
+    RunwayArrow ASDARightLabel = new RunwayArrowRight("ASDA", Color.BLUE,scaleFactor, 100, 100, 2500);
+    RunwayArrow TORARightLabel = new RunwayArrowRight("TORA", Color.YELLOW, scaleFactor, 100, 175, 2000);
+    RunwayArrow LDARightLabel = new RunwayArrowRight("LDA", Color.GREEN, scaleFactor, 100, 250, 1500);
+
+    RunwayArrow TODALeftLabel = new RunwayArrowLeft("TODA", Color.RED, scaleFactor, 100, 650, 3000);
+    RunwayArrow ASDALeftLabel = new RunwayArrowLeft("ASDA", Color.BLUE,scaleFactor, 100, 575, 2500);
+    RunwayArrow TORALeftLabel = new RunwayArrowLeft("TORA", Color.YELLOW, scaleFactor, 100, 500, 2000);
+    RunwayArrow LDARLeftLabel = new RunwayArrowLeft("LDA", Color.GREEN, scaleFactor, 100, 420, 1500);
+    labelPane.getChildren().addAll(TODARightLabel, ASDARightLabel, TORARightLabel, LDARightLabel, TODALeftLabel, ASDALeftLabel, TORALeftLabel, LDARLeftLabel);
+    root.getChildren().add(labelPane);
   }
 
   /**
@@ -417,6 +445,7 @@ public class RunwayScene extends SceneAbstract {
    * @see ClearedGradedArea
    */
   public void makeCGA(){
+
     //Cleared and graded area
     ClearedGradedArea cga = new ClearedGradedArea(group);
     cga.leftProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract( appWindow.runway.stopwayLeftProperty()).subtract(appWindow.runway.stripEndLeftProperty()).multiply(scaleFactor));
