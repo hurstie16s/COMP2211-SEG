@@ -3,6 +3,7 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.ProcessDataModel.Obstacle;
+import comp2211.seg.UiView.Overlay.RunwayLabel;
 import comp2211.seg.UiView.Scene.RunwayComponents.ClearedGradedArea;
 import comp2211.seg.UiView.Scene.RunwayComponents.Slope;
 import javafx.beans.binding.DoubleBinding;
@@ -11,22 +12,13 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 /**
  * RunwayScene class represents the runway scene of the airport
@@ -113,27 +105,8 @@ public class RunwayScene extends SceneAbstract {
     width = root.getParentWidth();
     height = root.getParentHeight();
 
-    Pane arrowPane = new Pane();
-    root.getChildren().add(arrowPane);
-    buildLabels();
-
   }
 
-  public void buildLabels() {
-    Pane labelPane = new Pane();
-    //Lengths and xOffsets need binding to back-end variables, work hasn't been done yet so constants used
-    RunwayArrow TODARightLabel = new RunwayArrowRight("TODA", Color.RED, scaleFactor, 100, 25, 3000);
-    RunwayArrow ASDARightLabel = new RunwayArrowRight("ASDA", Color.BLUE,scaleFactor, 100, 100, 2500);
-    RunwayArrow TORARightLabel = new RunwayArrowRight("TORA", Color.YELLOW, scaleFactor, 100, 175, 2000);
-    RunwayArrow LDARightLabel = new RunwayArrowRight("LDA", Color.GREEN, scaleFactor, 100, 250, 1500);
-
-    RunwayArrow TODALeftLabel = new RunwayArrowLeft("TODA", Color.RED, scaleFactor, 100, 650, 3000);
-    RunwayArrow ASDALeftLabel = new RunwayArrowLeft("ASDA", Color.BLUE,scaleFactor, 100, 575, 2500);
-    RunwayArrow TORALeftLabel = new RunwayArrowLeft("TORA", Color.YELLOW, scaleFactor, 100, 500, 2000);
-    RunwayArrow LDARLeftLabel = new RunwayArrowLeft("LDA", Color.GREEN, scaleFactor, 100, 420, 1500);
-    labelPane.getChildren().addAll(TODARightLabel, ASDARightLabel, TORARightLabel, LDARightLabel, TODALeftLabel, ASDALeftLabel, TORALeftLabel, LDARLeftLabel);
-    root.getChildren().add(labelPane);
-  }
 
   /**
    * Initializes the mouse and keyboard event listeners for
@@ -338,6 +311,12 @@ public class RunwayScene extends SceneAbstract {
 
 
 
+    Pane arrowPane = new Pane();
+    root.getChildren().add(arrowPane);
+    buildLabels();
+
+
+
     logger.info("building");
   }
 
@@ -461,133 +440,8 @@ public class RunwayScene extends SceneAbstract {
   }
 
   /**
-   * Creates a horizontal line in a 3D space, represented by a Box object.
-   *
-   * @param start The binding for the starting position of the line on the x-axis.
-   * @param length The binding for the length of the line on the x-axis.
-   * @param height The binding for the height of the line on the y and z-axis.
-   * @param thickness The thickness of the line on the y and z-axis.
-   * @param color The color of the line.
-   * @return A Box object representing the horizontal line.
-   */
-  public Box makeLineHorizontal(DoubleBinding start, DoubleBinding length, DoubleBinding height, double thickness, Color color){
-
-    Box box = new Box(length.get(),thickness,thickness);
-    box.translateXProperty().bind(start.add(length.divide(2)).multiply(scaleFactor));
-    box.translateYProperty().bind(height);
-    box.translateZProperty().bind(height);
-    box.widthProperty().bind(length.multiply(scaleFactor));
-
-    PhongMaterial material = new PhongMaterial();
-    material.setDiffuseColor(color);
-    box.setMaterial(material);
-    return box;
-  }
-
-  /**
-   * Creates a vertical line in a 3D space, represented by a Group object containing a rotated Box.
-   *
-   * @param start The binding for the starting position of the line on the x-axis.
-   * @param height The binding for the height of the line on the y-axis.
-   * @param thickness The thickness of the line on the x and y-axis.
-   * @param color The color of the line.
-   * @return A Group object containing a rotated Box representing the vertical line.
-   */
-  public Group makeLineVertical(DoubleBinding start, DoubleBinding height, double thickness, Color color){
-    Group boxRotateGroup = new Group();
-
-    Box box = new Box(thickness,thickness,100);
-    box.translateXProperty().bind(start.multiply(scaleFactor));
-    box.translateZProperty().bind(box.depthProperty().divide(-2));
-    box.depthProperty().set(Math.sqrt(Math.pow(height.get(),2)*2));
-    height.addListener((observableValue, number, t1) -> box.depthProperty().set(Math.sqrt(Math.pow(height.get(),2)*2)));
-
-    PhongMaterial material = new PhongMaterial();
-    material.setDiffuseColor(color);
-    box.setMaterial(material);
-    boxRotateGroup.getChildren().add(box);
-    boxRotateGroup.getTransforms().add(new Rotate(-45,Rotate.X_AXIS));
-    return boxRotateGroup;
-  }
-
-  /**
-   * Adds a label to a given Group object, along with horizontal and vertical lines to create a rectangular
-   * background for the label. The rectangular background is created using four Box objects, two horizontal and two
-   * vertical, and is positioned based on the start and length parameters. The label is centered horizontally within
-   * the rectangular background.
-   *
-   * @param start The binding for the starting position of the rectangular background on the x-axis.
-   * @param length The binding for the length of the rectangular background on the x-axis.
-   * @param height The height of the rectangular background on the y-axis.
-   * @param group The Group object to which the label and rectangular background will be added.
-   * @param color The color of the label text and rectangular background.
-   * @param name The text of the label.
-   */
-  public void addLabel(DoubleBinding start, DoubleBinding length, double height, Group group, Color color, String name){
-    Group labelRotateGroup = new Group();
-    Text label = new Text(name);
-    label.setFill(color);
-    label.setFont(Font.font("Calibri",18));
-    label.xProperty().set(-label.getBoundsInLocal().getWidth()/2);
-    label.yProperty().set(label.getBoundsInLocal().getHeight()/4);
-
-
-    Rotate xRotate;
-    Rotate yRotate;
-    Rotate zRotate;
-    labelRotateGroup.getTransforms().addAll(
-            xRotate = new Rotate(0,Rotate.X_AXIS),
-            yRotate = new Rotate(0,Rotate.Y_AXIS),
-            zRotate = new Rotate(0,Rotate.Z_AXIS)
-    );
-
-    xRotate.angleProperty().bind(angleXProperty.multiply(-1));
-    yRotate.angleProperty().bind(angleZProperty.multiply(-1));
-    zRotate.angleProperty().bind(angleYProperty.multiply(-1));
-
-    labelRotateGroup.getChildren().add(label);
-    labelRotateGroup.translateXProperty().bind(start.subtract(length).divide(-2).multiply(scaleFactor));
-    labelRotateGroup.translateYProperty().bind(heightProperty().multiply(-0.5 * height));
-    labelRotateGroup.translateZProperty().bind(heightProperty().multiply(-0.5 * height));
-
-
-    Box leftHorizontal = makeLineHorizontal(
-            start,
-            length.divide(2).subtract(new SimpleDoubleProperty(label.getBoundsInLocal().getWidth()/2).divide(scaleFactor)),
-            heightProperty().multiply(0.5*height).multiply(-1),
-            2,
-            Color.WHITE
-    );
-
-    Box rightHorizontal = makeLineHorizontal(
-            start.add(length.divide(2).add(new SimpleDoubleProperty(label.getBoundsInLocal().getWidth()/2).divide(scaleFactor))),
-            length.divide(2).subtract(new SimpleDoubleProperty(label.getBoundsInLocal().getWidth()/2).divide(scaleFactor)),
-            heightProperty().multiply(0.5*height).multiply(-1),
-            2,
-            Color.WHITE
-    );
-    Group leftVertical = makeLineVertical(
-            start,
-            heightProperty().multiply(0.5*height).multiply(-1),
-            1,
-            Color.WHITE
-    );
-
-    Group rightVertical = makeLineVertical(
-            start.add(length),
-            heightProperty().multiply(0.5*height).multiply(-1),
-            1,
-            Color.WHITE
-    );
-    group.getChildren().addAll(labelRotateGroup,leftHorizontal,rightHorizontal,leftVertical,rightVertical);
-
-  }
-
-
-  /**
    * Adds labels to the 3D space represented by the Group object, by calling the addLabel() method with the
    * appropriate parameters. The labels are added to a new Group object, which is then added to the main Group object.
-   */
   public void addLabels(){
     Group labels = new Group();
     group.getChildren().add(labels);
@@ -599,5 +453,55 @@ public class RunwayScene extends SceneAbstract {
             Color.WHITE,
             "Test"
     );
+  }
+
+   */
+
+  public void buildLabels() {
+    Pane labelPane = new Pane();
+    //Lengths and xOffsets need binding to back-end variables, work hasn't been done yet so constants used
+
+    //RunwayArrow TODARightLabel = new RunwayArrowRight("TODA", Color.RED, scaleFactor, 100, 25, 3000);
+    RunwayLabel TODARightLabel = new RunwayLabel("TODA", Color.RED, appWindow.runway.runwayLengthProperty().multiply(-0.5), 0.9, appWindow.runway.todaProperty().multiply(-1),this,true);
+    RunwayLabel TORARightLabel = new RunwayLabel("TORA", Color.YELLOW, appWindow.runway.runwayLengthProperty().multiply(-0.5), 0.7, appWindow.runway.toraProperty().multiply(-1),this,true);
+    RunwayLabel ASDARightLabel = new RunwayLabel("ASDA", Color.BLUE, appWindow.runway.runwayLengthProperty().multiply(-0.5), 0.5, appWindow.runway.asdaProperty().multiply(-1),this,true);
+    RunwayLabel LDARightLabel = new RunwayLabel("LDA", Color.GREEN, appWindow.runway.runwayLengthProperty().multiply(-0.5), 0.3, appWindow.runway.ldaProperty().multiply(-1),this,true);
+    RunwayLabel TODALeftLabel = new RunwayLabel("TODA", Color.RED, appWindow.runway.runwayLengthProperty().multiply(0.5), -0.9, appWindow.runway.todaProperty().multiply(1),this,false);
+    RunwayLabel TORALeftLabel = new RunwayLabel("TORA", Color.YELLOW, appWindow.runway.runwayLengthProperty().multiply(0.5), -0.7, appWindow.runway.toraProperty().multiply(1),this,false);
+    RunwayLabel ASDALeftLabel = new RunwayLabel("ASDA", Color.BLUE, appWindow.runway.runwayLengthProperty().multiply(0.5), -0.5, appWindow.runway.asdaProperty().multiply(1),this,false);
+    RunwayLabel LDALeftLabel = new RunwayLabel("LDA", Color.GREEN, appWindow.runway.runwayLengthProperty().multiply(0.5), -0.3, appWindow.runway.ldaProperty().multiply(1),this,false);
+    group.getChildren().addAll(TODARightLabel, ASDARightLabel, TORARightLabel, LDARightLabel, TODALeftLabel, ASDALeftLabel, TORALeftLabel, LDALeftLabel);
+  }
+
+  public double getAngleXProperty() {
+    return angleXProperty.get();
+  }
+
+  public DoubleProperty angleXProperty() {
+    return angleXProperty;
+  }
+
+  public double getAngleYProperty() {
+    return angleYProperty.get();
+  }
+
+  public DoubleProperty angleYProperty() {
+    return angleYProperty;
+  }
+
+  public double getAngleZProperty() {
+    return angleZProperty.get();
+  }
+
+  public DoubleProperty angleZProperty() {
+    return angleZProperty;
+  }
+
+  public double getScaleFactor() {
+    return scaleFactor.get();
+  }
+
+  public SimpleDoubleProperty scaleFactorProperty() {
+    return scaleFactor;
   }
 }

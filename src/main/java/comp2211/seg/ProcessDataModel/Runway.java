@@ -44,7 +44,6 @@ public class Runway {
     private final SimpleDoubleProperty lda = new SimpleDoubleProperty(800);
     private final SimpleDoubleProperty dispThreshold = new SimpleDoubleProperty(0);
 
-    private final ArrayList<Obstacle> runwayObstacles = new ArrayList<>();
     private Obstacle runwayObstacle;
 
     private final SimpleBooleanProperty landing = new SimpleBooleanProperty(true);
@@ -96,23 +95,16 @@ public class Runway {
      @param obstacleToAdd The obstacle to add to the runway.
      */
     public void addObstacle(Obstacle obstacleToAdd) {
-        runwayObstacles.add(obstacleToAdd);
         runwayObstacle = obstacleToAdd;
-        // re-calculate values?
+        recalculate();
     }
     /**
 
      Removes an obstacle from the list of obstacles on the runway.
-     @param obstacleToRemove The obstacle to remove from the runway.
      */
-    public void removeObstacle(Obstacle obstacleToRemove) {
-        runwayObstacles.remove(obstacleToRemove);
-        if (runwayObstacles.size() > 0){
-            runwayObstacle = runwayObstacles.get(runwayObstacles.size()-1);
-        } else {
-            runwayObstacle = null;
-        }
-        // re-calculate values?
+    public void removeObstacle() {
+        runwayObstacle = null;
+        recalculate();
     }
     /**
 
@@ -276,13 +268,6 @@ public class Runway {
     }
     public Obstacle getRunwayObstacle() {
         return runwayObstacle;
-    }
-    /**
-     * Returns an ArrayList of obstacles on the runway.
-     * @return An ArrayList of obstacles on the runway.
-     */
-    public ArrayList<Obstacle> getRunwayObstacles() {
-        return runwayObstacles;
     }
     /**
      * Returns the value of landing.

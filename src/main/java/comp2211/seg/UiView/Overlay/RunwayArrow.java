@@ -1,5 +1,7 @@
 package comp2211.seg.UiView.Overlay;
 
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Group;
@@ -19,69 +21,94 @@ public class RunwayArrow extends Group {
     protected double headWidth = 4 * strokeWidth;
     protected double headHeight = 1.75 * strokeWidth;
     protected SimpleDoubleProperty scaleFactor;
-    protected double length;
+    protected boolean direction;
+    protected DoubleBinding length;
     protected double xOffset;
     protected double yOffset;
-    protected String labelText;
+    public String labelText;
 
 
     protected ChangeListener<Number> translationListener;
 
-    protected RunwayArrow(String text, Color col, SimpleDoubleProperty scale) {
+    protected RunwayArrow(Color col, SimpleDoubleProperty scale, DoubleBinding length, boolean direction) {
         color = col;
-        labelText = text;
         scaleFactor = scale;
         scaleFactor.addListener((obs, oldVal, newVal) -> setLength(length));
+        this.direction = direction;
 
         buildArrowLine();
         buildArrowHead();
-        buildArrowLabel();
+        setLength(length);
+        setXOffset(length);
 
-        getChildren().addAll(arrowLine, arrowHead, arrowLabel);
     }
 
     protected void buildArrowLine() {
         arrowLine = new Line();
         arrowLine.setStroke(color);
         arrowLine.setStrokeWidth(strokeWidth);
+        getChildren().add(arrowLine);
 
     }
 
     protected void buildArrowHead() {
         arrowHead = new Polygon();
         arrowHead.setFill(color);
+        getChildren().add(arrowHead);
+        if (direction){
+            buildArrowHeadRight();
+        } else {
+            buildArrowHeadLeft();
+        }
     }
 
     protected void buildArrowLabel() {
         arrowLabel = new Label(labelText);
         arrowLabel.setTextFill(labelColor);
-    }
-
-    protected void addTranslationListeners() {
-        arrowLine.startXProperty().addListener(translationListener);
-        arrowLine.endXProperty().addListener(translationListener);
-        arrowLine.startYProperty().addListener(translationListener);
-        arrowLine.endYProperty().addListener(translationListener);
+        getChildren().addAll(arrowLabel);
     }
 
 
-    public void setXOffset(double x) {
-        xOffset = x;
-        arrowLine.setStartX(xOffset * scaleFactor.get());
+
+    public void setXOffset(DoubleBinding l) {
+        arrowLine.startXProperty().bind(l.multiply(scaleFactor).multiply(-0).add(1));
     }
 
-    public void setYOffset(double y) {
-        yOffset = y;
-        arrowLine.setStartY(yOffset * scaleFactor.get());
-        arrowLine.setEndY(yOffset * scaleFactor.get());
-    }
-
-    public void setLength(double l) {
-        length = l;
-        arrowLine.setEndX(arrowLine.getStartX() + length * scaleFactor.get() - headWidth);
+    public void setLength(DoubleBinding l) {
+        arrowLine.endXProperty().bind(l.multiply(scaleFactor).multiply(1).subtract(1));
         //* scale.get()
     }
+    /* Arrows outside
+    protected void buildArrowHeadRight() {
+        arrowHead.getPoints().addAll(
+                0.0, headHeight,
+                headWidth, 0.0,
+                0.0, -headHeight);
+    }
 
+
+    protected void buildArrowHeadLeft() {
+        arrowHead.getPoints().addAll(
+                0.0, headHeight,
+                -headWidth, 0.0,
+                0.0, -headHeight);
+    }
+
+     */
+    protected void buildArrowHeadRight() {
+        arrowHead.getPoints().addAll(
+                -headWidth, headHeight,
+                0.0, 0.0,
+                -headWidth, -headHeight);
+    }
+
+
+    protected void buildArrowHeadLeft() {
+        arrowHead.getPoints().addAll(
+                headWidth, headHeight,
+                0.0, 0.0,
+                headWidth, -headHeight);
+    }
 
 
 }
