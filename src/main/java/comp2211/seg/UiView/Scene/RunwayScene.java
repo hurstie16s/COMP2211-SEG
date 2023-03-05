@@ -310,7 +310,8 @@ public class RunwayScene extends SceneAbstract {
     obstacle.widthProperty().set(30);
     obstacle.lengthProperty().set(40);
     renderObstacle(obstacle);
-    addLabels();
+
+
 
     logger.info("building");
   }
@@ -481,9 +482,11 @@ public class RunwayScene extends SceneAbstract {
             yRotate = new Rotate(0,Rotate.Y_AXIS),
             zRotate = new Rotate(0,Rotate.Z_AXIS)
     );
+
     xRotate.angleProperty().bind(angleXProperty.multiply(-1));
     yRotate.angleProperty().bind(angleZProperty.multiply(-1));
     zRotate.angleProperty().bind(angleYProperty.multiply(-1));
+
     labelRotateGroup.getChildren().add(label);
     labelRotateGroup.translateXProperty().bind(start.subtract(length).divide(-2).multiply(scaleFactor));
     labelRotateGroup.translateYProperty().bind(heightProperty().multiply(-0.5 * height));
