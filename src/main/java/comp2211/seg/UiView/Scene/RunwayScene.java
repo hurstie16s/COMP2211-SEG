@@ -8,6 +8,9 @@ import comp2211.seg.UiView.Scene.RunwayComponents.Slope;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Bounds;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
@@ -16,6 +19,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
@@ -464,8 +468,9 @@ public class RunwayScene extends SceneAbstract {
     Group labelRotateGroup = new Group();
     Text label = new Text(name);
     label.setFill(color);
-    label.xProperty().set(-label.getLayoutBounds().getWidth()/2);
-    //label.setFont(Font.font("Calibri",20));
+    label.setFont(Font.font("Calibri",18));
+    label.xProperty().set(-label.getBoundsInLocal().getWidth()/2);
+    label.yProperty().set(label.getBoundsInLocal().getHeight()/4);
 
 
     Rotate xRotate;
@@ -481,21 +486,21 @@ public class RunwayScene extends SceneAbstract {
     zRotate.angleProperty().bind(angleYProperty.multiply(-1));
     labelRotateGroup.getChildren().add(label);
     labelRotateGroup.translateXProperty().bind(start.subtract(length).divide(-2).multiply(scaleFactor));
-    labelRotateGroup.translateYProperty().bind(heightProperty().multiply(-0.5 * height).add(label.getLayoutBounds().getHeight()/4));
-    labelRotateGroup.translateZProperty().bind(heightProperty().multiply(-0.5 * height).add(label.getLayoutBounds().getHeight()/4));
+    labelRotateGroup.translateYProperty().bind(heightProperty().multiply(-0.5 * height));
+    labelRotateGroup.translateZProperty().bind(heightProperty().multiply(-0.5 * height));
 
 
     Box leftHorizontal = makeLineHorizontal(
             start,
-            length.divide(2).subtract(new SimpleDoubleProperty(label.getLayoutBounds().getWidth()/2).divide(scaleFactor)),
+            length.divide(2).subtract(new SimpleDoubleProperty(label.getBoundsInLocal().getWidth()/2).divide(scaleFactor)),
             heightProperty().multiply(0.5*height).multiply(-1),
             2,
             Color.WHITE
     );
 
     Box rightHorizontal = makeLineHorizontal(
-            start.add(length.divide(2).add(new SimpleDoubleProperty(label.getLayoutBounds().getWidth()/2).divide(scaleFactor))),
-            length.divide(2).subtract(new SimpleDoubleProperty(label.getLayoutBounds().getWidth()/2).divide(scaleFactor)),
+            start.add(length.divide(2).add(new SimpleDoubleProperty(label.getBoundsInLocal().getWidth()/2).divide(scaleFactor))),
+            length.divide(2).subtract(new SimpleDoubleProperty(label.getBoundsInLocal().getWidth()/2).divide(scaleFactor)),
             heightProperty().multiply(0.5*height).multiply(-1),
             2,
             Color.WHITE
@@ -514,8 +519,9 @@ public class RunwayScene extends SceneAbstract {
             Color.WHITE
     );
 
-    group.getChildren().addAll(labelRotateGroup,leftHorizontal,rightHorizontal,leftVertical,rightVertical);
 
+
+    group.getChildren().addAll(labelRotateGroup,leftHorizontal,rightHorizontal,leftVertical,rightVertical);
 
   }
 
