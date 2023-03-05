@@ -61,6 +61,12 @@ public class Slope extends MeshView {
         DoubleBinding x = obstacle.distFromThresholdProperty().multiply(1).subtract(obstacle.widthProperty().divide(2));
         SimpleFloatProperty end = new SimpleFloatProperty();
         SimpleFloatProperty start = new SimpleFloatProperty();
+        front.bind(y.multiply(scaleFactorHeight).add(w.multiply(scaleFactorHeight).divide(2)));
+        back.bind(y.multiply(scaleFactorHeight).subtract(w.multiply(scaleFactorHeight).divide(2)));
+        start.bind(x.multiply(scaleFactor));
+        end.bind(x.multiply(scaleFactor).subtract(h.multiply(scaleFactor).multiply(49)));
+        bottom.bind(z.multiply(scaleFactorDepth).multiply(-1));
+        top.bind(h.add(z).multiply(scaleFactorDepth).multiply(-1));
         for (Property prop: new Property[] {
                 front,
                 back,
@@ -68,17 +74,12 @@ public class Slope extends MeshView {
                 start,
                 bottom,
                 top,
-                direction
+                direction,
+                scaleFactor
         }) {
             prop.addListener((observableValue, o, t1) -> redraw());
         }
-
-        front.bind(y.multiply(scaleFactorHeight).add(w.multiply(scaleFactorHeight).divide(2)));
-        back.bind(y.multiply(scaleFactorHeight).subtract(w.multiply(scaleFactorHeight).divide(2)));
-        start.bind(x.multiply(scaleFactor));
-        end.bind(x.multiply(scaleFactor).subtract(h.multiply(scaleFactor).multiply(49)));
-        bottom.bind(z.multiply(scaleFactorDepth).multiply(-1));
-        top.bind(h.add(z).multiply(scaleFactorDepth).multiply(-1));
+        redraw();
     }
 
     /**
@@ -114,7 +115,7 @@ public class Slope extends MeshView {
         }
 
         float difference = tempStart-tempEnd;
-        if (-240*scaleFactor.get() < difference && difference < 240*scaleFactor.get()) {
+        if (-240 < difference && difference < 240) {
             if (tempStart < tempEnd){
                 tempEnd = tempStart + 240;
             }else{
