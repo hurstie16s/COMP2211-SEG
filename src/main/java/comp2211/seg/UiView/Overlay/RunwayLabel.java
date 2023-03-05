@@ -47,7 +47,7 @@ public class RunwayLabel extends Group{
         if (direction) {
             labelRotateGroup.translateXProperty().bind(xOffset.multiply(scene.scaleFactorProperty()).add(label.getBoundsInLocal().getWidth() / 2));
         }else {
-            labelRotateGroup.translateXProperty().bind(xOffset.add(length).multiply(scene.scaleFactorProperty()).subtract(label.getBoundsInLocal().getWidth() / 2));
+            labelRotateGroup.translateXProperty().bind(xOffset.multiply(scene.scaleFactorProperty()).subtract(label.getBoundsInLocal().getWidth() / 2));
 
         }
         labelRotateGroup.translateYProperty().bind(scene.heightProperty().multiply(-0.5 * yOffset));
