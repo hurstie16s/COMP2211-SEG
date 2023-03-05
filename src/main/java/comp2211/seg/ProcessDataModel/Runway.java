@@ -99,36 +99,65 @@ public class Runway {
         }
     }
 
+    /**
+     Calculations for when a plane is landing over an obstacle
+     */
     public void calculateLandOver() {
-        //tora.set(Original TORA - Blast protection - Distance from threshold - Displaced threshold);
-        //asda.set((R) TORA + stopway);
-        //toda.set((R) TORA + clearway);
-        //lda.set(Original LDA - Distance from threshold - Slope calculation - strip end);
+        if (!runwayObstacles.isEmpty()) {
+            Obstacle currentObstacle = runwayObstacles.get(0);
+
+            // tora.set(Original TORA - Blast protection - Distance from threshold - Displaced threshold);
+            // asda.set((R) TORA + stopway);
+            // toda.set((R) TORA + clearway);
+            // lda.set(Original LDA - Distance from threshold - Slope calculation - strip end);
+        }
         output1.set(tora.get());
     }
 
+    /**
+     Calculations for when a plane is landing towards an obstacle
+     */
     public void calculateLandTowards() {
-        //tora.set(Distance from threshold - slope calculation - Strip end);
-        //asda.set((R) TORA);
-        //toda.set((R) TORA);
-        //lda.set(Distance from threshold - RESA - Strip end);
+        if (!runwayObstacles.isEmpty()) {
+            Obstacle currentObstacle = runwayObstacles.get(0);
+
+            tora.set(currentObstacle.getDistFromThreshold() - (50 * currentObstacle.getHeight()) - STRIPEND.get());
+            asda.set(tora.get());
+            toda.set(tora.get());
+            lda.set(currentObstacle.getDistFromThreshold() - MINRESA.get() - STRIPEND.get());
+        }
         output1.set(toda.get());
     }
 
+    /**
+    Calculations for when a plane is taking-off towards an obstacle
+     */
     public void calculateTakeOffToward() {
-        //tora.set(Distance from threshold - slope calculation - Strip end);
-        //asda.set((R) TORA);
-        //toda.set((R) TORA);
-        //lda.set(Distance from threshold - RESA - Strip end);
+        if (!runwayObstacles.isEmpty()) {
+            Obstacle currentObstacle = runwayObstacles.get(0);
+
+            tora.set(currentObstacle.getDistFromThreshold() - (50 * currentObstacle.getHeight()) - STRIPEND.get());
+            asda.set(tora.get());
+            toda.set(tora.get());
+            lda.set(currentObstacle.getDistFromThreshold() - MINRESA.get() - STRIPEND.get());
+        }
         output1.set(Double.parseDouble(runwayDesignator.get()));
     }
 
+    /**
+     Calculations for when a plane is taking-off away from an obstacle
+     */
     public void calculateTakeOffAway() {
-        //tora.set(Original TORA - Blast protection - Distance from threshold - Displaced threshold);
-        //asda.set((R) TORA + stopway);
-        //toda.set((R) TORA + clearway);
-        //lda.set(Original LDA - Distance from threshold - Slope calculation - strip end);
-        output1.set(asda.get());}
+        if (!runwayObstacles.isEmpty()) {
+            Obstacle currentObstacle = runwayObstacles.get(0);
+
+            // tora.set(tora.get() - BLASTZONE.get() - currentObstacle.getDistFromThreshold() );
+            // asda.set((R) TORA + stopway);
+            // toda.set((R) TORA + clearway);
+            // lda.set(Original LDA - Distance from threshold - Slope calculation - strip end);
+        }
+        output1.set(asda.get());
+    }
 
 
 
