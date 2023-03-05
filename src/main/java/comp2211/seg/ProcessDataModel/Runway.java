@@ -4,6 +4,8 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import java.util.ArrayList;
 
@@ -43,6 +45,7 @@ public class Runway {
     private final SimpleDoubleProperty dispThreshold = new SimpleDoubleProperty(0);
 
     private final ArrayList<Obstacle> runwayObstacles = new ArrayList<>();
+    private Obstacle runwayObstacle;
 
     private final SimpleBooleanProperty landing = new SimpleBooleanProperty(true);
 
@@ -50,6 +53,9 @@ public class Runway {
 
     // End of Inputs
 
+
+
+    // Typical values, may become variable down the line
     // Constants
     private static final SimpleDoubleProperty MINRESA = new SimpleDoubleProperty(240);
     private static final SimpleDoubleProperty ALSMAGNITUDE = new SimpleDoubleProperty(50);
@@ -91,7 +97,8 @@ public class Runway {
      */
     public void addObstacle(Obstacle obstacleToAdd) {
         runwayObstacles.add(obstacleToAdd);
-// re-calculate values?
+        runwayObstacle = obstacleToAdd;
+        // re-calculate values?
     }
     /**
 
@@ -100,7 +107,12 @@ public class Runway {
      */
     public void removeObstacle(Obstacle obstacleToRemove) {
         runwayObstacles.remove(obstacleToRemove);
-// re-calculate values?
+        if (runwayObstacles.size() > 0){
+            runwayObstacle = runwayObstacles.get(runwayObstacles.size()-1);
+        } else {
+            runwayObstacle = null;
+        }
+        // re-calculate values?
     }
     /**
 
@@ -115,44 +127,76 @@ public class Runway {
             runwayLength.set(lda.get());
             if (direction.get()){
                 calculateLandOver();
+
             } else {
                 calculateLandTowards();
+
             }
         } else {
             runwayLength.set(tora.get());
             if (direction.get()){
                 calculateTakeOffAway();
+
             } else {
                 calculateTakeOffToward();
+
             }
         }
     }
+
     /**
-     * Calculates the runway output value for landing towards.
-     * Sets output1 to TODA.
-     */
-    public void calculateLandTowards() {
-        output1.set(toda.get());
-    }
-    /**
-     * Calculates the runway output value for landing over.
-     * Sets output1 to TORA.
+     Calculations for when a plane is landing over an obstacle
      */
     public void calculateLandOver() {
+        if (runwayObstacle != null) {
+
+            // tora.set(Original TORA - Blast protection - Distance from threshold - Displaced threshold);
+            // asda.set((R) TORA + stopway);
+            // toda.set((R) TORA + clearway);
+            // lda.set(Original LDA - Distance from threshold - Slope calculation - strip end);
+        }
         output1.set(tora.get());
     }
+
     /**
-     * Calculates the runway output value for takeoff toward.
-     * Sets output1 to the runway designator value as a double.
+     Calculations for when a plane is landing towards an obstacle
+     */
+    public void calculateLandTowards() {
+        if (runwayObstacle != null) {
+
+            tora.set(runwayObstacle.getDistFromThreshold() - (50 * runwayObstacle.getHeight()) - STRIPEND.get());
+            asda.set(tora.get());
+            toda.set(tora.get());
+            lda.set(runwayObstacle.getDistFromThreshold() - MINRESA.get() - STRIPEND.get());
+        }
+        output1.set(toda.get());
+    }
+
+    /**
+    Calculations for when a plane is taking-off towards an obstacle
      */
     public void calculateTakeOffToward() {
+        if (runwayObstacle != null) {
+
+            tora.set(runwayObstacle.getDistFromThreshold() - (50 * runwayObstacle.getHeight()) - STRIPEND.get());
+            asda.set(tora.get());
+            toda.set(tora.get());
+            lda.set(runwayObstacle.getDistFromThreshold() - MINRESA.get() - STRIPEND.get());
+        }
         output1.set(Double.parseDouble(runwayDesignator.get()));
     }
+
     /**
-     * Calculates the runway output value for takeoff away.
-     * Sets output1 to ASDA.
+     Calculations for when a plane is taking-off away from an obstacle
      */
     public void calculateTakeOffAway() {
+        if (runwayObstacle != null) {
+
+            // tora.set(tora.get() - BLASTZONE.get() - currentObstacle.getDistFromThreshold() );
+            // asda.set((R) TORA + stopway);
+            // toda.set((R) TORA + clearway);
+            // lda.set(Original LDA - Distance from threshold - Slope calculation - strip end);
+        }
         output1.set(asda.get());
     }
 
@@ -229,6 +273,9 @@ public class Runway {
      */
     public SimpleDoubleProperty dispThresholdProperty() {
         return dispThreshold;
+    }
+    public Obstacle getRunwayObstacle() {
+        return runwayObstacle;
     }
     /**
      * Returns an ArrayList of obstacles on the runway.
