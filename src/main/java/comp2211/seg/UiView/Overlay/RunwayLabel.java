@@ -25,9 +25,14 @@ public class RunwayLabel extends Group{
         Text label = new Text(name);
         label.setFill(color);
         label.setFont(Font.font("Calibri",18));
-        label.xProperty().set(-label.getBoundsInLocal().getWidth()/2);
-        //label.yProperty().set(label.getBoundsInLocal().getHeight()/4);
-        label.yProperty().set(-5);
+        if (direction) {
+            label.yProperty().set(label.getBoundsInLocal().getHeight()/2+8);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth()/2+5);
+        } else {
+            label.yProperty().set(-5);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth()/2-5);
+        }
+
 
 
         Rotate xRotate;
@@ -113,11 +118,19 @@ public class RunwayLabel extends Group{
      * @return A Box object representing the horizontal line.
      */
     public Node makeLineHorizontal(DoubleBinding start, DoubleBinding length, DoubleBinding height, double thickness, Color color){
+        RunwayArrow arrow;
+        if (!direction){
+            arrow = new RunwayArrow(color,scene.scaleFactorProperty(), length.subtract(new SimpleDoubleProperty(0).divide(scene.scaleFactorProperty())),direction);
+            arrow.translateXProperty().bind(start.subtract(length).multiply(scene.scaleFactorProperty()).add(0));
 
-        RunwayArrow arrow = new RunwayArrow(color,scene.scaleFactorProperty(), length,direction);
+        } else {
+            arrow = new RunwayArrow(color,scene.scaleFactorProperty(), length.add(new SimpleDoubleProperty(4).divide(scene.scaleFactorProperty())),direction);
+            arrow.translateXProperty().bind(start.subtract(length).multiply(scene.scaleFactorProperty()).subtract(2));
+
+        }
+
         //arrow.labelText= name;
         //arrow.buildArrowLabel();
-        arrow.translateXProperty().bind(start.subtract(length).multiply(scene.scaleFactorProperty()));
         arrow.translateYProperty().bind(height);
         arrow.translateZProperty().bind(height);
         return arrow;

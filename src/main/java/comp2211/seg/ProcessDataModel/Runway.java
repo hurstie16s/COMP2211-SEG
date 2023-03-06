@@ -39,9 +39,9 @@ public class Runway {
      */
     private final SimpleStringProperty runwayDesignator = new SimpleStringProperty("36");
     private final SimpleDoubleProperty tora = new SimpleDoubleProperty(10000);
-    private final SimpleDoubleProperty toda = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty asda = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty lda = new SimpleDoubleProperty(800);
+    private final SimpleDoubleProperty toda = new SimpleDoubleProperty(9000);
+    private final SimpleDoubleProperty asda = new SimpleDoubleProperty(8000);
+    private final SimpleDoubleProperty lda = new SimpleDoubleProperty(7000);
     private final SimpleDoubleProperty dispThreshold = new SimpleDoubleProperty(0);
 
     private Obstacle runwayObstacle;
