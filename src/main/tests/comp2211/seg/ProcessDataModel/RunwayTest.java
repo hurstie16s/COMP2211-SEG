@@ -2,7 +2,6 @@ package comp2211.seg.ProcessDataModel;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -21,7 +20,7 @@ class RunwayTest {
     static Obstacle obstacle1 = new Obstacle("ob1", 25, 2600);
     static Obstacle obstacle2 = new Obstacle("ob2", 25, 500);
 
-    // probably will be changed to just an @Before so that we can have different runways for different tests
+    // probably will be changed to just a @Before so that we can have different runways for different tests
     @BeforeAll
     static void setUpRunways() {
         setProperties(
