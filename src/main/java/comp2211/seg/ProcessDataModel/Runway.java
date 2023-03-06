@@ -173,13 +173,19 @@ public class Runway {
             workingAsda.bind(workingTora.add(stopway));
             workingToda.bind(workingTora.add(clearway));
              */
-            if (runwayObstacle.heightProperty().multiply(SLOPE).get() < MINRESA.get()) {
-                workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE)).subtract(STRIPEND));
-                logger.info("Re-calculated LDA using obstacle height");
+            SimpleDoubleProperty obstacleSlopeCalculation;
+            if (runwayObstacle.heightProperty().multiply(SLOPE).get() > MINRESA.get()) {
+                obstacleSlopeCalculation = new SimpleDoubleProperty(runwayObstacle.heightProperty().multiply(SLOPE).get());
             } else {
-                workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(MINRESA).subtract(STRIPEND));
-                logger.info("Re-calculated LDA using MINRESA");
+                obstacleSlopeCalculation = MINRESA;
             }
+            SimpleDoubleProperty ldaSubtraction;
+            if (runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND).get() > BLASTZONE.get()) {
+                ldaSubtraction = new SimpleDoubleProperty(runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND).get());
+            } else {
+                ldaSubtraction = BLASTZONE;
+            }
+            workingLda.bind(lda.subtract(ldaSubtraction));
         } else {
             workingLda.bind(lda);
         }
