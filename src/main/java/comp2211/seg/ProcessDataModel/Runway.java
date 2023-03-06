@@ -156,10 +156,10 @@ public class Runway {
     public void calculateLandOver() {
         if (runwayObstacle != null) {
 
-            workingTora.set(tora.get() - BLASTZONE.get() - runwayObstacle.getDistFromThreshold() - dispThreshold.get());
-            workingAsda.set(workingTora.get() + stopway.get());
-            workingToda.set(workingTora.get() + clearway.get());
-            workingLda.set(lda.get() - runwayObstacle.getDistFromThreshold() - (runwayObstacle.getHeight() * SLOPE.get()) - STRIPEND.get());
+            workingTora.bind(tora.subtract(BLASTZONE).subtract(runwayObstacle.distFromThresholdProperty()).subtract(dispThreshold));
+            workingAsda.bind(workingTora.add(stopway));
+            workingToda.bind(workingTora.add(clearway));
+            workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE).subtract(STRIPEND.get())));
         }
         output1.set(workingTora.get());
     }
@@ -170,10 +170,10 @@ public class Runway {
     public void calculateLandTowards() {
         if (runwayObstacle != null) {
 
-            workingTora.set(runwayObstacle.getDistFromThreshold() - (50 * runwayObstacle.getHeight()) - STRIPEND.get());
-            workingAsda.set(workingTora.get());
-            workingToda.set(workingTora.get());
-            workingLda.set(runwayObstacle.getDistFromThreshold() - MINRESA.get() - STRIPEND.get());
+            workingTora.bind(runwayObstacle.distFromThresholdProperty().subtract(runwayObstacle.heightProperty().multiply(50)).subtract(STRIPEND.get()));
+            workingAsda.bind(workingTora);
+            workingToda.bind(workingTora);
+            workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA.get()).subtract(STRIPEND.get()));
         }
         output1.set(workingToda.get());
     }
@@ -184,10 +184,10 @@ public class Runway {
     public void calculateTakeOffToward() {
         if (runwayObstacle != null) {
 
-            workingTora.set(runwayObstacle.getDistFromThreshold() - (50 * runwayObstacle.getHeight()) - STRIPEND.get());
-            workingAsda.set(workingTora.get());
-            workingToda.set(workingTora.get());
-            workingLda.set(runwayObstacle.getDistFromThreshold() - MINRESA.get() - STRIPEND.get());
+            workingTora.bind(runwayObstacle.distFromThresholdProperty().subtract(runwayObstacle.heightProperty().multiply(50)).subtract(STRIPEND.get()));
+            workingAsda.bind(workingTora);
+            workingToda.bind(workingTora);
+            workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA.get()).subtract(STRIPEND.get()));
         }
         output1.set(Double.parseDouble(runwayDesignator.get()));
     }
@@ -198,10 +198,10 @@ public class Runway {
     public void calculateTakeOffAway() {
         if (runwayObstacle != null) {
 
-            workingTora.set(tora.get() - BLASTZONE.get() - runwayObstacle.getDistFromThreshold() - dispThreshold.get());
-            workingAsda.set(workingTora.get() + stopway.get());
-            workingToda.set(workingTora.get() + clearway.get());
-            workingLda.set(lda.get() - runwayObstacle.getDistFromThreshold() - (runwayObstacle.getHeight() * SLOPE.get()) - STRIPEND.get());
+            workingTora.bind(tora.subtract(BLASTZONE).subtract(runwayObstacle.distFromThresholdProperty()).subtract(dispThreshold.get()));
+            workingAsda.bind(workingTora.add(stopway));
+            workingToda.bind(workingTora.add(clearway));
+            workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE).subtract(STRIPEND.get())));
         }
         output1.set(workingAsda.get());
     }
