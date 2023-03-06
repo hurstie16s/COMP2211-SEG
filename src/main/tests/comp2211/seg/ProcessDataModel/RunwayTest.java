@@ -96,8 +96,10 @@ class RunwayTest {
 
     @ParameterizedTest
     @MethodSource("generateLandTowardsTestData")
-    void calculateLandTowardsTest() {
-        assert false;
+    void calculateLandTowardsTest(Runway runway, Obstacle obstacleToAdd, double expectedLDA) {
+        runway.addObstacle(obstacleToAdd);
+        runway.calculateLandTowards();
+        assertEquals(expectedLDA, runway.getWorkingLda());
     }
 
     @ParameterizedTest
@@ -119,7 +121,11 @@ class RunwayTest {
                 Arguments.of(runway2, obstacle2, 2074.0)
         );
     }
-    private static Stream<Arguments> generateLandTowardsTestData() {return null;}
+    private static Stream<Arguments> generateLandTowardsTestData() {
+        return Stream.of(
+                Arguments.of(runway1, obstacle1, 2300.0)
+        );
+    }
     private static Stream<Arguments> generateTakeOffTowardTestData() {return null;}
     private static Stream<Arguments> generateTakeOffAwayTestData() {return null;}
 }

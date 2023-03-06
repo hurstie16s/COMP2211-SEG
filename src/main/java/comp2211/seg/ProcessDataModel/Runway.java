@@ -190,7 +190,7 @@ public class Runway {
             workingAsda.bind(workingTora);
             workingToda.bind(workingTora);
              */
-            workingLda.bind(this.ldaProperty().subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE)).subtract(STRIPEND));
+            workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
         } else {
             workingLda.bind(lda);
         }
