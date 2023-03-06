@@ -83,7 +83,7 @@ public class InputScene extends SceneAbstract {
     makeTextField(inputs, "LDA", appWindow.runway.ldaProperty());
     makeTextField(inputs, "Display Threshold", appWindow.runway.dispThresholdProperty());
 
-    var landingMode = makeButton(calculations, "Landing Mode", appWindow.runway.landingProperty());
+    var landingMode = makeButton(calculations, "Landing Mode", appWindow.runway.landingModeProperty());
     var direction = makeButton(calculations, "Direction", appWindow.runway.directionProperty());
 
     var output1 = makeOutputLabel(outputs, "Output 1", appWindow.runway.output1Property());
