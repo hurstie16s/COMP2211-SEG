@@ -12,36 +12,50 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 
-public class RunwayLabel extends Group{
+/**
+ * The RunwayLabel class represents a label for a runway that includes the runway name and a line indicating its location
+ * and direction. The label is rendered as a Group that can be added to a JavaFX scene.
+ */
+public class RunwayLabel extends Group {
     private final RunwayScene scene;
     private final boolean direction;
     private final String name;
 
-    public RunwayLabel(String name, Color color, DoubleBinding xOffset, double yOffset, DoubleBinding length, RunwayScene scene, boolean direction){
+    /**
+     * Constructs a new RunwayLabel with the specified name, color, x-offset, y-offset, length, scene, and direction.
+     *
+     * @param name      The name of the runway.
+     * @param color     The color of the label and line.
+     * @param xOffset   The x-offset of the label.
+     * @param yOffset   The y-offset of the label.
+     * @param length    The length of the line.
+     * @param scene     The RunwayScene to which the label belongs.
+     * @param direction The direction of the runway.
+     */
+    public RunwayLabel(String name, Color color, DoubleBinding xOffset, double yOffset, DoubleBinding length, RunwayScene scene, boolean direction) {
         this.scene = scene;
         this.direction = direction;
         this.name = name;
+
         Group labelRotateGroup = new Group();
         Text label = new Text(name);
         label.setFill(color);
-        label.setFont(Font.font("Calibri",18));
+        label.setFont(Font.font("Calibri", 18));
         if (direction) {
-            label.yProperty().set(label.getBoundsInLocal().getHeight()/2+8);
-            label.xProperty().set(-label.getBoundsInLocal().getWidth()/2+5);
+            label.yProperty().set(label.getBoundsInLocal().getHeight() / 2 + 8);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 + 5);
         } else {
             label.yProperty().set(-5);
-            label.xProperty().set(-label.getBoundsInLocal().getWidth()/2-5);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 - 5);
         }
-
-
 
         Rotate xRotate;
         Rotate yRotate;
         Rotate zRotate;
         labelRotateGroup.getTransforms().addAll(
-                xRotate = new Rotate(0,Rotate.X_AXIS),
-                yRotate = new Rotate(0,Rotate.Y_AXIS),
-                zRotate = new Rotate(0,Rotate.Z_AXIS)
+            xRotate = new Rotate(0, Rotate.X_AXIS),
+            yRotate = new Rotate(0, Rotate.Y_AXIS),
+            zRotate = new Rotate(0, Rotate.Z_AXIS)
         );
 
         xRotate.angleProperty().bind(scene.angleXProperty().multiply(-1));
@@ -51,38 +65,37 @@ public class RunwayLabel extends Group{
         labelRotateGroup.getChildren().add(label);
         if (direction) {
             labelRotateGroup.translateXProperty().bind(xOffset.multiply(scene.scaleFactorProperty()).add(label.getBoundsInLocal().getWidth() / 2));
-        }else {
+        } else {
             labelRotateGroup.translateXProperty().bind(xOffset.multiply(scene.scaleFactorProperty()).subtract(label.getBoundsInLocal().getWidth() / 2));
-
         }
         labelRotateGroup.translateYProperty().bind(scene.heightProperty().multiply(-0.5 * yOffset));
         labelRotateGroup.translateZProperty().bind(scene.heightProperty().multiply(-0.5 * yOffset));
 
         Node leftHorizontal = makeLineHorizontal(
-                xOffset,
-                length.divide(1),
-                scene.heightProperty().multiply(0.5*yOffset).multiply(-1),
-                2,
-                color
+            xOffset,
+            length.divide(1),
+            scene.heightProperty().multiply(0.5 * yOffset).multiply(-1),
+            2,
+            color
         );
 
-
         Group leftVertical = makeLineVertical(
-                xOffset,
-                scene.heightProperty().multiply(0.5*yOffset).multiply(-1),
-                1,
-                color
+            xOffset,
+            scene.heightProperty().multiply(0.5 * yOffset).multiply(-1),
+            1,
+            color
         );
 
         Group rightVertical = makeLineVertical(
-                xOffset.subtract(length),
-                scene.heightProperty().multiply(0.5*yOffset).multiply(-1),
-                1,
-                color
+            xOffset.subtract(length),
+            scene.heightProperty().multiply(0.5 * yOffset).multiply(-1),
+            1,
+            color
         );
 
         leftHorizontal.getTransforms().add(xRotate);
-        getChildren().addAll(labelRotateGroup,leftHorizontal,leftVertical,rightVertical);
+        getChildren().addAll(labelRotateGroup, leftHorizontal, leftVertical, rightVertical);
+
 
 
         /*
