@@ -29,7 +29,7 @@ public interface GlobalVars {
   public static final Color bg = Color.gray(0.3);
   public static final Color bgRunway = Color.gray(0.2);
   public static final Color fg = Color.AZURE;
-  public static final Font font =Font.font("Calibri", 18);
+  public static final Font font =Font.font("Calibri", 20);
   /**
    * A constant string that holds the information about the home scene of the project.
    */

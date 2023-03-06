@@ -26,7 +26,7 @@ public class ClearedGradedArea extends Polygon {
      *
      * @param parent the parent object of this cleared graded area
      */
-    public ClearedGradedArea(Parent parent){
+    public ClearedGradedArea(Parent parent,boolean filled){
         this.parent = parent;
         for (Property prop: new Property[] {
             left,
@@ -40,7 +40,13 @@ public class ClearedGradedArea extends Polygon {
         }) {
             prop.addListener((observableValue, o, t1) -> redraw());
         }
-        setFill(Color.BLUE);
+        if (filled) {
+            setFill(Color.BLUE);
+        } else {
+            setStroke(Color.BLACK);
+            setFill(Color.TRANSPARENT);
+            setStrokeWidth(2);
+        }
     }
 
     /**

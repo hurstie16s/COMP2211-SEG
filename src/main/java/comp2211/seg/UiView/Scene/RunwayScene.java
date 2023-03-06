@@ -303,9 +303,10 @@ public class RunwayScene extends SceneAbstract {
     root.setBackground(new Background(new BackgroundFill(GlobalVars.bgRunway,null,null)));
     //root.getStyleClass().add("runway-background");
 
-    makeCGA();
+    makeCGA(true);
     addTopView();
     makeRunway();
+    makeCGA(false);
     scaleFactor.bind(widthProperty().subtract(borderx).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftWidthProperty()).add(appWindow.runway.clearwayRightWidthProperty())));
     scaleFactorHeight.bind(heightProperty().subtract(borderx).divide(420));
     logger.info(getClass().toString());
@@ -439,10 +440,10 @@ public class RunwayScene extends SceneAbstract {
    * of the Runway object and the scaling factors.
    * @see ClearedGradedArea
    */
-  public void makeCGA(){
+  public void makeCGA(boolean filled){
 
     //Cleared and graded area
-    ClearedGradedArea cga = new ClearedGradedArea(group);
+    ClearedGradedArea cga = new ClearedGradedArea(group,filled);
     cga.leftProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract( appWindow.runway.stopwayLeftProperty()).subtract(appWindow.runway.stripEndLeftProperty()).multiply(scaleFactor));
     cga.leftStartProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).multiply(scaleFactor));
     cga.leftEndProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).add(150).multiply(scaleFactor));
@@ -451,7 +452,6 @@ public class RunwayScene extends SceneAbstract {
     cga.rightEndProperty().bind(appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(150).multiply(scaleFactor));
     cga.innerHeightProperty().bind(scaleFactorHeight.multiply(-75));
     cga.outerHeightProperty().bind(scaleFactorHeight.multiply(-105));
-
     group.getChildren().add(cga);
   }
 
