@@ -32,7 +32,7 @@ public class HelpScene extends Scene {
         appWindow.getStage().requestFocus();
         this.appWindow = appWindow;
         this.root = root;
-        root.setBackground(new Background(new BackgroundFill(Color.rgb(21,21,21,0.4),null,null)));
+        root.setBackground(new Background(new BackgroundFill(Color.rgb(21,21,21,0.8),null,null)));
     }
     public void makeKey(String key, String desc){
         HBox box = new HBox();
@@ -64,6 +64,11 @@ public class HelpScene extends Scene {
             switch (className) {
                 case "comp2211.seg.UiView.Scene.RunwayScene":
                     makeKey("Esc", "Navigate back to home screen");
+                    makeKey("T", "Toggle between top and side views");
+                    break;
+                case "comp2211.seg.UiView.Scene.RunwaySceneLoader":
+                    makeKey("Esc", "Navigate back to home screen");
+                    makeKey("T", "Toggle between top and side views");
                     break;
                 case "comp2211.seg.UiView.Scene.MainScene":
                     break;

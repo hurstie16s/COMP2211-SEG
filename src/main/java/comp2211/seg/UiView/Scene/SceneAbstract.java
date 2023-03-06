@@ -19,7 +19,7 @@ import java.util.Objects;
 public abstract class SceneAbstract extends Scene{
 
   private static final Logger logger = LogManager.getLogger(SceneAbstract.class);
-  private final AppWindow appWindow;
+  protected final AppWindow appWindow;
 
   /** The root node of the scene.*/
   protected HandlerPane root;
