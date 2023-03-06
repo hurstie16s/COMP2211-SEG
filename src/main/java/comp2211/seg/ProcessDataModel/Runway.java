@@ -6,6 +6,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
@@ -14,6 +16,9 @@ import java.util.ArrayList;
  * for calculating takeoff and landing distances based on these properties.
  */
 public class Runway {
+
+    // logger
+    private static final Logger logger = LogManager.getLogger(Runway.class);
 
     // Runway dimensions and properties
     private SimpleDoubleProperty clearwayRightWidth = new SimpleDoubleProperty(500);
@@ -97,6 +102,7 @@ public class Runway {
         }) {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
+        logger.info("Created Runway object");
     }
 
     /**
@@ -106,6 +112,7 @@ public class Runway {
      */
     public void addObstacle(Obstacle obstacleToAdd) {
         this.runwayObstacle = obstacleToAdd;
+        logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignator.get());
         recalculate();
     }
     /**
@@ -121,6 +128,8 @@ public class Runway {
         workingToda.set(toda.get());
         workingAsda.set(asda.get());
         workingLda.set(lda.get());
+        logger.info("Removed Obstacle "+ runwayObstacle.getObstacleDesignator() + " from runway " + runwayDesignator.get());
+        logger.info("Return runway to original state");
     }
     /**
 
@@ -135,7 +144,6 @@ public class Runway {
             runwayLength.bind(lda);
             if (direction.get()){
                 calculateLandOver();
-
             } else {
                 calculateLandTowards();
 

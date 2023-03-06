@@ -27,13 +27,31 @@ public class Obstacle {
      * Creates a new Obstacle object with the specified designator, height, and distance from the runway threshold.
      *
      * @param obstacleDesignator the designator of the obstacle
-     * @param height the height of the obstacle
-     * @param distFromThreshold the distance of the obstacle from the runway threshold
+     * @param height             the height of the obstacle
+     * @param distFromThreshold  the distance of the obstacle from the runway threshold
      */
     public Obstacle(String obstacleDesignator, double height, double distFromThreshold) {
         this.obstacleDesignator.set(obstacleDesignator);
         this.height.set(height);
         this.distFromThreshold.set(distFromThreshold);
+    }
+
+    /**
+     * Gets obstacle designator.
+     *
+     * @return the obstacle designator
+     */
+    public String getObstacleDesignator() {
+        return obstacleDesignator.get();
+    }
+
+    /**
+     * Obstacle designator property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty obstacleDesignatorProperty() {
+        return obstacleDesignator;
     }
 
     /**
