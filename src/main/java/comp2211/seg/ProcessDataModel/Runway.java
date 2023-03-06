@@ -80,11 +80,19 @@ public class Runway {
         // re-calculate values?
     }
 
+    /**
+     * Removing the obstacle from the runway
+     * @param obstacleToRemove
+     */
     public void removeObstacle(Obstacle obstacleToRemove) {
         if (runwayObstacle == obstacleToRemove) {
             this.runwayObstacle = null;
         }
-        // re-calculate values?
+        // set values back to original
+        workingTora.set(tora.get());
+        workingToda.set(toda.get());
+        workingAsda.set(asda.get());
+        workingLda.set(lda.get());
     }
 
     public void recalculate(){
