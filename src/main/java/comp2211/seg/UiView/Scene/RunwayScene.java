@@ -304,11 +304,12 @@ public class RunwayScene extends SceneAbstract {
     scaleFactor.bind(widthProperty().subtract(borderx).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftWidthProperty()).add(appWindow.runway.clearwayRightWidthProperty())));
     scaleFactorHeight.bind(heightProperty().subtract(borderx).divide(420));
 
-    Obstacle obstacle = new Obstacle("Test",10,300);
-    obstacle.widthProperty().set(30);
-    obstacle.lengthProperty().set(40);
-    renderObstacle(obstacle);
 
+    try {
+      renderObstacle(appWindow.runway.getRunwayObstacle());
+    } catch (Exception e){
+      logger.error(e);
+    }
 
 
     Pane arrowPane = new Pane();

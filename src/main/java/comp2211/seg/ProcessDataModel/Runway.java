@@ -38,10 +38,10 @@ public class Runway {
     if the azimuth of the centre-line is 153 then the runway designator will be 15
      */
     private final SimpleStringProperty runwayDesignator = new SimpleStringProperty("36");
-    private final SimpleDoubleProperty tora = new SimpleDoubleProperty(1000);
-    private final SimpleDoubleProperty toda = new SimpleDoubleProperty(900);
-    private final SimpleDoubleProperty asda = new SimpleDoubleProperty(800);
-    private final SimpleDoubleProperty lda = new SimpleDoubleProperty(700);
+    private final SimpleDoubleProperty tora = new SimpleDoubleProperty(2000);
+    private final SimpleDoubleProperty toda = new SimpleDoubleProperty(1800);
+    private final SimpleDoubleProperty asda = new SimpleDoubleProperty(1600);
+    private final SimpleDoubleProperty lda = new SimpleDoubleProperty(1400);
     private final SimpleDoubleProperty workingTora = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty workingToda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty workingAsda = new SimpleDoubleProperty(0);
@@ -105,7 +105,7 @@ public class Runway {
      */
     public void addObstacle(Obstacle obstacleToAdd) {
         this.runwayObstacle = obstacleToAdd;
-        // re-calculate values?
+        recalculate();
     }
     /**
      * Removing the obstacle from the runway
@@ -131,6 +131,7 @@ public class Runway {
      */
     public void recalculate(){
         if (landingMode.get()){
+            runwayLength.bind(lda);
             if (direction.get()){
                 calculateLandOver();
 
@@ -139,6 +140,7 @@ public class Runway {
 
             }
         } else {
+            runwayLength.bind(tora);
 
             if (direction.get()){
                 calculateTakeOffAway();
@@ -160,8 +162,12 @@ public class Runway {
             workingAsda.bind(workingTora.add(stopway));
             workingToda.bind(workingTora.add(clearway));
             workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE).subtract(STRIPEND.get())));
+        } else {
+            workingTora.bind(tora);
+            workingAsda.bind(asda);
+            workingToda.bind(toda);
+            workingLda.bind(lda);
         }
-        output1.set(workingTora.get());
     }
 
     /**
@@ -174,8 +180,12 @@ public class Runway {
             workingAsda.bind(workingTora);
             workingToda.bind(workingTora);
             workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA.get()).subtract(STRIPEND.get()));
+        } else {
+            workingTora.bind(tora);
+            workingAsda.bind(asda);
+            workingToda.bind(toda);
+            workingLda.bind(lda);
         }
-        output1.set(workingToda.get());
     }
 
     /**
@@ -188,8 +198,12 @@ public class Runway {
             workingAsda.bind(workingTora);
             workingToda.bind(workingTora);
             workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA.get()).subtract(STRIPEND.get()));
+        } else {
+            workingTora.bind(tora);
+            workingAsda.bind(asda);
+            workingToda.bind(toda);
+            workingLda.bind(lda);
         }
-        output1.set(Double.parseDouble(runwayDesignator.get()));
     }
 
     /**
@@ -202,8 +216,12 @@ public class Runway {
             workingAsda.bind(workingTora.add(stopway));
             workingToda.bind(workingTora.add(clearway));
             workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE).subtract(STRIPEND.get())));
+        } else {
+            workingTora.bind(tora);
+            workingAsda.bind(asda);
+            workingToda.bind(toda);
+            workingLda.bind(lda);
         }
-        output1.set(workingAsda.get());
     }
 
 
@@ -559,5 +577,37 @@ public class Runway {
      */
     public SimpleDoubleProperty RESALeftHeightProperty() {
         return RESALeftHeight;
+    }
+
+    public double getWorkingTora() {
+        return workingTora.get();
+    }
+
+    public SimpleDoubleProperty workingToraProperty() {
+        return workingTora;
+    }
+
+    public double getWorkingToda() {
+        return workingToda.get();
+    }
+
+    public SimpleDoubleProperty workingTodaProperty() {
+        return workingToda;
+    }
+
+    public double getWorkingAsda() {
+        return workingAsda.get();
+    }
+
+    public SimpleDoubleProperty workingAsdaProperty() {
+        return workingAsda;
+    }
+
+    public double getWorkingLda() {
+        return workingLda.get();
+    }
+
+    public SimpleDoubleProperty workingLdaProperty() {
+        return workingLda;
     }
 }
