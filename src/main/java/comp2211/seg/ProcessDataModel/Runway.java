@@ -37,6 +37,8 @@ public class Runway {
     when viewed from the direction of approach. For example,
     if the azimuth of the centre-line is 153 then the runway designator will be 15
      */
+    private final SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
+    private final SimpleDoubleProperty runwayWidth = new SimpleDoubleProperty(60);
     private final SimpleStringProperty runwayDesignator = new SimpleStringProperty("36");
     private final SimpleDoubleProperty tora = new SimpleDoubleProperty(2000);
     private final SimpleDoubleProperty toda = new SimpleDoubleProperty(1800);
@@ -73,10 +75,6 @@ public class Runway {
     private SimpleDoubleProperty output2 = new SimpleDoubleProperty(0);
     private SimpleDoubleProperty output3 = new SimpleDoubleProperty(0);
 
-    // Runway dimensions
-    private SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
-    private SimpleDoubleProperty runwayWidth = new SimpleDoubleProperty(60);
-
     /**
      * Creates a new runway object and sets up change listeners on all input properties so that takeoff and landing
      * distances are automatically recalculated whenever any input value is changed.
@@ -92,7 +90,8 @@ public class Runway {
                 stopway,
                 clearway,
                 landingMode,
-                direction
+                direction,
+                runwayLength
         }) {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
@@ -131,7 +130,6 @@ public class Runway {
      */
     public void recalculate(){
         if (landingMode.get()){
-            runwayLength.bind(lda);
             if (direction.get()){
                 calculateLandOver();
 
@@ -140,8 +138,6 @@ public class Runway {
 
             }
         } else {
-            runwayLength.bind(tora);
-
             if (direction.get()){
                 calculateTakeOffAway();
 
@@ -610,4 +606,5 @@ public class Runway {
     public SimpleDoubleProperty workingLdaProperty() {
         return workingLda;
     }
+
 }

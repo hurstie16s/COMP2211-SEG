@@ -77,6 +77,7 @@ public class InputScene extends SceneAbstract {
     var outputs = new VBox();
     layout.getChildren().addAll(inputs, calculations, outputs);
 
+    makeTextField(inputs, "Runway Length", appWindow.runway.runwayLengthProperty());
     makeTextField(inputs, "Runway Designator", appWindow.runway.runwayDesignatorProperty(), "[0-9]|0[1-9]|[1-2][0-9]|3[0-6]");
     makeTextField(inputs, "TORA", appWindow.runway.toraProperty());
     makeTextField(inputs, "TODA", appWindow.runway.todaProperty());
