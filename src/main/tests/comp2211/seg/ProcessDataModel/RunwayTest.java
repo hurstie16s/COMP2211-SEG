@@ -1,8 +1,14 @@
 package comp2211.seg.ProcessDataModel;
 
-import junitparams.Parameters;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class RunwayTest {
 
@@ -10,6 +16,9 @@ class RunwayTest {
     static Runway runway2 = new Runway();
     static Runway runway3 = new Runway();
     static Runway runway4 = new Runway();
+
+    static Obstacle obstacle1 = new Obstacle("ob1", 25, 2600);
+    static Obstacle obstacle2 = new Obstacle("ob2", 25, 500);
 
     @BeforeAll
     static void setUpRunways() {
@@ -69,23 +78,36 @@ class RunwayTest {
 
     @Test
     void recalculateTest() {
+        assert false;
     }
 
-    @Test
-    @Parameters({"runway1", "runway2", "runway3", "runway4"})
-    void calculateLandOverTest(Runway runway) {
-
+    @ParameterizedTest
+    @MethodSource("generateLandOverTestData")
+    void calculateLandOverTest(Runway runway, Obstacle obstacleToAdd, double expectedLDA) {
+        runway.addObstacle(obstacleToAdd);
+        runway.landingModeProperty().set(true);
+        runway.directionProperty().set(true);
+        assertEquals(expectedLDA, runway.getLda());
+    }
+    private static Stream<Arguments> generateLandOverTestData() {
+        return Stream.of(
+                Arguments.of(runway1, obstacle1, 2300.0),
+                Arguments.of(runway2, obstacle2, 2074.0)
+        );
     }
 
     @Test
     void calculateLandTowardsTest() {
+        assert false;
     }
 
     @Test
     void calculateTakeOffTowardTest() {
+        assert false;
     }
 
     @Test
     void calculateTakeOffAwayTest() {
+        assert false;
     }
 }

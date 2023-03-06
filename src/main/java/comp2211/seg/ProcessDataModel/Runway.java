@@ -110,7 +110,7 @@ public class Runway {
     }
     /**
      * Removing the obstacle from the runway
-     * @param obstacleToRemove
+     * @param obstacleToRemove The obstacle to remove from the runway
      */
     public void removeObstacle(Obstacle obstacleToRemove) {
         if (runwayObstacle == obstacleToRemove) {
@@ -176,17 +176,19 @@ public class Runway {
      */
     public void calculateLandTowards() {
         if (runwayObstacle != null) {
-
+            /*
+            Not really needed for landing calc
             workingTora.bind(runwayObstacle.distFromThresholdProperty().subtract(runwayObstacle.heightProperty().multiply(50)).subtract(STRIPEND.get()));
             workingAsda.bind(workingTora);
             workingToda.bind(workingTora);
-            workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA.get()).subtract(STRIPEND.get()));
+             */
+            workingLda.bind(this.ldaProperty().subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE)).subtract(STRIPEND));
         } else {
-            workingTora.bind(tora);
-            workingAsda.bind(asda);
-            workingToda.bind(toda);
             workingLda.bind(lda);
         }
+        workingTora.bind(tora);
+        workingAsda.bind(asda);
+        workingToda.bind(toda);
     }
 
     /**
