@@ -4,6 +4,8 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import java.util.ArrayList;
 
@@ -40,12 +42,17 @@ public class Runway {
     private final SimpleDoubleProperty toda = new SimpleDoubleProperty(900);
     private final SimpleDoubleProperty asda = new SimpleDoubleProperty(800);
     private final SimpleDoubleProperty lda = new SimpleDoubleProperty(700);
+    private final SimpleDoubleProperty workingTora = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty workingToda = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty workingAsda = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty workingLda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty dispThreshold = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty stopway = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty clearway = new SimpleDoubleProperty(0);
 
-    private final ArrayList<Obstacle> runwayObstacles = new ArrayList<>();
-    private Obstacle runwayObstacle;
+    private Obstacle runwayObstacle = null;
 
-    private final SimpleBooleanProperty landing = new SimpleBooleanProperty(true);
+    private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
 
     private final SimpleBooleanProperty direction = new SimpleBooleanProperty(false);
 
@@ -59,6 +66,7 @@ public class Runway {
     private static final SimpleDoubleProperty ALSMAGNITUDE = new SimpleDoubleProperty(50);
     private static final SimpleDoubleProperty STRIPEND = new SimpleDoubleProperty(60);
     private static final SimpleDoubleProperty BLASTZONE = new SimpleDoubleProperty(500);
+    private static final SimpleDoubleProperty SLOPE = new SimpleDoubleProperty(50);
 
     // Outputs
     private SimpleDoubleProperty output1 = new SimpleDoubleProperty(0);
@@ -81,7 +89,9 @@ public class Runway {
                 asda,
                 lda,
                 dispThreshold,
-                landing,
+                stopway,
+                clearway,
+                landingMode,
                 direction
         }) {
             prop.addListener((observableValue, o, t1) -> recalculate());
@@ -94,23 +104,22 @@ public class Runway {
      @param obstacleToAdd The obstacle to add to the runway.
      */
     public void addObstacle(Obstacle obstacleToAdd) {
-        runwayObstacles.add(obstacleToAdd);
-        runwayObstacle = obstacleToAdd;
+        this.runwayObstacle = obstacleToAdd;
         // re-calculate values?
     }
     /**
-
-     Removes an obstacle from the list of obstacles on the runway.
-     @param obstacleToRemove The obstacle to remove from the runway.
+     * Removing the obstacle from the runway
+     * @param obstacleToRemove
      */
     public void removeObstacle(Obstacle obstacleToRemove) {
-        runwayObstacles.remove(obstacleToRemove);
-        if (runwayObstacles.size() > 0){
-            runwayObstacle = runwayObstacles.get(runwayObstacles.size()-1);
-        } else {
-            runwayObstacle = null;
+        if (runwayObstacle == obstacleToRemove) {
+            this.runwayObstacle = null;
         }
-        // re-calculate values?
+        // set values back to original
+        workingTora.set(tora.get());
+        workingToda.set(toda.get());
+        workingAsda.set(asda.get());
+        workingLda.set(lda.get());
     }
     /**
 
@@ -121,8 +130,7 @@ public class Runway {
      based on the takeoff direction.
      */
     public void recalculate(){
-        if (landing.get()){
-            runwayLength.set(lda.get());
+        if (landingMode.get()){
             if (direction.get()){
                 calculateLandOver();
 
@@ -131,7 +139,7 @@ public class Runway {
 
             }
         } else {
-            runwayLength.set(tora.get());
+
             if (direction.get()){
                 calculateTakeOffAway();
 
@@ -148,12 +156,12 @@ public class Runway {
     public void calculateLandOver() {
         if (runwayObstacle != null) {
 
-            // tora.set(Original TORA - Blast protection - Distance from threshold - Displaced threshold);
-            // asda.set((R) TORA + stopway);
-            // toda.set((R) TORA + clearway);
-            // lda.set(Original LDA - Distance from threshold - Slope calculation - strip end);
+            workingTora.set(tora.get() - BLASTZONE.get() - runwayObstacle.getDistFromThreshold() - dispThreshold.get());
+            workingAsda.set(workingTora.get() + stopway.get());
+            workingToda.set(workingTora.get() + clearway.get());
+            workingLda.set(lda.get() - runwayObstacle.getDistFromThreshold() - (runwayObstacle.getHeight() * SLOPE.get()) - STRIPEND.get());
         }
-        output1.set(tora.get());
+        output1.set(workingTora.get());
     }
 
     /**
@@ -162,12 +170,12 @@ public class Runway {
     public void calculateLandTowards() {
         if (runwayObstacle != null) {
 
-            tora.set(runwayObstacle.getDistFromThreshold() - (50 * runwayObstacle.getHeight()) - STRIPEND.get());
-            asda.set(tora.get());
-            toda.set(tora.get());
-            lda.set(runwayObstacle.getDistFromThreshold() - MINRESA.get() - STRIPEND.get());
+            workingTora.set(runwayObstacle.getDistFromThreshold() - (50 * runwayObstacle.getHeight()) - STRIPEND.get());
+            workingAsda.set(workingTora.get());
+            workingToda.set(workingTora.get());
+            workingLda.set(runwayObstacle.getDistFromThreshold() - MINRESA.get() - STRIPEND.get());
         }
-        output1.set(toda.get());
+        output1.set(workingToda.get());
     }
 
     /**
@@ -176,10 +184,10 @@ public class Runway {
     public void calculateTakeOffToward() {
         if (runwayObstacle != null) {
 
-            tora.set(runwayObstacle.getDistFromThreshold() - (50 * runwayObstacle.getHeight()) - STRIPEND.get());
-            asda.set(tora.get());
-            toda.set(tora.get());
-            lda.set(runwayObstacle.getDistFromThreshold() - MINRESA.get() - STRIPEND.get());
+            workingTora.set(runwayObstacle.getDistFromThreshold() - (50 * runwayObstacle.getHeight()) - STRIPEND.get());
+            workingAsda.set(workingTora.get());
+            workingToda.set(workingTora.get());
+            workingLda.set(runwayObstacle.getDistFromThreshold() - MINRESA.get() - STRIPEND.get());
         }
         output1.set(Double.parseDouble(runwayDesignator.get()));
     }
@@ -190,12 +198,12 @@ public class Runway {
     public void calculateTakeOffAway() {
         if (runwayObstacle != null) {
 
-            // tora.set(tora.get() - BLASTZONE.get() - currentObstacle.getDistFromThreshold() );
-            // asda.set((R) TORA + stopway);
-            // toda.set((R) TORA + clearway);
-            // lda.set(Original LDA - Distance from threshold - Slope calculation - strip end);
+            workingTora.set(tora.get() - BLASTZONE.get() - runwayObstacle.getDistFromThreshold() - dispThreshold.get());
+            workingAsda.set(workingTora.get() + stopway.get());
+            workingToda.set(workingTora.get() + clearway.get());
+            workingLda.set(lda.get() - runwayObstacle.getDistFromThreshold() - (runwayObstacle.getHeight() * SLOPE.get()) - STRIPEND.get());
         }
-        output1.set(asda.get());
+        output1.set(workingAsda.get());
     }
 
 
@@ -272,29 +280,17 @@ public class Runway {
     public SimpleDoubleProperty dispThresholdProperty() {
         return dispThreshold;
     }
+
     public Obstacle getRunwayObstacle() {
         return runwayObstacle;
     }
-    /**
-     * Returns an ArrayList of obstacles on the runway.
-     * @return An ArrayList of obstacles on the runway.
-     */
-    public ArrayList<Obstacle> getRunwayObstacles() {
-        return runwayObstacles;
+
+    public boolean isLandingMode() {
+        return landingMode.get();
     }
-    /**
-     * Returns the value of landing.
-     * @return The value of landing.
-     */
-    public boolean getLanding() {
-        return landing.get();
-    }
-    /**
-     * Returns the SimpleBooleanProperty object representing landing.
-     * @return The SimpleBooleanProperty object representing landing.
-     */
-    public SimpleBooleanProperty landingProperty() {
-        return landing;
+
+    public SimpleBooleanProperty landingModeProperty() {
+        return landingMode;
     }
     /**
      * Returns the value of output1.
