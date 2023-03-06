@@ -47,8 +47,9 @@ public class AppWindow {
 
         // Setup appWindow
         setupStage();
-        startHomeScene();
-        //startMainScene();
+        //startHomeScene();
+        addAirport(new Airport(""));
+        startMainScene();
         //startRunwayScene();
     }
     public void addAirport(Airport airport){

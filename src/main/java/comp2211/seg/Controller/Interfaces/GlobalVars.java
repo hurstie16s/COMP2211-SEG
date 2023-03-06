@@ -1,9 +1,12 @@
 package comp2211.seg.Controller.Interfaces;
 
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+
 /**
  * An interface that contains constant strings for the project.
  */
-public interface Temp {
+public interface GlobalVars {
   /**
    * A constant string that holds the information about the software engineering group project.
    */
@@ -23,6 +26,10 @@ public interface Temp {
       "Josh Willson\n" +
       "jjrw1g21\n";
 
+  public static final Color bg = Color.gray(0.3);
+  public static final Color bgRunway = Color.gray(0.2);
+  public static final Color fg = Color.AZURE;
+  public static final Font font =Font.font("Calibri", 18);
   /**
    * A constant string that holds the information about the home scene of the project.
    */

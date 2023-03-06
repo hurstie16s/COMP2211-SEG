@@ -1,6 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.App;
+import comp2211.seg.Controller.Interfaces.GlobalVars;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.ProcessDataModel.Obstacle;
@@ -13,9 +14,11 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -34,6 +37,7 @@ public class InputScene extends SceneAbstract {
    * The AppWindow object for the scene.
    */
   public AppWindow appWindow;
+  public SimpleDoubleProperty height = new SimpleDoubleProperty(0);
 
   /**
    * /**
@@ -67,8 +71,8 @@ public class InputScene extends SceneAbstract {
   public void build() {
     super.build();
     logger.info("building");
-    mainPane.getStyleClass().add("home-background");
 
+    //mainPane.getStyleClass().add("home-background");
     var layout = new HBox();
     layout.setMaxWidth(width);
     layout.setMinWidth(width);
@@ -85,8 +89,8 @@ public class InputScene extends SceneAbstract {
     makeTextField(inputs, "LDA", appWindow.runway.ldaProperty());
     makeTextField(inputs, "Display Threshold", appWindow.runway.dispThresholdProperty());
 
-    var landingMode = makeButton(calculations, "Landing Mode", appWindow.runway.landingModeProperty());
-    var direction = makeButton(calculations, "Direction", appWindow.runway.directionProperty());
+    var landingMode = makeButton(calculations, "Landing","Taking off", appWindow.runway.landingModeProperty());
+    var direction = makeButton(calculations, "Left","Right", appWindow.runway.directionProperty());
 
     var workingTora = makeOutputLabel(outputs, "workingTora", appWindow.runway.workingToraProperty());
     var workingToda = makeOutputLabel(outputs, "workingToda", appWindow.runway.workingTodaProperty());
@@ -124,14 +128,10 @@ public class InputScene extends SceneAbstract {
    * @return the created TextField Node.
    */
   public Node makeTextField(javafx.scene.layout.Pane parent, String label, SimpleStringProperty property, String regex) {
-    HBox segment = new HBox();
-    Label text = new Label(label);
     TextField entry = new TextField();
-    text.setMinWidth(width / 5);
-    text.setMaxWidth(width / 5);
-    segment.getChildren().addAll(text, entry);
-    entry.setMinWidth(width / 5);
-    entry.setMaxWidth(width / 5);
+    entry.setFont(GlobalVars.font);
+
+    HBox segment = makeBoundingBox(label,width/3,entry);
     parent.getChildren().add(segment);
     entry.textProperty().addListener(new ChangeListener<String>() {
       @Override
@@ -166,14 +166,10 @@ public class InputScene extends SceneAbstract {
    * @return the created TextField Node.
    */
   public Node makeTextField(javafx.scene.layout.Pane parent, String label, SimpleDoubleProperty property) {
-    HBox segment = new HBox();
-    Label text = new Label(label);
     TextField entry = new TextField();
-    text.setMinWidth(width / 5);
-    text.setMaxWidth(width / 5);
-    segment.getChildren().addAll(text, entry);
-    entry.setMinWidth(width / 5);
-    entry.setMaxWidth(width / 5);
+    entry.setFont(GlobalVars.font);
+
+    HBox segment = makeBoundingBox(label,width/3,entry);
     parent.getChildren().add(segment);
     entry.textProperty().addListener(new ChangeListener<String>() {
       @Override
@@ -204,17 +200,48 @@ public class InputScene extends SceneAbstract {
    * Creates a new Button with the specified label and adds it to the given parent Pane.
    *
    * @param parent the Pane to add the Button to.
-   * @param label  the label to use for the Button.
+   * @param label1  the label to use for the first Button.
+   * @param label2  the label to use for the second Button.
    * @return the created Button Node.
    */
-  public ToggleButton makeButton(javafx.scene.layout.Pane parent, String label, SimpleBooleanProperty property) {
-    ToggleButton button = new ToggleButton(label);
-    button.setMinWidth(width / 5);
-    button.setMaxWidth(width / 5);
-    parent.getChildren().add(button);
-    property.bindBidirectional(button.selectedProperty());
+  public Node makeButton(javafx.scene.layout.Pane parent, String label1, String label2, SimpleBooleanProperty property) {
+    double w = width/(6);
+    HBox segment = new HBox();
+    ToggleButton button = new ToggleButton(label1);
+    button.setMinWidth(w);
+    button.setMaxWidth(w);
+    ToggleButton button2 = new ToggleButton(label2);
+    button2.setMinWidth(w);
+    button2.setMaxWidth(w);
+    segment.getChildren().addAll(button,button2);
+    parent.getChildren().add(segment);
+    button.selectedProperty().addListener(new ChangeListener<Boolean>() {
+      @Override
+      public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+        if (button2.selectedProperty().get() == t1){
+          button2.selectedProperty().set(!t1);
+        }
+        if (t1) {
+          property.set(true);
+        }
+      }
+    });
+    button2.selectedProperty().addListener(new ChangeListener<Boolean>() {
+      @Override
+      public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+        if (button.selectedProperty().get() == t1){
+          button.selectedProperty().set(!t1);
+        }
+        if (t1) {
+          property.set(false);
+        }
+      }
+    });
 
-    return button;
+
+
+    button.fire();
+    return segment;
   }
 
   /**
@@ -225,15 +252,12 @@ public class InputScene extends SceneAbstract {
    * @return the created Label Node for displaying data.
    */
   public Label makeOutputLabel(javafx.scene.layout.Pane parent, String label, SimpleDoubleProperty property) {
-    HBox segment = new HBox();
-    Label title = new Label(label);
-    title.setMinWidth(width / 5);
-    title.setMaxWidth(width / 5);
     Label data = new Label();
-    data.setMinWidth(width / 5);
-    data.setMaxWidth(width / 5);
+    data.setFont(GlobalVars.font);
+    data.setTextFill(GlobalVars.fg);
     data.setText(String.valueOf(property.getValue()));
-    segment.getChildren().addAll(title, data);
+
+    HBox segment = makeBoundingBox(label,width/3,data);
     parent.getChildren().add(segment);
     property.addListener(new ChangeListener<Number>() {
       @Override
@@ -242,5 +266,18 @@ public class InputScene extends SceneAbstract {
       }
     });
     return data;
+  }
+  public HBox makeBoundingBox(String label, double width, Node node){
+
+    HBox segment = new HBox();
+    Label title = new Label(label);
+    title.setFont(GlobalVars.font);
+    title.setTextFill(GlobalVars.fg);
+    title.setMinWidth(width / 2);
+    title.setMaxWidth(width / 2);
+    node.minWidth(width / 2);
+    node.maxWidth(width / 2);
+    segment.getChildren().addAll(title,node);
+    return segment;
   }
 }

@@ -1,5 +1,6 @@
 package comp2211.seg.UiView.Overlay;
 
+import comp2211.seg.Controller.Interfaces.GlobalVars;
 import comp2211.seg.UiView.Scene.RunwayScene;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -40,7 +41,7 @@ public class RunwayLabel extends Group {
         Group labelRotateGroup = new Group();
         Text label = new Text(name);
         label.setFill(color);
-        label.setFont(Font.font("Calibri", 18));
+        label.setFont(GlobalVars.font);
         if (direction) {
             label.yProperty().set(label.getBoundsInLocal().getHeight() / 2 + 8);
             label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 + 5);

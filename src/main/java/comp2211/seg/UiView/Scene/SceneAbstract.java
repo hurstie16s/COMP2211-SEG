@@ -1,5 +1,6 @@
 package comp2211.seg.UiView.Scene;
 
+import comp2211.seg.Controller.Interfaces.GlobalVars;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.scene.Scene;
@@ -7,7 +8,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,6 +44,7 @@ public abstract class SceneAbstract extends Scene{
     this.root = root;
     this.width = root.getParentWidth();
     this.height = root.getParentHeight();
+
   }
 
   /**
@@ -56,7 +57,6 @@ public abstract class SceneAbstract extends Scene{
    * This is used to define a generic structure used by all the children
    */
   public void build() {
-    logger.info("building1234");
     try {
       getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/stylesheet.css")).toExternalForm());
 
@@ -69,13 +69,14 @@ public abstract class SceneAbstract extends Scene{
 
     mainPane.setMinWidth(width);
     mainPane.setMinHeight(height);
-    mainPane.setBackground(new Background(new BackgroundFill(Color.BLACK,null,null)));
+    mainPane.setBackground(new Background(new BackgroundFill(GlobalVars.bg,null,null)));
     root.getChildren().add(mainPane);
 
     root.setMaxWidth(width);
     root.setMaxHeight(height);
     root.setMinWidth(width);
     root.setMinHeight(height);
+
   }
 
 }

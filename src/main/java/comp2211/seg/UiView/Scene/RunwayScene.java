@@ -1,5 +1,6 @@
 package comp2211.seg.UiView.Scene;
 
+import comp2211.seg.Controller.Interfaces.GlobalVars;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.ProcessDataModel.Obstacle;
@@ -295,7 +296,7 @@ public class RunwayScene extends SceneAbstract {
     root.setMaxHeight(height);
     root.setMinWidth(width);
     root.setMinHeight(height);
-    root.setBackground(new Background(new BackgroundFill(Color.BLACK,null,null)));
+    root.setBackground(new Background(new BackgroundFill(GlobalVars.bgRunway,null,null)));
     //root.getStyleClass().add("runway-background");
 
     makeCGA();
@@ -303,7 +304,7 @@ public class RunwayScene extends SceneAbstract {
     makeRunway();
     scaleFactor.bind(widthProperty().subtract(borderx).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftWidthProperty()).add(appWindow.runway.clearwayRightWidthProperty())));
     scaleFactorHeight.bind(heightProperty().subtract(borderx).divide(420));
-
+    logger.info(getClass().toString());
 
     try {
       renderObstacle(appWindow.runway.getRunwayObstacle());
@@ -318,6 +319,15 @@ public class RunwayScene extends SceneAbstract {
 
 
 
+    //CentreLine
+    addCuboid(
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            widthProperty().divide(scaleFactor).multiply(1),
+            new SimpleDoubleProperty(1).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            Color.BLACK);
     logger.info("building");
   }
 
@@ -355,6 +365,7 @@ public class RunwayScene extends SceneAbstract {
    * Adds the top view of the runway to the 3D scene.
    */
   public void addTopView(){
+
     //Clearway Right
     addCuboid(
             appWindow.runway.runwayLengthProperty().multiply(0.5).add( appWindow.runway.clearwayRightWidthProperty().divide(2)),
@@ -384,7 +395,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.stopwayLeftProperty().multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             new SimpleDoubleProperty(10).multiply(1),
-            Color.DARKGREY);
+            Color.VIOLET);
 
     //Stopway Right
     addCuboid(
@@ -394,7 +405,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.stopwayRightProperty().multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             new SimpleDoubleProperty(10).multiply(1),
-            Color.DARKGREY);
+            Color.VIOLET);
 
 
     //RESA Right
@@ -405,7 +416,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.RESARightWidthProperty().multiply(1),
             appWindow.runway.RESARightHeightProperty().multiply(1),
             new SimpleDoubleProperty(10).multiply(1),
-            Color.LIGHTGRAY);
+            Color.ORANGE);
 
     //RESA Left
     addCuboid(
@@ -415,7 +426,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.RESALeftWidthProperty().multiply(1),
             appWindow.runway.RESALeftHeightProperty().multiply(1),
             new SimpleDoubleProperty(10).multiply(1),
-            Color.LIGHTGRAY);
+            Color.ORANGE);
   }
   /**
    * Creates the Cleared and Graded Area (CGA) and adds it to the 3D group.
