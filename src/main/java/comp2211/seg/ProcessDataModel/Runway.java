@@ -143,6 +143,7 @@ public class Runway {
         if (landingMode.get()){
             runwayLength.bind(lda);
             if (direction.get()){
+                //TODO: Can't really use direction to decide case, direction changes all values even when there is no obstacle
                 calculateLandOver();
             } else {
                 calculateLandTowards();
@@ -166,17 +167,25 @@ public class Runway {
      */
     public void calculateLandOver() {
         if (runwayObstacle != null) {
-
+            /*
+            Not really needed for landing calculations
             workingTora.bind(tora.subtract(BLASTZONE).subtract(runwayObstacle.distFromThresholdProperty()).subtract(dispThreshold));
             workingAsda.bind(workingTora.add(stopway));
             workingToda.bind(workingTora.add(clearway));
-            workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE)).subtract(STRIPEND));
+             */
+            if (runwayObstacle.heightProperty().multiply(SLOPE).get() < MINRESA.get()) {
+                workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE)).subtract(STRIPEND));
+                logger.info("Re-calculated LDA using obstacle height");
+            } else {
+                workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(MINRESA).subtract(STRIPEND));
+                logger.info("Re-calculated LDA using MINRESA");
+            }
         } else {
-            workingTora.bind(tora);
-            workingAsda.bind(asda);
-            workingToda.bind(toda);
             workingLda.bind(lda);
         }
+        workingTora.bind(tora);
+        workingAsda.bind(asda);
+        workingToda.bind(toda);
     }
 
     /**
@@ -191,6 +200,7 @@ public class Runway {
             workingToda.bind(workingTora);
              */
             workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
+            logger.info("Re-calculated LDA");
         } else {
             workingLda.bind(lda);
         }

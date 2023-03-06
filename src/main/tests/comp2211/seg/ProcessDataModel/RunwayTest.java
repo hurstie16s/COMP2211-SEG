@@ -23,6 +23,7 @@ class RunwayTest {
     // probably will be changed to just a @Before so that we can have different runways for different tests
     @BeforeAll
     static void setUpRunways() {
+        // Runways 1 & 2 are the SAME runway from different directions
         setProperties(
                 "09L",
                 3902,
@@ -41,6 +42,7 @@ class RunwayTest {
                 0,
                 runway2
         );
+        // Runways 3 & 4 are the SAME runway from different directions
         setProperties(
                 "09R",
                 3660,
