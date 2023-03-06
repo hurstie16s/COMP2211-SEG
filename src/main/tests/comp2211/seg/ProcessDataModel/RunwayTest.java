@@ -79,6 +79,7 @@ class RunwayTest {
 
     // Unit Tests
 
+    @DisplayName("Test correct calculations are performed when recalculation is performed")
     @ParameterizedTest
     @MethodSource("generateRecalculateTestData")
     void recalculateTest() {
@@ -94,6 +95,7 @@ class RunwayTest {
         assertEquals(expectedLDA, runway.getWorkingLda());
     }
 
+    @DisplayName("Test calculations for landing towards an obstacle")
     @ParameterizedTest
     @MethodSource("generateLandTowardsTestData")
     void calculateLandTowardsTest(Runway runway, Obstacle obstacleToAdd, double expectedLDA) {
@@ -102,12 +104,14 @@ class RunwayTest {
         assertEquals(expectedLDA, runway.getWorkingLda());
     }
 
+    @DisplayName("Test Calculations for taking-off towards an obstacle")
     @ParameterizedTest
     @MethodSource("generateTakeOffTowardTestData")
     void calculateTakeOffTowardTest() {
         assert false;
     }
 
+    @DisplayName("Test Calculations for taking-off away from an obstacle")
     @ParameterizedTest
     @MethodSource("generateTakeOffAwayTestData")
     void calculateTakeOffAwayTest() {
