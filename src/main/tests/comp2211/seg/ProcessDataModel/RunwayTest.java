@@ -17,9 +17,6 @@ class RunwayTest {
     static Runway runway3 = new Runway();
     static Runway runway4 = new Runway();
 
-    static Obstacle obstacle1 = new Obstacle("ob1", 25, 2600);
-    static Obstacle obstacle2 = new Obstacle("ob2", 25, 500);
-
     // probably will be changed to just a @Before so that we can have different runways for different tests
     @BeforeAll
     static void setUpRunways() {
@@ -124,12 +121,14 @@ class RunwayTest {
     private static Stream<Arguments> generateRecalculateTestData() {return null;}
     private static Stream<Arguments> generateLandOverTestData() {
         return Stream.of(
-                Arguments.of(runway2, obstacle2, 2074.0)
+                Arguments.of(runway2, new Obstacle("obT1", 25, 500), 2074.0),
+                Arguments.of(runway2, new Obstacle("obT2", 5, 2), 3384),
+                Arguments.of(runway2, new Obstacle("obT3", 4, 500), 3084)
         );
     }
     private static Stream<Arguments> generateLandTowardsTestData() {
         return Stream.of(
-                Arguments.of(runway1, obstacle1, 2300.0)
+                Arguments.of(runway1, new Obstacle("ob1", 25, 2600), 2300.0)
         );
     }
     private static Stream<Arguments> generateTakeOffTowardTestData() {return null;}
