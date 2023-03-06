@@ -1,16 +1,10 @@
 package comp2211.seg.Controller.Stage;
 
 import comp2211.seg.App;
-import comp2211.seg.ProcessDataModel.Obstacle;
+import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.Runway;
-import comp2211.seg.UiView.Scene.InputScene;
-import comp2211.seg.UiView.Scene.MainScene;
-import comp2211.seg.UiView.Scene.RunwayScene;
-import comp2211.seg.UiView.Scene.SceneAbstract;
+import comp2211.seg.UiView.Scene.*;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -29,15 +23,12 @@ public class AppWindow {
     private final int width;
     private final int height;
     private SceneAbstract currentScene;
+    private ArrayList<Airport> airports;
     private Scene scene;
 
     public HandlerPane root;
 
     public Runway runway;
-
-
-
-
 
     /**
      * Constructs an AppWindow object with the specified stage, width, and height.
@@ -50,12 +41,19 @@ public class AppWindow {
         this.stage = stage;
         this.width = width;
         this.height = height;
-        runway = new Runway();
+        airports = new ArrayList<>();
+
+
 
         // Setup appWindow
         setupStage();
-        startMainScene();
+        startHomeScene();
+        //startMainScene();
         //startRunwayScene();
+    }
+    public void addAirport(Airport airport){
+        airports.add(airport);
+        runway = airports.get(0).getRunways().get(0);
     }
 
     /**
@@ -79,7 +77,7 @@ public class AppWindow {
      * Starts the home scene.
      */
     public void startHomeScene() {
-        loadScene(new InputScene(new HandlerPane(width,height),this));
+        loadScene(new HomeScene(new HandlerPane(width,height),this));
     }
 
     /**

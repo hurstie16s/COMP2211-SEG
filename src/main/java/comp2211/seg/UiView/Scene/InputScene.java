@@ -3,7 +3,7 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.App;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
-import javafx.beans.property.Property;
+import comp2211.seg.ProcessDataModel.Obstacle;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,14 +11,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.util.Objects;
 
 /**
@@ -90,9 +87,16 @@ public class InputScene extends SceneAbstract {
     var landingMode = makeButton(calculations, "Landing Mode", appWindow.runway.landingModeProperty());
     var direction = makeButton(calculations, "Direction", appWindow.runway.directionProperty());
 
-    var output1 = makeOutputLabel(outputs, "Output 1", appWindow.runway.output1Property());
-    output1.setText("Example output");
+    var workingTora = makeOutputLabel(outputs, "workingTora", appWindow.runway.workingToraProperty());
+    var workingToda = makeOutputLabel(outputs, "workingToda", appWindow.runway.workingTodaProperty());
+    var workingAsda = makeOutputLabel(outputs, "workingAsda", appWindow.runway.workingAsdaProperty());
+    var workingLda = makeOutputLabel(outputs, "workingLda", appWindow.runway.workingLdaProperty());
 
+
+    Obstacle obstacle = new Obstacle("Test",10,300);
+    obstacle.widthProperty().set(30);
+    obstacle.lengthProperty().set(40);
+    appWindow.runway.addObstacle(obstacle);
 
     mainPane.getChildren().add(layout);
   }
@@ -143,6 +147,13 @@ public class InputScene extends SceneAbstract {
         }
       }
     });
+    property.addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+        entry.setText(t1);
+      }
+    });
+    entry.setText(property.getValue());
     return entry;
   }
 
@@ -178,6 +189,13 @@ public class InputScene extends SceneAbstract {
         }
       }
     });
+    property.addListener(new ChangeListener<Number>() {
+      @Override
+      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+        entry.setText(Double.toString(t1.doubleValue()));
+      }
+    });
+    entry.setText(property.getValue().toString());
     return entry;
   }
 
@@ -193,7 +211,8 @@ public class InputScene extends SceneAbstract {
     button.setMinWidth(width / 5);
     button.setMaxWidth(width / 5);
     parent.getChildren().add(button);
-    property.bind(button.selectedProperty());
+    property.bindBidirectional(button.selectedProperty());
+
     return button;
   }
 
@@ -212,6 +231,7 @@ public class InputScene extends SceneAbstract {
     Label data = new Label();
     data.setMinWidth(width / 5);
     data.setMaxWidth(width / 5);
+    data.setText(String.valueOf(property.getValue()));
     segment.getChildren().addAll(title, data);
     parent.getChildren().add(segment);
     property.addListener(new ChangeListener<Number>() {
