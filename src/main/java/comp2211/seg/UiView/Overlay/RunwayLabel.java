@@ -118,16 +118,8 @@ public class RunwayLabel extends Group{
      * @return A Box object representing the horizontal line.
      */
     public Node makeLineHorizontal(DoubleBinding start, DoubleBinding length, DoubleBinding height, double thickness, Color color){
-        RunwayArrow arrow;
-        if (!direction){
-            arrow = new RunwayArrow(color,scene.scaleFactorProperty(), length.subtract(new SimpleDoubleProperty(0).divide(scene.scaleFactorProperty())),direction);
-            arrow.translateXProperty().bind(start.subtract(length).multiply(scene.scaleFactorProperty()).add(0));
-
-        } else {
-            arrow = new RunwayArrow(color,scene.scaleFactorProperty(), length.add(new SimpleDoubleProperty(4).divide(scene.scaleFactorProperty())),direction);
-            arrow.translateXProperty().bind(start.subtract(length).multiply(scene.scaleFactorProperty()).subtract(2));
-
-        }
+        RunwayArrow arrow = new RunwayArrow(color,scene.scaleFactorProperty(), length,direction);
+        arrow.translateXProperty().bind(start.subtract(length).multiply(scene.scaleFactorProperty()));
 
         //arrow.labelText= name;
         //arrow.buildArrowLabel();

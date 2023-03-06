@@ -71,11 +71,21 @@ public class RunwayArrow extends Group {
 
 
     public void setXOffset(DoubleBinding l) {
-        arrowLine.startXProperty().bind(l.multiply(scaleFactor).multiply(-0).add(1));
+        if (direction) {
+            arrowLine.startXProperty().bind(l.multiply(scaleFactor).multiply(-0).subtract(strokeWidth));
+        } else {
+            arrowLine.startXProperty().bind(l.multiply(scaleFactor).multiply(-0).add(strokeWidth));
+
+        }
     }
 
     public void setLength(DoubleBinding l) {
-        arrowLine.endXProperty().bind(l.multiply(scaleFactor).multiply(1).subtract(1));
+        if (direction) {
+            arrowLine.endXProperty().bind(l.multiply(scaleFactor).add(strokeWidth*0.5));
+        } else {
+            arrowLine.endXProperty().bind(l.multiply(scaleFactor).subtract(strokeWidth*0.5));
+
+        }
         //* scale.get()
     }
     /* Arrows outside
