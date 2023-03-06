@@ -21,18 +21,18 @@ public class Runway {
     private static final Logger logger = LogManager.getLogger(Runway.class);
 
     // Runway dimensions and properties
-    private SimpleDoubleProperty clearwayRightWidth = new SimpleDoubleProperty(500);
-    private SimpleDoubleProperty clearwayRightHeight = new SimpleDoubleProperty(150);
-    private SimpleDoubleProperty clearwayLeftWidth = new SimpleDoubleProperty(500);
-    private SimpleDoubleProperty clearwayLeftHeight = new SimpleDoubleProperty(150);
-    private SimpleDoubleProperty stopwayRight = new SimpleDoubleProperty(150);
-    private SimpleDoubleProperty stopwayLeft = new SimpleDoubleProperty(150);
-    private SimpleDoubleProperty stripEndRight = new SimpleDoubleProperty(60);
-    private SimpleDoubleProperty stripEndLeft = new SimpleDoubleProperty(60);
-    private SimpleDoubleProperty RESARightWidth = new SimpleDoubleProperty(240);
-    private SimpleDoubleProperty RESARightHeight = new SimpleDoubleProperty(90);
-    private SimpleDoubleProperty RESALeftWidth = new SimpleDoubleProperty(240);
-    private SimpleDoubleProperty RESALeftHeight = new SimpleDoubleProperty(90);
+    private final SimpleDoubleProperty clearwayRightWidth = new SimpleDoubleProperty(500);
+    private final SimpleDoubleProperty clearwayRightHeight = new SimpleDoubleProperty(150);
+    private final SimpleDoubleProperty clearwayLeftWidth = new SimpleDoubleProperty(500);
+    private final SimpleDoubleProperty clearwayLeftHeight = new SimpleDoubleProperty(150);
+    private final SimpleDoubleProperty stopwayRight = new SimpleDoubleProperty(150);
+    private final SimpleDoubleProperty stopwayLeft = new SimpleDoubleProperty(150);
+    private final SimpleDoubleProperty stripEndRight = new SimpleDoubleProperty(60);
+    private final SimpleDoubleProperty stripEndLeft = new SimpleDoubleProperty(60);
+    private final SimpleDoubleProperty RESARightWidth = new SimpleDoubleProperty(240);
+    private final SimpleDoubleProperty RESARightHeight = new SimpleDoubleProperty(90);
+    private final SimpleDoubleProperty RESALeftWidth = new SimpleDoubleProperty(240);
+    private final SimpleDoubleProperty RESALeftHeight = new SimpleDoubleProperty(90);
 
     //Inputs
 
@@ -69,19 +69,18 @@ public class Runway {
     // Typical values, may become variable down the line
     // Constants
     private static final SimpleDoubleProperty MINRESA = new SimpleDoubleProperty(240);
-    private static final SimpleDoubleProperty ALSMAGNITUDE = new SimpleDoubleProperty(50);
     private static final SimpleDoubleProperty STRIPEND = new SimpleDoubleProperty(60);
     private static final SimpleDoubleProperty BLASTZONE = new SimpleDoubleProperty(500);
     private static final SimpleDoubleProperty SLOPE = new SimpleDoubleProperty(50);
 
     // Outputs
-    private SimpleDoubleProperty output1 = new SimpleDoubleProperty(0);
-    private SimpleDoubleProperty output2 = new SimpleDoubleProperty(0);
-    private SimpleDoubleProperty output3 = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty output1 = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty output2 = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty output3 = new SimpleDoubleProperty(0);
 
     // Runway dimensions
-    private SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
-    private SimpleDoubleProperty runwayWidth = new SimpleDoubleProperty(60);
+    private final SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
+    private final SimpleDoubleProperty runwayWidth = new SimpleDoubleProperty(60);
 
     /**
      * Creates a new runway object and sets up change listeners on all input properties so that takeoff and landing
@@ -142,19 +141,15 @@ public class Runway {
     public void recalculate(){
         if (landingMode.get()){
             runwayLength.bind(lda);
-            if (direction.get()){
-                //TODO: Can't really use direction to decide case, direction changes all values even when there is no obstacle
+            if (runwayObstacle.distFromThresholdProperty().lessThan(runwayLength.get()/2).get()){
                 calculateLandOver();
             } else {
                 calculateLandTowards();
-
             }
         } else {
             runwayLength.bind(tora);
-
-            if (direction.get()){
+            if (runwayObstacle.distFromThresholdProperty().lessThan(runwayLength.get()/2).get()){
                 calculateTakeOffAway();
-
             } else {
                 calculateTakeOffToward();
 
