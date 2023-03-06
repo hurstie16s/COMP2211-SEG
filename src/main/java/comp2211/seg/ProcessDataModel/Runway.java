@@ -22,6 +22,8 @@ public class Runway {
     private final SimpleDoubleProperty asda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty lda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty dispThreshold = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty stopway = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty clearway = new SimpleDoubleProperty(0);
 
     private Obstacle runwayObstacle = null;
 
@@ -40,6 +42,7 @@ public class Runway {
     private static final SimpleDoubleProperty ALSMAGNITUDE = new SimpleDoubleProperty(50);
     private static final SimpleDoubleProperty STRIPEND = new SimpleDoubleProperty(60);
     private static final SimpleDoubleProperty BLASTZONE = new SimpleDoubleProperty(500);
+    private static final SimpleDoubleProperty SLOPE = new SimpleDoubleProperty(50);
 
     //Outputs
     private SimpleDoubleProperty output1 = new SimpleDoubleProperty(0);
@@ -54,6 +57,8 @@ public class Runway {
                 asda,
                 lda,
                 dispThreshold,
+                stopway,
+                clearway,
                 landingMode,
                 direction
         }) {
@@ -104,11 +109,12 @@ public class Runway {
      */
     public void calculateLandOver() {
         if (runwayObstacle != null) {
+            double origTORA = tora.get();
 
-            // tora.set(Original TORA - Blast protection - Distance from threshold - Displaced threshold);
-            // asda.set((R) TORA + stopway);
-            // toda.set((R) TORA + clearway);
-            // lda.set(Original LDA - Distance from threshold - Slope calculation - strip end);
+            tora.set(origTORA - BLASTZONE.get() - runwayObstacle.getDistFromThreshold() - dispThreshold.get());
+            asda.set(tora.get() + stopway.get());
+            toda.set(tora.get() + clearway.get());
+            lda.set(lda.get() - runwayObstacle.getDistFromThreshold() - (runwayObstacle.getHeight() * SLOPE.get()) - STRIPEND.get());
         }
         output1.set(tora.get());
     }
@@ -146,11 +152,12 @@ public class Runway {
      */
     public void calculateTakeOffAway() {
         if (runwayObstacle != null) {
+            double origTORA = tora.get();
 
-            // tora.set(tora.get() - BLASTZONE.get() - currentObstacle.getDistFromThreshold() );
-            // asda.set((R) TORA + stopway);
-            // toda.set((R) TORA + clearway);
-            // lda.set(Original LDA - Distance from threshold - Slope calculation - strip end);
+            tora.set(origTORA - BLASTZONE.get() - runwayObstacle.getDistFromThreshold() - dispThreshold.get());
+            asda.set(tora.get() + stopway.get());
+            toda.set(tora.get() + clearway.get());
+            lda.set(lda.get() - runwayObstacle.getDistFromThreshold() - (runwayObstacle.getHeight() * SLOPE.get()) - STRIPEND.get());
         }
         output1.set(asda.get());
     }
