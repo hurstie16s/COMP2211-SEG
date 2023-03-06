@@ -36,8 +36,9 @@ public class Runway {
     which is the whole number nearest to one tenth of the magnetic North
     when viewed from the direction of approach. For example,
     if the azimuth of the centre-line is 153 then the runway designator will be 15
+    followed by either L C or R to differentiate between parallel runways
      */
-    private final SimpleStringProperty runwayDesignator = new SimpleStringProperty("36");
+    private final SimpleStringProperty runwayDesignator = new SimpleStringProperty("36C");
     private final SimpleDoubleProperty tora = new SimpleDoubleProperty(2000);
     private final SimpleDoubleProperty toda = new SimpleDoubleProperty(1800);
     private final SimpleDoubleProperty asda = new SimpleDoubleProperty(1600);
