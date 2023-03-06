@@ -162,7 +162,7 @@ public class Runway {
             workingTora.bind(tora.subtract(BLASTZONE).subtract(runwayObstacle.distFromThresholdProperty()).subtract(dispThreshold));
             workingAsda.bind(workingTora.add(stopway));
             workingToda.bind(workingTora.add(clearway));
-            workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE).subtract(STRIPEND.get())));
+            workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE)).subtract(STRIPEND));
         } else {
             workingTora.bind(tora);
             workingAsda.bind(asda);

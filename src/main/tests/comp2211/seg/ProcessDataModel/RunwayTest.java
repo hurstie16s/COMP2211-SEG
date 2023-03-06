@@ -1,6 +1,7 @@
 package comp2211.seg.ProcessDataModel;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -20,6 +21,7 @@ class RunwayTest {
     static Obstacle obstacle1 = new Obstacle("ob1", 25, 2600);
     static Obstacle obstacle2 = new Obstacle("ob2", 25, 500);
 
+    // probably will be changed to just an @Before so that we can have different runways for different tests
     @BeforeAll
     static void setUpRunways() {
         setProperties(
@@ -76,38 +78,49 @@ class RunwayTest {
         runway.dispThresholdProperty().set(dispThreshold);
     }
 
-    @Test
+    // Unit Tests
+
+    @ParameterizedTest
+    @MethodSource("generateRecalculateTestData")
     void recalculateTest() {
         assert false;
     }
 
+    @DisplayName("Test calculations for landing over an obstacle")
     @ParameterizedTest
     @MethodSource("generateLandOverTestData")
     void calculateLandOverTest(Runway runway, Obstacle obstacleToAdd, double expectedLDA) {
         runway.addObstacle(obstacleToAdd);
-        runway.landingModeProperty().set(true);
-        runway.directionProperty().set(true);
-        assertEquals(expectedLDA, runway.getLda());
-    }
-    private static Stream<Arguments> generateLandOverTestData() {
-        return Stream.of(
-                Arguments.of(runway1, obstacle1, 2300.0),
-                Arguments.of(runway2, obstacle2, 2074.0)
-        );
+        runway.calculateLandOver();
+        assertEquals(expectedLDA, runway.getWorkingLda());
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("generateLandTowardsTestData")
     void calculateLandTowardsTest() {
         assert false;
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("generateTakeOffTowardTestData")
     void calculateTakeOffTowardTest() {
         assert false;
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("generateTakeOffAwayTestData")
     void calculateTakeOffAwayTest() {
         assert false;
     }
+
+    // Test Data Generation
+    private static Stream<Arguments> generateRecalculateTestData() {return null;}
+    private static Stream<Arguments> generateLandOverTestData() {
+        return Stream.of(
+                Arguments.of(runway2, obstacle2, 2074.0)
+        );
+    }
+    private static Stream<Arguments> generateLandTowardsTestData() {return null;}
+    private static Stream<Arguments> generateTakeOffTowardTestData() {return null;}
+    private static Stream<Arguments> generateTakeOffAwayTestData() {return null;}
 }
