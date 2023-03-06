@@ -55,7 +55,13 @@ public class MainScene extends SceneAbstract{
      */
     @Override
     public void initialise() {
-        //add events here
+        setOnKeyPressed((keyEvent -> {
+            switch (keyEvent.getCode()){
+                case H:
+                    help.toggleHelp("Main");
+                    break;
+            }
+        }));
     }
 
     /**
@@ -88,6 +94,7 @@ public class MainScene extends SceneAbstract{
         layout.setMaxWidth(width);
         layout.setMinWidth(width);
         mainPane.getChildren().add(layout);
+        layout.setOnMousePressed((e) -> layout.requestFocus());
         layout2.setOnMousePressed((e) -> appWindow.startRunwayScene());
     }
 }

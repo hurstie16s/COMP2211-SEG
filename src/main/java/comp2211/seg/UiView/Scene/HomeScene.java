@@ -51,6 +51,7 @@ public class HomeScene extends SceneAbstract implements GlobalVars {
   @Override
   public void initialise() {
     this.setOnKeyPressed((keyEvent -> {
+      logger.info(keyEvent.getCode());
       if(keyEvent.getCode().equals(KeyCode.ESCAPE)) {
         App.getInstance().shutdown();
       }

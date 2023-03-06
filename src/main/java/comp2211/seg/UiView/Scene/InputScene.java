@@ -5,6 +5,7 @@ import comp2211.seg.Controller.Interfaces.GlobalVars;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.ProcessDataModel.Obstacle;
+import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -29,6 +30,7 @@ public class InputScene extends SceneAbstract {
    * Logger object used for logging messages.
    */
   private static final Logger logger = LogManager.getLogger(InputScene.class);
+  private static SimpleStringProperty units = new SimpleStringProperty("m");
   /**
    * The BorderPane object for the scene.
    */
@@ -81,13 +83,13 @@ public class InputScene extends SceneAbstract {
     var outputs = new VBox();
     layout.getChildren().addAll(inputs, calculations, outputs);
 
-    makeTextField(inputs, "Runway Length", appWindow.runway.runwayLengthProperty());
-    makeTextField(inputs, "Runway Designator", appWindow.runway.runwayDesignatorProperty(), "[0-9]|0[1-9]|[1-2][0-9]|3[0-6]");
-    makeTextField(inputs, "TORA", appWindow.runway.toraProperty());
-    makeTextField(inputs, "TODA", appWindow.runway.todaProperty());
-    makeTextField(inputs, "ASDA", appWindow.runway.asdaProperty());
-    makeTextField(inputs, "LDA", appWindow.runway.ldaProperty());
-    makeTextField(inputs, "Display Threshold", appWindow.runway.dispThresholdProperty());
+    makeTextField(inputs, new SimpleStringProperty("Runway Length (").concat(units).concat(")"), appWindow.runway.runwayLengthProperty());
+    makeTextField(inputs, new SimpleStringProperty("Runway Designator").concat(""), appWindow.runway.runwayDesignatorProperty(), "[0-9]|0[1-9]|[1-2][0-9]|3[0-6]");
+    makeTextField(inputs, new SimpleStringProperty("TORA (").concat(units).concat(")"), appWindow.runway.toraProperty());
+    makeTextField(inputs, new SimpleStringProperty("TODA (").concat(units).concat(")"), appWindow.runway.todaProperty());
+    makeTextField(inputs, new SimpleStringProperty("ASDA (").concat(units).concat(")"), appWindow.runway.asdaProperty());
+    makeTextField(inputs, new SimpleStringProperty("LDA (").concat(units).concat(")"), appWindow.runway.ldaProperty());
+    makeTextField(inputs, new SimpleStringProperty("Displaced Threshold (").concat(units).concat(")"), appWindow.runway.dispThresholdProperty());
 
     var landingMode = makeButton(calculations, "Landing","Taking off", appWindow.runway.landingModeProperty());
     var direction = makeButton(calculations, "Left","Right", appWindow.runway.directionProperty());
@@ -127,7 +129,7 @@ public class InputScene extends SceneAbstract {
    * @param label  the label to use for the TextField.
    * @return the created TextField Node.
    */
-  public Node makeTextField(javafx.scene.layout.Pane parent, String label, SimpleStringProperty property, String regex) {
+  public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleStringProperty property, String regex) {
     TextField entry = new TextField();
     entry.setFont(GlobalVars.font);
 
@@ -165,7 +167,7 @@ public class InputScene extends SceneAbstract {
    * @param label  the label to use for the TextField.
    * @return the created TextField Node.
    */
-  public Node makeTextField(javafx.scene.layout.Pane parent, String label, SimpleDoubleProperty property) {
+  public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleDoubleProperty property) {
     TextField entry = new TextField();
     entry.setFont(GlobalVars.font);
 
@@ -257,7 +259,7 @@ public class InputScene extends SceneAbstract {
     data.setTextFill(GlobalVars.fg);
     data.setText(String.valueOf(property.getValue()));
 
-    HBox segment = makeBoundingBox(label,width/3,data);
+    HBox segment = makeBoundingBox(new SimpleStringProperty(label),width/3,data);
     parent.getChildren().add(segment);
     property.addListener(new ChangeListener<Number>() {
       @Override
@@ -267,10 +269,11 @@ public class InputScene extends SceneAbstract {
     });
     return data;
   }
-  public HBox makeBoundingBox(String label, double width, Node node){
+  public HBox makeBoundingBox(StringExpression label, double width, Node node){
 
     HBox segment = new HBox();
-    Label title = new Label(label);
+    Label title = new Label(label.getValue());
+    title.textProperty().bind(label);
     title.setFont(GlobalVars.font);
     title.setTextFill(GlobalVars.fg);
     title.setMinWidth(width / 2);

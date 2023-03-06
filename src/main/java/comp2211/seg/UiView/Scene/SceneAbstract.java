@@ -4,9 +4,7 @@ import comp2211.seg.Controller.Interfaces.GlobalVars;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,6 +19,7 @@ import java.util.Objects;
 public abstract class SceneAbstract extends Scene{
 
   private static final Logger logger = LogManager.getLogger(SceneAbstract.class);
+  private final AppWindow appWindow;
 
   /** The root node of the scene.*/
   protected HandlerPane root;
@@ -33,6 +32,7 @@ public abstract class SceneAbstract extends Scene{
 
   /** The height of the scene.*/
   protected double height;
+  protected HelpScene help;
 
   /**
    * Constructor to create a SceneAbstract object.
@@ -44,6 +44,8 @@ public abstract class SceneAbstract extends Scene{
     this.root = root;
     this.width = root.getParentWidth();
     this.height = root.getParentHeight();
+    this.appWindow = appWindow;
+
 
   }
 
@@ -77,6 +79,12 @@ public abstract class SceneAbstract extends Scene{
     root.setMinWidth(width);
     root.setMinHeight(height);
 
+  }
+  public void makeHelp(){
+
+    help = new HelpScene(new VBox(),appWindow);
+    root.getChildren().add(help.getRoot());
+    help.toggleHelp(this.getClass().getName());
   }
 
 }
