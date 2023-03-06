@@ -39,12 +39,14 @@ public class HelpScene extends Scene {
         StackPane imagePane = new StackPane();
 
         ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResource("/images/keycap.png")).toExternalForm()));
-        imageView.setFitWidth(20);
-        imageView.setFitHeight(20);
+        imageView.setFitWidth(24);
+        imageView.setFitHeight(24);
         Text keyView = new Text(key);
         keyView.setFill(Color.WHITE);
         keyView.setFont(new Font("Calibri",16));
-        keyView.setScaleX((16/keyView.boundsInLocalProperty().get().getWidth()));
+        double scale = Math.min((16/keyView.boundsInLocalProperty().get().getWidth()),16/keyView.boundsInLocalProperty().get().getHeight());
+        keyView.setScaleX(scale);
+        keyView.setScaleY(scale);
         Text descView = new Text(desc);
         descView.setFill(Color.WHITE);
         descView.setFont(new Font("Calibri",16));
@@ -55,10 +57,10 @@ public class HelpScene extends Scene {
         box.getChildren().add(descView);
         root.setMaxWidth(Math.max(root.getMaxWidth(),(descView.boundsInLocalProperty().get().getWidth()+20)));
         root.getChildren().add(box);
-        root.setMaxHeight(20*root.getChildren().size());
+        root.setMaxHeight(24*root.getChildren().size());
     }
     public void toggleHelp(String className){
-        logger.info(className);
+        //logger.info(className);
         if (!visible) {
             makeKey("H", "Toggle this menu");
             switch (className) {
