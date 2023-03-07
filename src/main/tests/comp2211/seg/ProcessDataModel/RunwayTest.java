@@ -78,14 +78,15 @@ class RunwayTest {
 
     // Unit Tests
 
-    @DisplayName("Test correct calculations are performed when recalculation is performed")
+    //TODO: Write Test
+    @DisplayName("Landing/ take-off calculations : Recalculate appropriate values")
     @ParameterizedTest
     @MethodSource("generateRecalculateTestData")
     void recalculateTest() {
         assert false;
     }
 
-    @DisplayName("Test calculations for landing over an obstacle")
+    @DisplayName("Landing calculations : Land over an obstacle")
     @ParameterizedTest
     @MethodSource("generateLandOverTestData")
     void calculateLandOverTest(Runway runway, Obstacle obstacleToAdd, double expectedLDA) {
@@ -94,7 +95,7 @@ class RunwayTest {
         assertEquals(expectedLDA, runway.getWorkingLda());
     }
 
-    @DisplayName("Test calculations for landing towards an obstacle")
+    @DisplayName("Landing calculations : Land towards an obstacle")
     @ParameterizedTest
     @MethodSource("generateLandTowardsTestData")
     void calculateLandTowardsTest(Runway runway, Obstacle obstacleToAdd, double expectedLDA) {
@@ -103,21 +104,28 @@ class RunwayTest {
         assertEquals(expectedLDA, runway.getWorkingLda());
     }
 
-    @DisplayName("Test Calculations for taking-off towards an obstacle")
+    @DisplayName("Take-off calculations : Take-off towards an obstacle")
     @ParameterizedTest
     @MethodSource("generateTakeOffTowardTestData")
-    void calculateTakeOffTowardTest() {
+    void calculateTakeOffTowardTest(Runway runway, Obstacle obstacleToAdd, double expectedTORA) {
         assert false;
     }
 
-    @DisplayName("Test Calculations for taking-off away from an obstacle")
+    @DisplayName("Take-off calculations : Take-off away from an obstacle")
     @ParameterizedTest
     @MethodSource("generateTakeOffAwayTestData")
-    void calculateTakeOffAwayTest() {
+    void calculateTakeOffAwayTest(
+            Runway runway,
+            Obstacle obstacleToAdd,
+            double expectedTORA,
+            double expectedTODA,
+            double expectedASDA
+    ) {
         assert false;
     }
 
     // Test Data Generation
+    //TODO: Generate test data for recalculate
     private static Stream<Arguments> generateRecalculateTestData() {return null;}
     private static Stream<Arguments> generateLandOverTestData() {
         return Stream.of(
@@ -131,6 +139,8 @@ class RunwayTest {
                 Arguments.of(runway1, new Obstacle("ob1", 25, 2600), 2300.0)
         );
     }
+    //TODO: Generate test data for take-off towards
     private static Stream<Arguments> generateTakeOffTowardTestData() {return null;}
+    //TODO: Generate test data for take-off away
     private static Stream<Arguments> generateTakeOffAwayTestData() {return null;}
 }
