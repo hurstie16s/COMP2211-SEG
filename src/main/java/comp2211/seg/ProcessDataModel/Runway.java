@@ -4,10 +4,8 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-
-import java.util.ArrayList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Represents a runway object, containing various properties such as length, width, and designator, as well as methods
@@ -15,19 +13,22 @@ import java.util.ArrayList;
  */
 public class Runway {
 
+    // logger
+    private static final Logger logger = LogManager.getLogger(Runway.class);
+
     // Runway dimensions and properties
-    private SimpleDoubleProperty clearwayRightWidth = new SimpleDoubleProperty(500);
-    private SimpleDoubleProperty clearwayRightHeight = new SimpleDoubleProperty(150);
-    private SimpleDoubleProperty clearwayLeftWidth = new SimpleDoubleProperty(500);
-    private SimpleDoubleProperty clearwayLeftHeight = new SimpleDoubleProperty(150);
-    private SimpleDoubleProperty stopwayRight = new SimpleDoubleProperty(150);
-    private SimpleDoubleProperty stopwayLeft = new SimpleDoubleProperty(150);
-    private SimpleDoubleProperty stripEndRight = new SimpleDoubleProperty(60);
-    private SimpleDoubleProperty stripEndLeft = new SimpleDoubleProperty(60);
-    private SimpleDoubleProperty RESARightWidth = new SimpleDoubleProperty(240);
-    private SimpleDoubleProperty RESARightHeight = new SimpleDoubleProperty(90);
-    private SimpleDoubleProperty RESALeftWidth = new SimpleDoubleProperty(240);
-    private SimpleDoubleProperty RESALeftHeight = new SimpleDoubleProperty(90);
+    private final SimpleDoubleProperty clearwayRightWidth = new SimpleDoubleProperty(500);
+    private final SimpleDoubleProperty clearwayRightHeight = new SimpleDoubleProperty(150);
+    private final SimpleDoubleProperty clearwayLeftWidth = new SimpleDoubleProperty(500);
+    private final SimpleDoubleProperty clearwayLeftHeight = new SimpleDoubleProperty(150);
+    private final SimpleDoubleProperty stopwayRight = new SimpleDoubleProperty(150);
+    private final SimpleDoubleProperty stopwayLeft = new SimpleDoubleProperty(150);
+    private final SimpleDoubleProperty stripEndRight = new SimpleDoubleProperty(60);
+    private final SimpleDoubleProperty stripEndLeft = new SimpleDoubleProperty(60);
+    private final SimpleDoubleProperty RESARightWidth = new SimpleDoubleProperty(240);
+    private final SimpleDoubleProperty RESARightHeight = new SimpleDoubleProperty(90);
+    private final SimpleDoubleProperty RESALeftWidth = new SimpleDoubleProperty(240);
+    private final SimpleDoubleProperty RESALeftHeight = new SimpleDoubleProperty(90);
 
     //Inputs
 
@@ -36,10 +37,9 @@ public class Runway {
     which is the whole number nearest to one tenth of the magnetic North
     when viewed from the direction of approach. For example,
     if the azimuth of the centre-line is 153 then the runway designator will be 15
+    followed by either L C or R to differentiate between parallel runways
      */
-    private final SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
-    private final SimpleDoubleProperty runwayWidth = new SimpleDoubleProperty(60);
-    private final SimpleStringProperty runwayDesignator = new SimpleStringProperty("36");
+    private final SimpleStringProperty runwayDesignator = new SimpleStringProperty("36C");
     private final SimpleDoubleProperty tora = new SimpleDoubleProperty(2000);
     private final SimpleDoubleProperty toda = new SimpleDoubleProperty(1800);
     private final SimpleDoubleProperty asda = new SimpleDoubleProperty(1600);
@@ -65,15 +65,18 @@ public class Runway {
     // Typical values, may become variable down the line
     // Constants
     private static final SimpleDoubleProperty MINRESA = new SimpleDoubleProperty(240);
-    private static final SimpleDoubleProperty ALSMAGNITUDE = new SimpleDoubleProperty(50);
     private static final SimpleDoubleProperty STRIPEND = new SimpleDoubleProperty(60);
     private static final SimpleDoubleProperty BLASTZONE = new SimpleDoubleProperty(500);
     private static final SimpleDoubleProperty SLOPE = new SimpleDoubleProperty(50);
 
     // Outputs
-    private SimpleDoubleProperty output1 = new SimpleDoubleProperty(0);
-    private SimpleDoubleProperty output2 = new SimpleDoubleProperty(0);
-    private SimpleDoubleProperty output3 = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty output1 = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty output2 = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty output3 = new SimpleDoubleProperty(0);
+
+    // Runway dimensions
+    private final SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
+    private final SimpleDoubleProperty runwayWidth = new SimpleDoubleProperty(60);
 
     /**
      * Creates a new runway object and sets up change listeners on all input properties so that takeoff and landing
@@ -95,6 +98,7 @@ public class Runway {
         }) {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
+        logger.info("Created Runway object");
     }
 
     /**
@@ -104,11 +108,12 @@ public class Runway {
      */
     public void addObstacle(Obstacle obstacleToAdd) {
         this.runwayObstacle = obstacleToAdd;
+        logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignator.get());
         recalculate();
     }
     /**
      * Removing the obstacle from the runway
-     * @param obstacleToRemove
+     * @param obstacleToRemove The obstacle to remove from the runway
      */
     public void removeObstacle(Obstacle obstacleToRemove) {
         if (runwayObstacle == obstacleToRemove) {
@@ -119,6 +124,8 @@ public class Runway {
         workingToda.set(toda.get());
         workingAsda.set(asda.get());
         workingLda.set(lda.get());
+        logger.info("Removed Obstacle "+ runwayObstacle.getObstacleDesignator() + " from runway " + runwayDesignator.get());
+        logger.info("Return runway to original state");
     }
     /**
 
@@ -130,17 +137,16 @@ public class Runway {
      */
     public void recalculate(){
         if (landingMode.get()){
-            if (direction.get()){
+            runwayLength.bind(lda);
+            if (runwayObstacle.distFromThresholdProperty().lessThan(runwayLength.get()/2).get()){
                 calculateLandOver();
-
             } else {
                 calculateLandTowards();
-
             }
         } else {
-            if (direction.get()){
+            runwayLength.bind(tora);
+            if (runwayObstacle.distFromThresholdProperty().lessThan(runwayLength.get()/2).get()){
                 calculateTakeOffAway();
-
             } else {
                 calculateTakeOffToward();
 
@@ -153,17 +159,31 @@ public class Runway {
      */
     public void calculateLandOver() {
         if (runwayObstacle != null) {
-
+            /*
+            Not really needed for landing calculations
             workingTora.bind(tora.subtract(BLASTZONE).subtract(runwayObstacle.distFromThresholdProperty()).subtract(dispThreshold));
             workingAsda.bind(workingTora.add(stopway));
             workingToda.bind(workingTora.add(clearway));
-            workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE).subtract(STRIPEND.get())));
+             */
+            SimpleDoubleProperty obstacleSlopeCalculation;
+            if (runwayObstacle.heightProperty().multiply(SLOPE).get() > MINRESA.get()) {
+                obstacleSlopeCalculation = new SimpleDoubleProperty(runwayObstacle.heightProperty().multiply(SLOPE).get());
+            } else {
+                obstacleSlopeCalculation = MINRESA;
+            }
+            SimpleDoubleProperty ldaSubtraction;
+            if (runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND).get() > BLASTZONE.get()) {
+                ldaSubtraction = new SimpleDoubleProperty(runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND).get());
+            } else {
+                ldaSubtraction = BLASTZONE;
+            }
+            workingLda.bind(lda.subtract(ldaSubtraction));
         } else {
-            workingTora.bind(tora);
-            workingAsda.bind(asda);
-            workingToda.bind(toda);
             workingLda.bind(lda);
         }
+        workingTora.bind(tora);
+        workingAsda.bind(asda);
+        workingToda.bind(toda);
     }
 
     /**
@@ -171,17 +191,20 @@ public class Runway {
      */
     public void calculateLandTowards() {
         if (runwayObstacle != null) {
-
+            /*
+            Not really needed for landing calc
             workingTora.bind(runwayObstacle.distFromThresholdProperty().subtract(runwayObstacle.heightProperty().multiply(50)).subtract(STRIPEND.get()));
             workingAsda.bind(workingTora);
             workingToda.bind(workingTora);
-            workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA.get()).subtract(STRIPEND.get()));
+             */
+            workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
+            logger.info("Re-calculated LDA");
         } else {
-            workingTora.bind(tora);
-            workingAsda.bind(asda);
-            workingToda.bind(toda);
             workingLda.bind(lda);
         }
+        workingTora.bind(tora);
+        workingAsda.bind(asda);
+        workingToda.bind(toda);
     }
 
     /**
@@ -190,15 +213,25 @@ public class Runway {
     public void calculateTakeOffToward() {
         if (runwayObstacle != null) {
 
-            workingTora.bind(runwayObstacle.distFromThresholdProperty().subtract(runwayObstacle.heightProperty().multiply(50)).subtract(STRIPEND.get()));
+            //Compare slope caused by obstacle to min RESA, so aircraft has time to stop before obstacle in case of aborted take-off
+            SimpleDoubleProperty obstacleSlopeCalculation;
+            if (runwayObstacle.heightProperty().multiply(SLOPE).get() > MINRESA.get()) {
+                obstacleSlopeCalculation = new SimpleDoubleProperty(runwayObstacle.heightProperty().multiply(SLOPE).get());
+            } else {
+                obstacleSlopeCalculation = MINRESA;
+            }
+
+            workingTora.bind(runwayObstacle.distFromThresholdProperty().add(dispThreshold.get()).subtract(obstacleSlopeCalculation.get()).subtract(STRIPEND.get()));
             workingAsda.bind(workingTora);
             workingToda.bind(workingTora);
+            /*
+            not needed for take-off
             workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA.get()).subtract(STRIPEND.get()));
+            */
         } else {
             workingTora.bind(tora);
             workingAsda.bind(asda);
             workingToda.bind(toda);
-            workingLda.bind(lda);
         }
     }
 
@@ -208,10 +241,16 @@ public class Runway {
     public void calculateTakeOffAway() {
         if (runwayObstacle != null) {
 
-            workingTora.bind(tora.subtract(BLASTZONE).subtract(runwayObstacle.distFromThresholdProperty()).subtract(dispThreshold.get()));
+            SimpleDoubleProperty toraSubtraction = new SimpleDoubleProperty(Math.max(dispThreshold.get() + BLASTZONE.get(), STRIPEND.get() + MINRESA.get()));
+
+            workingTora.bind(tora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(toraSubtraction));
             workingAsda.bind(workingTora.add(stopway));
             workingToda.bind(workingTora.add(clearway));
+
+            /*
+            not needed for take-off
             workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE).subtract(STRIPEND.get())));
+            */
         } else {
             workingTora.bind(tora);
             workingAsda.bind(asda);
@@ -606,5 +645,4 @@ public class Runway {
     public SimpleDoubleProperty workingLdaProperty() {
         return workingLda;
     }
-
 }
