@@ -240,7 +240,9 @@ public class Runway {
     public void calculateTakeOffAway() {
         if (runwayObstacle != null) {
 
-            workingTora.bind(tora.subtract(BLASTZONE).subtract(runwayObstacle.distFromThresholdProperty()).subtract(dispThreshold.get()));
+            SimpleDoubleProperty toraSubtraction = new SimpleDoubleProperty(Math.max(dispThreshold.get() + BLASTZONE.get(), STRIPEND.get() + MINRESA.get()));
+
+            workingTora.bind(tora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(toraSubtraction));
             workingAsda.bind(workingTora.add(stopway));
             workingToda.bind(workingTora.add(clearway));
 
