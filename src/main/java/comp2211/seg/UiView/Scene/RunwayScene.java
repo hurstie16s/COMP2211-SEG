@@ -39,7 +39,7 @@ public class RunwayScene extends SceneAbstract {
   /**
    * The main application window for the interface.
    */
-  protected AppWindow appWindow;
+  public AppWindow appWindow;
 
   /**
    * The camera used to view the runway scene.

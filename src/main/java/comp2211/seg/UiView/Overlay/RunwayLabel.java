@@ -2,7 +2,10 @@ package comp2211.seg.UiView.Overlay;
 
 import comp2211.seg.Controller.Interfaces.GlobalVars;
 import comp2211.seg.UiView.Scene.RunwayScene;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -21,7 +24,6 @@ public class RunwayLabel extends Group {
     private final RunwayScene scene;
     private final boolean direction;
     private final String name;
-
     /**
      * Constructs a new RunwayLabel with the specified name, color, x-offset, y-offset, length, scene, and direction.
      *
@@ -37,6 +39,7 @@ public class RunwayLabel extends Group {
         this.scene = scene;
         this.direction = direction;
         this.name = name;
+        visibleProperty().bind( Bindings.and(Bindings.greaterThanOrEqual(scene.appWindow.runway.runwayLengthProperty().divide(2), xOffset.subtract(length)),Bindings.lessThanOrEqual(scene.appWindow.runway.runwayLengthProperty().divide(-2),xOffset.subtract(length))));
 
         Group labelRotateGroup = new Group();
         Text label = new Text(name);
@@ -96,6 +99,8 @@ public class RunwayLabel extends Group {
 
         leftHorizontal.getTransforms().add(xRotate);
         getChildren().addAll(labelRotateGroup, leftHorizontal, leftVertical, rightVertical);
+
+
 
 
 

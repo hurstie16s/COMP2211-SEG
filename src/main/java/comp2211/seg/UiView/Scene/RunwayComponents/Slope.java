@@ -77,9 +77,9 @@ public class Slope extends MeshView {
         back.bind(y.multiply(scaleFactorHeight).subtract(w.multiply(scaleFactorHeight).divide(2)));
         start.bind((Bindings.when(direction).then(x.add(obstacle.distFromThresholdProperty()).subtract(obstacle.widthProperty().divide(2))).otherwise(x.add(obstacle.distFromThresholdProperty()).add(obstacle.widthProperty().divide(2))).multiply(scaleFactor)));
         NumberBinding difference = Bindings.when(direction).then(obstacle.heightProperty().multiply(-50).add(obstacle.widthProperty().divide(2))).otherwise(obstacle.heightProperty().multiply(50).subtract(obstacle.widthProperty().divide(2)));
-        NumberBinding change = start.add(Bindings.when(direction).then(Bindings.when(Bindings.lessThan(240, difference)).then(difference).otherwise(240)).otherwise(Bindings.when(Bindings.greaterThan(-240, difference)).then(difference).otherwise(-240)).multiply(scaleFactor));
+        NumberBinding change = start.add(Bindings.when(direction.not()).then(Bindings.when(Bindings.lessThan(240, difference)).then(difference).otherwise(240)).otherwise(Bindings.when(Bindings.greaterThan(-240, difference)).then(difference).otherwise(-240)).multiply(scaleFactor));
         end.bind(Bindings.when(Bindings.lessThan(appWindow.runway.runwayLengthProperty().divide(2).multiply(scaleFactor),change)).then(start).otherwise(Bindings.when(Bindings.greaterThan(appWindow.runway.runwayLengthProperty().divide(-2).multiply(scaleFactor),change)).then(start).otherwise(change)));
-        change.addListener(new ChangeListener<Number>() {
+        difference.addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 logger.info(t1);
