@@ -440,7 +440,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.RESAWidthProperty().multiply(1),
             appWindow.runway.RESAHeightProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            Color.BROWN);
+            Color.SADDLEBROWN);
 
     //RESA Left
     addCuboid(
@@ -450,7 +450,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.RESAWidthProperty().multiply(1),
             appWindow.runway.RESAHeightProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            Color.BROWN);
+            Color.SADDLEBROWN);
   }
   /**
    * Creates the Cleared and Graded Area (CGA) and adds it to the 3D group.
@@ -499,12 +499,12 @@ public class RunwayScene extends SceneAbstract {
     //RunwayArrow TODARightLabel = new RunwayArrowRight("TODA", Color.RED, scaleFactor, 100, 25, 3000);
     RunwayLabel TORALeftLabel = new RunwayLabel("TORA", Color.AQUA, appWindow.runway.runwayLengthProperty().multiply(-0.5), 0.9, appWindow.runway.leftToraProperty().multiply(-1),this,true);
     RunwayLabel TODALeftLabel = new RunwayLabel("TODA", Color.MAGENTA, appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract(appWindow.runway.clearwayProperty()), 0.7, appWindow.runway.leftTodaProperty().multiply(-1),this,true);
-    RunwayLabel ASDALeftLabel = new RunwayLabel("ASDA", Color.RED, appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract(appWindow.runway.stopwayProperty()), 0.5, appWindow.runway.leftAsdaProperty().multiply(-1),this,true);
-    RunwayLabel LDALeftLabel = new RunwayLabel("LDA", Color.YELLOW, appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdProperty()), 0.3, appWindow.runway.leftLdaProperty().multiply(-1),this,true);
+    RunwayLabel ASDALeftLabel = new RunwayLabel("ASDA", Color.YELLOW, appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract(appWindow.runway.stopwayProperty()), 0.5, appWindow.runway.leftAsdaProperty().multiply(-1),this,true);
+    RunwayLabel LDALeftLabel = new RunwayLabel("LDA", Color.FIREBRICK, appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdProperty()), 0.3, appWindow.runway.leftLdaProperty().multiply(-1),this,true);
     RunwayLabel TORARightLabel = new RunwayLabel("TORA", Color.AQUA, appWindow.runway.runwayLengthProperty().multiply(0.5), -0.9, appWindow.runway.rightToraProperty().multiply(1),this,false);
     RunwayLabel TODARightLabel = new RunwayLabel("TODA", Color.MAGENTA, appWindow.runway.runwayLengthProperty().multiply(0.5).add(appWindow.runway.clearwayProperty()), -0.7, appWindow.runway.rightTodaProperty().multiply(1),this,false);
-    RunwayLabel ASDARightLabel = new RunwayLabel("ASDA", Color.RED, appWindow.runway.runwayLengthProperty().multiply(0.5).add(appWindow.runway.stopwayProperty()), -0.5, appWindow.runway.rightAsdaProperty().multiply(1),this,false);
-    RunwayLabel LDARightLabel = new RunwayLabel("LDA", Color.YELLOW, appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdProperty()), -0.3, appWindow.runway.rightLdaProperty().multiply(1),this,false);
+    RunwayLabel ASDARightLabel = new RunwayLabel("ASDA", Color.YELLOW, appWindow.runway.runwayLengthProperty().multiply(0.5).add(appWindow.runway.stopwayProperty()), -0.5, appWindow.runway.rightAsdaProperty().multiply(1),this,false);
+    RunwayLabel LDARightLabel = new RunwayLabel("LDA", Color.FIREBRICK, appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdProperty()), -0.3, appWindow.runway.rightLdaProperty().multiply(1),this,false);
     group.getChildren().addAll(TODARightLabel, ASDARightLabel, TORARightLabel, LDARightLabel, TODALeftLabel, ASDALeftLabel, TORALeftLabel, LDALeftLabel);
   }
 
