@@ -4,10 +4,7 @@ import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +22,7 @@ public abstract class SceneAbstract extends Scene{
   protected final AppWindow appWindow;
 
   /** The root node of the scene.*/
-  protected HandlerPane root;
+  public Pane root;
 
   /**The main pane of the scene.*/
   protected StackPane mainPane;
@@ -47,6 +44,14 @@ public abstract class SceneAbstract extends Scene{
     this.root = root;
     this.width = root.getParentWidth();
     this.height = root.getParentHeight();
+    this.appWindow = appWindow;
+
+
+  }public SceneAbstract(Pane root, AppWindow appWindow, double width,double height) {
+    super(root, appWindow.getWidth(), appWindow.getHeight(),Color.BLACK);
+    this.root = root;
+    this.width = width;
+    this.height = height;
     this.appWindow = appWindow;
 
 
@@ -74,7 +79,8 @@ public abstract class SceneAbstract extends Scene{
 
     mainPane.setMinWidth(width);
     mainPane.setMinHeight(height);
-    mainPane.setBackground(new Background(new BackgroundFill(GlobalVariables.bg,null,null)));
+    mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+    root.setBackground(new Background(new BackgroundFill(GlobalVariables.bg,null,null)));
     root.getChildren().add(mainPane);
 
     root.setMaxWidth(width);

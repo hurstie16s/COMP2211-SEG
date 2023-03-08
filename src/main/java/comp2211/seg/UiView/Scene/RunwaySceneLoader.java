@@ -2,6 +2,9 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.layout.Pane;
 
 public class RunwaySceneLoader extends SceneAbstract{
     private RunwayScene scene;
@@ -34,9 +37,24 @@ public class RunwaySceneLoader extends SceneAbstract{
     }
     public void build(){
         super.build();
-        scene = new RunwayScene(new HandlerPane(appWindow.getWidth(),appWindow.getHeight()),appWindow);
+        scene = new RunwayScene(new Pane(),appWindow,appWindow.getWidth(), appWindow.getHeight());
         scene.build();
         scene.initialise();
         root.getChildren().add(scene.getRoot());
+        root.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                scene.root.setMinWidth((Double) t1);
+                scene.root.setMaxWidth((Double) t1);
+            }
+        });
+        root.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                scene.root.setMinHeight((Double) t1);
+                scene.root.setMaxHeight((Double) t1);
+
+            }
+        });
     }
 }

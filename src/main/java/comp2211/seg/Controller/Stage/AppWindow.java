@@ -6,6 +6,7 @@ import comp2211.seg.ProcessDataModel.Runway;
 import comp2211.seg.UiView.Scene.*;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -85,7 +86,7 @@ public class AppWindow {
      * Starts the main scene.
      */
     public void startMainScene() {
-        loadScene(new MainScene(new HandlerPane(width,height),this));
+        loadScene(new MainScene(new Pane(),this, getWidth(),getHeight()));
     }
 
     /**

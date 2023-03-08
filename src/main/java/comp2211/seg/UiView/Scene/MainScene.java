@@ -3,7 +3,10 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.App;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,6 +38,7 @@ public class MainScene extends SceneAbstract{
      * The main application window for the interface.
      */
     protected AppWindow appWindow;
+    protected Pane root;
 
     /**
      * Constructs a new MainScene object.
@@ -42,11 +46,12 @@ public class MainScene extends SceneAbstract{
      * @param root      the root handler pane for the scene
      * @param appWindow the main application window
      */
-    public MainScene(HandlerPane root, AppWindow appWindow) {
-        super(root, appWindow);
+    public MainScene(Pane root, AppWindow appWindow, double width, double height) {
+        super(root, appWindow, width, height);
+        this.root = root;
         scene1 = new InputScene(new HandlerPane(appWindow.getWidth(),appWindow.getHeight()/2.0),appWindow);
-        scene2 = new RunwayScene(new HandlerPane(appWindow.getWidth()/2.0,appWindow.getHeight()/2.0),appWindow);
-        scene3 = new RunwayScene(new HandlerPane(appWindow.getWidth()/2.0,appWindow.getHeight()/2.0),appWindow);
+        scene2 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/2.0,appWindow.getHeight()/2.0);
+        scene3 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/2.0,appWindow.getHeight()/2.0);
         this.appWindow = appWindow;
     }
 
@@ -99,6 +104,45 @@ public class MainScene extends SceneAbstract{
         mainPane.getChildren().add(layout);
         layout.setOnMousePressed((e) -> layout.requestFocus());
         layout2.setOnMousePressed((e) -> appWindow.startRunwayScene());
+        root.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                mainPane.setMinWidth((Double) t1);
+                mainPane.setMaxWidth((Double) t1);
+                layout.setMaxWidth((Double) t1);
+                layout.setMinWidth((Double) t1);
+                scene1.root.setMinWidth((Double) t1);
+                scene1.root.setMaxWidth((Double) t1);
+                scene2.root.setMinWidth((Double) t1/2);
+                scene2.root.setMaxWidth((Double) t1/2);
+                scene3.root.setMinWidth((Double) t1/2);
+                scene3.root.setMaxWidth((Double) t1/2);
+                scene2.mainPane.setMinWidth((Double) t1/2);
+                scene2.mainPane.setMaxWidth((Double) t1/2);
+                scene3.mainPane.setMinWidth((Double) t1/2);
+                scene3.mainPane.setMaxWidth((Double) t1/2);
+            }
+        });
+        root.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                mainPane.setMinHeight((Double) t1);
+                mainPane.setMaxHeight((Double) t1);
+                layout.setMinHeight((Double) t1);
+                layout.setMaxHeight((Double) t1);
+                scene1.root.setMinHeight((Double) t1/2);
+                scene1.root.setMaxHeight((Double) t1/2);
+                scene2.root.setMinHeight((Double) t1/2);
+                scene2.root.setMaxHeight((Double) t1/2);
+                scene3.root.setMinHeight((Double) t1/2);
+                scene3.root.setMaxHeight((Double) t1/2);
+                scene2.mainPane.setMinHeight((Double) t1/2);
+                scene2.mainPane.setMaxHeight((Double) t1/2);
+                scene3.mainPane.setMinHeight((Double) t1/2);
+                scene3.mainPane.setMaxHeight((Double) t1/2);
+
+            }
+        });
     }
 }
 

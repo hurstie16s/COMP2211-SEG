@@ -4,8 +4,11 @@ import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.UiView.Scene.RunwayScene;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -77,29 +80,29 @@ public class RunwayLabel extends Group {
         } else {
             labelRotateGroup.translateXProperty().bind(xOffset.multiply(scene.scaleFactorProperty()).subtract(label.getBoundsInLocal().getWidth() / 2));
         }
-        labelRotateGroup.translateYProperty().bind(scene.heightProperty().multiply(-0.5 * yOffset));
-        labelRotateGroup.translateZProperty().bind(scene.heightProperty().multiply(-0.5 * yOffset));
+        labelRotateGroup.translateYProperty().bind(scene.root.heightProperty().multiply(-0.5 * yOffset));
+        labelRotateGroup.translateZProperty().bind(scene.root.heightProperty().multiply(-0.5 * yOffset));
 
         Node leftHorizontal = makeLineHorizontal(
             xOffset,
             length.divide(1),
-            scene.heightProperty().multiply(0.5 * yOffset).multiply(-1),
+            scene.root.heightProperty().multiply(0.5 * yOffset).multiply(-1),
             2,
             color
         );
 
         Group leftVertical = makeLineVertical(
-            xOffset,
-            scene.heightProperty().multiply(0.5 * yOffset).multiply(-1),
-            1,
-            color
+                xOffset,
+                scene.root.heightProperty().multiply(0.5 * yOffset).multiply(-1),
+                1,
+                color
         );
 
         Group rightVertical = makeLineVertical(
-            xOffset.subtract(length),
-            scene.heightProperty().multiply(0.5 * yOffset).multiply(-1),
-            1,
-            color
+                xOffset.subtract(length),
+                scene.root.heightProperty().multiply(0.5 * yOffset).multiply(-1),
+                1,
+                color
         );
 
         leftHorizontal.getTransforms().add(xRotate);
@@ -168,11 +171,15 @@ public class RunwayLabel extends Group {
         Box box = new Box(thickness,thickness,100);
         box.translateXProperty().bind(start.multiply(scene.scaleFactorProperty()));
         box.translateZProperty().bind(box.depthProperty().divide(-2));
+        scene.root.heightProperty().addListener(new ChangeListener<>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                box.depthProperty().set(Math.sqrt(height.multiply(height).multiply(2).get()));
+            }
+        });
         if (height.get() > 0) {
-            box.depthProperty().set(Math.sqrt(Math.pow(height.get(), 2) * 2));
             box.translateZProperty().bind(box.depthProperty().divide(2));
         } else {
-            box.depthProperty().set(Math.sqrt(Math.pow(height.get(), 2) * 2));
             box.translateZProperty().bind(box.depthProperty().divide(-2));
         }
         material.setDiffuseColor(color);

@@ -101,13 +101,13 @@ public class RunwayScene extends SceneAbstract {
    * @param root      the root handler pane for the scene
    * @param appWindow the main application window
    */
-  public RunwayScene(HandlerPane root, AppWindow appWindow) {
-    super(root, appWindow);
+  public RunwayScene(Pane root, AppWindow appWindow, double width, double height) {
+    super(root, appWindow, width, height);
+    this.width = width;
+    this.height = height;
 
     this.group = new Group();
     this.appWindow = appWindow;
-    width = root.getParentWidth();
-    height = root.getParentHeight();
 
   }
 
@@ -286,6 +286,8 @@ public class RunwayScene extends SceneAbstract {
 //material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
     material.setDiffuseColor(Color.DARKGREEN);
     background.setMaterial(material);
+    background.widthProperty().bind(root.widthProperty());
+    background.heightProperty().bind(root.heightProperty());
     group.getChildren().add(background);
   }
 
@@ -311,8 +313,8 @@ public class RunwayScene extends SceneAbstract {
     addTopView();
     makeRunway();
     makeCGA(false);
-    scaleFactor.bind(widthProperty().subtract(borderx).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
-    scaleFactorHeight.bind(heightProperty().subtract(borderx).divide(420));
+    scaleFactor.bind(root.widthProperty().subtract(borderx).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+    scaleFactorHeight.bind(root.heightProperty().subtract(borderx).divide(420));
     logger.info(getClass().toString());
 
     try {
