@@ -77,7 +77,8 @@ public class InputScene extends SceneAbstract {
     logger.info("building");
     units.bind(appWindow.runway.unitsProperty());
 
-    var layout = new HBox();
+    var layout = new BorderPane();
+    //var layout = new HBox();
     root.widthProperty().addListener(new ChangeListener<Number>() {
       @Override
       public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -91,7 +92,10 @@ public class InputScene extends SceneAbstract {
     var inputs = new VBox();
     var calculationsButtons = new HBox();
     var outputs = new VBox();
-    layout.getChildren().addAll(inputs, outputs);
+    var inputsOutputsBox = new HBox();
+    inputsOutputsBox.getChildren().addAll(inputs, outputs);
+    layout.setTop(calculationsButtons);
+    layout.setCenter(inputsOutputsBox);
 
     makeTextField(inputs, new SimpleStringProperty(
         "TORA (").concat(units).concat(")"),
