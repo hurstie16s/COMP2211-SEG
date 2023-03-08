@@ -168,7 +168,7 @@ class RunwayTest {
      */
     private static Stream<Arguments> generateTakeOffTowardTestData() {
         return Stream.of(
-                Arguments.of(runway2, new Obstacle("obT1", 12, -50), 3346, 3346, 3346),
+                Arguments.of(runway2, new Obstacle("obT1", 12, 3646), 2986, 2986, 2986),
                 Arguments.of(runway3, new Obstacle("obT2", 25, 2853), 1850, 1850, 1850),
                 Arguments.of(runway4, new Obstacle("obT3", 15, 3203), 2393, 2393, 2393),
                 Arguments.of(runway1, new Obstacle("obT4", 20, 3546), 2792, 2792, 2792)
