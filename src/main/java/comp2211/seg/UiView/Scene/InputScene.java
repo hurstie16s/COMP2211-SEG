@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -137,7 +138,9 @@ public class InputScene extends SceneAbstract {
    */
   public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleStringProperty property, String regex) {
     TextField entry = new TextField();
+    //remove autofocus
     entry.setFocusTraversable(false);
+    //add padding so text is displayed more central
     entry.setFont(GlobalVars.font);
 
     HBox segment = makeBoundingBox(label,width/3,entry);
@@ -266,6 +269,7 @@ public class InputScene extends SceneAbstract {
     Label data = new Label();
     data.setFont(GlobalVars.font);
     data.setTextFill(GlobalVars.fg);
+    data.setPadding(new Insets(5,10,5,10));
     data.setText(String.valueOf(property.getValue()));
 
     HBox segment = makeBoundingBox(new SimpleStringProperty(label),width/3,data);
@@ -281,10 +285,11 @@ public class InputScene extends SceneAbstract {
     title.textProperty().bind(label);
     title.setFont(GlobalVars.font);
     title.setTextFill(GlobalVars.fg);
-    title.setMinWidth(width / 2);
-    title.setMaxWidth(width / 2);
-    node.minWidth(width / 2);
-    node.maxWidth(width / 2);
+    title.setMinWidth(width / 1.7);
+    title.setMaxWidth(width / 1.7);
+    title.setPadding(new Insets(5,10,5,10));
+    node.minWidth(width / 1.7);
+    node.maxWidth(width / 1.7);
     segment.getChildren().addAll(title,node);
     return segment;
   }
