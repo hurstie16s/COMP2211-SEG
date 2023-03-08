@@ -69,11 +69,16 @@ class RunwayTest {
             int dispThreshold,
             Runway runway) {
         runway.runwayDesignatorProperty().set(designator);
-        runway.toraProperty().set(tora);
-        runway.todaProperty().set(toda);
-        runway.asdaProperty().set(asda);
-        runway.ldaProperty().set(lda);
-        runway.dispThresholdProperty().set(dispThreshold);
+        runway.inputLeftToraProperty().set(tora);
+        runway.inputLeftTodaProperty().set(toda);
+        runway.inputLeftAsdaProperty().set(asda);
+        runway.inputLeftLdaProperty().set(lda);
+        runway.dispThresholdLeftProperty().set(dispThreshold);
+        runway.inputRightToraProperty().set(tora);
+        runway.inputRightTodaProperty().set(toda);
+        runway.inputRightAsdaProperty().set(asda);
+        runway.inputRightLdaProperty().set(lda);
+        runway.dispThresholdRightProperty().set(dispThreshold);
     }
     void addObstacle(Runway runway, Obstacle obstacle){
         runway.addObstacle();

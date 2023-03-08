@@ -309,7 +309,7 @@ public class RunwayScene extends SceneAbstract {
     addTopView();
     makeRunway();
     makeCGA(false);
-    scaleFactor.bind(widthProperty().subtract(borderx).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayWidthProperty()).add(appWindow.runway.clearwayWidthProperty())));
+    scaleFactor.bind(widthProperty().subtract(borderx).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
     scaleFactorHeight.bind(heightProperty().subtract(borderx).divide(420));
     logger.info(getClass().toString());
 
@@ -392,20 +392,20 @@ public class RunwayScene extends SceneAbstract {
 
     //Clearway Right
     addCuboid(
-            appWindow.runway.runwayLengthProperty().multiply(0.5).add( appWindow.runway.clearwayWidthProperty().divide(2)),
+            appWindow.runway.runwayLengthProperty().multiply(0.5).add( appWindow.runway.clearwayRightProperty().divide(2)),
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
-            appWindow.runway.clearwayWidthProperty().multiply(1),
+            appWindow.runway.clearwayRightProperty().multiply(1),
             appWindow.runway.clearwayHeightProperty().multiply(1),
             new SimpleDoubleProperty(10).multiply(1),
             Color.DARKGOLDENROD);
 
     //Clearway Left
     addCuboid(
-            appWindow.runway.runwayLengthProperty().multiply(-0.5).add( appWindow.runway.clearwayWidthProperty().divide(-2)),
+            appWindow.runway.runwayLengthProperty().multiply(-0.5).add( appWindow.runway.clearwayLeftProperty().divide(-2)),
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
-            appWindow.runway.clearwayWidthProperty().multiply(1),
+            appWindow.runway.clearwayLeftProperty().multiply(1),
             appWindow.runway.clearwayHeightProperty().multiply(1),
             new SimpleDoubleProperty(10).multiply(1),
             Color.DARKGOLDENROD);
@@ -413,20 +413,20 @@ public class RunwayScene extends SceneAbstract {
 
     //Stopway Left
     addCuboid(
-            appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.stopwayProperty().divide(-2)),
+            appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.stopwayLeftProperty().divide(-2)),
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
-            appWindow.runway.stopwayProperty().multiply(1),
+            appWindow.runway.stopwayLeftProperty().multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
             Color.VIOLET);
 
     //Stopway Right
     addCuboid(
-            appWindow.runway.runwayLengthProperty().multiply(0.5).add(appWindow.runway.stopwayProperty().divide(2)),
+            appWindow.runway.runwayLengthProperty().multiply(0.5).add(appWindow.runway.stopwayRightProperty().divide(2)),
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
-            appWindow.runway.stopwayProperty().multiply(1),
+            appWindow.runway.stopwayRightProperty().multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
             Color.VIOLET);
@@ -434,7 +434,7 @@ public class RunwayScene extends SceneAbstract {
 
     //RESA Right
     addCuboid(
-            appWindow.runway.runwayLengthProperty().multiply(0.5).add( appWindow.runway.stopwayProperty()).add(appWindow.runway.stripEndProperty()).add(appWindow.runway.RESAWidthProperty().divide(2)),
+            appWindow.runway.runwayLengthProperty().multiply(0.5).add( appWindow.runway.stopwayRightProperty()).add(appWindow.runway.stripEndProperty()).add(appWindow.runway.RESAWidthProperty().divide(2)),
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             appWindow.runway.RESAWidthProperty().multiply(1),
@@ -444,7 +444,7 @@ public class RunwayScene extends SceneAbstract {
 
     //RESA Left
     addCuboid(
-            appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract( appWindow.runway.stopwayProperty()).subtract(appWindow.runway.stripEndProperty()).subtract(appWindow.runway.RESAWidthProperty().divide(2)),
+            appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract( appWindow.runway.stopwayLeftProperty()).subtract(appWindow.runway.stripEndProperty()).subtract(appWindow.runway.RESAWidthProperty().divide(2)),
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             appWindow.runway.RESAWidthProperty().multiply(1),
@@ -463,10 +463,10 @@ public class RunwayScene extends SceneAbstract {
 
     //Cleared and graded area
     ClearedGradedArea cga = new ClearedGradedArea(group,filled);
-    cga.leftProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract( appWindow.runway.stopwayProperty()).subtract(appWindow.runway.stripEndProperty()).multiply(scaleFactor));
+    cga.leftProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract( appWindow.runway.stopwayLeftProperty()).subtract(appWindow.runway.stripEndProperty()).multiply(scaleFactor));
     cga.leftStartProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).multiply(scaleFactor));
     cga.leftEndProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).add(150).multiply(scaleFactor));
-    cga.rightProperty().bind(appWindow.runway.runwayLengthProperty().multiply(0.5).add( appWindow.runway.stopwayProperty()).add(appWindow.runway.stripEndProperty()).multiply(scaleFactor));
+    cga.rightProperty().bind(appWindow.runway.runwayLengthProperty().multiply(0.5).add( appWindow.runway.stopwayRightProperty()).add(appWindow.runway.stripEndProperty()).multiply(scaleFactor));
     cga.rightStartProperty().bind(appWindow.runway.runwayLengthProperty().multiply(0.5).multiply(scaleFactor));
     cga.rightEndProperty().bind(appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(150).multiply(scaleFactor));
     cga.innerHeightProperty().bind(scaleFactorHeight.multiply(-75));
@@ -498,13 +498,13 @@ public class RunwayScene extends SceneAbstract {
 
     //RunwayArrow TODARightLabel = new RunwayArrowRight("TODA", Color.RED, scaleFactor, 100, 25, 3000);
     RunwayLabel TORALeftLabel = new RunwayLabel("TORA", Color.AQUA, appWindow.runway.runwayLengthProperty().multiply(-0.5), 0.9, appWindow.runway.leftToraProperty().multiply(-1),this,true);
-    RunwayLabel TODALeftLabel = new RunwayLabel("TODA", Color.MAGENTA, appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract(appWindow.runway.clearwayProperty()), 0.7, appWindow.runway.leftTodaProperty().multiply(-1),this,true);
-    RunwayLabel ASDALeftLabel = new RunwayLabel("ASDA", Color.YELLOW, appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract(appWindow.runway.stopwayProperty()), 0.5, appWindow.runway.leftAsdaProperty().multiply(-1),this,true);
-    RunwayLabel LDALeftLabel = new RunwayLabel("LDA", Color.FIREBRICK, appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdProperty()), 0.3, appWindow.runway.leftLdaProperty().multiply(-1),this,true);
+    RunwayLabel TODALeftLabel = new RunwayLabel("TODA", Color.MAGENTA, appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract(appWindow.runway.clearwayLeftProperty()), 0.7, appWindow.runway.leftTodaProperty().multiply(-1),this,true);
+    RunwayLabel ASDALeftLabel = new RunwayLabel("ASDA", Color.YELLOW, appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract(appWindow.runway.stopwayLeftProperty()), 0.5, appWindow.runway.leftAsdaProperty().multiply(-1),this,true);
+    RunwayLabel LDALeftLabel = new RunwayLabel("LDA", Color.FIREBRICK, appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()), 0.3, appWindow.runway.leftLdaProperty().multiply(-1),this,true);
     RunwayLabel TORARightLabel = new RunwayLabel("TORA", Color.AQUA, appWindow.runway.runwayLengthProperty().multiply(0.5), -0.9, appWindow.runway.rightToraProperty().multiply(1),this,false);
-    RunwayLabel TODARightLabel = new RunwayLabel("TODA", Color.MAGENTA, appWindow.runway.runwayLengthProperty().multiply(0.5).add(appWindow.runway.clearwayProperty()), -0.7, appWindow.runway.rightTodaProperty().multiply(1),this,false);
-    RunwayLabel ASDARightLabel = new RunwayLabel("ASDA", Color.YELLOW, appWindow.runway.runwayLengthProperty().multiply(0.5).add(appWindow.runway.stopwayProperty()), -0.5, appWindow.runway.rightAsdaProperty().multiply(1),this,false);
-    RunwayLabel LDARightLabel = new RunwayLabel("LDA", Color.FIREBRICK, appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdProperty()), -0.3, appWindow.runway.rightLdaProperty().multiply(1),this,false);
+    RunwayLabel TODARightLabel = new RunwayLabel("TODA", Color.MAGENTA, appWindow.runway.runwayLengthProperty().multiply(0.5).add(appWindow.runway.clearwayRightProperty()), -0.7, appWindow.runway.rightTodaProperty().multiply(1),this,false);
+    RunwayLabel ASDARightLabel = new RunwayLabel("ASDA", Color.YELLOW, appWindow.runway.runwayLengthProperty().multiply(0.5).add(appWindow.runway.stopwayRightProperty()), -0.5, appWindow.runway.rightAsdaProperty().multiply(1),this,false);
+    RunwayLabel LDARightLabel = new RunwayLabel("LDA", Color.FIREBRICK, appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()), -0.3, appWindow.runway.rightLdaProperty().multiply(1),this,false);
     group.getChildren().addAll(TODARightLabel, ASDARightLabel, TORARightLabel, LDARightLabel, TODALeftLabel, ASDALeftLabel, TORALeftLabel, LDALeftLabel);
   }
 

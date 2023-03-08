@@ -87,9 +87,11 @@ public class InputScene extends SceneAbstract {
     var outputs = new VBox();
     layout.getChildren().addAll(inputs, calculations, outputs);
 
-    makeTextField(inputs, new SimpleStringProperty("Runway Length (").concat(units).concat(")"), appWindow.runway.runwayLengthProperty());
+    makeTextField(inputs, new SimpleStringProperty("TORA (").concat(units).concat(")"), appWindow.runway.inputLeftToraProperty(), appWindow.runway.inputRightToraProperty());
+    makeTextField(inputs, new SimpleStringProperty("TODA (").concat(units).concat(")"), appWindow.runway.inputLeftTodaProperty(), appWindow.runway.inputRightTodaProperty());
+    makeTextField(inputs, new SimpleStringProperty("ASDA (").concat(units).concat(")"), appWindow.runway.inputLeftAsdaProperty(), appWindow.runway.inputRightAsdaProperty());
+    makeTextField(inputs, new SimpleStringProperty("LDA (").concat(units).concat(")"), appWindow.runway.inputLeftLdaProperty(), appWindow.runway.inputRightLdaProperty());
     makeTextField(inputs, new SimpleStringProperty("Runway Designator").concat(""), appWindow.runway.runwayDesignatorProperty(), "([0-9]|0[1-9]|[1-2][0-9]|3[0-6])[lrcLRC]?");
-    makeTextField(inputs, new SimpleStringProperty("Displaced Threshold (").concat(units).concat(")"), appWindow.runway.dispThresholdProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle width (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().widthProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle length (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().lengthProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle height (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().heightProperty());
@@ -101,12 +103,12 @@ public class InputScene extends SceneAbstract {
 
 
     var leftTora = makeOutputLabel(outputs, "rightTora", appWindow.runway.rightToraProperty(), new SimpleDoubleProperty(0));
-    var leftToda = makeOutputLabel(outputs, "rightToda", appWindow.runway.rightTodaProperty(), appWindow.runway.clearwayProperty());
-    var leftAsda = makeOutputLabel(outputs, "rightAsda", appWindow.runway.rightAsdaProperty(), appWindow.runway.stopwayProperty());
+    var leftToda = makeOutputLabel(outputs, "rightToda", appWindow.runway.rightTodaProperty(), appWindow.runway.clearwayLeftProperty());
+    var leftAsda = makeOutputLabel(outputs, "rightAsda", appWindow.runway.rightAsdaProperty(), appWindow.runway.stopwayLeftProperty());
     var leftLda = makeOutputLabel(outputs, "rightLda", appWindow.runway.rightLdaProperty(), new SimpleDoubleProperty(0));
     var rightTora = makeOutputLabel(outputs, "leftTora", appWindow.runway.leftToraProperty(), new SimpleDoubleProperty(0));
-    var rightToda = makeOutputLabel(outputs, "leftToda", appWindow.runway.leftTodaProperty(), appWindow.runway.clearwayProperty());
-    var rightAsda = makeOutputLabel(outputs, "leftAsda", appWindow.runway.leftAsdaProperty(), appWindow.runway.stopwayProperty());
+    var rightToda = makeOutputLabel(outputs, "leftToda", appWindow.runway.leftTodaProperty(), appWindow.runway.clearwayRightProperty());
+    var rightAsda = makeOutputLabel(outputs, "leftAsda", appWindow.runway.leftAsdaProperty(), appWindow.runway.stopwayRightProperty());
     var rightLda = makeOutputLabel(outputs, "leftLda", appWindow.runway.leftLdaProperty(), new SimpleDoubleProperty(0));
 
 
@@ -204,6 +206,68 @@ public class InputScene extends SceneAbstract {
     });
     entry.setText(property.getValue().toString());
     return entry;
+  }/**
+   * Creates a new TextField with the specified label and adds it to the given parent Pane.
+   *
+   * @param parent the Pane to add the TextField to.
+   * @param label  the label to use for the TextField.
+   * @return the created TextField Node.
+   */
+  public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleDoubleProperty property, SimpleDoubleProperty property2) {
+    TextField entry = new TextField();
+    entry.setFocusTraversable(false);
+    entry.setFont(GlobalVars.font);
+    TextField entry2 = new TextField();
+    entry2.setFocusTraversable(false);
+    entry2.setFont(GlobalVars.font);
+    HBox entries = new HBox(entry,entry2);
+
+    HBox segment = makeBoundingBox(label,width/3,entries);
+    parent.getChildren().add(segment);
+    entry.textProperty().addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+        if (Objects.equals(t1, "")) {
+          property.set(0);
+        } else {
+          try {
+            property.set(Double.parseDouble(t1));
+          } catch (Exception e) {
+            displayErrorMessage("Invalid Entry", label + " must be a number");
+            entry.setText(s);
+          }
+        }
+      }
+    });
+    property.addListener(new ChangeListener<Number>() {
+      @Override
+      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+        entry.setText(Double.toString(t1.doubleValue()));
+      }
+    });
+    entry2.textProperty().addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+        if (Objects.equals(t1, "")) {
+          property2.set(0);
+        } else {
+          try {
+            property2.set(Double.parseDouble(t1));
+          } catch (Exception e) {
+            displayErrorMessage("Invalid Entry", label + " must be a number");
+            entry2.setText(s);
+          }
+        }
+      }
+    });
+    property.addListener(new ChangeListener<Number>() {
+      @Override
+      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+        entry2.setText(Double.toString(t1.doubleValue()));
+      }
+    });
+    entry.setText(property.getValue().toString());
+    return entry;
   }
 
   /**
@@ -281,10 +345,8 @@ public class InputScene extends SceneAbstract {
     title.textProperty().bind(label);
     title.setFont(GlobalVars.font);
     title.setTextFill(GlobalVars.fg);
-    title.setMinWidth(width / 2);
-    title.setMaxWidth(width / 2);
-    node.minWidth(width / 2);
-    node.maxWidth(width / 2);
+    segment.setMinWidth(width);
+    segment.setMaxWidth(width);
     segment.getChildren().addAll(title,node);
     return segment;
   }
