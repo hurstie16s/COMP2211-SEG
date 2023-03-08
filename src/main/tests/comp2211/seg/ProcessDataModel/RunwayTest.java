@@ -117,7 +117,11 @@ class RunwayTest {
             double exceptedASDA,
             double expectedTODA
     ) {
-        assert false;
+        runway.addObstacle(obstacleToAdd);
+        runway.calculateTakeOffToward();
+        assertEquals(expectedTORA, runway.getWorkingTora());
+        assertEquals(exceptedASDA, runway.getWorkingAsda());
+        assertEquals(expectedTODA, runway.getWorkingToda());
     }
 
     @DisplayName("Take-off calculations : Take-off away from an obstacle")
@@ -167,5 +171,7 @@ class RunwayTest {
         );
     }
     //TODO: Generate test data for take-off away
-    private static Stream<Arguments> generateTakeOffAwayTestData() {return null;}
+    private static Stream<Arguments> generateTakeOffAwayTestData() {
+        return Stream.of();
+    }
 }
