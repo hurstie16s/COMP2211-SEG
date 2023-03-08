@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RunwayTest {
 
@@ -134,7 +134,11 @@ class RunwayTest {
             double expectedASDA,
             double expectedTODA
     ) {
-        assert false;
+        runway.addObstacle(obstacleToAdd);
+        runway.calculateTakeOffAway();
+        assertEquals(expectedTORA, runway.getWorkingTora());
+        assertEquals(expectedASDA, runway.getWorkingAsda());
+        assertEquals(expectedTODA, runway.getWorkingToda());
     }
 
     // Test Data Generation
@@ -172,6 +176,11 @@ class RunwayTest {
     }
     //TODO: Generate test data for take-off away
     private static Stream<Arguments> generateTakeOffAwayTestData() {
-        return Stream.of();
+        return Stream.of(
+            Arguments.of(runway1, new Obstacle("obT1", 12, -50), 3146, 3146, 3146),
+            Arguments.of(runway4, new Obstacle("obT2", 25, 500), 2660, 2660, 2660),
+            Arguments.of(runway3, new Obstacle("obT3", 15, 150), 2703, 2703, 2703),
+            Arguments.of(runway2, new Obstacle("obT4", 20, 50), 3334, 3334, 3412)
+        );
     }
 }

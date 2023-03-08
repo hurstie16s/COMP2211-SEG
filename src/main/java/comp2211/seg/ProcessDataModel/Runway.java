@@ -105,9 +105,9 @@ public class Runway {
      * Calculates displaced threshold, stopway and clearway when a runway is initialised
      */
     public void calculateRunwayAttributes() {
-        dispThreshold.set(tora.get() - lda.get());
-        stopway.set(asda.get() - tora.get());
-        clearway.set(toda.get() - tora.get());
+        //dispThreshold.bind(tora.subtract(lda));
+        stopway.bind(asda.subtract(tora));
+        clearway.bind(toda.subtract(tora));
     }
 
     /**
@@ -144,21 +144,24 @@ public class Runway {
      based on the takeoff direction.
      */
     public void recalculate(){
-        if (landingMode.get()){
-            runwayLength.bind(lda);
-            if (runwayObstacle.distFromThresholdProperty().lessThan(runwayLength.get()/2).get()){
-                calculateLandOver();
+        if (runwayObstacle != null) {
+            if (landingMode.get()){
+                runwayLength.bind(lda);
+                if (runwayObstacle.distFromThresholdProperty().lessThan(runwayLength.get()/2).get()){
+                    calculateLandOver();
+                } else {
+                    calculateLandTowards();
+                }
             } else {
-                calculateLandTowards();
+                runwayLength.bind(tora);
+                if (runwayObstacle.distFromThresholdProperty().lessThan(runwayLength.get() / 2).get()) {
+                    calculateTakeOffAway();
+                } else {
+                    calculateTakeOffToward();
+                }
             }
         } else {
-            runwayLength.bind(tora);
-            if (runwayObstacle.distFromThresholdProperty().lessThan(runwayLength.get()/2).get()){
-                calculateTakeOffAway();
-            } else {
-                calculateTakeOffToward();
-
-            }
+            logger.info("Tried to recalculate with no obstacle");
         }
     }
 
