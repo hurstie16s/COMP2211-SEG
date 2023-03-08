@@ -97,13 +97,22 @@ public class Runway {
         }) {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
+        calculateRunwayAttributes();
         logger.info("Created Runway object");
     }
 
     /**
+     * Calculates displaced threshold, stopway and clearway when a runway is initialised
+     */
+    public void calculateRunwayAttributes() {
+        dispThreshold.set(tora.get() - lda.get());
+        stopway.set(asda.get() - tora.get());
+        clearway.set(toda.get() - tora.get());
+    }
 
-     Adds an obstacle to the list of obstacles on the runway.
-     @param obstacleToAdd The obstacle to add to the runway.
+    /**
+     * Adds an obstacle to the list of obstacles on the runway.
+     * @param obstacleToAdd The obstacle to add to the runway.
      */
     public void addObstacle(Obstacle obstacleToAdd) {
         this.runwayObstacle = obstacleToAdd;
@@ -193,12 +202,7 @@ public class Runway {
         if (runwayObstacle != null) {
 
             //Compare slope caused by obstacle to min RESA, so aircraft has time to stop before obstacle in case of aborted take-off
-            SimpleDoubleProperty obstacleSlopeCalculation;
-            if (runwayObstacle.heightProperty().multiply(SLOPE).get() > MINRESA.get()) {
-                obstacleSlopeCalculation = new SimpleDoubleProperty(runwayObstacle.heightProperty().multiply(SLOPE).get());
-            } else {
-                obstacleSlopeCalculation = MINRESA;
-            }
+            SimpleDoubleProperty obstacleSlopeCalculation = new SimpleDoubleProperty(Math.max(runwayObstacle.heightProperty().multiply(SLOPE).get() , MINRESA.get()));
 
             workingTora.bind(runwayObstacle.distFromThresholdProperty().add(dispThreshold.get()).subtract(obstacleSlopeCalculation.get()).subtract(STRIPEND.get()));
             workingAsda.bind(workingTora);
