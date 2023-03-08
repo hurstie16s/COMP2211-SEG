@@ -45,16 +45,14 @@ public abstract class SceneAbstract extends Scene{
     this.width = root.getParentWidth();
     this.height = root.getParentHeight();
     this.appWindow = appWindow;
+  }
 
-
-  }public SceneAbstract(Pane root, AppWindow appWindow, double width,double height) {
+  public SceneAbstract(Pane root, AppWindow appWindow, double width,double height) {
     super(root, appWindow.getWidth(), appWindow.getHeight(),Color.BLACK);
     this.root = root;
     this.width = width;
     this.height = height;
     this.appWindow = appWindow;
-
-
   }
 
   /**
