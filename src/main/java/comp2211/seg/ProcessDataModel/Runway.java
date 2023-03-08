@@ -37,14 +37,14 @@ public class Runway {
     followed by either L C or R to differentiate between parallel runways
      */
     private final SimpleStringProperty runwayDesignator = new SimpleStringProperty("36C");
-    private final SimpleDoubleProperty inputRightTora = new SimpleDoubleProperty(2000);
-    private final SimpleDoubleProperty inputRightToda = new SimpleDoubleProperty(1800);
-    private final SimpleDoubleProperty inputRightAsda = new SimpleDoubleProperty(1600);
-    private final SimpleDoubleProperty inputRightLda = new SimpleDoubleProperty(1400);
-    private final SimpleDoubleProperty inputLeftTora = new SimpleDoubleProperty(2000);
-    private final SimpleDoubleProperty inputLeftToda = new SimpleDoubleProperty(1800);
-    private final SimpleDoubleProperty inputLeftAsda = new SimpleDoubleProperty(1600);
-    private final SimpleDoubleProperty inputLeftLda = new SimpleDoubleProperty(1400);
+    private final SimpleDoubleProperty inputRightTora = new SimpleDoubleProperty(1000);
+    private final SimpleDoubleProperty inputRightToda = new SimpleDoubleProperty(1500);
+    private final SimpleDoubleProperty inputRightAsda = new SimpleDoubleProperty(1150);
+    private final SimpleDoubleProperty inputRightLda = new SimpleDoubleProperty(900);
+    private final SimpleDoubleProperty inputLeftTora = new SimpleDoubleProperty(1000);
+    private final SimpleDoubleProperty inputLeftToda = new SimpleDoubleProperty(1500);
+    private final SimpleDoubleProperty inputLeftAsda = new SimpleDoubleProperty(1150);
+    private final SimpleDoubleProperty inputLeftLda = new SimpleDoubleProperty(900);
     private final SimpleDoubleProperty rightTora = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty rightToda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty rightAsda = new SimpleDoubleProperty(0);

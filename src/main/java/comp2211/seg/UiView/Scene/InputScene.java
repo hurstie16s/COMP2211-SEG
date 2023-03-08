@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
@@ -93,7 +94,6 @@ public class InputScene extends SceneAbstract {
     makeTextField(inputs, new SimpleStringProperty("ASDA (").concat(units).concat(")"), appWindow.runway.inputLeftAsdaProperty(), appWindow.runway.inputRightAsdaProperty());
     makeTextField(inputs, new SimpleStringProperty("LDA (").concat(units).concat(")"), appWindow.runway.inputLeftLdaProperty(), appWindow.runway.inputRightLdaProperty());
     makeTextField(inputs, new SimpleStringProperty("Runway Designator").concat(""), appWindow.runway.runwayDesignatorProperty(), "([0-9]|0[1-9]|[1-2][0-9]|3[0-6])[lrcLRC]?");
-    makeTextField(inputs, new SimpleStringProperty("Displaced Threshold (").concat(units).concat(")"), appWindow.runway.dispThresholdProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle width (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().widthProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle length (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().lengthProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle height (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().heightProperty());
@@ -210,6 +210,71 @@ public class InputScene extends SceneAbstract {
     });
     entry.setText(property.getValue().toString());
     return entry;
+  }/**
+   * Creates a new TextField with the specified label and adds it to the given parent Pane.
+   *
+   * @param parent the Pane to add the TextField to.
+   * @param label  the label to use for the TextField.
+   * @return the created TextField Node.
+   */
+  public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleDoubleProperty property, SimpleDoubleProperty property2) {
+    TextField entry = new TextField();
+    entry.setFocusTraversable(false);
+    entry.setFont(GlobalVars.font);
+    TextField entry2 = new TextField();
+    entry.setFocusTraversable(false);
+    entry.setFont(GlobalVars.font);
+    GridPane entries = new GridPane();
+    entries.addColumn(0,entry);
+    entries.addColumn(1,entry2);
+
+    HBox segment = makeBoundingBox(label,width/3,entries);
+    parent.getChildren().add(segment);
+    entry.textProperty().addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+        if (Objects.equals(t1, "")) {
+          property.set(0);
+        } else {
+          try {
+            property.set(Double.parseDouble(t1));
+          } catch (Exception e) {
+            displayErrorMessage("Invalid Entry", label + " must be a number");
+            entry.setText(s);
+          }
+        }
+      }
+    });
+    property.addListener(new ChangeListener<Number>() {
+      @Override
+      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+        entry.setText(Double.toString(t1.doubleValue()));
+      }
+    });
+    entry.setText(property.getValue().toString());
+    entry2.textProperty().addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+        if (Objects.equals(t1, "")) {
+          property2.set(0);
+        } else {
+          try {
+            property2.set(Double.parseDouble(t1));
+          } catch (Exception e) {
+            displayErrorMessage("Invalid Entry", label + " must be a number");
+            entry2.setText(s);
+          }
+        }
+      }
+    });
+    property2.addListener(new ChangeListener<Number>() {
+      @Override
+      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+        entry2.setText(Double.toString(t1.doubleValue()));
+      }
+    });
+    entry2.setText(property2.getValue().toString());
+    return entry;
   }
 
   /**
@@ -288,7 +353,6 @@ public class InputScene extends SceneAbstract {
     title.textProperty().bind(label);
     title.setFont(GlobalVars.font);
     title.setTextFill(GlobalVars.fg);
-    title.setPadding(new Insets(5,10,5,10));
     segment.setMinWidth(width);
     segment.setMaxWidth(width);
     segment.getChildren().addAll(title,node);
