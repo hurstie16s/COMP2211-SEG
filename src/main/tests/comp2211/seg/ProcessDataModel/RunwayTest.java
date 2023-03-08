@@ -117,7 +117,7 @@ class RunwayTest {
     void calculateLandTowardsTest(Runway runway, Obstacle obstacleToAdd, double expectedLDA) {
         addObstacle(runway,obstacleToAdd);
         runway.calculateLandTowards();
-        assertEquals(expectedLDA, runway.getRightLda());
+        assertEquals(expectedLDA, runway.getLeftLda());
     }
 
     @DisplayName("Take-off calculations : Take-off towards an obstacle")
