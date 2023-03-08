@@ -17,6 +17,7 @@ class RunwayTest {
     //TODO: Test Rew-calculate
     //TODO: Re-work tests to handle left and right
 
+
     static Runway runway1 = new Runway();
     static Runway runway2 = new Runway();
     static Runway runway3 = new Runway();
