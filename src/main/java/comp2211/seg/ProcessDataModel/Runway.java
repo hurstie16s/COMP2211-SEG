@@ -95,11 +95,11 @@ public class Runway {
         logger.info("Created Runway object");
         runwayObstacle = new Obstacle("One", 0,0);
         runwayLength.bind(Bindings.when(Bindings.greaterThan(inputLeftTora,inputRightTora)).then(inputLeftTora).otherwise(inputRightTora));
-        clearwayRight.bind(inputRightToda.subtract(inputRightTora));
-        stopwayRight.bind(inputRightAsda.subtract(inputRightTora));
+        clearwayLeft.bind(inputRightToda.subtract(inputRightTora));
+        stopwayLeft.bind(inputRightAsda.subtract(inputRightTora));
         dispThresholdRight.bind(inputRightTora.subtract(inputRightLda));
-        clearwayLeft.bind(inputLeftToda.subtract(inputLeftTora));
-        stopwayLeft.bind(inputLeftAsda.subtract(inputLeftTora));
+        clearwayRight.bind(inputLeftToda.subtract(inputLeftTora));
+        stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
         recalculate();
     }

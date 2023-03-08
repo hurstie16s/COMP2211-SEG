@@ -40,7 +40,13 @@ public class RunwayLabel extends Group {
         this.scene = scene;
         this.direction = direction;
         this.name = name;
-        visibleProperty().bind( Bindings.and(Bindings.greaterThanOrEqual(scene.appWindow.runway.runwayLengthProperty().divide(2), xOffset.subtract(length)),Bindings.lessThanOrEqual(scene.appWindow.runway.runwayLengthProperty().divide(-2),xOffset.subtract(length))));
+        visibleProperty().bind( Bindings.and(
+                Bindings.greaterThanOrEqual(scene.appWindow.runway.runwayLengthProperty().divide(2).add(scene.appWindow.runway.clearwayRightProperty()), xOffset.subtract(length)),
+                Bindings.lessThanOrEqual(scene.appWindow.runway.runwayLengthProperty().divide(-2).subtract(scene.appWindow.runway.clearwayLeftProperty()), xOffset.subtract(length))));
+        visibleProperty().bind
+                (Bindings.when(new SimpleBooleanProperty(direction))
+                        .then(Bindings.greaterThanOrEqual(0, length))
+                        .otherwise(Bindings.lessThanOrEqual(0, length)));
 
         Group labelRotateGroup = new Group();
         Text label = new Text(name);

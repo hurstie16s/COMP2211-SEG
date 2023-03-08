@@ -18,7 +18,7 @@ public class HelpScene extends Scene {
     private static final Logger logger = LogManager.getLogger(HelpScene.class);
     private final AppWindow appWindow;
     private final VBox root;
-    private boolean visible = false;
+    private boolean visible = true;
 
     /**
      * Constructor to create a SceneAbstract object.
@@ -31,6 +31,7 @@ public class HelpScene extends Scene {
         this.appWindow = appWindow;
         this.root = root;
         root.setBackground(new Background(new BackgroundFill(Color.rgb(21,21,21,0.8),null,null)));
+
     }
     public void makeKey(String key, String desc){
         HBox box = new HBox();
@@ -82,7 +83,6 @@ public class HelpScene extends Scene {
     public void toggleHelp(String className){
         //logger.info(className);
         if (!visible) {
-            makeKey("H", "Toggle this menu");
             switch (className) {
                 case "comp2211.seg.UiView.Scene.RunwayScene":
                     makeKey("Esc", "Navigate back to home screen");
@@ -115,6 +115,7 @@ public class HelpScene extends Scene {
             root.getChildren().removeAll(root.getChildren());
             root.setMaxHeight(0);
             root.setMaxWidth(0);
+            makeKey("H", "Toggle the help menu");
         }
         visible = !visible;
     }
