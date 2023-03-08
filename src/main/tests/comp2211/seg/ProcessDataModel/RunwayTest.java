@@ -1,5 +1,7 @@
 package comp2211.seg.ProcessDataModel;
 
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -71,17 +73,15 @@ class RunwayTest {
             int lda,
             int dispThreshold,
             Runway runway) {
-        runway.runwayDesignatorProperty().set(designator);
-        runway.inputLeftToraProperty().set(tora);
-        runway.inputLeftTodaProperty().set(toda);
-        runway.inputLeftAsdaProperty().set(asda);
-        runway.inputLeftLdaProperty().set(lda);
-        runway.dispThresholdLeftProperty().set(dispThreshold);
-        runway.inputRightToraProperty().set(tora);
-        runway.inputRightTodaProperty().set(toda);
-        runway.inputRightAsdaProperty().set(asda);
-        runway.inputRightLdaProperty().set(lda);
-        runway.dispThresholdRightProperty().set(dispThreshold);
+        runway.runwayDesignatorProperty().bind(new SimpleStringProperty(designator));
+        runway.inputLeftToraProperty().bind(new SimpleDoubleProperty(tora));
+        runway.inputLeftTodaProperty().bind(new SimpleDoubleProperty(toda));
+        runway.inputLeftAsdaProperty().bind(new SimpleDoubleProperty(asda));
+        runway.inputLeftLdaProperty().bind(new SimpleDoubleProperty(lda));
+        runway.inputRightToraProperty().bind(new SimpleDoubleProperty(tora));
+        runway.inputRightTodaProperty().bind(new SimpleDoubleProperty(toda));
+        runway.inputRightAsdaProperty().bind(new SimpleDoubleProperty(asda));
+        runway.inputRightLdaProperty().bind(new SimpleDoubleProperty(lda));
     }
     void addObstacle(Runway runway, Obstacle obstacle){
         runway.addObstacle();
