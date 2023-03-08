@@ -89,7 +89,12 @@ public class InputScene extends SceneAbstract {
     var outputs = new VBox();
     layout.getChildren().addAll(inputs, calculations, outputs);
 
-    makeTextField(inputs, new SimpleStringProperty("TORA (").concat(units).concat(")"), appWindow.runway.inputLeftToraProperty(), appWindow.runway.inputRightToraProperty());
+    makeTextField(inputs, new SimpleStringProperty(
+        "TORA (").concat(units).concat(")"),
+        //left direction
+        appWindow.runway.inputLeftToraProperty(),
+        //right direction
+        appWindow.runway.inputRightToraProperty());
     makeTextField(inputs, new SimpleStringProperty("TODA (").concat(units).concat(")"), appWindow.runway.inputLeftTodaProperty(), appWindow.runway.inputRightTodaProperty());
     makeTextField(inputs, new SimpleStringProperty("ASDA (").concat(units).concat(")"), appWindow.runway.inputLeftAsdaProperty(), appWindow.runway.inputRightAsdaProperty());
     makeTextField(inputs, new SimpleStringProperty("LDA (").concat(units).concat(")"), appWindow.runway.inputLeftLdaProperty(), appWindow.runway.inputRightLdaProperty());
@@ -112,8 +117,6 @@ public class InputScene extends SceneAbstract {
     var rightToda = makeOutputLabel(outputs, "Bottom Toda", appWindow.runway.rightTodaProperty(), appWindow.runway.clearwayLeftProperty());
     var rightAsda = makeOutputLabel(outputs, "Bottom Asda", appWindow.runway.rightAsdaProperty(), appWindow.runway.stopwayLeftProperty());
     var rightLda = makeOutputLabel(outputs, "Bottom Lda", appWindow.runway.rightLdaProperty(), new SimpleDoubleProperty(0));
-
-
 
     mainPane.getChildren().add(layout);
   }
@@ -143,7 +146,6 @@ public class InputScene extends SceneAbstract {
     TextField entry = new TextField();
     //remove autofocus
     entry.setFocusTraversable(false);
-    //add padding so text is displayed more central
     entry.setFont(GlobalVariables.font);
 
     HBox segment = makeBoundingBox(label,width/3,entry);
@@ -318,9 +320,6 @@ public class InputScene extends SceneAbstract {
         }
       }
     });
-
-
-
     button.selectedProperty().set(property.get());
     button2.selectedProperty().set(!property.get());
     return segment;
