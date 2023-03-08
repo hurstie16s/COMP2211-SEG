@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class App extends Application {
 
+
   /** Base resolution width */
   private final int width = 1280; // 1920
   /** Base resolution height */
