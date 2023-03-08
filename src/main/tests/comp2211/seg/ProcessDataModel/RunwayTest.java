@@ -128,11 +128,11 @@ class RunwayTest {
             double exceptedASDA,
             double expectedTODA
     ) {
-        runway.addObstacle(obstacleToAdd);
+        addObstacle(runway,obstacleToAdd);
         runway.calculateTakeOffToward();
-        assertEquals(expectedTORA, runway.getWorkingTora());
-        assertEquals(exceptedASDA, runway.getWorkingAsda());
-        assertEquals(expectedTODA, runway.getWorkingToda());
+        assertEquals(expectedTORA, runway.getLeftTora());
+        assertEquals(exceptedASDA, runway.getLeftAsda());
+        assertEquals(expectedTODA, runway.getLeftToda());
     }
 
     @DisplayName("Take-off calculations : Take-off away from an obstacle")
@@ -145,11 +145,11 @@ class RunwayTest {
             double expectedASDA,
             double expectedTODA
     ) {
-        runway.addObstacle(obstacleToAdd);
+        addObstacle(runway,obstacleToAdd);
         runway.calculateTakeOffAway();
-        assertEquals(expectedTORA, runway.getWorkingTora());
-        assertEquals(expectedASDA, runway.getWorkingAsda());
-        assertEquals(expectedTODA, runway.getWorkingToda());
+        assertEquals(expectedTORA, runway.getLeftTora());
+        assertEquals(expectedASDA, runway.getLeftAsda());
+        assertEquals(expectedTODA, runway.getLeftToda());
     }
 
     // Test Data Generation
