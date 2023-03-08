@@ -3,6 +3,7 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -90,7 +91,16 @@ public abstract class SceneAbstract extends Scene{
   public void makeHelp(){
 
     help = new HelpScene(new VBox(),appWindow);
-    root.getChildren().add(help.getRoot());
+    VBox alignPane = new VBox();
+    alignPane.setMaxWidth(root.getMaxWidth());
+    alignPane.setMinWidth(root.getMaxWidth());
+    alignPane.getChildren().add(help.getRoot());
+    alignPane.setAlignment(Pos.TOP_RIGHT);
+
+    root.getChildren().add(alignPane);
+    help.getRoot().setPickOnBounds(false);
+    alignPane.setPickOnBounds(false);
+    root.setPickOnBounds(false);
     help.toggleHelp(this.getClass().getName());
   }
 
