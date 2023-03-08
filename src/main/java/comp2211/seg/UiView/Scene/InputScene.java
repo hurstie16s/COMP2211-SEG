@@ -222,7 +222,7 @@ public class InputScene extends SceneAbstract {
     entry.setFocusTraversable(false);
     entry.setFont(GlobalVariables.font);
     TextField entry2 = new TextField();
-    entry.setFocusTraversable(false);
+    entry2.setFocusTraversable(false);
     entry.setFont(GlobalVariables.font);
     GridPane entries = new GridPane();
     entries.addColumn(0,entry);
