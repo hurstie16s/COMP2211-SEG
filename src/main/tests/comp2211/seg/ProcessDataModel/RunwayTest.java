@@ -12,6 +12,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RunwayTest {
 
+    //TODO: Test Rew-calculate
+    //TODO: Test Negative Distance From Threshold
+
     static Runway runway1 = new Runway();
     static Runway runway2 = new Runway();
     static Runway runway3 = new Runway();
@@ -51,10 +54,10 @@ class RunwayTest {
         );
         setProperties(
                 "27L",
-                3360,
-                3360,
-                3360,
-                3360,
+                3660,
+                3660,
+                3660,
+                3660,
                 0,
                 runway4
         );
@@ -107,7 +110,13 @@ class RunwayTest {
     @DisplayName("Take-off calculations : Take-off towards an obstacle")
     @ParameterizedTest
     @MethodSource("generateTakeOffTowardTestData")
-    void calculateTakeOffTowardTest(Runway runway, Obstacle obstacleToAdd, double expectedTORA) {
+    void calculateTakeOffTowardTest(
+            Runway runway,
+            Obstacle obstacleToAdd,
+            double expectedTORA,
+            double exceptedASDA,
+            double expectedTODA
+    ) {
         assert false;
     }
 
@@ -118,8 +127,8 @@ class RunwayTest {
             Runway runway,
             Obstacle obstacleToAdd,
             double expectedTORA,
-            double expectedTODA,
-            double expectedASDA
+            double expectedASDA,
+            double expectedTODA
     ) {
         assert false;
     }
@@ -129,19 +138,34 @@ class RunwayTest {
     private static Stream<Arguments> generateRecalculateTestData() {return null;}
     private static Stream<Arguments> generateLandOverTestData() {
         return Stream.of(
-                Arguments.of(runway2, new Obstacle("obT1", 25, 500), 2074.0),
-                Arguments.of(runway2, new Obstacle("obT2", 12, 47), 3177),
-                Arguments.of(runway2, new Obstacle("obT3", 19, 312), 2562),
-                Arguments.of(runway2, new Obstacle("obT4", 8, 183), 3201)
+                Arguments.of(runway1, new Obstacle("obT1", 12, -50), 2985),
+                Arguments.of(runway4, new Obstacle("obT2", 25, 500), 1850),
+                Arguments.of(runway3, new Obstacle("obT3", 15, 150), 2393),
+                Arguments.of(runway2, new Obstacle("obT4", 20, 50), 2774)
         );
     }
     private static Stream<Arguments> generateLandTowardsTestData() {
         return Stream.of(
-                Arguments.of(runway1, new Obstacle("ob1", 25, 2600), 2300.0)
+                Arguments.of(runway2, new Obstacle("obT1", 12, 3646), 3346),
+                Arguments.of(runway3, new Obstacle("obT2", 25, 2853), 2553),
+                Arguments.of(runway4, new Obstacle("obT3", 15, 3203), 2903),
+                Arguments.of(runway1, new Obstacle("obT4", 20, 3546), 3246)
         );
     }
-    //TODO: Generate test data for take-off towards
-    private static Stream<Arguments> generateTakeOffTowardTestData() {return null;}
+    /*
+    runway1 = 09L
+    runway2 = 27R
+    runway3 = 09R
+    runway4 = 27L
+     */
+    private static Stream<Arguments> generateTakeOffTowardTestData() {
+        return Stream.of(
+                Arguments.of(runway2, new Obstacle("obT1", 12, -50), 3346, 3346, 3346),
+                Arguments.of(runway3, new Obstacle("obT2", 25, 2853), 1850, 1850, 1850),
+                Arguments.of(runway4, new Obstacle("obT3", 15, 3203), 2393, 2393, 2393),
+                Arguments.of(runway1, new Obstacle("obT4", 20, 3546), 2792, 2792, 2792)
+        );
+    }
     //TODO: Generate test data for take-off away
     private static Stream<Arguments> generateTakeOffAwayTestData() {return null;}
 }

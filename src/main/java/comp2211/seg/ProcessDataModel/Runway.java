@@ -157,20 +157,9 @@ public class Runway {
      Calculations for when a plane is landing over an obstacle
      */
     public void calculateLandOver() {
+        logger.info("Original LDA = " + lda.get());
         if (runwayObstacle != null) {
-            /*
-            Not really needed for landing calculations
-            workingTora.bind(tora.subtract(BLASTZONE).subtract(runwayObstacle.distFromThresholdProperty()).subtract(dispThreshold));
-            workingAsda.bind(workingTora.add(stopway));
-            workingToda.bind(workingTora.add(clearway));
-             */
-            SimpleDoubleProperty ldaSubtraction;
-            if ((runwayObstacle.heightProperty().multiply(SLOPE)).add(STRIPEND).get() > BLASTZONE.get()) {
-                ldaSubtraction = new SimpleDoubleProperty((runwayObstacle.heightProperty().multiply(SLOPE)).add(STRIPEND).get());
-            } else {
-                ldaSubtraction = BLASTZONE;
-            }
-            workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(ldaSubtraction));
+            workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE)).subtract(STRIPEND));
         } else {
             workingLda.bind(lda);
         }
@@ -214,10 +203,6 @@ public class Runway {
             workingTora.bind(runwayObstacle.distFromThresholdProperty().add(dispThreshold.get()).subtract(obstacleSlopeCalculation.get()).subtract(STRIPEND.get()));
             workingAsda.bind(workingTora);
             workingToda.bind(workingTora);
-            /*
-            not needed for take-off
-            workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA.get()).subtract(STRIPEND.get()));
-            */
         } else {
             workingTora.bind(tora);
             workingAsda.bind(asda);
