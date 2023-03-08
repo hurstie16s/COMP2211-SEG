@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -92,6 +93,7 @@ public class InputScene extends SceneAbstract {
     makeTextField(inputs, new SimpleStringProperty("ASDA (").concat(units).concat(")"), appWindow.runway.inputLeftAsdaProperty(), appWindow.runway.inputRightAsdaProperty());
     makeTextField(inputs, new SimpleStringProperty("LDA (").concat(units).concat(")"), appWindow.runway.inputLeftLdaProperty(), appWindow.runway.inputRightLdaProperty());
     makeTextField(inputs, new SimpleStringProperty("Runway Designator").concat(""), appWindow.runway.runwayDesignatorProperty(), "([0-9]|0[1-9]|[1-2][0-9]|3[0-6])[lrcLRC]?");
+    makeTextField(inputs, new SimpleStringProperty("Displaced Threshold (").concat(units).concat(")"), appWindow.runway.dispThresholdProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle width (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().widthProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle length (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().lengthProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle height (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().heightProperty());
@@ -139,7 +141,9 @@ public class InputScene extends SceneAbstract {
    */
   public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleStringProperty property, String regex) {
     TextField entry = new TextField();
+    //remove autofocus
     entry.setFocusTraversable(false);
+    //add padding so text is displayed more central
     entry.setFont(GlobalVars.font);
 
     HBox segment = makeBoundingBox(label,width/3,entry);
@@ -206,68 +210,6 @@ public class InputScene extends SceneAbstract {
     });
     entry.setText(property.getValue().toString());
     return entry;
-  }/**
-   * Creates a new TextField with the specified label and adds it to the given parent Pane.
-   *
-   * @param parent the Pane to add the TextField to.
-   * @param label  the label to use for the TextField.
-   * @return the created TextField Node.
-   */
-  public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleDoubleProperty property, SimpleDoubleProperty property2) {
-    TextField entry = new TextField();
-    entry.setFocusTraversable(false);
-    entry.setFont(GlobalVars.font);
-    TextField entry2 = new TextField();
-    entry2.setFocusTraversable(false);
-    entry2.setFont(GlobalVars.font);
-    HBox entries = new HBox(entry,entry2);
-
-    HBox segment = makeBoundingBox(label,width/3,entries);
-    parent.getChildren().add(segment);
-    entry.textProperty().addListener(new ChangeListener<String>() {
-      @Override
-      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-        if (Objects.equals(t1, "")) {
-          property.set(0);
-        } else {
-          try {
-            property.set(Double.parseDouble(t1));
-          } catch (Exception e) {
-            displayErrorMessage("Invalid Entry", label + " must be a number");
-            entry.setText(s);
-          }
-        }
-      }
-    });
-    property.addListener(new ChangeListener<Number>() {
-      @Override
-      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-        entry.setText(Double.toString(t1.doubleValue()));
-      }
-    });
-    entry2.textProperty().addListener(new ChangeListener<String>() {
-      @Override
-      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-        if (Objects.equals(t1, "")) {
-          property2.set(0);
-        } else {
-          try {
-            property2.set(Double.parseDouble(t1));
-          } catch (Exception e) {
-            displayErrorMessage("Invalid Entry", label + " must be a number");
-            entry2.setText(s);
-          }
-        }
-      }
-    });
-    property.addListener(new ChangeListener<Number>() {
-      @Override
-      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-        entry2.setText(Double.toString(t1.doubleValue()));
-      }
-    });
-    entry.setText(property.getValue().toString());
-    return entry;
   }
 
   /**
@@ -330,6 +272,7 @@ public class InputScene extends SceneAbstract {
     Label data = new Label();
     data.setFont(GlobalVars.font);
     data.setTextFill(GlobalVars.fg);
+    data.setPadding(new Insets(5,10,5,10));
     data.setText(String.valueOf(property.getValue()));
 
     HBox segment = makeBoundingBox(new SimpleStringProperty(label),width/3,data);
@@ -345,6 +288,7 @@ public class InputScene extends SceneAbstract {
     title.textProperty().bind(label);
     title.setFont(GlobalVars.font);
     title.setTextFill(GlobalVars.fg);
+    title.setPadding(new Insets(5,10,5,10));
     segment.setMinWidth(width);
     segment.setMaxWidth(width);
     segment.getChildren().addAll(title,node);
