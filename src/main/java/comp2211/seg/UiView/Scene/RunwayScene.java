@@ -1,6 +1,6 @@
 package comp2211.seg.UiView.Scene;
 
-import comp2211.seg.Controller.Interfaces.GlobalVars;
+import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.ProcessDataModel.Obstacle;
@@ -14,7 +14,9 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -302,7 +304,7 @@ public class RunwayScene extends SceneAbstract {
     root.setMaxHeight(height);
     root.setMinWidth(width);
     root.setMinHeight(height);
-    mainPane.setBackground(new Background(new BackgroundFill(GlobalVars.bgRunway,null,null)));
+    mainPane.setBackground(new Background(new BackgroundFill(GlobalVariables.bgRunway,null,null)));
     //root.getStyleClass().add("runway-background");
 
     makeCGA(true);

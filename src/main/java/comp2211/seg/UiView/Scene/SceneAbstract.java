@@ -1,10 +1,13 @@
 package comp2211.seg.UiView.Scene;
 
-import comp2211.seg.Controller.Interfaces.GlobalVars;
+import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.scene.Scene;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -71,7 +74,7 @@ public abstract class SceneAbstract extends Scene{
 
     mainPane.setMinWidth(width);
     mainPane.setMinHeight(height);
-    mainPane.setBackground(new Background(new BackgroundFill(GlobalVars.bg,null,null)));
+    mainPane.setBackground(new Background(new BackgroundFill(GlobalVariables.bg,null,null)));
     root.getChildren().add(mainPane);
 
     root.setMaxWidth(width);

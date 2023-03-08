@@ -6,7 +6,7 @@ import javafx.scene.text.Font;
 /**
  * An interface that contains constant strings for the project.
  */
-public interface GlobalVars {
+public interface GlobalVariables {
   /**
    * A constant string that holds the information about the software engineering group project.
    */

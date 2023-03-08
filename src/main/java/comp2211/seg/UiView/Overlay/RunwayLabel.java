@@ -1,19 +1,16 @@
 package comp2211.seg.UiView.Overlay;
 
-import comp2211.seg.Controller.Interfaces.GlobalVars;
+import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.UiView.Scene.RunwayScene;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 
@@ -52,7 +49,7 @@ public class RunwayLabel extends Group {
         Text label = new Text(name);
         label.textProperty().bind((new SimpleStringProperty(name)).concat(" (").concat(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(length.asString()).otherwise(length.multiply(-1).asString())).concat(scene.appWindow.runway.unitsProperty()).concat(")"));
         label.setFill(color);
-        label.setFont(GlobalVars.font);
+        label.setFont(GlobalVariables.font);
         if (direction) {
             label.yProperty().set(label.getBoundsInLocal().getHeight() / 2 + 8);
             label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 + 5);

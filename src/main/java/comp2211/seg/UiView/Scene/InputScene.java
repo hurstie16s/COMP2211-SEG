@@ -1,7 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.App;
-import comp2211.seg.Controller.Interfaces.GlobalVars;
+import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.beans.binding.Bindings;
@@ -144,7 +144,7 @@ public class InputScene extends SceneAbstract {
     //remove autofocus
     entry.setFocusTraversable(false);
     //add padding so text is displayed more central
-    entry.setFont(GlobalVars.font);
+    entry.setFont(GlobalVariables.font);
 
     HBox segment = makeBoundingBox(label,width/3,entry);
     parent.getChildren().add(segment);
@@ -183,7 +183,7 @@ public class InputScene extends SceneAbstract {
   public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleDoubleProperty property) {
     TextField entry = new TextField();
     entry.setFocusTraversable(false);
-    entry.setFont(GlobalVars.font);
+    entry.setFont(GlobalVariables.font);
 
     HBox segment = makeBoundingBox(label,width/3,entry);
     parent.getChildren().add(segment);
@@ -220,10 +220,10 @@ public class InputScene extends SceneAbstract {
   public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleDoubleProperty property, SimpleDoubleProperty property2) {
     TextField entry = new TextField();
     entry.setFocusTraversable(false);
-    entry.setFont(GlobalVars.font);
+    entry.setFont(GlobalVariables.font);
     TextField entry2 = new TextField();
     entry.setFocusTraversable(false);
-    entry.setFont(GlobalVars.font);
+    entry.setFont(GlobalVariables.font);
     GridPane entries = new GridPane();
     entries.addColumn(0,entry);
     entries.addColumn(1,entry2);
@@ -335,8 +335,8 @@ public class InputScene extends SceneAbstract {
    */
   public Label makeOutputLabel(javafx.scene.layout.Pane parent, String label, SimpleDoubleProperty property,SimpleDoubleProperty limit) {
     Label data = new Label();
-    data.setFont(GlobalVars.font);
-    data.setTextFill(GlobalVars.fg);
+    data.setFont(GlobalVariables.font);
+    data.setTextFill(GlobalVariables.fg);
     data.setPadding(new Insets(5,10,5,10));
     data.setText(String.valueOf(property.getValue()));
 
@@ -351,8 +351,8 @@ public class InputScene extends SceneAbstract {
     HBox segment = new HBox();
     Label title = new Label(label.getValue());
     title.textProperty().bind(label);
-    title.setFont(GlobalVars.font);
-    title.setTextFill(GlobalVars.fg);
+    title.setFont(GlobalVariables.font);
+    title.setTextFill(GlobalVariables.fg);
     segment.setMinWidth(width);
     segment.setMaxWidth(width);
     segment.getChildren().addAll(title,node);

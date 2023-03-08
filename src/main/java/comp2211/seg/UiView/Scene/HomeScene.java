@@ -1,7 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.App;
-import comp2211.seg.Controller.Interfaces.GlobalVars;
+import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.ProcessDataModel.Airport;
@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
  * A concrete implementation of the SceneAbstract class representing the home scene of the application.
  * Implements temporary Temp interface with final Strings to be edited if needed.
  */
-public class HomeScene extends SceneAbstract implements GlobalVars {
+public class HomeScene extends SceneAbstract implements GlobalVariables {
 
   /**
    * Logger object used for logging messages.
