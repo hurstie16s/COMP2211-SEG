@@ -4,7 +4,9 @@ import comp2211.seg.App;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -18,10 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,8 +52,8 @@ public class InputScene extends SceneAbstract {
    * @param root      the root handler pane for the scene
    * @param appWindow the application window for the scene
    */
-  public InputScene(HandlerPane root, AppWindow appWindow) {
-    super(root, appWindow);
+  public InputScene(Pane root, AppWindow appWindow, double width, double height) {
+    super(root, appWindow, width, height);
     this.appWindow = appWindow;
   }
 
@@ -82,6 +81,14 @@ public class InputScene extends SceneAbstract {
 
     //mainPane.getStyleClass().add("home-background");
     var layout = new HBox();
+    root.widthProperty().addListener(new ChangeListener<Number>() {
+      @Override
+      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+        layout.setMaxWidth((Double) t1);
+        layout.setMinWidth((Double) t1);
+
+      }
+    });
     layout.setMaxWidth(width);
     layout.setMinWidth(width);
     var inputs = new VBox();
@@ -118,7 +125,7 @@ public class InputScene extends SceneAbstract {
     var rightAsda = makeOutputLabel(outputs, "Bottom Asda", appWindow.runway.rightAsdaProperty(), appWindow.runway.stopwayLeftProperty());
     var rightLda = makeOutputLabel(outputs, "Bottom Lda", appWindow.runway.rightLdaProperty(), new SimpleDoubleProperty(0));
 
-    mainPane.getChildren().add(layout);
+    root.getChildren().add(layout);
   }
 
   /**
@@ -148,7 +155,7 @@ public class InputScene extends SceneAbstract {
     entry.setFocusTraversable(false);
     entry.setFont(GlobalVariables.font);
 
-    HBox segment = makeBoundingBox(label,width/3,entry);
+    HBox segment = makeBoundingBox(label,root.widthProperty().divide(3),entry);
     parent.getChildren().add(segment);
     entry.textProperty().addListener(new ChangeListener<String>() {
       @Override
@@ -187,7 +194,7 @@ public class InputScene extends SceneAbstract {
     entry.setFocusTraversable(false);
     entry.setFont(GlobalVariables.font);
 
-    HBox segment = makeBoundingBox(label,width/3,entry);
+    HBox segment = makeBoundingBox(label,root.widthProperty().divide(3),entry);
     parent.getChildren().add(segment);
     entry.textProperty().addListener(new ChangeListener<String>() {
       @Override
@@ -230,7 +237,7 @@ public class InputScene extends SceneAbstract {
     entries.addColumn(0,entry);
     entries.addColumn(1,entry2);
 
-    HBox segment = makeBoundingBox(label,width/3,entries);
+    HBox segment = makeBoundingBox(label,root.widthProperty().divide(3),entries);
     parent.getChildren().add(segment);
     entry.textProperty().addListener(new ChangeListener<String>() {
       @Override
@@ -288,14 +295,14 @@ public class InputScene extends SceneAbstract {
    * @return the created Button Node.
    */
   public Node makeButton(javafx.scene.layout.Pane parent, String label1, String label2, SimpleBooleanProperty property) {
-    double w = width/(6);
+    DoubleBinding w = root.widthProperty().divide(6);
     HBox segment = new HBox();
     ToggleButton button = new ToggleButton(label1);
-    button.setMinWidth(w);
-    button.setMaxWidth(w);
+    button.minWidthProperty().bind(w);
+    button.maxWidthProperty().bind(w);
     ToggleButton button2 = new ToggleButton(label2);
-    button2.setMinWidth(w);
-    button2.setMaxWidth(w);
+    button2.minWidthProperty().bind(w);
+    button2.maxWidthProperty().bind(w);
     segment.getChildren().addAll(button,button2);
     parent.getChildren().add(segment);
     button.selectedProperty().addListener(new ChangeListener<Boolean>() {
@@ -339,21 +346,21 @@ public class InputScene extends SceneAbstract {
     data.setPadding(new Insets(5,10,5,10));
     data.setText(String.valueOf(property.getValue()));
 
-    HBox segment = makeBoundingBox(new SimpleStringProperty(label),width/3,data);
+    HBox segment = makeBoundingBox(new SimpleStringProperty(label),root.widthProperty().divide(3),data);
     parent.getChildren().add(segment);
     data.textProperty().bind(Bindings.when(Bindings.lessThan(limit,property)).then(property.asString().concat(units)).otherwise(new
             SimpleStringProperty("Error")));
     return data;
   }
-  public HBox makeBoundingBox(StringExpression label, double width, Node node){
+  public HBox makeBoundingBox(StringExpression label, DoubleBinding width, Node node){
 
     HBox segment = new HBox();
     Label title = new Label(label.getValue());
     title.textProperty().bind(label);
     title.setFont(GlobalVariables.font);
     title.setTextFill(GlobalVariables.fg);
-    segment.setMinWidth(width);
-    segment.setMaxWidth(width);
+    segment.minWidthProperty().bind(width);
+    segment.maxWidthProperty().bind(width);
     segment.getChildren().addAll(title,node);
     return segment;
   }

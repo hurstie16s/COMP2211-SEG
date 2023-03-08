@@ -335,7 +335,7 @@ public class RunwayScene extends SceneAbstract {
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
-            widthProperty().divide(scaleFactor).multiply(1),
+            widthProperty().divide(scaleFactor.get()).multiply(1),
             new SimpleDoubleProperty(1).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             Color.BLACK);

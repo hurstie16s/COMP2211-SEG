@@ -93,7 +93,7 @@ public class AppWindow {
      * Starts the runway scene.
      */
     public void startRunwayScene() {
-        loadScene(new RunwaySceneLoader(new HandlerPane(getWidth(),getHeight()),this));
+        loadScene(new RunwaySceneLoader(new Pane(),this,getWidth(),getHeight()));
     }
 
     /**

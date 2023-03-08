@@ -177,6 +177,7 @@ public class RunwayLabel extends Group {
                 box.depthProperty().set(Math.sqrt(height.multiply(height).multiply(2).get()));
             }
         });
+        box.depthProperty().set(Math.sqrt(height.multiply(height).multiply(2).get()));
         if (height.get() > 0) {
             box.translateZProperty().bind(box.depthProperty().divide(2));
         } else {
