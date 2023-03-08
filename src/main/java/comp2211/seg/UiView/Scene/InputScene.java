@@ -33,7 +33,7 @@ public class InputScene extends SceneAbstract {
    * Logger object used for logging messages.
    */
   private static final Logger logger = LogManager.getLogger(InputScene.class);
-  private static SimpleStringProperty units = new SimpleStringProperty("m");
+  private static SimpleStringProperty units = new SimpleStringProperty();
   /**
    * The BorderPane object for the scene.
    */
@@ -76,6 +76,7 @@ public class InputScene extends SceneAbstract {
   public void build() {
     super.build();
     logger.info("building");
+    units.bind(appWindow.runway.unitsProperty());
 
     //mainPane.getStyleClass().add("home-background");
     var layout = new HBox();

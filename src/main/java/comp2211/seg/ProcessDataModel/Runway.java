@@ -66,15 +66,11 @@ public class Runway {
     private static final SimpleDoubleProperty BLASTZONE = new SimpleDoubleProperty(500);
     private static final SimpleDoubleProperty SLOPE = new SimpleDoubleProperty(50);
 
-    // Outputs
-    private final SimpleDoubleProperty output1 = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty output2 = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty output3 = new SimpleDoubleProperty(0);
-
     // Runway dimensions
     private final SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
     private final SimpleDoubleProperty runwayWidth = new SimpleDoubleProperty(60);
     private final SimpleBooleanProperty hasRunwayObstacle = new SimpleBooleanProperty(false);
+    private final SimpleStringProperty units = new SimpleStringProperty("m");
 
     /**
      * Creates a new runway object and sets up change listeners on all input properties so that takeoff and landing
@@ -310,48 +306,6 @@ public class Runway {
         return landingMode;
     }
     /**
-     * Returns the value of output1.
-     * @return The value of output1.
-     */
-    public double getOutput1() {
-        return output1.get();
-    }
-    /**
-     * Returns the SimpleDoubleProperty object representing output1.
-     * @return The SimpleDoubleProperty object representing output1.
-     */
-    public SimpleDoubleProperty output1Property() {
-        return output1;
-    }
-    /**
-     * Returns the value of output2.
-     * @return The value of output2.
-     */
-    public double getOutput2() {
-        return output2.get();
-    }
-    /**
-     * Returns the SimpleDoubleProperty object representing output2.
-     * @return The SimpleDoubleProperty object representing output2.
-     */
-    public SimpleDoubleProperty output2Property() {
-        return output2;
-    }
-    /**
-     * Returns the value of output3.
-     * @return The value of output3.
-     */
-    public double getOutput3() {
-        return output3.get();
-    }
-    /**
-     * Returns the SimpleDoubleProperty object representing output3.
-     * @return The SimpleDoubleProperty object representing output3.
-     */
-    public SimpleDoubleProperty output3Property() {
-        return output3;
-    }
-    /**
      * Returns the runway designator string.
      * @return The runway designator string.
      */
@@ -551,5 +505,13 @@ public class Runway {
 
     public SimpleBooleanProperty hasRunwayObstacleProperty() {
         return hasRunwayObstacle;
+    }
+
+    public String getUnits() {
+        return units.get();
+    }
+
+    public SimpleStringProperty unitsProperty() {
+        return units;
     }
 }

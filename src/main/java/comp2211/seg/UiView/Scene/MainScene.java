@@ -59,7 +59,7 @@ public class MainScene extends SceneAbstract{
         setOnKeyPressed((keyEvent -> {
             switch (keyEvent.getCode()){
                 case H:
-                    help.toggleHelp("Main");
+                    help.toggleHelp(this.getClass().getCanonicalName());
                     break;
                 case ESCAPE:
                     App.getInstance().shutdown();
