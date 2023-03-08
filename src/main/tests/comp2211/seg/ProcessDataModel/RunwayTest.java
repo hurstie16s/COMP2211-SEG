@@ -130,8 +130,9 @@ class RunwayTest {
     private static Stream<Arguments> generateLandOverTestData() {
         return Stream.of(
                 Arguments.of(runway2, new Obstacle("obT1", 25, 500), 2074.0),
-                Arguments.of(runway2, new Obstacle("obT2", 5, 2), 3384),
-                Arguments.of(runway2, new Obstacle("obT3", 4, 500), 3084)
+                Arguments.of(runway2, new Obstacle("obT2", 12, 47), 3177),
+                Arguments.of(runway2, new Obstacle("obT3", 19, 312), 2562),
+                Arguments.of(runway2, new Obstacle("obT4", 8, 183), 3201)
         );
     }
     private static Stream<Arguments> generateLandTowardsTestData() {
