@@ -118,12 +118,12 @@ public class InputScene extends SceneAbstract {
 
     makeOutputLabel(outputs, "Top Tora", appWindow.runway.leftToraProperty(), new SimpleDoubleProperty(0));
     makeOutputLabel(outputs, "Top Toda", appWindow.runway.leftTodaProperty(), appWindow.runway.clearwayRightProperty());
-    makeOutputLabel(outputs, "Top Asda", appWindow.runway.leftAsdaProperty(), appWindow.runway.stopwayRightProperty());
     makeOutputLabel(outputs, "Top Lda", appWindow.runway.leftLdaProperty(), new SimpleDoubleProperty(0));
+    makeOutputLabel(outputs, "Top Asda", appWindow.runway.leftAsdaProperty(), appWindow.runway.stopwayRightProperty());
     makeOutputLabel(outputs, "Bottom Tora", appWindow.runway.rightToraProperty(), new SimpleDoubleProperty(0));
     makeOutputLabel(outputs, "Bottom Toda", appWindow.runway.rightTodaProperty(), appWindow.runway.clearwayLeftProperty());
-    makeOutputLabel(outputs, "Bottom Asda", appWindow.runway.rightAsdaProperty(), appWindow.runway.stopwayLeftProperty());
     makeOutputLabel(outputs, "Bottom Lda", appWindow.runway.rightLdaProperty(), new SimpleDoubleProperty(0));
+    makeOutputLabel(outputs, "Bottom Asda", appWindow.runway.rightAsdaProperty(), appWindow.runway.stopwayLeftProperty());
 
     root.getChildren().add(layout);
   }
@@ -232,7 +232,7 @@ public class InputScene extends SceneAbstract {
     entry.setFont(GlobalVariables.font);
     TextField entry2 = new TextField();
     entry2.setFocusTraversable(false);
-    entry.setFont(GlobalVariables.font);
+    entry2.setFont(GlobalVariables.font);
     GridPane entries = new GridPane();
     entries.addColumn(0,entry);
     entries.addColumn(1,entry2);
