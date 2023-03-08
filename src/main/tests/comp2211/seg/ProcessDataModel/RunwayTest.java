@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class RunwayTest {
 
     //TODO: Test Rew-calculate
-    //TODO: Test Negative Distance From Threshold
+    //TODO: Re-work tests to handle left and right
 
     static Runway runway1 = new Runway();
     static Runway runway2 = new Runway();

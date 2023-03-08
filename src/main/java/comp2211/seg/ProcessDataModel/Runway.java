@@ -124,7 +124,7 @@ public class Runway {
         logger.info("Return runway to original state");
     }
     /**
-
+     *
      Recalculates the runway values based on the landing/takeoff direction and LDA/TORA values.
      If landing direction is true, runwayLength is set to LDA and either calculateLandOver() or
      calculateLandTowards() is called based on the takeoff direction. If landing direction is false,
