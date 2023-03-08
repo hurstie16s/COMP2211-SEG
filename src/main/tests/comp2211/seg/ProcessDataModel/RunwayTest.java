@@ -88,6 +88,7 @@ class RunwayTest {
         runway.getRunwayObstacle().heightProperty().set(obstacle.getHeight());
         runway.getRunwayObstacle().widthProperty().set(obstacle.getWidth());
         runway.getRunwayObstacle().lengthProperty().set(obstacle.getLength());
+        runway.getRunwayObstacle().distFromThresholdProperty().set(obstacle.getDistFromThreshold());
     }
 
     // Unit Tests
@@ -130,9 +131,9 @@ class RunwayTest {
     ) {
         addObstacle(runway,obstacleToAdd);
         runway.calculateTakeOffToward();
-        assertEquals(expectedTORA, runway.getLeftTora());
-        assertEquals(exceptedASDA, runway.getLeftAsda());
-        assertEquals(expectedTODA, runway.getLeftToda());
+        assertEquals(expectedTORA, runway.getRightTora());
+        assertEquals(exceptedASDA, runway.getRightAsda());
+        assertEquals(expectedTODA, runway.getRightToda());
     }
 
     @DisplayName("Take-off calculations : Take-off away from an obstacle")
@@ -147,9 +148,9 @@ class RunwayTest {
     ) {
         addObstacle(runway,obstacleToAdd);
         runway.calculateTakeOffAway();
-        assertEquals(expectedTORA, runway.getLeftTora());
-        assertEquals(expectedASDA, runway.getLeftAsda());
-        assertEquals(expectedTODA, runway.getLeftToda());
+        assertEquals(expectedTORA, runway.getRightTora());
+        assertEquals(expectedASDA, runway.getRightAsda());
+        assertEquals(expectedTODA, runway.getRightToda());
     }
 
     // Test Data Generation
