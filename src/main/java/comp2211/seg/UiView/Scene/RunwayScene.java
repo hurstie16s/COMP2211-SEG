@@ -201,7 +201,7 @@ public class RunwayScene extends SceneAbstract {
    * @param d     the height of the object
    * @param color the colour of the bounding box
    */
-  public void addCuboid(DoubleBinding x, DoubleBinding y, DoubleBinding z, DoubleBinding w, DoubleBinding l, DoubleBinding d, Color color){
+  public Box addCuboid(DoubleBinding x, DoubleBinding y, DoubleBinding z, DoubleBinding w, DoubleBinding l, DoubleBinding d, Color color){
 
     PhongMaterial material = new PhongMaterial();
     material.setDiffuseColor(color);
@@ -215,6 +215,7 @@ public class RunwayScene extends SceneAbstract {
     box.depthProperty().bind(d.multiply(scaleFactorDepth));
     box.setMaterial(material);
     group.getChildren().add(box);
+    return box;
   }
 
   /**
@@ -342,7 +343,8 @@ public class RunwayScene extends SceneAbstract {
    * @param obstacle The obstacle to render.
    */
   public void renderObstacle(Obstacle obstacle){
-    addCuboid(
+
+    Box obstacleView = addCuboid(
             appWindow.runway.runwayLengthProperty().divide(-2).add(obstacle.distFromThresholdProperty()),
             new SimpleDoubleProperty(0).multiply(1),
             obstacle.heightProperty().multiply(1),
@@ -351,6 +353,7 @@ public class RunwayScene extends SceneAbstract {
             obstacle.heightProperty().multiply(1),
             Color.DARKRED
             );
+    obstacleView.visibleProperty().bind(appWindow.runway.hasRunwayObstacleProperty());
 
     group.getChildren().add(new Slope(
             appWindow,

@@ -11,6 +11,8 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
@@ -69,14 +71,20 @@ public class Slope extends MeshView {
         material.setDiffuseColor(color);
         setMaterial(material);
         this.direction = direction;
+        this.visibleProperty().bind(appWindow.runway.hasRunwayObstacleProperty());
 
         front.bind(y.multiply(scaleFactorHeight).add(w.multiply(scaleFactorHeight).divide(2)));
         back.bind(y.multiply(scaleFactorHeight).subtract(w.multiply(scaleFactorHeight).divide(2)));
         start.bind((Bindings.when(direction).then(x.add(obstacle.distFromThresholdProperty()).subtract(obstacle.widthProperty().divide(2))).otherwise(x.add(obstacle.distFromThresholdProperty()).add(obstacle.widthProperty().divide(2))).multiply(scaleFactor)));
         NumberBinding difference = Bindings.when(direction).then(obstacle.heightProperty().multiply(-50).add(obstacle.widthProperty().divide(2))).otherwise(obstacle.heightProperty().multiply(50).subtract(obstacle.widthProperty().divide(2)));
-        NumberBinding change = start.add(Bindings.when(Bindings.greaterThan(0, difference)).then(Bindings.when(Bindings.greaterThan(240, difference)).then(difference).otherwise(240)).otherwise(Bindings.when(Bindings.lessThan(-240, difference)).then(difference).otherwise(-240)).multiply(scaleFactor));
+        NumberBinding change = start.add(Bindings.when(direction).then(Bindings.when(Bindings.lessThan(240, difference)).then(difference).otherwise(240)).otherwise(Bindings.when(Bindings.greaterThan(-240, difference)).then(difference).otherwise(-240)).multiply(scaleFactor));
         end.bind(Bindings.when(Bindings.lessThan(appWindow.runway.runwayLengthProperty().divide(2).multiply(scaleFactor),change)).then(start).otherwise(Bindings.when(Bindings.greaterThan(appWindow.runway.runwayLengthProperty().divide(-2).multiply(scaleFactor),change)).then(start).otherwise(change)));
-
+        change.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                logger.info(t1);
+            }
+        });
         bottom.bind(z.multiply(scaleFactorDepth).multiply(-1));
         top.bind(h.add(z).multiply(scaleFactorDepth).multiply(-1));
         for (Property prop: new Property[] {

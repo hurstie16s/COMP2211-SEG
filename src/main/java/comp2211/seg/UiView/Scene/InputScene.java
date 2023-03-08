@@ -85,9 +85,15 @@ public class InputScene extends SceneAbstract {
     makeTextField(inputs, new SimpleStringProperty("Runway Length (").concat(units).concat(")"), appWindow.runway.runwayLengthProperty());
     makeTextField(inputs, new SimpleStringProperty("Runway Designator").concat(""), appWindow.runway.runwayDesignatorProperty(), "([0-9]|0[1-9]|[1-2][0-9]|3[0-6])[lrcLRC]?");
     makeTextField(inputs, new SimpleStringProperty("Displaced Threshold (").concat(units).concat(")"), appWindow.runway.dispThresholdProperty());
+    makeTextField(inputs, new SimpleStringProperty("Obstacle width "), appWindow.runway.getRunwayObstacle().widthProperty());
+    makeTextField(inputs, new SimpleStringProperty("Obstacle length "), appWindow.runway.getRunwayObstacle().widthProperty());
+    makeTextField(inputs, new SimpleStringProperty("Obstacle height "), appWindow.runway.getRunwayObstacle().heightProperty());
+    makeTextField(inputs, new SimpleStringProperty("Obstacle displacement "), appWindow.runway.getRunwayObstacle().distFromThresholdProperty());
 
     //var landingMode = makeButton(calculations, "Landing","Taking off", appWindow.runway.landingModeProperty());
     var direction = makeButton(calculations, "Towards","Away", appWindow.runway.directionProperty());
+    var hasObstacle = makeButton(calculations, "Obstacle","Clear", appWindow.runway.hasRunwayObstacleProperty());
+
 
     var leftTora = makeOutputLabel(outputs, "rightTora", appWindow.runway.rightToraProperty(), new SimpleDoubleProperty(0));
     var leftToda = makeOutputLabel(outputs, "rightToda", appWindow.runway.rightTodaProperty(), appWindow.runway.clearwayProperty());
@@ -99,10 +105,6 @@ public class InputScene extends SceneAbstract {
     var rightLda = makeOutputLabel(outputs, "leftLda", appWindow.runway.leftLdaProperty(), new SimpleDoubleProperty(0));
 
 
-    Obstacle obstacle = new Obstacle("Test",10,700);
-    obstacle.lengthProperty().bind(appWindow.runway.runwayWidthProperty());
-    obstacle.widthProperty().bind(obstacle.heightProperty());
-    appWindow.runway.addObstacle(obstacle);
 
     mainPane.getChildren().add(layout);
   }
@@ -241,7 +243,8 @@ public class InputScene extends SceneAbstract {
 
 
 
-    button.fire();
+    button.selectedProperty().set(property.get());
+    button2.selectedProperty().set(!property.get());
     return segment;
   }
 

@@ -75,6 +75,12 @@ class RunwayTest {
         runway.ldaProperty().set(lda);
         runway.dispThresholdProperty().set(dispThreshold);
     }
+    void addObstacle(Runway runway, Obstacle obstacle){
+        runway.addObstacle();
+        runway.getRunwayObstacle().heightProperty().set(obstacle.getHeight());
+        runway.getRunwayObstacle().widthProperty().set(obstacle.getWidth());
+        runway.getRunwayObstacle().lengthProperty().set(obstacle.getLength());
+    }
 
     // Unit Tests
 
@@ -90,7 +96,7 @@ class RunwayTest {
     @ParameterizedTest
     @MethodSource("generateLandOverTestData")
     void calculateLandOverTest(Runway runway, Obstacle obstacleToAdd, double expectedLDA) {
-        runway.addObstacle(obstacleToAdd);
+        addObstacle(runway,obstacleToAdd);
         runway.calculateLandOver();
         assertEquals(expectedLDA, runway.getRightLda());
     }
@@ -99,7 +105,7 @@ class RunwayTest {
     @ParameterizedTest
     @MethodSource("generateLandTowardsTestData")
     void calculateLandTowardsTest(Runway runway, Obstacle obstacleToAdd, double expectedLDA) {
-        runway.addObstacle(obstacleToAdd);
+        addObstacle(runway,obstacleToAdd);
         runway.calculateLandTowards();
         assertEquals(expectedLDA, runway.getRightLda());
     }

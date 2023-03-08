@@ -73,6 +73,7 @@ public class Runway {
     // Runway dimensions
     private final SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
     private final SimpleDoubleProperty runwayWidth = new SimpleDoubleProperty(60);
+    private final SimpleBooleanProperty hasRunwayObstacle = new SimpleBooleanProperty(false);
 
     /**
      * Creates a new runway object and sets up change listeners on all input properties so that takeoff and landing
@@ -81,45 +82,37 @@ public class Runway {
     public Runway() {
         for (Property prop: new Property[] {
                 runwayDesignator,
-                tora,
-                toda,
-                asda,
-                lda,
                 dispThreshold,
-                stopway,
-                clearway,
-                landingMode,
                 direction,
-                runwayLength
+                runwayLength,
+                hasRunwayObstacle
         }) {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
         logger.info("Created Runway object");
-    }
-
-    /**
-
-     Adds an obstacle to the list of obstacles on the runway.
-     @param obstacleToAdd The obstacle to add to the runway.
-     */
-    public void addObstacle(Obstacle obstacleToAdd) {
-        this.runwayObstacle = obstacleToAdd;
-        logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignator.get());
-
+        runwayObstacle = new Obstacle("One", 0,0);
         tora.bind(runwayLength);
         toda.bind(runwayLength.add(clearway));
         asda.bind(runwayLength.add(stopway));
         lda.bind(runwayLength.subtract(dispThreshold));
         recalculate();
     }
+
+    /**
+
+     Adds an obstacle to the list of obstacles on the runway.
+     */
+    public void addObstacle() {
+        hasRunwayObstacle.set(true);
+        logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignator.get());
+    }
     /**
      * Removing the obstacle from the runway
      * @param obstacleToRemove The obstacle to remove from the runway
      */
     public void removeObstacle(Obstacle obstacleToRemove) {
-        if (runwayObstacle == obstacleToRemove) {
-            this.runwayObstacle = null;
-        }
+        hasRunwayObstacle.set(false);
+
         recalculate();
         logger.info("Removed Obstacle "+ runwayObstacle.getObstacleDesignator() + " from runway " + runwayDesignator.get());
         logger.info("Return runway to original state");
@@ -142,7 +135,7 @@ public class Runway {
         leftAsda.bind(asda);
         leftLda.bind(lda);
 
-        if (runwayObstacle != null) {
+        if (hasRunwayObstacle.get()) {
             if (direction.get()) {
                 calculateTakeOffToward();
                 calculateLandTowards();
@@ -565,5 +558,13 @@ public class Runway {
 
     public SimpleDoubleProperty RESAHeightProperty() {
         return RESAHeight;
+    }
+
+    public boolean isHasRunwayObstacle() {
+        return hasRunwayObstacle.get();
+    }
+
+    public SimpleBooleanProperty hasRunwayObstacleProperty() {
+        return hasRunwayObstacle;
     }
 }
