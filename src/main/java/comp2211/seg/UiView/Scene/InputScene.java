@@ -104,14 +104,14 @@ public class InputScene extends SceneAbstract {
     var hasObstacle = makeButton(calculations, "Obstacle","Clear", appWindow.runway.hasRunwayObstacleProperty());
 
 
-    var leftTora = makeOutputLabel(outputs, "rightTora", appWindow.runway.rightToraProperty(), new SimpleDoubleProperty(0));
-    var leftToda = makeOutputLabel(outputs, "rightToda", appWindow.runway.rightTodaProperty(), appWindow.runway.clearwayLeftProperty());
-    var leftAsda = makeOutputLabel(outputs, "rightAsda", appWindow.runway.rightAsdaProperty(), appWindow.runway.stopwayLeftProperty());
-    var leftLda = makeOutputLabel(outputs, "rightLda", appWindow.runway.rightLdaProperty(), new SimpleDoubleProperty(0));
-    var rightTora = makeOutputLabel(outputs, "leftTora", appWindow.runway.leftToraProperty(), new SimpleDoubleProperty(0));
-    var rightToda = makeOutputLabel(outputs, "leftToda", appWindow.runway.leftTodaProperty(), appWindow.runway.clearwayRightProperty());
-    var rightAsda = makeOutputLabel(outputs, "leftAsda", appWindow.runway.leftAsdaProperty(), appWindow.runway.stopwayRightProperty());
-    var rightLda = makeOutputLabel(outputs, "leftLda", appWindow.runway.leftLdaProperty(), new SimpleDoubleProperty(0));
+    var leftTora = makeOutputLabel(outputs, "Top Tora", appWindow.runway.leftToraProperty(), new SimpleDoubleProperty(0));
+    var leftToda = makeOutputLabel(outputs, "Top Toda", appWindow.runway.leftTodaProperty(), appWindow.runway.clearwayRightProperty());
+    var leftAsda = makeOutputLabel(outputs, "Top Asda", appWindow.runway.leftAsdaProperty(), appWindow.runway.stopwayRightProperty());
+    var leftLda = makeOutputLabel(outputs, "Top Lda", appWindow.runway.leftLdaProperty(), new SimpleDoubleProperty(0));
+    var rightTora = makeOutputLabel(outputs, "Bottom Tora", appWindow.runway.rightToraProperty(), new SimpleDoubleProperty(0));
+    var rightToda = makeOutputLabel(outputs, "Bottom Toda", appWindow.runway.rightTodaProperty(), appWindow.runway.clearwayLeftProperty());
+    var rightAsda = makeOutputLabel(outputs, "Bottom Asda", appWindow.runway.rightAsdaProperty(), appWindow.runway.stopwayLeftProperty());
+    var rightLda = makeOutputLabel(outputs, "Bottom Lda", appWindow.runway.rightLdaProperty(), new SimpleDoubleProperty(0));
 
 
 
