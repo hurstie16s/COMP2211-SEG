@@ -1,5 +1,6 @@
 package comp2211.seg.ProcessDataModel;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -156,25 +157,14 @@ public class Runway {
         workingAsda.bind(workingTora.add(stopway));
         workingToda.bind(workingTora.add(clearway));
          */
-        SimpleDoubleProperty obstacleSlopeCalculation;
-        if (runwayObstacle.heightProperty().multiply(SLOPE).get() > MINRESA.get()) {
-            obstacleSlopeCalculation = new SimpleDoubleProperty(runwayObstacle.heightProperty().multiply(SLOPE).get());
-        } else {
-            obstacleSlopeCalculation = MINRESA;
-        }
-        SimpleDoubleProperty leftLdaSubtraction;
-        if (runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND).get() > BLASTZONE.get()) {
-            leftLdaSubtraction = new SimpleDoubleProperty(runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND).get());
-        } else {
-            leftLdaSubtraction = BLASTZONE;
-        }
-        SimpleDoubleProperty rightLdaSubtraction;
-        if (runwayLength.subtract(runwayObstacle.distFromThresholdProperty()).add(obstacleSlopeCalculation).add(STRIPEND).get() > BLASTZONE.get()) {
-            rightLdaSubtraction = new SimpleDoubleProperty(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()).add(obstacleSlopeCalculation).add(STRIPEND).get());
-        } else {
-            rightLdaSubtraction = BLASTZONE;
-        }
+        SimpleDoubleProperty obstacleSlopeCalculation = new SimpleDoubleProperty();
+        obstacleSlopeCalculation.bind(Bindings.when(Bindings.greaterThan(runwayObstacle.heightProperty().multiply(SLOPE),MINRESA.add(runwayObstacle.widthProperty().divide(2)))).then(runwayObstacle.heightProperty().multiply(SLOPE)).otherwise(MINRESA.add(runwayObstacle.widthProperty().divide(2))));
 
+
+        SimpleDoubleProperty leftLdaSubtraction = new SimpleDoubleProperty();
+        SimpleDoubleProperty rightLdaSubtraction= new SimpleDoubleProperty();
+        leftLdaSubtraction.bind(Bindings.when(Bindings.greaterThan(runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND),BLASTZONE)).then(runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE));
+        rightLdaSubtraction.bind(Bindings.when(Bindings.greaterThan(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()).add(obstacleSlopeCalculation).add(STRIPEND),BLASTZONE)).then(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()).add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE));
         rightLda.bind(lda.subtract(leftLdaSubtraction));
         leftLda.bind(lda.subtract(rightLdaSubtraction));
     }
@@ -200,17 +190,12 @@ public class Runway {
      */
     public void calculateTakeOffToward() {
         //Compare slope caused by obstacle to min RESA, so aircraft has time to stop before obstacle in case of aborted take-off
-        SimpleDoubleProperty obstacleSlopeCalculation;
-        if (runwayObstacle.heightProperty().multiply(SLOPE).get() > MINRESA.get()) {
-            obstacleSlopeCalculation = new SimpleDoubleProperty(runwayObstacle.heightProperty().multiply(SLOPE).get());
-        } else {
-            obstacleSlopeCalculation = MINRESA;
-        }
-
-        rightTora.bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()).subtract(obstacleSlopeCalculation.get()).subtract(STRIPEND.get()));
+        SimpleDoubleProperty obstacleSlopeCalculation = new SimpleDoubleProperty();
+        obstacleSlopeCalculation.bind(Bindings.when(Bindings.greaterThan(runwayObstacle.heightProperty().multiply(SLOPE),MINRESA.add(runwayObstacle.widthProperty().divide(2)))).then(runwayObstacle.heightProperty().multiply(SLOPE)).otherwise(MINRESA.add(runwayObstacle.widthProperty().divide(2))));
+        rightTora.bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()).subtract(obstacleSlopeCalculation).subtract(STRIPEND));
         rightAsda.bind(rightTora);
         rightToda.bind(rightTora);
-        leftTora.bind(runwayObstacle.distFromThresholdProperty().subtract(obstacleSlopeCalculation.get()).subtract(STRIPEND.get()));
+        leftTora.bind(runwayObstacle.distFromThresholdProperty().subtract(obstacleSlopeCalculation).subtract(STRIPEND));
         leftAsda.bind(leftTora);
         leftToda.bind(leftTora);
         /*

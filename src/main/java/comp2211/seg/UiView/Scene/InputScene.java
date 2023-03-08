@@ -85,10 +85,10 @@ public class InputScene extends SceneAbstract {
     makeTextField(inputs, new SimpleStringProperty("Runway Length (").concat(units).concat(")"), appWindow.runway.runwayLengthProperty());
     makeTextField(inputs, new SimpleStringProperty("Runway Designator").concat(""), appWindow.runway.runwayDesignatorProperty(), "([0-9]|0[1-9]|[1-2][0-9]|3[0-6])[lrcLRC]?");
     makeTextField(inputs, new SimpleStringProperty("Displaced Threshold (").concat(units).concat(")"), appWindow.runway.dispThresholdProperty());
-    makeTextField(inputs, new SimpleStringProperty("Obstacle width "), appWindow.runway.getRunwayObstacle().widthProperty());
-    makeTextField(inputs, new SimpleStringProperty("Obstacle length "), appWindow.runway.getRunwayObstacle().widthProperty());
-    makeTextField(inputs, new SimpleStringProperty("Obstacle height "), appWindow.runway.getRunwayObstacle().heightProperty());
-    makeTextField(inputs, new SimpleStringProperty("Obstacle displacement "), appWindow.runway.getRunwayObstacle().distFromThresholdProperty());
+    makeTextField(inputs, new SimpleStringProperty("Obstacle width (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().widthProperty());
+    makeTextField(inputs, new SimpleStringProperty("Obstacle length (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().lengthProperty());
+    makeTextField(inputs, new SimpleStringProperty("Obstacle height (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().heightProperty());
+    makeTextField(inputs, new SimpleStringProperty("Obstacle displacement (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().distFromThresholdProperty());
 
     //var landingMode = makeButton(calculations, "Landing","Taking off", appWindow.runway.landingModeProperty());
     var direction = makeButton(calculations, "Towards","Away", appWindow.runway.directionProperty());
