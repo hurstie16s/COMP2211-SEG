@@ -108,6 +108,7 @@ public class Runway {
         //dispThreshold.bind(tora.subtract(lda));
         stopway.bind(asda.subtract(tora));
         clearway.bind(toda.subtract(tora));
+        runwayLength.bind(tora);
     }
 
     /**
@@ -145,21 +146,13 @@ public class Runway {
      */
     public void recalculate(){
         if (runwayObstacle != null) {
-            if (landingMode.get()){
-                runwayLength.bind(lda);
                 if (runwayObstacle.distFromThresholdProperty().lessThan(runwayLength.get()/2).get()){
                     calculateLandOver();
-                } else {
-                    calculateLandTowards();
-                }
-            } else {
-                runwayLength.bind(tora);
-                if (runwayObstacle.distFromThresholdProperty().lessThan(runwayLength.get() / 2).get()) {
                     calculateTakeOffAway();
                 } else {
+                    calculateLandTowards();
                     calculateTakeOffToward();
                 }
-            }
         } else {
             logger.info("Tried to recalculate with no obstacle");
         }
@@ -222,22 +215,14 @@ public class Runway {
      */
     public void calculateTakeOffAway() {
         if (runwayObstacle != null) {
-
             SimpleDoubleProperty toraSubtraction = new SimpleDoubleProperty(Math.max(dispThreshold.get() + BLASTZONE.get(), STRIPEND.get() + MINRESA.get()));
-
             workingTora.bind(tora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(toraSubtraction));
             workingAsda.bind(workingTora.add(stopway));
             workingToda.bind(workingTora.add(clearway));
-
-            /*
-            not needed for take-off
-            workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE).subtract(STRIPEND.get())));
-            */
         } else {
             workingTora.bind(tora);
             workingAsda.bind(asda);
             workingToda.bind(toda);
-            workingLda.bind(lda);
         }
     }
 
