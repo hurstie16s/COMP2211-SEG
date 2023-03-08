@@ -26,8 +26,8 @@ public interface GlobalVars {
       "Josh Willson\n" +
       "jjrw1g21\n";
 
-  public static final Color bg = Color.gray(0.3);
-  public static final Color bgRunway = Color.gray(0.2);
+  public static final Color bg = Color.gray(0.2);
+  public static final Color bgRunway = Color.gray(0.1);
   public static final Color fg = Color.AZURE;
   public static final Font font =Font.font("Calibri", 20);
   /**
