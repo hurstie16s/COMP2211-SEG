@@ -220,8 +220,8 @@ public class Runway {
         rightAsda.bind(rightTora.add(stopwayRight));
         rightToda.bind(rightTora.add(clearwayRight));
         leftTora.bind(inputLeftTora.subtract(runwayLength.subtract(runwayObstacle.distFromThresholdProperty())).subtract(toraSubtractionLeft));
-        leftAsda.bind(leftTora);
-        leftToda.bind(leftTora);
+        leftAsda.bind(leftTora.add(stopwayLeft));
+        leftToda.bind(leftTora.add(clearwayRight));
 
         /*
         not needed for take-off
