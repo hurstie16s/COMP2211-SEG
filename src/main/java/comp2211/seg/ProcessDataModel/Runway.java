@@ -4,12 +4,8 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.ArrayList;
 
 /**
  * Represents a runway object, containing various properties such as length, width, and designator, as well as methods
@@ -207,15 +203,25 @@ public class Runway {
     public void calculateTakeOffToward() {
         if (runwayObstacle != null) {
 
-            workingTora.bind(runwayObstacle.distFromThresholdProperty().subtract(runwayObstacle.heightProperty().multiply(50)).subtract(STRIPEND.get()));
+            //Compare slope caused by obstacle to min RESA, so aircraft has time to stop before obstacle in case of aborted take-off
+            SimpleDoubleProperty obstacleSlopeCalculation;
+            if (runwayObstacle.heightProperty().multiply(SLOPE).get() > MINRESA.get()) {
+                obstacleSlopeCalculation = new SimpleDoubleProperty(runwayObstacle.heightProperty().multiply(SLOPE).get());
+            } else {
+                obstacleSlopeCalculation = MINRESA;
+            }
+
+            workingTora.bind(runwayObstacle.distFromThresholdProperty().add(dispThreshold.get()).subtract(obstacleSlopeCalculation.get()).subtract(STRIPEND.get()));
             workingAsda.bind(workingTora);
             workingToda.bind(workingTora);
+            /*
+            not needed for take-off
             workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA.get()).subtract(STRIPEND.get()));
+            */
         } else {
             workingTora.bind(tora);
             workingAsda.bind(asda);
             workingToda.bind(toda);
-            workingLda.bind(lda);
         }
     }
 
@@ -225,10 +231,16 @@ public class Runway {
     public void calculateTakeOffAway() {
         if (runwayObstacle != null) {
 
-            workingTora.bind(tora.subtract(BLASTZONE).subtract(runwayObstacle.distFromThresholdProperty()).subtract(dispThreshold.get()));
+            SimpleDoubleProperty toraSubtraction = new SimpleDoubleProperty(Math.max(dispThreshold.get() + BLASTZONE.get(), STRIPEND.get() + MINRESA.get()));
+
+            workingTora.bind(tora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(toraSubtraction));
             workingAsda.bind(workingTora.add(stopway));
             workingToda.bind(workingTora.add(clearway));
+
+            /*
+            not needed for take-off
             workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE).subtract(STRIPEND.get())));
+            */
         } else {
             workingTora.bind(tora);
             workingAsda.bind(asda);
