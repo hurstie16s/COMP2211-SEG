@@ -1,5 +1,6 @@
 package comp2211.seg.UiView.Scene;
 
+import comp2211.seg.App;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.scene.layout.GridPane;
@@ -60,6 +61,8 @@ public class MainScene extends SceneAbstract{
                 case H:
                     help.toggleHelp("Main");
                     break;
+                case ESCAPE:
+                    App.getInstance().shutdown();
             }
         }));
     }

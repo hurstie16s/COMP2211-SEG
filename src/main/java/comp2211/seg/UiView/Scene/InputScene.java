@@ -4,7 +4,6 @@ import comp2211.seg.App;
 import comp2211.seg.Controller.Interfaces.GlobalVars;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
-import comp2211.seg.ProcessDataModel.Obstacle;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -13,9 +12,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -132,6 +136,7 @@ public class InputScene extends SceneAbstract {
    */
   public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleStringProperty property, String regex) {
     TextField entry = new TextField();
+    entry.setFocusTraversable(false);
     entry.setFont(GlobalVars.font);
 
     HBox segment = makeBoundingBox(label,width/3,entry);
@@ -170,6 +175,7 @@ public class InputScene extends SceneAbstract {
    */
   public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleDoubleProperty property) {
     TextField entry = new TextField();
+    entry.setFocusTraversable(false);
     entry.setFont(GlobalVars.font);
 
     HBox segment = makeBoundingBox(label,width/3,entry);

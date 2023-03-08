@@ -1,8 +1,6 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.HandlerPane;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -102,6 +100,7 @@ public class HelpScene extends Scene {
                     makeColour(Color.GREY,"Runway");
                     break;
                 case "comp2211.seg.UiView.Scene.MainScene":
+                    makeKey("Esc", "Exit application");
                     makeColour(Color.DARKRED,"Obstacle");
                     makeColour(Color.BLUE,"Cleared and graded area");
                     makeColour(Color.DARKCYAN,"Approach/Take off Slope");
