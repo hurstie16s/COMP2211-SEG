@@ -163,13 +163,46 @@ public class Runway {
         workingToda.bind(workingTora.add(clearway));
          */
         SimpleDoubleProperty obstacleSlopeCalculation = new SimpleDoubleProperty();
-        obstacleSlopeCalculation.bind(Bindings.when(Bindings.greaterThan(runwayObstacle.heightProperty().multiply(SLOPE),MINRESA.add(runwayObstacle.widthProperty().divide(2)))).then(runwayObstacle.heightProperty().multiply(SLOPE)).otherwise(MINRESA.add(runwayObstacle.widthProperty().divide(2))));
+        obstacleSlopeCalculation
+                .bind(Bindings
+                        .when(Bindings
+                                .greaterThan(runwayObstacle.heightProperty()
+                                        .multiply(SLOPE),MINRESA
+                                        .add(runwayObstacle.widthProperty()
+                                                .divide(2))))
+                        .then(runwayObstacle
+                                .heightProperty()
+                                .multiply(SLOPE))
+                        .otherwise(MINRESA
+                                .add(runwayObstacle
+                                        .widthProperty()
+                                        .divide(2))));
 
 
         SimpleDoubleProperty leftLdaSubtraction = new SimpleDoubleProperty();
         SimpleDoubleProperty rightLdaSubtraction= new SimpleDoubleProperty();
-        leftLdaSubtraction.bind(Bindings.when(Bindings.greaterThan(runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND),BLASTZONE)).then(runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE));
-        rightLdaSubtraction.bind(Bindings.when(Bindings.greaterThan(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()).add(obstacleSlopeCalculation).add(STRIPEND),BLASTZONE)).then(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()).add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE));
+
+        leftLdaSubtraction.bind(
+                Bindings.when(
+                        Bindings.greaterThan(
+                                runwayObstacle.distFromThresholdProperty()
+                                        .add(obstacleSlopeCalculation)
+                                        .add(STRIPEND),BLASTZONE)).then(runwayObstacle.distFromThresholdProperty()
+                        .add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE));
+
+        rightLdaSubtraction.bind(
+                Bindings.when(
+                        Bindings.greaterThan(
+                                runwayLength
+                                        .subtract(runwayObstacle.distFromThresholdProperty())
+                                        .add(obstacleSlopeCalculation)
+                                        .add(STRIPEND),BLASTZONE))
+                        .then(runwayLength
+                                .subtract(runwayObstacle.distFromThresholdProperty())
+                                .add(obstacleSlopeCalculation)
+                                .add(STRIPEND))
+                        .otherwise(BLASTZONE));
+
         rightLda.bind(inputRightLda.subtract(leftLdaSubtraction));
         leftLda.bind(inputLeftLda.subtract(rightLdaSubtraction));
     }
