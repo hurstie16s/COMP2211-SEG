@@ -1,10 +1,21 @@
 package comp2211.seg.ProcessDataModel;
 
+import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -61,6 +72,10 @@ public class Runway {
     private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
 
     private final SimpleBooleanProperty direction = new SimpleBooleanProperty(false);
+    private final SimpleBooleanProperty leftTakeOff = new SimpleBooleanProperty(false);
+    private final SimpleBooleanProperty leftLand = new SimpleBooleanProperty(false);
+    private final SimpleBooleanProperty rightTakeOff = new SimpleBooleanProperty(false);
+    private final SimpleBooleanProperty rightLand = new SimpleBooleanProperty(false);
 
     // End of Inputs
 
@@ -72,6 +87,7 @@ public class Runway {
     private static final SimpleDoubleProperty STRIPEND = new SimpleDoubleProperty(60);
     private static final SimpleDoubleProperty BLASTZONE = new SimpleDoubleProperty(500);
     private static final SimpleDoubleProperty SLOPE = new SimpleDoubleProperty(50);
+    private static final SimpleDoubleProperty STOPWAYMIN = new SimpleDoubleProperty(0);
 
     // Runway dimensions
     private final SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
@@ -102,6 +118,7 @@ public class Runway {
         stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
         recalculate();
+        validityChecks();
     }
 
     /**
@@ -150,6 +167,95 @@ public class Runway {
                 calculateTakeOffAway();
             }
         }
+    }
+    public void validityChecks(){
+        //Bindings.greaterThan(greater,lesser) = true;
+        leftTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftAsda,inputLeftTora.add(STOPWAYMIN)),Bindings.greaterThanOrEqual(inputLeftToda,leftAsda.add(STRIPEND).add(RESAWidth))));
+        leftLand.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftLda,0),
+                Bindings.lessThanOrEqual(inputLeftLda,inputLeftTora))
+        );
+        rightTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora.add(STOPWAYMIN)),Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda.add(STRIPEND).add(RESAWidth))));
+        rightLand.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightLda,0),
+                Bindings.lessThanOrEqual(inputRightLda,inputRightTora))
+        );
+    }
+    public BorderPane makeErrorScene(NumberBinding width, NumberBinding height){
+        BorderPane errorPane = new BorderPane();
+        errorPane.setBackground(new Background(new BackgroundFill(Color.BLACK,null,null)));
+        errorPane.visibleProperty().bind(
+                Bindings.and(
+                        Bindings.and(leftTakeOff,
+                                rightTakeOff
+                        ),
+                        Bindings.and(leftLand,
+                                rightLand
+                        )
+                ).not()
+        );
+
+        Text label = new Text();
+        label.textProperty().bind(new SimpleStringProperty("Top ASDA (").concat(inputLeftAsda.asString()).concat(") < Top TORA (").concat( inputLeftTora.asString()).concat(") + Stopway (").concat(STOPWAYMIN).concat(")"));
+        label.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftAsda,inputLeftTora.add(STOPWAYMIN)).not());
+        label.setFill(Color.RED);
+        label.setFont(GlobalVariables.font);
+        Text label2 = new Text();
+        label2.textProperty().bind(new SimpleStringProperty("Top TODA (").concat(inputLeftToda.asString()).concat(") < Top ASDA (").concat( inputLeftAsda.asString()).concat(") + Strip end (").concat(STRIPEND).concat(") + Resa (").concat(RESAWidth).concat(")"));
+        label2.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftToda,inputLeftAsda.add(STRIPEND).add(RESAWidth)).not());
+        label2.setFill(Color.RED);
+        label2.setFont(GlobalVariables.font);
+        Text label3 = new Text();
+        label3.textProperty().bind(new SimpleStringProperty("Top LDA (").concat(inputLeftLda.asString()).concat(") < 0"));
+        label3.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftLda,0).not());
+        label3.setFill(Color.RED);
+        label3.setFont(GlobalVariables.font);
+        Text label4 = new Text();
+        label4.textProperty().bind(new SimpleStringProperty("Top TORA (").concat(inputLeftTora.asString()).concat(") < Top LDA (").concat( inputLeftLda.asString()).concat(")"));
+        label4.visibleProperty().bind(Bindings.lessThanOrEqual(inputLeftLda,inputLeftTora).not());
+        label4.setFill(Color.RED);
+        label4.setFont(GlobalVariables.font);
+        Text label5= new Text();
+        label5.textProperty().bind(new SimpleStringProperty("Bottom ASDA (").concat(inputRightAsda.asString()).concat(") < Bottom TORA (").concat( inputRightTora.asString()).concat(") + Stopway (").concat(STOPWAYMIN).concat(")"));
+        label5.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora.add(STOPWAYMIN)).not());
+        label5.setFill(Color.RED);
+        label5.setFont(GlobalVariables.font);
+        Text label6= new Text();
+        label6.textProperty().bind(new SimpleStringProperty("Bottom TODA (").concat(inputRightToda.asString()).concat(") < Bottom ASDA (").concat( inputRightAsda.asString()).concat(") + Strip end (").concat(STRIPEND).concat(") + Resa (").concat(RESAWidth).concat(")"));
+        label6.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda.add(STRIPEND).add(RESAWidth)).not());
+        label6.setFill(Color.RED);
+        label6.setFont(GlobalVariables.font);
+        Text label7= new Text();
+        label7.textProperty().bind(new SimpleStringProperty("Bottom LDA (").concat(inputRightLda.asString()).concat(") < 0"));
+        label7.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightLda,0).not());
+        label7.setFill(Color.RED);
+        label7.setFont(GlobalVariables.font);
+        Text label8 = new Text();
+        label8.textProperty().bind(new SimpleStringProperty("Bottom TORA (").concat(inputRightTora.asString()).concat(") < Bottom LDA (").concat( inputRightLda.asString()).concat(")"));
+        label8.visibleProperty().bind(Bindings.lessThanOrEqual(inputRightLda,inputRightTora).not());
+        label8.setFill(Color.RED);
+        label8.setFont(GlobalVariables.font);
+        VBox labels = new VBox(label,label2,label3,label4,label5,label6,label7,label8);
+        labels.setAlignment(Pos.CENTER);
+        errorPane.setCenter(labels);
+        width.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                labels.setMaxWidth((Double) t1);
+                labels.setMinWidth((Double) t1);
+                errorPane.setMaxWidth((Double) t1);
+                errorPane.setMinWidth((Double) t1);
+            }
+        });
+        height.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                labels.setMaxHeight((Double) t1);
+                labels.setMinHeight((Double) t1);
+                errorPane.setMaxHeight((Double) t1);
+                errorPane.setMinHeight((Double) t1);
+            }
+        });
+
+        return errorPane;
     }
 
     /**
@@ -249,13 +355,11 @@ public class Runway {
      Calculations for when a plane is taking-off away from an obstacle
      */
     public void calculateTakeOffAway() {
-        SimpleDoubleProperty toraSubtractionLeft = new SimpleDoubleProperty(Math.max(dispThresholdLeft.get() + BLASTZONE.get(), STRIPEND.get() + MINRESA.get()));
-        SimpleDoubleProperty toraSubtractionRight = new SimpleDoubleProperty(Math.max(dispThresholdRight.get() + BLASTZONE.get(), STRIPEND.get() + MINRESA.get()));
 
-        rightTora.bind(inputRightTora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(toraSubtractionRight));
+        rightTora.bind(inputRightTora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(dispThresholdRight.add( BLASTZONE), STRIPEND.add(MINRESA))));
         rightAsda.bind(rightTora.add(stopwayRight));
         rightToda.bind(rightTora.add(clearwayRight));
-        leftTora.bind(inputLeftTora.subtract(runwayLength.subtract(runwayObstacle.distFromThresholdProperty())).subtract(toraSubtractionLeft));
+        leftTora.bind(inputLeftTora.subtract(runwayLength.subtract(runwayObstacle.distFromThresholdProperty())).subtract(Bindings.max(dispThresholdLeft.add( BLASTZONE), STRIPEND.add(MINRESA))));
         leftAsda.bind(leftTora.add(stopwayLeft));
         leftToda.bind(leftTora.add(clearwayRight));
 
@@ -572,5 +676,37 @@ public class Runway {
 
     public SimpleDoubleProperty dispThresholdRightProperty() {
         return dispThresholdRight;
+    }
+
+    public boolean isLeftTakeOff() {
+        return leftTakeOff.get();
+    }
+
+    public SimpleBooleanProperty leftTakeOffProperty() {
+        return leftTakeOff;
+    }
+
+    public boolean isLeftLand() {
+        return leftLand.get();
+    }
+
+    public SimpleBooleanProperty leftLandProperty() {
+        return leftLand;
+    }
+
+    public boolean isRightTakeOff() {
+        return rightTakeOff.get();
+    }
+
+    public SimpleBooleanProperty rightTakeOffProperty() {
+        return rightTakeOff;
+    }
+
+    public boolean isRightLand() {
+        return rightLand.get();
+    }
+
+    public SimpleBooleanProperty rightLandProperty() {
+        return rightLand;
     }
 }

@@ -3,10 +3,11 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.App;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -88,6 +89,7 @@ public class MainScene extends SceneAbstract{
         scene3.toggleView();
         GridPane layout = new GridPane();
         GridPane layout2 = new GridPane();
+        StackPane layout3 = new StackPane();
         layout.setMinHeight(height/2);
         layout.setMaxHeight(height/2);
         layout.setMaxWidth(width);
@@ -96,13 +98,15 @@ public class MainScene extends SceneAbstract{
         layout.addRow(0,scene1.getRoot());
         layout2.addColumn(0,scene2.getRoot());
         layout2.addColumn(1,scene3.getRoot());
-        layout.addRow(1,layout2);
+        layout.addRow(1,layout3);
         layout.setMinHeight(height);
         layout.setMaxHeight(height);
         layout.setMaxWidth(width);
         layout.setMinWidth(width);
         mainPane.getChildren().add(layout);
         layout.setOnMousePressed((e) -> layout.requestFocus());
+        layout3.getChildren().addAll(layout2,appWindow.runway.makeErrorScene(root.widthProperty().divide(1),root.heightProperty().divide(1)));
+
         layout2.setOnMousePressed((e) -> appWindow.startRunwayScene());
         root.widthProperty().addListener(new ChangeListener<Number>() {
             @Override

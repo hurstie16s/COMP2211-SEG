@@ -36,17 +36,16 @@ public class RunwayLabel extends Group {
      * @param scene     The RunwayScene to which the label belongs.
      * @param direction The direction of the runway.
      */
-    public RunwayLabel(String name, Color color, DoubleBinding xOffset, double yOffset, DoubleBinding length, RunwayScene scene, boolean direction) {
+    public RunwayLabel(String name, Color color, DoubleBinding xOffset, double yOffset, DoubleBinding length, RunwayScene scene, boolean direction, SimpleBooleanProperty visibility) {
         this.scene = scene;
         this.direction = direction;
         this.name = name;
-        visibleProperty().bind( Bindings.and(
-                Bindings.greaterThanOrEqual(scene.appWindow.runway.runwayLengthProperty().divide(2).add(scene.appWindow.runway.clearwayRightProperty()), xOffset.subtract(length)),
-                Bindings.lessThanOrEqual(scene.appWindow.runway.runwayLengthProperty().divide(-2).subtract(scene.appWindow.runway.clearwayLeftProperty()), xOffset.subtract(length))));
         visibleProperty().bind
-                (Bindings.when(new SimpleBooleanProperty(direction))
+                (Bindings.and(
+                        Bindings.when(new SimpleBooleanProperty(direction))
                         .then(Bindings.greaterThanOrEqual(0, length))
-                        .otherwise(Bindings.lessThanOrEqual(0, length)));
+                        .otherwise(Bindings.lessThanOrEqual(0, length)),
+                        visibility));
 
         Group labelRotateGroup = new Group();
         Text label = new Text(name);
