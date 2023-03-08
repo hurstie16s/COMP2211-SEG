@@ -88,20 +88,28 @@ public abstract class SceneAbstract extends Scene{
     root.setMinHeight(height);
 
   }
-  public void makeHelp(){
+  public void makeHelp(boolean left){
+    if (!left) {
 
-    help = new HelpScene(new VBox(),appWindow);
-    VBox alignPane = new VBox();
-    alignPane.setMaxWidth(root.getMaxWidth());
-    alignPane.setMinWidth(root.getMaxWidth());
-    alignPane.getChildren().add(help.getRoot());
-    alignPane.setAlignment(Pos.TOP_RIGHT);
+      help = new HelpScene(new VBox(), appWindow);
+      VBox alignPane = new VBox();
+      alignPane.setMaxWidth(root.getMaxWidth());
+      alignPane.setMinWidth(root.getMaxWidth());
+      alignPane.getChildren().add(help.getRoot());
+      alignPane.setAlignment(Pos.TOP_RIGHT);
 
-    root.getChildren().add(alignPane);
-    help.getRoot().setPickOnBounds(false);
-    alignPane.setPickOnBounds(false);
-    root.setPickOnBounds(false);
-    help.toggleHelp(this.getClass().getName());
+      root.getChildren().add(alignPane);
+      help.getRoot().setPickOnBounds(false);
+      alignPane.setPickOnBounds(false);
+      root.setPickOnBounds(false);
+      help.toggleHelp(this.getClass().getName());
+    } else{
+
+      help = new HelpScene(new VBox(), appWindow);
+      root.getChildren().add(help.getRoot());
+      help.toggleHelp(this.getClass().getName());
+
+    }
   }
 
 }

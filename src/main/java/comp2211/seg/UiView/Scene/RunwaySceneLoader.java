@@ -31,7 +31,8 @@ public class RunwaySceneLoader extends SceneAbstract{
                     scene.toggleView();
                     break;
                 case H:
-                    help.toggleHelp(this.getClass().getCanonicalName());
+                    help.toggleHelp(this.getClass().getName());
+                    scene.render();
                     break;
             }
         }));
@@ -39,10 +40,11 @@ public class RunwaySceneLoader extends SceneAbstract{
     }
     public void build(){
         super.build();
+        makeHelp(true);
         scene = new RunwayScene(new Pane(),appWindow, width, height);
         scene.build();
         scene.initialise();
-        root.getChildren().add(scene.getRoot());
+        mainPane.getChildren().add(scene.getRoot());
         root.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {

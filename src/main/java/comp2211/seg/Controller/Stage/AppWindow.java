@@ -108,7 +108,6 @@ public class AppWindow {
         newScene.build();
         currentScene = newScene;
         stage.setScene(currentScene);
-        currentScene.makeHelp();
 
         // Initialise the scene when ready
         Platform.runLater(() -> currentScene.initialise());

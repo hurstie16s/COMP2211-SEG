@@ -113,8 +113,6 @@ public class HelpScene extends Scene {
             }
         }else {
             root.getChildren().removeAll(root.getChildren());
-            root.setMaxHeight(0);
-            root.setMaxWidth(0);
             makeKey("H", "Toggle the help menu");
         }
         visible = !visible;

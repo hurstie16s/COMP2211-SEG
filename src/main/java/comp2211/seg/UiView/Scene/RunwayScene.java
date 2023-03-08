@@ -305,14 +305,22 @@ public class RunwayScene extends SceneAbstract {
   public void build() {
     super.build();
     logger.info("building");
-    makeBackground();
     configureCamera();
-    scaleFactor.set(0.3);
-    mainPane.getChildren().add(group);
+    render();
     root.setMaxWidth(width);
     root.setMaxHeight(height);
     root.setMinWidth(width);
     root.setMinHeight(height);
+    scaleFactor.bind(root.widthProperty().subtract(borderx).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+    scaleFactorHeight.bind(root.heightProperty().subtract(borderx).divide(420));
+    mainPane.getChildren().add(group);
+
+
+  }
+  public void render(){
+    group.getChildren().removeAll(group.getChildren());
+
+    makeBackground();
     mainPane.setBackground(new Background(new BackgroundFill(GlobalVariables.bgRunway,null,null)));
     //root.getStyleClass().add("runway-background");
 
@@ -320,9 +328,6 @@ public class RunwayScene extends SceneAbstract {
     addTopView();
     makeRunway();
     makeCGA(false);
-    scaleFactor.bind(root.widthProperty().subtract(borderx).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
-    scaleFactorHeight.bind(root.heightProperty().subtract(borderx).divide(420));
-    logger.info(getClass().toString());
 
     try {
       renderObstacle(appWindow.runway.getRunwayObstacle());
@@ -330,9 +335,6 @@ public class RunwayScene extends SceneAbstract {
       logger.error(e);
     }
 
-
-    Pane arrowPane = new Pane();
-    root.getChildren().add(arrowPane);
     buildLabels();
 
 
@@ -346,8 +348,6 @@ public class RunwayScene extends SceneAbstract {
             new SimpleDoubleProperty(1).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             Color.BLACK);
-
-
   }
 
   /**
