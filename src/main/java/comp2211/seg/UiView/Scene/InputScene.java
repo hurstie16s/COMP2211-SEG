@@ -263,7 +263,7 @@ public class InputScene extends SceneAbstract {
 
     HBox segment = makeBoundingBox(new SimpleStringProperty(label),width/3,data);
     parent.getChildren().add(segment);
-    data.textProperty().bind(Bindings.when(Bindings.lessThan(limit,property)).then(property.asString()).otherwise(new
+    data.textProperty().bind(Bindings.when(Bindings.lessThan(limit,property)).then(property.asString().concat(units)).otherwise(new
             SimpleStringProperty("Error")));
     return data;
   }

@@ -49,11 +49,33 @@ public class HelpScene extends Scene {
         keyView.setScaleY(scale);
         Text descView = new Text(desc);
         descView.setFill(Color.WHITE);
-        descView.setFont(new Font("Calibri",16));
+        descView.setFont(new Font("Calibri",24));
 
         imagePane.getChildren().add(imageView);
         imagePane.getChildren().add(keyView);
         box.getChildren().add(imagePane);
+        box.getChildren().add(descView);
+        root.setMaxWidth(Math.max(root.getMaxWidth(),(descView.boundsInLocalProperty().get().getWidth()+20)));
+        root.getChildren().add(box);
+        root.setMaxHeight(24*root.getChildren().size());
+    }
+    public void makeColour(Color colour, String desc){
+
+        HBox box = new HBox();
+        StackPane colourPane = new StackPane();
+
+
+        colourPane.setMinWidth(24);
+        colourPane.setMaxWidth(24);
+        colourPane.setMinHeight(24);
+        colourPane.setMaxHeight(24);
+        colourPane.setBackground(new Background(new BackgroundFill(colour,null,null)));
+
+        Text descView = new Text(desc);
+        descView.setFill(Color.WHITE);
+        descView.setFont(new Font("Calibri",24));
+
+        box.getChildren().add(colourPane);
         box.getChildren().add(descView);
         root.setMaxWidth(Math.max(root.getMaxWidth(),(descView.boundsInLocalProperty().get().getWidth()+20)));
         root.getChildren().add(box);
@@ -71,8 +93,20 @@ public class HelpScene extends Scene {
                 case "comp2211.seg.UiView.Scene.RunwaySceneLoader":
                     makeKey("Esc", "Navigate back to home screen");
                     makeKey("T", "Toggle between top and side views");
+                    makeColour(Color.BLUE,"Cleared and graded area");
+                    makeColour(Color.DARKCYAN,"Approach/Take off Slope");
+                    makeColour(Color.DARKGOLDENROD,"Clearway");
+                    makeColour(Color.VIOLET,"Stopway");
+                    makeColour(Color.SADDLEBROWN,"RESA");
+                    makeColour(Color.GREY,"Runway");
                     break;
                 case "comp2211.seg.UiView.Scene.MainScene":
+                    makeColour(Color.BLUE,"Cleared and graded area");
+                    makeColour(Color.DARKCYAN,"Approach/Take off Slope");
+                    makeColour(Color.DARKGOLDENROD,"Clearway");
+                    makeColour(Color.VIOLET,"Stopway");
+                    makeColour(Color.SADDLEBROWN,"RESA");
+                    makeColour(Color.GREY,"Runway");
                     break;
 
             }
