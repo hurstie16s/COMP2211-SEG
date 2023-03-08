@@ -3,8 +3,6 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.App;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.HandlerPane;
-import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.StringExpression;
@@ -79,7 +77,6 @@ public class InputScene extends SceneAbstract {
     logger.info("building");
     units.bind(appWindow.runway.unitsProperty());
 
-    //mainPane.getStyleClass().add("home-background");
     var layout = new HBox();
     root.widthProperty().addListener(new ChangeListener<Number>() {
       @Override
@@ -92,9 +89,9 @@ public class InputScene extends SceneAbstract {
     layout.setMaxWidth(width);
     layout.setMinWidth(width);
     var inputs = new VBox();
-    var calculations = new VBox();
+    var calculationsButtons = new HBox();
     var outputs = new VBox();
-    layout.getChildren().addAll(inputs, calculations, outputs);
+    layout.getChildren().addAll(inputs, outputs);
 
     makeTextField(inputs, new SimpleStringProperty(
         "TORA (").concat(units).concat(")"),
@@ -111,19 +108,18 @@ public class InputScene extends SceneAbstract {
     makeTextField(inputs, new SimpleStringProperty("Obstacle height (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().heightProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle displacement (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().distFromThresholdProperty());
 
-    //var landingMode = makeButton(calculations, "Landing","Taking off", appWindow.runway.landingModeProperty());
-    var direction = makeButton(calculations, "Towards","Away", appWindow.runway.directionProperty());
-    var hasObstacle = makeButton(calculations, "Obstacle","Clear", appWindow.runway.hasRunwayObstacleProperty());
+    //var landingMode = makeButton(calculationsButtons, "Landing","Taking off", appWindow.runway.landingModeProperty());
+    makeButton(calculationsButtons, "Towards","Away", appWindow.runway.directionProperty());
+    makeButton(calculationsButtons, "Obstacle","Clear", appWindow.runway.hasRunwayObstacleProperty());
 
-
-    var leftTora = makeOutputLabel(outputs, "Top Tora", appWindow.runway.leftToraProperty(), new SimpleDoubleProperty(0));
-    var leftToda = makeOutputLabel(outputs, "Top Toda", appWindow.runway.leftTodaProperty(), appWindow.runway.clearwayRightProperty());
-    var leftAsda = makeOutputLabel(outputs, "Top Asda", appWindow.runway.leftAsdaProperty(), appWindow.runway.stopwayRightProperty());
-    var leftLda = makeOutputLabel(outputs, "Top Lda", appWindow.runway.leftLdaProperty(), new SimpleDoubleProperty(0));
-    var rightTora = makeOutputLabel(outputs, "Bottom Tora", appWindow.runway.rightToraProperty(), new SimpleDoubleProperty(0));
-    var rightToda = makeOutputLabel(outputs, "Bottom Toda", appWindow.runway.rightTodaProperty(), appWindow.runway.clearwayLeftProperty());
-    var rightAsda = makeOutputLabel(outputs, "Bottom Asda", appWindow.runway.rightAsdaProperty(), appWindow.runway.stopwayLeftProperty());
-    var rightLda = makeOutputLabel(outputs, "Bottom Lda", appWindow.runway.rightLdaProperty(), new SimpleDoubleProperty(0));
+    makeOutputLabel(outputs, "Top Tora", appWindow.runway.leftToraProperty(), new SimpleDoubleProperty(0));
+    makeOutputLabel(outputs, "Top Toda", appWindow.runway.leftTodaProperty(), appWindow.runway.clearwayRightProperty());
+    makeOutputLabel(outputs, "Top Asda", appWindow.runway.leftAsdaProperty(), appWindow.runway.stopwayRightProperty());
+    makeOutputLabel(outputs, "Top Lda", appWindow.runway.leftLdaProperty(), new SimpleDoubleProperty(0));
+    makeOutputLabel(outputs, "Bottom Tora", appWindow.runway.rightToraProperty(), new SimpleDoubleProperty(0));
+    makeOutputLabel(outputs, "Bottom Toda", appWindow.runway.rightTodaProperty(), appWindow.runway.clearwayLeftProperty());
+    makeOutputLabel(outputs, "Bottom Asda", appWindow.runway.rightAsdaProperty(), appWindow.runway.stopwayLeftProperty());
+    makeOutputLabel(outputs, "Bottom Lda", appWindow.runway.rightLdaProperty(), new SimpleDoubleProperty(0));
 
     root.getChildren().add(layout);
   }
