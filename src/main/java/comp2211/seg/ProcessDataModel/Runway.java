@@ -17,18 +17,12 @@ public class Runway {
     private static final Logger logger = LogManager.getLogger(Runway.class);
 
     // Runway dimensions and properties
-    private final SimpleDoubleProperty clearwayRightWidth = new SimpleDoubleProperty(500);
-    private final SimpleDoubleProperty clearwayRightHeight = new SimpleDoubleProperty(150);
-    private final SimpleDoubleProperty clearwayLeftWidth = new SimpleDoubleProperty(500);
-    private final SimpleDoubleProperty clearwayLeftHeight = new SimpleDoubleProperty(150);
-    private final SimpleDoubleProperty stopwayRight = new SimpleDoubleProperty(150);
-    private final SimpleDoubleProperty stopwayLeft = new SimpleDoubleProperty(150);
-    private final SimpleDoubleProperty stripEndRight = new SimpleDoubleProperty(60);
-    private final SimpleDoubleProperty stripEndLeft = new SimpleDoubleProperty(60);
-    private final SimpleDoubleProperty RESARightWidth = new SimpleDoubleProperty(240);
-    private final SimpleDoubleProperty RESARightHeight = new SimpleDoubleProperty(90);
-    private final SimpleDoubleProperty RESALeftWidth = new SimpleDoubleProperty(240);
-    private final SimpleDoubleProperty RESALeftHeight = new SimpleDoubleProperty(90);
+    private final SimpleDoubleProperty clearway = new SimpleDoubleProperty(500);
+    private final SimpleDoubleProperty clearwayHeight = new SimpleDoubleProperty(150);
+    private final SimpleDoubleProperty stopway = new SimpleDoubleProperty(150);
+    private final SimpleDoubleProperty stripEnd = new SimpleDoubleProperty(60);
+    private final SimpleDoubleProperty RESAWidth = new SimpleDoubleProperty(240);
+    private final SimpleDoubleProperty RESAHeight = new SimpleDoubleProperty(90);
 
     //Inputs
 
@@ -44,13 +38,15 @@ public class Runway {
     private final SimpleDoubleProperty toda = new SimpleDoubleProperty(1800);
     private final SimpleDoubleProperty asda = new SimpleDoubleProperty(1600);
     private final SimpleDoubleProperty lda = new SimpleDoubleProperty(1400);
-    private final SimpleDoubleProperty workingTora = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty workingToda = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty workingAsda = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty workingLda = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty rightTora = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty rightToda = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty rightAsda = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty rightLda = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty leftTora = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty leftToda = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty leftAsda = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty leftLda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty dispThreshold = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty stopway = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty clearway = new SimpleDoubleProperty(0);
 
     private Obstacle runwayObstacle = null;
 
@@ -109,6 +105,11 @@ public class Runway {
     public void addObstacle(Obstacle obstacleToAdd) {
         this.runwayObstacle = obstacleToAdd;
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignator.get());
+
+        tora.bind(runwayLength);
+        toda.bind(runwayLength.add(clearway));
+        asda.bind(runwayLength.add(stopway));
+        lda.bind(runwayLength.subtract(dispThreshold));
         recalculate();
     }
     /**
@@ -119,11 +120,7 @@ public class Runway {
         if (runwayObstacle == obstacleToRemove) {
             this.runwayObstacle = null;
         }
-        // set values back to original
-        workingTora.set(tora.get());
-        workingToda.set(toda.get());
-        workingAsda.set(asda.get());
-        workingLda.set(lda.get());
+        recalculate();
         logger.info("Removed Obstacle "+ runwayObstacle.getObstacleDesignator() + " from runway " + runwayDesignator.get());
         logger.info("Return runway to original state");
     }
@@ -136,20 +133,22 @@ public class Runway {
      based on the takeoff direction.
      */
     public void recalculate(){
-        if (landingMode.get()){
-            runwayLength.bind(lda);
-            if (runwayObstacle.distFromThresholdProperty().lessThan(runwayLength.get()/2).get()){
-                calculateLandOver();
-            } else {
-                calculateLandTowards();
-            }
-        } else {
-            runwayLength.bind(tora);
-            if (runwayObstacle.distFromThresholdProperty().lessThan(runwayLength.get()/2).get()){
-                calculateTakeOffAway();
-            } else {
-                calculateTakeOffToward();
+        rightTora.bind(tora);
+        rightToda.bind(toda);
+        rightAsda.bind(asda);
+        rightLda.bind(lda);
+        leftTora.bind(tora);
+        leftToda.bind(toda);
+        leftAsda.bind(asda);
+        leftLda.bind(lda);
 
+        if (runwayObstacle != null) {
+            if (direction.get()) {
+                calculateTakeOffToward();
+                calculateLandTowards();
+            } else {
+                calculateLandOver();
+                calculateTakeOffAway();
             }
         }
     }
@@ -158,105 +157,92 @@ public class Runway {
      Calculations for when a plane is landing over an obstacle
      */
     public void calculateLandOver() {
-        if (runwayObstacle != null) {
-            /*
-            Not really needed for landing calculations
-            workingTora.bind(tora.subtract(BLASTZONE).subtract(runwayObstacle.distFromThresholdProperty()).subtract(dispThreshold));
-            workingAsda.bind(workingTora.add(stopway));
-            workingToda.bind(workingTora.add(clearway));
-             */
-            SimpleDoubleProperty obstacleSlopeCalculation;
-            if (runwayObstacle.heightProperty().multiply(SLOPE).get() > MINRESA.get()) {
-                obstacleSlopeCalculation = new SimpleDoubleProperty(runwayObstacle.heightProperty().multiply(SLOPE).get());
-            } else {
-                obstacleSlopeCalculation = MINRESA;
-            }
-            SimpleDoubleProperty ldaSubtraction;
-            if (runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND).get() > BLASTZONE.get()) {
-                ldaSubtraction = new SimpleDoubleProperty(runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND).get());
-            } else {
-                ldaSubtraction = BLASTZONE;
-            }
-            workingLda.bind(lda.subtract(ldaSubtraction));
+        /*
+        Not really needed for landing calculations
+        workingTora.bind(tora.subtract(BLASTZONE).subtract(runwayObstacle.distFromThresholdProperty()).subtract(dispThreshold));
+        workingAsda.bind(workingTora.add(stopway));
+        workingToda.bind(workingTora.add(clearway));
+         */
+        SimpleDoubleProperty obstacleSlopeCalculation;
+        if (runwayObstacle.heightProperty().multiply(SLOPE).get() > MINRESA.get()) {
+            obstacleSlopeCalculation = new SimpleDoubleProperty(runwayObstacle.heightProperty().multiply(SLOPE).get());
         } else {
-            workingLda.bind(lda);
+            obstacleSlopeCalculation = MINRESA;
         }
-        workingTora.bind(tora);
-        workingAsda.bind(asda);
-        workingToda.bind(toda);
+        SimpleDoubleProperty leftLdaSubtraction;
+        if (runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND).get() > BLASTZONE.get()) {
+            leftLdaSubtraction = new SimpleDoubleProperty(runwayObstacle.distFromThresholdProperty().add(obstacleSlopeCalculation).add(STRIPEND).get());
+        } else {
+            leftLdaSubtraction = BLASTZONE;
+        }
+        SimpleDoubleProperty rightLdaSubtraction;
+        if (runwayLength.subtract(runwayObstacle.distFromThresholdProperty()).add(obstacleSlopeCalculation).add(STRIPEND).get() > BLASTZONE.get()) {
+            rightLdaSubtraction = new SimpleDoubleProperty(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()).add(obstacleSlopeCalculation).add(STRIPEND).get());
+        } else {
+            rightLdaSubtraction = BLASTZONE;
+        }
+
+        rightLda.bind(lda.subtract(leftLdaSubtraction));
+        leftLda.bind(lda.subtract(rightLdaSubtraction));
     }
 
     /**
      Calculations for when a plane is landing towards an obstacle
      */
     public void calculateLandTowards() {
-        if (runwayObstacle != null) {
-            /*
-            Not really needed for landing calc
-            workingTora.bind(runwayObstacle.distFromThresholdProperty().subtract(runwayObstacle.heightProperty().multiply(50)).subtract(STRIPEND.get()));
-            workingAsda.bind(workingTora);
-            workingToda.bind(workingTora);
-             */
-            workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
-            logger.info("Re-calculated LDA");
-        } else {
-            workingLda.bind(lda);
-        }
-        workingTora.bind(tora);
-        workingAsda.bind(asda);
-        workingToda.bind(toda);
+        /*
+        Not really needed for landing calc
+        workingTora.bind(runwayObstacle.distFromThresholdProperty().subtract(runwayObstacle.heightProperty().multiply(50)).subtract(STRIPEND.get()));
+        workingAsda.bind(workingTora);
+        workingToda.bind(workingTora);
+         */
+        leftLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
+        rightLda.bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()).subtract(MINRESA).subtract(STRIPEND));
+        logger.info("Re-calculated LDA");
+
     }
 
     /**
     Calculations for when a plane is taking-off towards an obstacle
      */
     public void calculateTakeOffToward() {
-        if (runwayObstacle != null) {
-
-            //Compare slope caused by obstacle to min RESA, so aircraft has time to stop before obstacle in case of aborted take-off
-            SimpleDoubleProperty obstacleSlopeCalculation;
-            if (runwayObstacle.heightProperty().multiply(SLOPE).get() > MINRESA.get()) {
-                obstacleSlopeCalculation = new SimpleDoubleProperty(runwayObstacle.heightProperty().multiply(SLOPE).get());
-            } else {
-                obstacleSlopeCalculation = MINRESA;
-            }
-
-            workingTora.bind(runwayObstacle.distFromThresholdProperty().add(dispThreshold.get()).subtract(obstacleSlopeCalculation.get()).subtract(STRIPEND.get()));
-            workingAsda.bind(workingTora);
-            workingToda.bind(workingTora);
-            /*
-            not needed for take-off
-            workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA.get()).subtract(STRIPEND.get()));
-            */
+        //Compare slope caused by obstacle to min RESA, so aircraft has time to stop before obstacle in case of aborted take-off
+        SimpleDoubleProperty obstacleSlopeCalculation;
+        if (runwayObstacle.heightProperty().multiply(SLOPE).get() > MINRESA.get()) {
+            obstacleSlopeCalculation = new SimpleDoubleProperty(runwayObstacle.heightProperty().multiply(SLOPE).get());
         } else {
-            workingTora.bind(tora);
-            workingAsda.bind(asda);
-            workingToda.bind(toda);
+            obstacleSlopeCalculation = MINRESA;
         }
+
+        rightTora.bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()).subtract(obstacleSlopeCalculation.get()).subtract(STRIPEND.get()));
+        rightAsda.bind(rightTora);
+        rightToda.bind(rightTora);
+        leftTora.bind(runwayObstacle.distFromThresholdProperty().subtract(obstacleSlopeCalculation.get()).subtract(STRIPEND.get()));
+        leftAsda.bind(leftTora);
+        leftToda.bind(leftTora);
+        /*
+        not needed for take-off
+        workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA.get()).subtract(STRIPEND.get()));
+        */
     }
 
     /**
      Calculations for when a plane is taking-off away from an obstacle
      */
     public void calculateTakeOffAway() {
-        if (runwayObstacle != null) {
+        SimpleDoubleProperty toraSubtraction = new SimpleDoubleProperty(Math.max(dispThreshold.get() + BLASTZONE.get(), STRIPEND.get() + MINRESA.get()));
 
-            SimpleDoubleProperty toraSubtraction = new SimpleDoubleProperty(Math.max(dispThreshold.get() + BLASTZONE.get(), STRIPEND.get() + MINRESA.get()));
+        rightTora.bind(tora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(toraSubtraction));
+        rightAsda.bind(rightTora.add(stopway));
+        rightToda.bind(rightTora.add(clearway));
+        leftTora.bind(tora.subtract(runwayLength.subtract(runwayObstacle.distFromThresholdProperty())).subtract(toraSubtraction));
+        leftAsda.bind(leftTora);
+        leftToda.bind(leftTora);
 
-            workingTora.bind(tora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(toraSubtraction));
-            workingAsda.bind(workingTora.add(stopway));
-            workingToda.bind(workingTora.add(clearway));
-
-            /*
-            not needed for take-off
-            workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE).subtract(STRIPEND.get())));
-            */
-        } else {
-            workingTora.bind(tora);
-            workingAsda.bind(asda);
-            workingToda.bind(toda);
-            workingLda.bind(lda);
-        }
+        /*
+        not needed for take-off
+        workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE).subtract(STRIPEND.get())));
+        */
     }
 
 
@@ -445,204 +431,139 @@ public class Runway {
         return runwayWidth;
     }
     /**
-     * Returns the value of clearwayRightWidth.
-     * @return The value of clearwayRightWidth.
-     */
-    public double getClearwayRightWidth() {
-        return clearwayRightWidth.get();
-    }
-    /**
-     * Returns the SimpleDoubleProperty object representing clearwayRightWidth.
-     * @return The SimpleDoubleProperty object representing clearwayRightWidth.
-     */
-    public SimpleDoubleProperty clearwayRightWidthProperty() {
-        return clearwayRightWidth;
-    }
-    /**
-     * Returns the value of clearwayRightHeight.
-     * @return The value of clearwayRightHeight.
-     */
-    public double getClearwayRightHeight() {
-        return clearwayRightHeight.get();
-    }
-    /**
-     * Returns the SimpleDoubleProperty object representing clearwayRightHeight.
-     * @return The SimpleDoubleProperty object representing clearwayRightHeight.
-     */
-    public SimpleDoubleProperty clearwayRightHeightProperty() {
-        return clearwayRightHeight;
-    }
-    /**
      * Returns the value of clearwayLeftWidth.
      * @return The value of clearwayLeftWidth.
      */
-    public double getClearwayLeftWidth() {
-        return clearwayLeftWidth.get();
+    public double getClearwayWidth() {
+        return clearway.get();
     }
     /**
      * Returns the SimpleDoubleProperty object representing clearwayLeftWidth.
      * @return The SimpleDoubleProperty object representing clearwayLeftWidth.
      */
-    public SimpleDoubleProperty clearwayLeftWidthProperty() {
-        return clearwayLeftWidth;
+    public SimpleDoubleProperty clearwayWidthProperty() {
+        return clearway;
     }
     /**
      * Returns the value of clearwayLeftHeight.
      * @return The value of clearwayLeftHeight.
      */
-    public double getClearwayLeftHeight() {
-        return clearwayLeftHeight.get();
+    public double getClearwayHeight() {
+        return clearwayHeight.get();
     }
     /**
      * Returns the SimpleDoubleProperty object representing clearwayLeftHeight.
      * @return The SimpleDoubleProperty object representing clearwayLeftHeight.
      */
-    public SimpleDoubleProperty clearwayLeftHeightProperty() {
-        return clearwayLeftHeight;
+    public SimpleDoubleProperty clearwayHeightProperty() {
+        return clearwayHeight;
     }
     /**
      * Returns the value of stopwayRight.
      * @return The value of stopwayRight.
      */
-    public double getStopwayRight() {
-        return stopwayRight.get();
-    }
-    /**
-     * Returns the SimpleDoubleProperty object representing stopwayRight.
-     * @return The SimpleDoubleProperty object representing stopwayRight.
-     */
-    public SimpleDoubleProperty stopwayRightProperty() {
-        return stopwayRight;
-    }
-    /**
-     * Returns the value of stopwayLeft.
-     * @return The value of stopwayLeft.
-     */
-    public double getStopwayLeft() {
-        return stopwayLeft.get();
-    }
-    /**
-     * Returns the SimpleDoubleProperty object representing stopwayLeft.
-     * @return The SimpleDoubleProperty object representing stopwayLeft.
-     */
-    public SimpleDoubleProperty stopwayLeftProperty() {
-        return stopwayLeft;
+
+
+    public double getRightTora() {
+        return rightTora.get();
     }
 
-    /**
-     * Returns the value of stripEndRight.
-     * @return The value of stripEndRight.
-     */
-    public double getStripEndRight() {
-        return stripEndRight.get();
-    }
-    /**
-     * Returns the SimpleDoubleProperty object representing stripEndRight.
-     * @return The SimpleDoubleProperty object representing stripEndRight.
-     */
-    public SimpleDoubleProperty stripEndRightProperty() {
-        return stripEndRight;
-    }
-    /**
-     * Returns the value of stripEndLeft.
-     * @return The value of stripEndLeft.
-     */
-    public double getStripEndLeft() {
-        return stripEndLeft.get();
-    }
-    /**
-     * Returns the SimpleDoubleProperty object representing stripEndLeft.
-     * @return The SimpleDoubleProperty object representing stripEndLeft.
-     */
-    public SimpleDoubleProperty stripEndLeftProperty() {
-        return stripEndLeft;
-    }
-    /**
-     * Returns the value of RESARightWidth.
-     * @return The value of RESARightWidth.
-     */
-    public double getRESARightWidth() {
-        return RESARightWidth.get();
-    }
-    /**
-     * Returns the SimpleDoubleProperty object representing RESARightWidth.
-     * @return The SimpleDoubleProperty object representing RESARightWidth.
-     */
-    public SimpleDoubleProperty RESARightWidthProperty() {
-        return RESARightWidth;
-    }
-    /**
-     * Returns the value of RESARightHeight.
-     * @return The value of RESARightHeight.
-     */
-    public double getRESARightHeight() {
-        return RESARightHeight.get();
-    }
-    /**
-     * Returns the SimpleDoubleProperty object representing RESARightHeight.
-     * @return The SimpleDoubleProperty object representing RESARightHeight.
-     */
-    public SimpleDoubleProperty RESARightHeightProperty() {
-        return RESARightHeight;
-    }
-    /**
-     * Returns the value of RESALeftWidth.
-     * @return The value of RESALeftWidth.
-     */
-    public double getRESALeftWidth() {
-        return RESALeftWidth.get();
-    }
-    /**
-     * Returns the SimpleDoubleProperty object representing RESALeftWidth.
-     * @return The SimpleDoubleProperty object representing RESALeftWidth.
-     */
-    public SimpleDoubleProperty RESALeftWidthProperty() {
-        return RESALeftWidth;
-    }
-    /**
-     * Returns the value of RESALeftHeight.
-     * @return The value of RESALeftHeight.
-     */
-    public double getRESALeftHeight() {
-        return RESALeftHeight.get();
-    }
-    /**
-     * Returns the SimpleDoubleProperty object representing RESALeftHeight.
-     * @return The SimpleDoubleProperty object representing RESALeftHeight.
-     */
-    public SimpleDoubleProperty RESALeftHeightProperty() {
-        return RESALeftHeight;
+    public SimpleDoubleProperty rightToraProperty() {
+        return rightTora;
     }
 
-    public double getWorkingTora() {
-        return workingTora.get();
+    public double getRightToda() {
+        return rightToda.get();
     }
 
-    public SimpleDoubleProperty workingToraProperty() {
-        return workingTora;
+    public SimpleDoubleProperty rightTodaProperty() {
+        return rightToda;
     }
 
-    public double getWorkingToda() {
-        return workingToda.get();
+    public double getRightAsda() {
+        return rightAsda.get();
     }
 
-    public SimpleDoubleProperty workingTodaProperty() {
-        return workingToda;
+    public SimpleDoubleProperty rightAsdaProperty() {
+        return rightAsda;
     }
 
-    public double getWorkingAsda() {
-        return workingAsda.get();
+    public double getRightLda() {
+        return rightLda.get();
     }
 
-    public SimpleDoubleProperty workingAsdaProperty() {
-        return workingAsda;
+    public SimpleDoubleProperty rightLdaProperty() {
+        return rightLda;
     }
 
-    public double getWorkingLda() {
-        return workingLda.get();
+    public double getLeftTora() {
+        return leftTora.get();
     }
 
-    public SimpleDoubleProperty workingLdaProperty() {
-        return workingLda;
+    public SimpleDoubleProperty leftToraProperty() {
+        return leftTora;
+    }
+
+    public double getLeftToda() {
+        return leftToda.get();
+    }
+
+    public SimpleDoubleProperty leftTodaProperty() {
+        return leftToda;
+    }
+
+    public double getLeftAsda() {
+        return leftAsda.get();
+    }
+
+    public SimpleDoubleProperty leftAsdaProperty() {
+        return leftAsda;
+    }
+
+    public double getLeftLda() {
+        return leftLda.get();
+    }
+
+    public SimpleDoubleProperty leftLdaProperty() {
+        return leftLda;
+    }
+
+    public double getStopway() {
+        return stopway.get();
+    }
+
+    public SimpleDoubleProperty stopwayProperty() {
+        return stopway;
+    }
+
+    public double getClearway() {
+        return clearway.get();
+    }
+
+    public SimpleDoubleProperty clearwayProperty() {
+        return clearway;
+    }
+    public double getStripEnd() {
+        return stripEnd.get();
+    }
+
+    public SimpleDoubleProperty stripEndProperty() {
+        return stripEnd;
+    }
+
+    public double getRESAWidth() {
+        return RESAWidth.get();
+    }
+
+    public SimpleDoubleProperty RESAWidthProperty() {
+        return RESAWidth;
+    }
+
+    public double getRESAHeight() {
+        return RESAHeight.get();
+    }
+
+    public SimpleDoubleProperty RESAHeightProperty() {
+        return RESAHeight;
     }
 }

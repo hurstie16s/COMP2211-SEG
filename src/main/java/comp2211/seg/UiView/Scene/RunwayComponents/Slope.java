@@ -1,7 +1,12 @@
 package comp2211.seg.UiView.Scene.RunwayComponents;
 
+import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.ProcessDataModel.Obstacle;
+import comp2211.seg.UiView.Scene.InputScene;
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -10,6 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A custom JavaFX MeshView representing a triangular prism object representing
@@ -19,6 +26,7 @@ import javafx.scene.shape.TriangleMesh;
  */
 public class Slope extends MeshView {
 
+    private static final Logger logger = LogManager.getLogger(Slope.class);
     /** The direction of the ramp. */
     private final SimpleBooleanProperty direction;
 
@@ -33,38 +41,42 @@ public class Slope extends MeshView {
 
     /** The distance of the top of the ramp from the ground. */
     private final SimpleFloatProperty top = new SimpleFloatProperty();
+    private final SimpleFloatProperty start = new SimpleFloatProperty();
+    private final SimpleFloatProperty end = new SimpleFloatProperty();
 
     /** The scaling factor of the ramp. */
     private final SimpleDoubleProperty scaleFactor;
 
     /** The obstacle causing the ramp. */
     private final Obstacle obstacle;
+    private final AppWindow appWindow;
 
     /**
      * Adds a triangular prism object to the runway scene.
      *
-     * @param obstacle  the obstacle causing the issue
+     * @param appWindow  the application window
      * @param y         the height above the runway
      * @param w         the width of the runway
      * @param h         the height of the object
      * @param color     the colour of the object
      * @param direction the direction the ramp is facing
      */
-    public Slope(Obstacle obstacle, DoubleBinding y, DoubleBinding z, DoubleBinding w, DoubleBinding h, Color color, SimpleBooleanProperty direction, SimpleDoubleProperty scaleFactor, SimpleDoubleProperty scaleFactorHeight, SimpleDoubleProperty scaleFactorDepth){
+    public Slope(AppWindow appWindow, DoubleBinding x, DoubleBinding y, DoubleBinding z, DoubleBinding w, DoubleBinding h, Color color, SimpleBooleanProperty direction, SimpleDoubleProperty scaleFactor, SimpleDoubleProperty scaleFactorHeight, SimpleDoubleProperty scaleFactorDepth){
         this.scaleFactor = scaleFactor;
-        this.obstacle = obstacle;
+        this.obstacle = appWindow.runway.getRunwayObstacle();
+        this.appWindow = appWindow;
         PhongMaterial material = new PhongMaterial();
         material.setDiffuseColor(color);
         setMaterial(material);
         this.direction = direction;
 
-        DoubleBinding x = obstacle.distFromThresholdProperty().multiply(1).subtract(obstacle.widthProperty().divide(2));
-        SimpleFloatProperty end = new SimpleFloatProperty();
-        SimpleFloatProperty start = new SimpleFloatProperty();
         front.bind(y.multiply(scaleFactorHeight).add(w.multiply(scaleFactorHeight).divide(2)));
         back.bind(y.multiply(scaleFactorHeight).subtract(w.multiply(scaleFactorHeight).divide(2)));
-        start.bind(x.multiply(scaleFactor));
-        end.bind(x.multiply(scaleFactor).subtract(h.multiply(scaleFactor).multiply(49)));
+        start.bind((Bindings.when(direction).then(x.add(obstacle.distFromThresholdProperty()).subtract(obstacle.widthProperty().divide(2))).otherwise(x.add(obstacle.distFromThresholdProperty()).add(obstacle.widthProperty().divide(2))).multiply(scaleFactor)));
+        NumberBinding difference = Bindings.when(direction).then(obstacle.heightProperty().multiply(-50).add(obstacle.widthProperty().divide(2))).otherwise(obstacle.heightProperty().multiply(50).subtract(obstacle.widthProperty().divide(2)));
+        NumberBinding change = start.add(Bindings.when(Bindings.greaterThan(0, difference)).then(Bindings.when(Bindings.greaterThan(240, difference)).then(difference).otherwise(240)).otherwise(Bindings.when(Bindings.lessThan(-240, difference)).then(difference).otherwise(-240)).multiply(scaleFactor));
+        end.bind(Bindings.when(Bindings.lessThan(appWindow.runway.runwayLengthProperty().divide(2).multiply(scaleFactor),change)).then(start).otherwise(Bindings.when(Bindings.greaterThan(appWindow.runway.runwayLengthProperty().divide(-2).multiply(scaleFactor),change)).then(start).otherwise(change)));
+
         bottom.bind(z.multiply(scaleFactorDepth).multiply(-1));
         top.bind(h.add(z).multiply(scaleFactorDepth).multiply(-1));
         for (Property prop: new Property[] {
@@ -104,33 +116,13 @@ public class Slope extends MeshView {
      * triangular prism MeshView object with the updated vertices and faces.
      */
     public void redraw(){
-        float tempStart;
-        float tempEnd;
-        if (direction.get()) {
-            tempStart = (float) (obstacle.distFromThresholdProperty().get() - (obstacle.widthProperty().divide(2)).get());
-            tempEnd = (float) (tempStart - obstacle.getHeight()*49);
-        } else {
-            tempStart = (float) (obstacle.distFromThresholdProperty().get() + (obstacle.widthProperty().divide(2)).get());
-            tempEnd = (float) (tempStart + obstacle.getHeight()*49);
-        }
-
-        float difference = tempStart-tempEnd;
-        if (-240 < difference && difference < 240) {
-            if (tempStart < tempEnd){
-                tempEnd = tempStart + 240;
-            }else{
-                tempEnd = tempStart - 240;
-            }
-        }
-        tempStart = (float) (tempStart * scaleFactor.get());
-        tempEnd = (float) (tempEnd * scaleFactor.get());
         makePrism(new float[]{
-                tempStart, front.get(), bottom.get(),
-                tempEnd, front.get(), bottom.get(),
-                tempStart, front.get(), top.get(),
-                tempStart, back.get(), bottom.get(),
-                tempEnd, back.get(), bottom.get(),
-                tempStart, back.get(), top.get()
+                start.get(), front.get(), bottom.get(),
+                end.get(), front.get(), bottom.get(),
+                start.get(), front.get(), top.get(),
+                start.get(), back.get(), bottom.get(),
+                end.get(), back.get(), bottom.get(),
+                start.get(), back.get(), top.get()
         }, new int[]{
                 0, 0, 2, 0, 1, 0,
                 3, 0, 4, 0, 5, 0,

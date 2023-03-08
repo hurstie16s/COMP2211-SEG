@@ -5,6 +5,7 @@ import comp2211.seg.Controller.Interfaces.GlobalVars;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.ProcessDataModel.Obstacle;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -15,11 +16,9 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -84,25 +83,25 @@ public class InputScene extends SceneAbstract {
     layout.getChildren().addAll(inputs, calculations, outputs);
 
     makeTextField(inputs, new SimpleStringProperty("Runway Length (").concat(units).concat(")"), appWindow.runway.runwayLengthProperty());
-    makeTextField(inputs, new SimpleStringProperty("Runway Designator").concat(""), appWindow.runway.runwayDesignatorProperty(), "[0-9]|0[1-9]|[1-2][0-9]|3[0-6]");
-    makeTextField(inputs, new SimpleStringProperty("TORA (").concat(units).concat(")"), appWindow.runway.toraProperty());
-    makeTextField(inputs, new SimpleStringProperty("TODA (").concat(units).concat(")"), appWindow.runway.todaProperty());
-    makeTextField(inputs, new SimpleStringProperty("ASDA (").concat(units).concat(")"), appWindow.runway.asdaProperty());
-    makeTextField(inputs, new SimpleStringProperty("LDA (").concat(units).concat(")"), appWindow.runway.ldaProperty());
+    makeTextField(inputs, new SimpleStringProperty("Runway Designator").concat(""), appWindow.runway.runwayDesignatorProperty(), "([0-9]|0[1-9]|[1-2][0-9]|3[0-6])[lrcLRC]?");
     makeTextField(inputs, new SimpleStringProperty("Displaced Threshold (").concat(units).concat(")"), appWindow.runway.dispThresholdProperty());
 
-    var landingMode = makeButton(calculations, "Landing","Taking off", appWindow.runway.landingModeProperty());
-    var direction = makeButton(calculations, "Left","Right", appWindow.runway.directionProperty());
+    //var landingMode = makeButton(calculations, "Landing","Taking off", appWindow.runway.landingModeProperty());
+    var direction = makeButton(calculations, "Towards","Away", appWindow.runway.directionProperty());
 
-    var workingTora = makeOutputLabel(outputs, "workingTora", appWindow.runway.workingToraProperty());
-    var workingToda = makeOutputLabel(outputs, "workingToda", appWindow.runway.workingTodaProperty());
-    var workingAsda = makeOutputLabel(outputs, "workingAsda", appWindow.runway.workingAsdaProperty());
-    var workingLda = makeOutputLabel(outputs, "workingLda", appWindow.runway.workingLdaProperty());
+    var leftTora = makeOutputLabel(outputs, "rightTora", appWindow.runway.rightToraProperty(), new SimpleDoubleProperty(0));
+    var leftToda = makeOutputLabel(outputs, "rightToda", appWindow.runway.rightTodaProperty(), appWindow.runway.clearwayProperty());
+    var leftAsda = makeOutputLabel(outputs, "rightAsda", appWindow.runway.rightAsdaProperty(), appWindow.runway.stopwayProperty());
+    var leftLda = makeOutputLabel(outputs, "rightLda", appWindow.runway.rightLdaProperty(), new SimpleDoubleProperty(0));
+    var rightTora = makeOutputLabel(outputs, "leftTora", appWindow.runway.leftToraProperty(), new SimpleDoubleProperty(0));
+    var rightToda = makeOutputLabel(outputs, "leftToda", appWindow.runway.leftTodaProperty(), appWindow.runway.clearwayProperty());
+    var rightAsda = makeOutputLabel(outputs, "leftAsda", appWindow.runway.leftAsdaProperty(), appWindow.runway.stopwayProperty());
+    var rightLda = makeOutputLabel(outputs, "leftLda", appWindow.runway.leftLdaProperty(), new SimpleDoubleProperty(0));
 
 
-    Obstacle obstacle = new Obstacle("Test",10,300);
-    obstacle.widthProperty().set(30);
-    obstacle.lengthProperty().set(40);
+    Obstacle obstacle = new Obstacle("Test",10,700);
+    obstacle.lengthProperty().bind(appWindow.runway.runwayWidthProperty());
+    obstacle.widthProperty().bind(obstacle.heightProperty());
     appWindow.runway.addObstacle(obstacle);
 
     mainPane.getChildren().add(layout);
@@ -253,7 +252,7 @@ public class InputScene extends SceneAbstract {
    * @param label  the label to use for the Labels.
    * @return the created Label Node for displaying data.
    */
-  public Label makeOutputLabel(javafx.scene.layout.Pane parent, String label, SimpleDoubleProperty property) {
+  public Label makeOutputLabel(javafx.scene.layout.Pane parent, String label, SimpleDoubleProperty property,SimpleDoubleProperty limit) {
     Label data = new Label();
     data.setFont(GlobalVars.font);
     data.setTextFill(GlobalVars.fg);
@@ -261,12 +260,8 @@ public class InputScene extends SceneAbstract {
 
     HBox segment = makeBoundingBox(new SimpleStringProperty(label),width/3,data);
     parent.getChildren().add(segment);
-    property.addListener(new ChangeListener<Number>() {
-      @Override
-      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-        data.setText(String.valueOf(property.getValue()));
-      }
-    });
+    data.textProperty().bind(Bindings.when(Bindings.lessThan(limit,property)).then(property.asString()).otherwise(new
+            SimpleStringProperty("Error")));
     return data;
   }
   public HBox makeBoundingBox(StringExpression label, double width, Node node){
