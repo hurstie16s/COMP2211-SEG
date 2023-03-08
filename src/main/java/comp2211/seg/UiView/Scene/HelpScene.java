@@ -93,14 +93,16 @@ public class HelpScene extends Scene {
                 case "comp2211.seg.UiView.Scene.RunwaySceneLoader":
                     makeKey("Esc", "Navigate back to home screen");
                     makeKey("T", "Toggle between top and side views");
-                    makeColour(Color.BLUE,"Cleared and graded area");
+                    makeColour(Color.DARKRED,"Obstacle");
                     makeColour(Color.DARKCYAN,"Approach/Take off Slope");
+                    makeColour(Color.BLUE,"Cleared and graded area");
                     makeColour(Color.DARKGOLDENROD,"Clearway");
                     makeColour(Color.VIOLET,"Stopway");
                     makeColour(Color.SADDLEBROWN,"RESA");
                     makeColour(Color.GREY,"Runway");
                     break;
                 case "comp2211.seg.UiView.Scene.MainScene":
+                    makeColour(Color.DARKRED,"Obstacle");
                     makeColour(Color.BLUE,"Cleared and graded area");
                     makeColour(Color.DARKCYAN,"Approach/Take off Slope");
                     makeColour(Color.DARKGOLDENROD,"Clearway");
