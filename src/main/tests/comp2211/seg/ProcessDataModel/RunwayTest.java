@@ -132,9 +132,9 @@ class RunwayTest {
     ) {
         addObstacle(runway,obstacleToAdd);
         runway.calculateTakeOffToward();
-        assertEquals(expectedTORA, runway.getRightTora());
-        assertEquals(exceptedASDA, runway.getRightAsda());
-        assertEquals(expectedTODA, runway.getRightToda());
+        assertEquals(expectedTORA, runway.getLeftTora());
+        assertEquals(exceptedASDA, runway.getLeftAsda());
+        assertEquals(expectedTODA, runway.getLeftToda());
     }
 
     @DisplayName("Take-off calculations : Take-off away from an obstacle")
@@ -184,13 +184,13 @@ class RunwayTest {
                 Arguments.of(runway2, new Obstacle("obT1", 12, 3646), 2986, 2986, 2986),
                 Arguments.of(runway3, new Obstacle("obT2", 25, 2853), 1850, 1850, 1850),
                 Arguments.of(runway4, new Obstacle("obT3", 15, 3203), 2393, 2393, 2393),
-                Arguments.of(runway1, new Obstacle("obT4", 20, 3546), 2792, 2792, 2792)
+                Arguments.of(runway1, new Obstacle("obT4", 20, 3546), 2793, 2793, 2793)
         );
     }
     //TODO: Generate test data for take-off away
     private static Stream<Arguments> generateTakeOffAwayTestData() {
         return Stream.of(
-            Arguments.of(runway1, new Obstacle("obT1", 12, -50), 3146, 3146, 3146),
+            Arguments.of(runway1, new Obstacle("obT1", 12, -50), 3145, 3145, 3145),
             Arguments.of(runway4, new Obstacle("obT2", 25, 500), 2660, 2660, 2660),
             Arguments.of(runway3, new Obstacle("obT3", 15, 150), 2703, 2703, 2703),
             Arguments.of(runway2, new Obstacle("obT4", 20, 50), 3334, 3334, 3412)

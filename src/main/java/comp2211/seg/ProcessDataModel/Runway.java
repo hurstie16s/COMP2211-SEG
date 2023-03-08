@@ -196,11 +196,14 @@ public class Runway {
     public void calculateTakeOffToward() {
         //Compare slope caused by obstacle to min RESA, so aircraft has time to stop before obstacle in case of aborted take-off
         SimpleDoubleProperty obstacleSlopeCalculation = new SimpleDoubleProperty();
-        obstacleSlopeCalculation.bind(Bindings.when(Bindings.greaterThan(runwayObstacle.heightProperty().multiply(SLOPE),MINRESA.add(runwayObstacle.widthProperty().divide(2)))).then(runwayObstacle.heightProperty().multiply(SLOPE)).otherwise(MINRESA.add(runwayObstacle.widthProperty().divide(2))));
-        rightTora.bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()).subtract(obstacleSlopeCalculation).subtract(STRIPEND));
+        //obstacleSlopeCalculation.bind(Bindings.when(Bindings.greaterThan(runwayObstacle.heightProperty().multiply(SLOPE),MINRESA.add(runwayObstacle.widthProperty().divide(2)))).then(runwayObstacle.heightProperty().multiply(SLOPE)).otherwise(MINRESA.add(runwayObstacle.widthProperty().divide(2))));
+        obstacleSlopeCalculation.bind(Bindings.max(runwayObstacle.heightProperty().multiply(SLOPE), MINRESA.add(runwayObstacle.widthProperty().divide(2))));
+
+        rightTora.bind(runwayLength.add(dispThresholdRight).subtract(runwayObstacle.distFromThresholdProperty()).subtract(obstacleSlopeCalculation).subtract(STRIPEND));
         rightAsda.bind(rightTora);
         rightToda.bind(rightTora);
-        leftTora.bind(runwayObstacle.distFromThresholdProperty().subtract(obstacleSlopeCalculation).subtract(STRIPEND));
+
+        leftTora.bind(runwayObstacle.distFromThresholdProperty().add(dispThresholdLeft).subtract(obstacleSlopeCalculation).subtract(STRIPEND));
         leftAsda.bind(leftTora);
         leftToda.bind(leftTora);
         /*
