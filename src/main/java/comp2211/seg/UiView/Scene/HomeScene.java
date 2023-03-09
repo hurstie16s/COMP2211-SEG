@@ -132,6 +132,7 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
         appWindow.setAirport((Airport) t1);
       }
     });
+    airports.valueProperty().set(appWindow.airport);
     Button startApplication = new Button("Start Application");
     startApplication.setOnMousePressed(this::startApplication);
     Button importAirport = new Button("Import Airport");
