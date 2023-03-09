@@ -103,6 +103,8 @@ public abstract class SceneAbstract extends Scene{
       alignPane.setPickOnBounds(false);
       root.setPickOnBounds(false);
       help.toggleHelp(this.getClass().getName());
+      alignPane.maxWidthProperty().bind(root.widthProperty());
+      alignPane.minWidthProperty().bind(root.widthProperty());
     } else{
 
       help = new HelpScene(new VBox(), appWindow);
