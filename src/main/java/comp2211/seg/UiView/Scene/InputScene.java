@@ -359,6 +359,7 @@ public class InputScene extends SceneAbstract {
     title.textProperty().bind(label);
     title.setFont(GlobalVariables.font);
     title.setTextFill(GlobalVariables.fg);
+    title.setPadding(new Insets(5,10,5,10));
     segment.minWidthProperty().bind(width);
     segment.maxWidthProperty().bind(width);
     segment.getChildren().addAll(title,node);
