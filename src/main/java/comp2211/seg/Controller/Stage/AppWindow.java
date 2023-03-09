@@ -56,7 +56,11 @@ public class AppWindow {
     }
     public void addAirport(Airport airport){
         this.airport = airport;
-        stage.setTitle(airport.name);
+        if (airport.name.equals("")){
+            stage.setTitle("Runway tool");
+        }else {
+            stage.setTitle(airport.name);
+        }
         airports.add(airport);
         runway = airports.get(0).getRunways().get(0);
     }
