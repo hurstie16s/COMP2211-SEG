@@ -299,6 +299,8 @@ public class RunwayScene extends SceneAbstract {
     background.setMaterial(material);
     background.widthProperty().bind(mainPane.widthProperty());
     background.heightProperty().bind(mainPane.heightProperty());
+    background.translateXProperty().bind(appWindow.runway.clearwayLeftProperty().add(appWindow.runway.clearwayRightProperty()).add(appWindow.runway.runwayLengthProperty()).divide(2)
+            .subtract(appWindow.runway.clearwayLeftProperty().add(appWindow.runway.runwayLengthProperty().divide(2))).multiply(scaleFactor));
     group.getChildren().add(background);
   }
 
@@ -320,7 +322,6 @@ public class RunwayScene extends SceneAbstract {
     scaleFactor.bind(mainPane.widthProperty().subtract(border).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
     scaleFactorHeight.bind(mainPane.heightProperty().subtract(border).divide(420));
     mainPane.getChildren().add(group);
-
 
   }
   public void render(){
@@ -351,6 +352,7 @@ public class RunwayScene extends SceneAbstract {
             new SimpleDoubleProperty(0).multiply(1),
             Color.BLACK);
     makeScale();
+    group.translateXProperty().set(0);
   }
 
   /**
