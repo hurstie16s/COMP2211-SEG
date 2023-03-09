@@ -79,27 +79,27 @@ public class RunwayLabel extends Group {
         } else {
             labelRotateGroup.translateXProperty().bind(xOffset.multiply(scene.scaleFactorProperty()).subtract(label.getBoundsInLocal().getWidth() / 2));
         }
-        labelRotateGroup.translateYProperty().bind(scene.root.heightProperty().multiply(-0.5 * yOffset));
-        labelRotateGroup.translateZProperty().bind(scene.root.heightProperty().multiply(-0.5 * yOffset));
+        labelRotateGroup.translateYProperty().bind(scene.mainPane.heightProperty().multiply(-0.5 * yOffset));
+        labelRotateGroup.translateZProperty().bind(scene.mainPane.heightProperty().multiply(-0.5 * yOffset));
 
         Node leftHorizontal = makeLineHorizontal(
             xOffset,
             length.divide(1),
-            scene.root.heightProperty().multiply(0.5 * yOffset).multiply(-1),
+            scene.mainPane.heightProperty().multiply(0.5 * yOffset).multiply(-1),
             2,
             color
         );
 
         Group leftVertical = makeLineVertical(
                 xOffset,
-                scene.root.heightProperty().multiply(0.5 * yOffset).multiply(-1),
+                scene.mainPane.heightProperty().multiply(0.5 * yOffset).multiply(-1),
                 1,
                 color
         );
 
         Group rightVertical = makeLineVertical(
                 xOffset.subtract(length),
-                scene.root.heightProperty().multiply(0.5 * yOffset).multiply(-1),
+                scene.mainPane.heightProperty().multiply(0.5 * yOffset).multiply(-1),
                 1,
                 color
         );
@@ -170,10 +170,15 @@ public class RunwayLabel extends Group {
         Box box = new Box(thickness,thickness,100);
         box.translateXProperty().bind(start.multiply(scene.scaleFactorProperty()));
         box.translateZProperty().bind(box.depthProperty().divide(-2));
-        scene.root.heightProperty().addListener(new ChangeListener<>() {
+        scene.mainPane.heightProperty().addListener(new ChangeListener<>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 box.depthProperty().set(Math.sqrt(height.multiply(height).multiply(2).get()));
+                if (height.get() > 0) {
+                    box.translateZProperty().bind(box.depthProperty().divide(2));
+                } else {
+                    box.translateZProperty().bind(box.depthProperty().divide(-2));
+                }
             }
         });
         box.depthProperty().set(Math.sqrt(height.multiply(height).multiply(2).get()));

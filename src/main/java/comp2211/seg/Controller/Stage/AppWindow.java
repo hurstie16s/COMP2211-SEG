@@ -46,6 +46,10 @@ public class AppWindow {
         airports = new ArrayList<>();
 
 
+
+        addAirport(new Airport("Heathrow"));
+        addAirport(new Airport("Gatwick"));
+        addAirport(new Airport("Southampton"));
         // Setup appWindow
         setupStage();
         startHomeScene();
@@ -87,7 +91,7 @@ public class AppWindow {
      * Starts the home scene.
      */
     public void startHomeScene() {
-        loadScene(new HomeScene(new HandlerPane(width,height),this));
+        loadScene(new HomeScene(new Pane(),this, width, height));
     }
 
     /**

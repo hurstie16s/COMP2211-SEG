@@ -50,14 +50,10 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
    * @param root      the root pane of the scene
    * @param appWindow the application window of the scene
    */
-  public HomeScene(HandlerPane root, AppWindow appWindow) {
-    super(root, appWindow);
+  public HomeScene(Pane root, AppWindow appWindow, double width, double height) {
+    super(root, appWindow, width, height);
     this.appWindow = appWindow;
 
-
-    appWindow.addAirport(new Airport("Heathrow"));
-    appWindow.addAirport(new Airport("Gatwick"));
-    appWindow.addAirport(new Airport("Southampton"));
   }
 
   /**
@@ -140,12 +136,8 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
     startApplication.setOnMousePressed(this::startApplication);
     Button importAirport = new Button("Import Airport");
     Button newAirport = new Button("New Airport");
-
-
-
-
-
-
+    importAirport.setDisable(true);
+    newAirport.setDisable(true);
 
     TextFlow text = new TextFlow(title,desciption);
     text.setTextAlignment(TextAlignment.CENTER);
@@ -165,6 +157,8 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
     centrePane.getChildren().addAll(text, bottomPane);
     mainPane.getChildren().add(projectInfo);
     mainPane.getChildren().add(centrePane);
+    mainPane.maxWidthProperty().bind(root.widthProperty());
+    mainPane.minWidthProperty().bind(root.widthProperty());
   }
 
 }

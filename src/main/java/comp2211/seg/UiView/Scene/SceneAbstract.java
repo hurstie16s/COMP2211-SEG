@@ -26,7 +26,7 @@ public abstract class SceneAbstract extends Scene{
   public Pane root;
 
   /**The main pane of the scene.*/
-  protected StackPane mainPane;
+  public StackPane mainPane;
 
   /** The width of the scene.*/
   protected double width;

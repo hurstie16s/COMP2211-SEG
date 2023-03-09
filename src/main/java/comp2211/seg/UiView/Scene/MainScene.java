@@ -3,6 +3,7 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.App;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -68,7 +69,7 @@ public class MainScene extends SceneAbstract{
                     help.toggleHelp(this.getClass().getCanonicalName());
                     break;
                 case ESCAPE:
-                    App.getInstance().shutdown();
+                    Platform.runLater(appWindow::startHomeScene);
             }
         }));
     }
