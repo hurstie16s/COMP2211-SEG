@@ -107,7 +107,7 @@ public class MainScene extends SceneAbstract{
         layout.setMinWidth(width);
         mainPane.getChildren().add(layout);
         layout.setOnMousePressed((e) -> layout.requestFocus());
-        layout3.getChildren().addAll(layout2,appWindow.runway.makeErrorScene(root.widthProperty().divide(1),root.heightProperty().divide(1)));
+        layout3.getChildren().addAll(layout2,appWindow.runway.makeErrorScene(mainPane.widthProperty().divide(1),mainPane.heightProperty().divide(2)));
 
         layout2.setOnMousePressed((e) -> appWindow.startRunwayScene());
         root.widthProperty().addListener(new ChangeListener<Number>() {
