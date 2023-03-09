@@ -46,23 +46,24 @@ public class AppWindow {
         airports = new ArrayList<>();
 
 
-
         // Setup appWindow
         setupStage();
         startHomeScene();
-        //addAirport(new Airport(""));
         //startMainScene();
         //startRunwayScene();
     }
     public void addAirport(Airport airport){
-        this.airport = airport;
+        airports.add(airport);
+        runway = airport.getRunways().get(0);
+    }
+    public void setAirport(Airport airport){
         if (airport.name.equals("")){
             stage.setTitle("Runway tool");
         }else {
             stage.setTitle(airport.name);
         }
-        airports.add(airport);
-        runway = airports.get(0).getRunways().get(0);
+        this.airport = airport;
+        runway = airport.getRunways().get(0);
     }
 
     /**
@@ -153,5 +154,9 @@ public class AppWindow {
     public void cleanup(){
         //clear listeners
         //root.getChildren().removeAll(root.getChildren());
+    }
+
+    public ArrayList<Airport> getAirports() {
+        return airports;
     }
 }

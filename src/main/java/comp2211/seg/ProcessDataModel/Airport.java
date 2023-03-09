@@ -21,6 +21,9 @@ public class Airport {
         this.name = name;
         makeRunway();
     }
+    public String toString(){
+        return name;
+    }
 
     /**
      * Creates a new runway and adds it to the list of runways at the airport.

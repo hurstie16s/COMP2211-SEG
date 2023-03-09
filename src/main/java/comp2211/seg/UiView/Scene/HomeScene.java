@@ -6,13 +6,23 @@ import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.ProcessDataModel.Airport;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,6 +42,7 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
    */
   protected AppWindow appWindow;
   protected TextField nameEntry;
+  private ComboBox airports;
 
   /**
    * Constructor to create a HomeScene object.
@@ -42,6 +53,11 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
   public HomeScene(HandlerPane root, AppWindow appWindow) {
     super(root, appWindow);
     this.appWindow = appWindow;
+
+
+    appWindow.addAirport(new Airport("Heathrow"));
+    appWindow.addAirport(new Airport("Gatwick"));
+    appWindow.addAirport(new Airport("Southampton"));
   }
 
   /**
@@ -55,11 +71,11 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
       if(keyEvent.getCode().equals(KeyCode.ESCAPE)) {
         App.getInstance().shutdown();
       }
-      if(keyEvent.getCode().equals(KeyCode.ENTER)) {
-        appWindow.addAirport(new Airport(nameEntry.getText()));
-        Platform.runLater(appWindow::startMainScene);
-      }
     }));
+  }
+
+  private void startApplication(MouseEvent mouseEvent) {
+    Platform.runLater(appWindow::startMainScene);
   }
 
   /**
@@ -71,8 +87,12 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
     super.build();
     logger.info("building");
 
+
     Text projectInfo = new Text(SEG_INFO);
     projectInfo.setFill(Color.WHITE);
+    projectInfo.wrappingWidthProperty().bind(mainPane.widthProperty());
+    projectInfo.maxHeight(mainPane.heightProperty().get());
+    projectInfo.minHeight(mainPane.heightProperty().get());
     Text entryInfo = new Text(HOME_SCENE_INFO);
     entryInfo.setFill(Color.WHITE);
     nameEntry = new TextField();
@@ -81,12 +101,70 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
 
     var entryBox = new VBox();
     entryBox.getChildren().addAll(entryInfo, nameEntry);
-    BorderPane.setMargin(entryBox, new Insets(20, 500, 20, 500));
+    BorderPane.setMargin(entryBox, new Insets(20, 300, 20, 300));
     BorderPane.setMargin(projectInfo, new Insets(20, 20, 20, 20));
     VBox.setMargin(entryInfo, new Insets(5, 5, 25, 5));
     var menuPane = new BorderPane();
-    menuPane.setTop(projectInfo);
     menuPane.setCenter(entryBox);
-    mainPane.getChildren().add(menuPane);
+    menuPane.maxWidthProperty().bind(mainPane.widthProperty());
+    menuPane.minWidthProperty().bind(mainPane.widthProperty());
+    menuPane.maxHeightProperty().bind(mainPane.heightProperty());
+    menuPane.minHeightProperty().bind(mainPane.heightProperty());
+
+    VBox centrePane = new VBox();
+    centrePane.maxWidthProperty().bind(mainPane.widthProperty().divide(2));
+    centrePane.minWidthProperty().bind(mainPane.widthProperty().divide(2));
+    centrePane.maxHeightProperty().bind(mainPane.heightProperty());
+    centrePane.minHeightProperty().bind(mainPane.heightProperty());
+    centrePane.setAlignment(Pos.CENTER);
+
+
+    Text title = new Text("Runway Redeclaration Tool\n\n");
+    title.setFont(Font.font("Calibri", 48));
+    title.setFill(Color.WHITE);
+
+    Text desciption = new Text("Welcome! This runway redeclaration tool is designed to help air traffic control professionals visualise the impact of obstacles on declared distances to understand how to continue runway operations");
+    desciption.setFont(Font.font("Calibri", 24));
+    desciption.setFill(Color.WHITE);
+
+
+
+    airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
+    airports.valueProperty().addListener(new ChangeListener() {
+      @Override
+      public void changed(ObservableValue observableValue, Object o, Object t1) {
+        appWindow.setAirport((Airport) t1);
+      }
+    });
+    Button startApplication = new Button("Start Application");
+    startApplication.setOnMousePressed(this::startApplication);
+    Button importAirport = new Button("Import Airport");
+    Button newAirport = new Button("New Airport");
+
+
+
+
+
+
+
+    TextFlow text = new TextFlow(title,desciption);
+    text.setTextAlignment(TextAlignment.CENTER);
+
+    VBox buttonsPane = new VBox(startApplication,importAirport,newAirport);
+    VBox airportsPane = new VBox(airports);
+    airportsPane.maxHeightProperty().bind(buttonsPane.heightProperty());
+    airportsPane.minHeightProperty().bind(buttonsPane.heightProperty());
+
+    HBox bottomPane = new HBox(airportsPane,buttonsPane);
+    bottomPane.setAlignment(Pos.CENTER);
+    bottomPane.setPadding(new Insets(20));
+    buttonsPane.setPadding(new Insets(20));
+    airportsPane.setPadding(new Insets(20));
+    buttonsPane.setSpacing(10);
+
+    centrePane.getChildren().addAll(text, bottomPane);
+    mainPane.getChildren().add(projectInfo);
+    mainPane.getChildren().add(centrePane);
   }
+
 }
