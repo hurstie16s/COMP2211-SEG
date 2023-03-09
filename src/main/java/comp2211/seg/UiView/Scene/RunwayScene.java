@@ -291,8 +291,8 @@ public class RunwayScene extends SceneAbstract {
 //material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
     material.setDiffuseColor(Color.DARKGREEN);
     background.setMaterial(material);
-    background.widthProperty().bind(root.widthProperty());
-    background.heightProperty().bind(root.heightProperty());
+    background.widthProperty().bind(mainPane.widthProperty());
+    background.heightProperty().bind(mainPane.heightProperty());
     group.getChildren().add(background);
   }
 
@@ -311,8 +311,8 @@ public class RunwayScene extends SceneAbstract {
     root.setMaxHeight(height);
     root.setMinWidth(width);
     root.setMinHeight(height);
-    scaleFactor.bind(root.widthProperty().subtract(borderx).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
-    scaleFactorHeight.bind(root.heightProperty().subtract(borderx).divide(420));
+    scaleFactor.bind(mainPane.widthProperty().subtract(borderx).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+    scaleFactorHeight.bind(mainPane.heightProperty().subtract(borderx).divide(420));
     mainPane.getChildren().add(group);
 
 
