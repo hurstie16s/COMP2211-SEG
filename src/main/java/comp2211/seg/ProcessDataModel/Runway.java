@@ -102,7 +102,6 @@ public class Runway {
     public Runway() {
         for (Property prop: new Property[] {
                 runwayDesignator,
-                direction,
                 runwayLength,
                 hasRunwayObstacle
         }) {

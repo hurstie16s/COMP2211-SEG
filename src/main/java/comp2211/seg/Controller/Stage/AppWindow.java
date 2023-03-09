@@ -30,6 +30,7 @@ public class AppWindow {
     public HandlerPane root;
 
     public Runway runway;
+    public Airport airport;
 
     /**
      * Constructs an AppWindow object with the specified stage, width, and height.
@@ -54,6 +55,8 @@ public class AppWindow {
         //startRunwayScene();
     }
     public void addAirport(Airport airport){
+        this.airport = airport;
+        stage.setTitle(airport.name);
         airports.add(airport);
         runway = airports.get(0).getRunways().get(0);
     }
@@ -69,7 +72,7 @@ public class AppWindow {
      * Sets up the primary stage of the application.
      */
     public void setupStage() {
-        stage.setTitle("AppWindow");
+        stage.setTitle("Runway tool");
         stage.setMinWidth(width);
         stage.setMinHeight(height);
         stage.setOnCloseRequest(ev -> App.getInstance().shutdown());
