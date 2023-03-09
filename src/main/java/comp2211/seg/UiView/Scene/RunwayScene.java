@@ -328,16 +328,12 @@ public class RunwayScene extends SceneAbstract {
     addTopView();
     makeRunway();
     makeCGA(false);
-
     try {
       renderObstacle(appWindow.runway.getRunwayObstacle());
     } catch (Exception e){
       logger.error(e);
     }
-
     buildLabels();
-
-
 
     //CentreLine
     addCuboid(

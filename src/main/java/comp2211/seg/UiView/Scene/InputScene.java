@@ -116,14 +116,14 @@ public class InputScene extends SceneAbstract {
     makeButton(calculationsButtons, "Towards","Away", appWindow.runway.directionProperty());
     makeButton(calculationsButtons, "Obstacle","Clear", appWindow.runway.hasRunwayObstacleProperty());
 
-    makeOutputLabel(outputs, "Top Tora", appWindow.runway.leftToraProperty(), new SimpleDoubleProperty(0));
-    makeOutputLabel(outputs, "Top Toda", appWindow.runway.leftTodaProperty(), appWindow.runway.clearwayRightProperty());
-    makeOutputLabel(outputs, "Top Lda", appWindow.runway.leftLdaProperty(), new SimpleDoubleProperty(0));
-    makeOutputLabel(outputs, "Top Asda", appWindow.runway.leftAsdaProperty(), appWindow.runway.stopwayRightProperty());
-    makeOutputLabel(outputs, "Bottom Tora", appWindow.runway.rightToraProperty(), new SimpleDoubleProperty(0));
-    makeOutputLabel(outputs, "Bottom Toda", appWindow.runway.rightTodaProperty(), appWindow.runway.clearwayLeftProperty());
-    makeOutputLabel(outputs, "Bottom Lda", appWindow.runway.rightLdaProperty(), new SimpleDoubleProperty(0));
-    makeOutputLabel(outputs, "Bottom Asda", appWindow.runway.rightAsdaProperty(), appWindow.runway.stopwayLeftProperty());
+    makeOutputLabel(outputs, "Top Tora", appWindow.runway.leftToraProperty(), new SimpleDoubleProperty(0), appWindow.runway.leftTakeOffProperty());
+    makeOutputLabel(outputs, "Top Toda", appWindow.runway.leftTodaProperty(), appWindow.runway.clearwayRightProperty(), appWindow.runway.leftTakeOffProperty());
+    makeOutputLabel(outputs, "Top Lda", appWindow.runway.leftLdaProperty(), new SimpleDoubleProperty(0), appWindow.runway.leftLandProperty());
+    makeOutputLabel(outputs, "Top Asda", appWindow.runway.leftAsdaProperty(), appWindow.runway.stopwayRightProperty(), appWindow.runway.leftTakeOffProperty());
+    makeOutputLabel(outputs, "Bottom Tora", appWindow.runway.rightToraProperty(), new SimpleDoubleProperty(0), appWindow.runway.rightTakeOffProperty());
+    makeOutputLabel(outputs, "Bottom Toda", appWindow.runway.rightTodaProperty(), appWindow.runway.clearwayLeftProperty(), appWindow.runway.rightTakeOffProperty());
+    makeOutputLabel(outputs, "Bottom Lda", appWindow.runway.rightLdaProperty(), new SimpleDoubleProperty(0), appWindow.runway.rightLandProperty());
+    makeOutputLabel(outputs, "Bottom Asda", appWindow.runway.rightAsdaProperty(), appWindow.runway.stopwayLeftProperty(), appWindow.runway.rightTakeOffProperty());
 
     root.getChildren().add(layout);
   }
@@ -155,7 +155,7 @@ public class InputScene extends SceneAbstract {
     entry.setFocusTraversable(false);
     entry.setFont(GlobalVariables.font);
 
-    HBox segment = makeBoundingBox(label,root.widthProperty().divide(3),entry);
+    HBox segment = makeBoundingBox(label,root.widthProperty().divide(2),entry);
     parent.getChildren().add(segment);
     entry.textProperty().addListener(new ChangeListener<String>() {
       @Override
@@ -194,7 +194,7 @@ public class InputScene extends SceneAbstract {
     entry.setFocusTraversable(false);
     entry.setFont(GlobalVariables.font);
 
-    HBox segment = makeBoundingBox(label,root.widthProperty().divide(3),entry);
+    HBox segment = makeBoundingBox(label,root.widthProperty().divide(2),entry);
     parent.getChildren().add(segment);
     entry.textProperty().addListener(new ChangeListener<String>() {
       @Override
@@ -237,7 +237,7 @@ public class InputScene extends SceneAbstract {
     entries.addColumn(0,entry);
     entries.addColumn(1,entry2);
 
-    HBox segment = makeBoundingBox(label,root.widthProperty().divide(3),entries);
+    HBox segment = makeBoundingBox(label,root.widthProperty().divide(2),entries);
     parent.getChildren().add(segment);
     entry.textProperty().addListener(new ChangeListener<String>() {
       @Override
@@ -295,7 +295,7 @@ public class InputScene extends SceneAbstract {
    * @return the created Button Node.
    */
   public Node makeButton(javafx.scene.layout.Pane parent, String label1, String label2, SimpleBooleanProperty property) {
-    DoubleBinding w = root.widthProperty().divide(6);
+    DoubleBinding w = root.widthProperty().divide(5);
     HBox segment = new HBox();
     ToggleButton button = new ToggleButton(label1);
     button.minWidthProperty().bind(w);
@@ -339,16 +339,16 @@ public class InputScene extends SceneAbstract {
    * @param label  the label to use for the Labels.
    * @return the created Label Node for displaying data.
    */
-  public Label makeOutputLabel(javafx.scene.layout.Pane parent, String label, SimpleDoubleProperty property,SimpleDoubleProperty limit) {
+  public Label makeOutputLabel(javafx.scene.layout.Pane parent, String label, SimpleDoubleProperty property,SimpleDoubleProperty limit, SimpleBooleanProperty visibility) {
     Label data = new Label();
     data.setFont(GlobalVariables.font);
     data.setTextFill(GlobalVariables.fg);
     data.setPadding(new Insets(5,10,5,10));
     data.setText(String.valueOf(property.getValue()));
 
-    HBox segment = makeBoundingBox(new SimpleStringProperty(label),root.widthProperty().divide(3),data);
+    HBox segment = makeBoundingBox(new SimpleStringProperty(label),root.widthProperty().divide(2),data);
     parent.getChildren().add(segment);
-    data.textProperty().bind(Bindings.when(Bindings.lessThan(limit,property)).then(property.asString().concat(units)).otherwise(new
+    data.textProperty().bind(Bindings.when(Bindings.and(visibility, Bindings.lessThan(limit,property))).then(property.asString().concat(units)).otherwise(new
             SimpleStringProperty("Error")));
     return data;
   }
