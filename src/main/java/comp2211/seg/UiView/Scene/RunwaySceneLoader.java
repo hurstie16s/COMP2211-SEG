@@ -40,7 +40,7 @@ public class RunwaySceneLoader extends SceneAbstract{
     }
     public void build(){
         super.build();
-        makeHelp(true);
+        makeHelp(false);
         scene = new RunwayScene(new Pane(),appWindow, width, height);
         scene.build();
         scene.initialise();

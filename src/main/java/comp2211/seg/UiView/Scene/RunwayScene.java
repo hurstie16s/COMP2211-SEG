@@ -2,28 +2,23 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.ProcessDataModel.Obstacle;
 import comp2211.seg.UiView.Overlay.RunwayLabel;
 import comp2211.seg.UiView.Scene.RunwayComponents.ClearedGradedArea;
 import comp2211.seg.UiView.Scene.RunwayComponents.Slope;
-import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -97,7 +92,7 @@ public class RunwayScene extends SceneAbstract {
    */
   private final DoubleProperty angleZProperty = new SimpleDoubleProperty();
 
-  private final SimpleDoubleProperty borderx = new SimpleDoubleProperty(10);
+  private final SimpleDoubleProperty border = new SimpleDoubleProperty(10);
 
   /**
    * Constructs a new RunwayScene object.
@@ -223,6 +218,17 @@ public class RunwayScene extends SceneAbstract {
     group.getChildren().add(box);
     return box;
   }
+  public void makeScale(){
+    addCuboid(appWindow.runway.runwayLengthProperty().divide(-2).subtract(appWindow.runway.clearwayLeftProperty()).add(new SimpleDoubleProperty(100).divide(2)),
+            new SimpleDoubleProperty(-210).add(5),
+            mainPane.heightProperty().divide(2).subtract(border).divide(scaleFactorDepth),
+            new SimpleDoubleProperty(100).add(0),
+            new SimpleDoubleProperty(10).add(0),
+            new SimpleDoubleProperty(10).add(0),
+            Color.WHITE
+    );
+
+  }
 
   /**
    * Creates a 3D box representing the runway, textured with
@@ -311,8 +317,8 @@ public class RunwayScene extends SceneAbstract {
     root.setMaxHeight(height);
     root.setMinWidth(width);
     root.setMinHeight(height);
-    scaleFactor.bind(mainPane.widthProperty().subtract(borderx).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
-    scaleFactorHeight.bind(mainPane.heightProperty().subtract(borderx).divide(420));
+    scaleFactor.bind(mainPane.widthProperty().subtract(border).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+    scaleFactorHeight.bind(mainPane.heightProperty().subtract(border).divide(420));
     mainPane.getChildren().add(group);
 
 
@@ -344,6 +350,7 @@ public class RunwayScene extends SceneAbstract {
             new SimpleDoubleProperty(1).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             Color.BLACK);
+    makeScale();
   }
 
   /**

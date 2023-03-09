@@ -1,6 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,6 +9,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -80,6 +82,19 @@ public class HelpScene extends Scene {
         root.getChildren().add(box);
         root.setMaxHeight(24*root.getChildren().size());
     }
+    public void makeText(String desc){
+
+        TextFlow box = new TextFlow();
+        Text descView = new Text(desc);
+        descView.setFill(Color.WHITE);
+        descView.setFont(new Font("Calibri",24));
+        box.maxWidthProperty().bind(Bindings.min(Bindings.max(root.maxWidthProperty(),800),descView.boundsInLocalProperty().get().getWidth()));
+
+        root.setMaxWidth(Math.max(root.getMaxWidth(),(box.boundsInLocalProperty().get().getWidth()+20)));
+        box.getChildren().add(descView);
+        root.getChildren().add(box);
+        root.setMaxHeight(24*root.getChildren().size());
+    }
     public void toggleHelp(String className){
         //logger.info(className);
         if (!visible) {
@@ -108,6 +123,7 @@ public class HelpScene extends Scene {
                     makeColour(Color.VIOLET,"Stopway");
                     makeColour(Color.SADDLEBROWN,"RESA");
                     makeColour(Color.GREY,"Runway");
+                    makeText("The square in the top left corner shows the scale of the runway (10x100".concat(appWindow.runway.getUnits()).concat(")"));
                     break;
 
             }
