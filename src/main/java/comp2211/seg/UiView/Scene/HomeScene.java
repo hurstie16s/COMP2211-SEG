@@ -3,10 +3,8 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.App;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.ProcessDataModel.Airport;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -17,7 +15,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -70,9 +71,16 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
     }));
   }
 
+  /**
+   * This method starts the main application scene on the JavaFX application thread.
+   *
+   * @param mouseEvent The MouseEvent that triggered the method call.
+   * @return void
+   */
   private void startApplication(MouseEvent mouseEvent) {
     Platform.runLater(appWindow::startMainScene);
   }
+
 
   /**
    * Builds the HomeScene object.
