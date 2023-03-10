@@ -1,14 +1,13 @@
 package comp2211.seg.UiView.Scene;
 
-import comp2211.seg.App;
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.Node;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -78,6 +77,7 @@ public class MainScene extends SceneAbstract{
      * Builds the main scene by adding the GUI components
      * to the root handler pane.
      */
+
     public void build() {
         super.build();
         makeHelp(false);
@@ -89,27 +89,41 @@ public class MainScene extends SceneAbstract{
         scene2.initialise();
         scene3.initialise();
         scene3.toggleView();
-        GridPane layout = new GridPane();
-        GridPane layout2 = new GridPane();
+
+        GridPane layout = createGridPane();
+        GridPane layout2 = createGridPane();
         StackPane layout3 = new StackPane();
-        layout.setMinHeight(height/2);
-        layout.setMaxHeight(height/2);
-        layout.setMaxWidth(width);
-        layout.setMinWidth(width);
-        layout.setVgap(0);
-        layout.addRow(0,scene1.getRoot());
-        layout2.addColumn(0,scene2.getRoot());
-        layout2.addColumn(1,scene3.getRoot());
-        layout.addRow(1,layout3);
+        configureLayout(layout, height / 2, width);
+        configureLayout(layout2, height, width);
+
+        layout.addRow(0, scene1.getRoot());
+        layout2.addColumn(0, scene2.getRoot());
+        layout2.addColumn(1, scene3.getRoot());
+        layout.addRow(1, layout3);
+        mainPane.getChildren().add(layout);
+
+        layout.setOnMousePressed((e) -> layout.requestFocus());
+        layout3.getChildren().addAll(layout2, appWindow.runway.makeErrorScene(mainPane.widthProperty().divide(1), mainPane.heightProperty().divide(2)));
+        layout2.setOnMousePressed((e) -> appWindow.startRunwayScene());
+
+        addWidthListeners(layout, scene1.root, scene2.root, scene3.root, scene2.mainPane, scene3.mainPane);
+        addHeightListeners(layout, scene1.root, scene2.root, scene3.root, scene2.mainPane, scene3.mainPane);
+    }
+
+    private void configureLayout(GridPane layout, double height, double width) {
         layout.setMinHeight(height);
         layout.setMaxHeight(height);
         layout.setMaxWidth(width);
         layout.setMinWidth(width);
-        mainPane.getChildren().add(layout);
-        layout.setOnMousePressed((e) -> layout.requestFocus());
-        layout3.getChildren().addAll(layout2,appWindow.runway.makeErrorScene(mainPane.widthProperty().divide(1),mainPane.heightProperty().divide(2)));
+    }
 
-        layout2.setOnMousePressed((e) -> appWindow.startRunwayScene());
+    private GridPane createGridPane() {
+        GridPane gridPane = new GridPane();
+        gridPane.setVgap(0);
+        return gridPane;
+    }
+
+    private void addWidthListeners(GridPane layout, Node... nodes) {
         root.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -117,18 +131,15 @@ public class MainScene extends SceneAbstract{
                 mainPane.setMaxWidth((Double) t1);
                 layout.setMaxWidth((Double) t1);
                 layout.setMinWidth((Double) t1);
-                scene1.root.setMinWidth((Double) t1);
-                scene1.root.setMaxWidth((Double) t1);
-                scene2.root.setMinWidth((Double) t1/2);
-                scene2.root.setMaxWidth((Double) t1/2);
-                scene3.root.setMinWidth((Double) t1/2);
-                scene3.root.setMaxWidth((Double) t1/2);
-                scene2.mainPane.setMinWidth((Double) t1/2);
-                scene2.mainPane.setMaxWidth((Double) t1/2);
-                scene3.mainPane.setMinWidth((Double) t1/2);
-                scene3.mainPane.setMaxWidth((Double) t1/2);
+                for (Node node : nodes) {
+                    node.minWidth((Double) t1);
+                    node.maxWidth((Double) t1);
+                }
             }
         });
+    }
+
+    private void addHeightListeners(GridPane layout, Node... nodes) {
         root.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -136,19 +147,15 @@ public class MainScene extends SceneAbstract{
                 mainPane.setMaxHeight((Double) t1);
                 layout.setMinHeight((Double) t1);
                 layout.setMaxHeight((Double) t1);
-                scene1.root.setMinHeight((Double) t1/2);
-                scene1.root.setMaxHeight((Double) t1/2);
-                scene2.root.setMinHeight((Double) t1/2);
-                scene2.root.setMaxHeight((Double) t1/2);
-                scene3.root.setMinHeight((Double) t1/2);
-                scene3.root.setMaxHeight((Double) t1/2);
-                scene2.mainPane.setMinHeight((Double) t1/2);
-                scene2.mainPane.setMaxHeight((Double) t1/2);
-                scene3.mainPane.setMinHeight((Double) t1/2);
-                scene3.mainPane.setMaxHeight((Double) t1/2);
-
+                for (Node node : nodes) {
+                    node.maxHeight((Double) t1 / 2);
+                    node.maxHeight((Double) t1 / 2);
+                }
             }
         });
     }
+
+
+
 }
 

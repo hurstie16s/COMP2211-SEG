@@ -46,6 +46,10 @@ public class App extends Application {
     var javaVersion = SystemInfo.javaVersion();
     var javafxVersion = SystemInfo.javafxVersion();
     logger.info("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
+    /*The logging level determines which log messages will be recorded and which will be discarded.
+    There are several logging levels available, including:
+    SEVERE (highest value),WARNING,INFO,CONFIG,FINE,FINER,FINEST (lowest value).
+    ALL - sets the logger to log all messages, regardless of their logging level.*/
     logger.atLevel(Level.ALL);
 
     instance = this;

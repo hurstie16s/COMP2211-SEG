@@ -3,9 +3,11 @@ package comp2211.seg.Controller.Stage;
 import comp2211.seg.App;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.Runway;
-import comp2211.seg.UiView.Scene.*;
+import comp2211.seg.UiView.Scene.HomeScene;
+import comp2211.seg.UiView.Scene.MainScene;
+import comp2211.seg.UiView.Scene.RunwaySceneLoader;
+import comp2211.seg.UiView.Scene.SceneAbstract;
 import javafx.application.Platform;
-import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -17,18 +19,13 @@ import java.util.ArrayList;
  * The AppWindow class is responsible for managing the application's window and scenes.
  */
 public class AppWindow {
-
     private static final Logger logger = LogManager.getLogger(AppWindow.class);
-
     private final Stage stage;
     private final int width;
     private final int height;
     private SceneAbstract currentScene;
     private ArrayList<Airport> airports;
-    private Scene scene;
-
     public HandlerPane root;
-
     public Runway runway;
     public Airport airport;
 
@@ -45,14 +42,14 @@ public class AppWindow {
         this.height = height;
         airports = new ArrayList<>();
 
-
-
         addAirport(new Airport("Heathrow"));
         addAirport(new Airport("Gatwick"));
         addAirport(new Airport("Southampton"));
         // Setup appWindow
         setupStage();
         startHomeScene();
+
+        //for individual scene testing:
         //startMainScene();
         //startRunwayScene();
     }
@@ -88,10 +85,12 @@ public class AppWindow {
     }
 
     /**
-     * Starts the home scene.
+     * This method starts the home scene of the application.
+     * It loads a new instance of the {@link HomeScene} class using a new {@link Pane}
+     * as the root node and sets the width and height of the scene.
      */
     public void startHomeScene() {
-        loadScene(new HomeScene(new Pane(),this, width, height));
+        loadScene(new HomeScene(new Pane(), this, width, height));
     }
 
     /**
@@ -120,7 +119,6 @@ public class AppWindow {
         newScene.build();
         currentScene = newScene;
         stage.setScene(currentScene);
-
         // Initialise the scene when ready
         Platform.runLater(() -> currentScene.initialise());
     }
@@ -152,15 +150,25 @@ public class AppWindow {
         return height;
     }
 
+
+    /**
+     * Returns a list of all the airports stored in this object.
+     *
+     * @return An {@link ArrayList} of {@link Airport} objects.
+     */
+    public ArrayList<Airport> getAirports() {
+        return airports;
+    }
+
     /**
      * Cleans up the remains of the previous scene.
      */
     public void cleanup(){
-        //clear listeners
-        //root.getChildren().removeAll(root.getChildren());
-    }
-
-    public ArrayList<Airport> getAirports() {
-        return airports;
+        if(this.root != null) {
+            root.getChildren().removeAll(root.getChildren());
+            logger.info("Scene clean");
+        } else {
+            logger.info("Nothing to clean");
+        }
     }
 }
