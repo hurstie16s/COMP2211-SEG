@@ -51,13 +51,18 @@ public class App extends Application {
     instance = this;
     this.stage = stage;
 
-    displayHomeView();
+    showAppWindow();
   }
 
   /**
-   * Displays the home view of the application.
+   * This method creates a new instance of the {@link AppWindow} class
+   * with the given width and height,using this stage as the parent.
+   * The method then displays the window on the stage.
+   *
+   * The window width and height are currently hardcoded:
+   * at {@link App#width} and {@link App#height} respectively.
    */
-  public void displayHomeView() {
+  public void showAppWindow() {
     logger.info("Opening AppWindow");
     new AppWindow(stage, width, height);
     stage.show();
