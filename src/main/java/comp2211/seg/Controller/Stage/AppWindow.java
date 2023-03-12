@@ -164,11 +164,11 @@ public class AppWindow {
      * Cleans up the remains of the previous scene.
      */
     public void cleanup(){
-        if(this.root != null) {
+        /* if(this.root != null) {
             root.getChildren().removeAll(root.getChildren());
             logger.info("Scene clean");
         } else {
             logger.info("Nothing to clean");
-        }
+        }*/
     }
 }
