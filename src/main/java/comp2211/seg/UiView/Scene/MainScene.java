@@ -86,46 +86,50 @@ public class MainScene extends SceneAbstract{
      * Builds the main scene by setting up the grid layout and adding scenes to it.
      * Also sets up event handlers and listeners for the nodes in the layout.
      */
-
     public void build() {
         super.build();
         makeHelp(false);
         logger.info("building main scene");
         //build and initialise Scenes
         buildInitialiseScenes(inputScene,runwayTopDownView,runwaySideView);
+        //toggle to get side view
+        runwaySideView.toggleView();
         //construct new Pane instances
-        GridPane inputLayout = new GridPane();
+        GridPane ioLayout = new GridPane();
         GridPane runwaysLayout = new GridPane();
+        GridPane baseLayout = new GridPane();
         StackPane multiLevelLayout = new StackPane();
-        //set initial size of inputLayout grid
-        configureLayoutSize(inputLayout, height / 2, width);
+        //set initial size of ioLayout grid
+        configureLayoutSize(baseLayout, height / 2, width);
         //gap to ensure that input scene is fully visible during stage resizing
-        inputLayout.setVgap(20);
+        ioLayout.setVgap(20);
         //place scenes into the grid
-        inputLayout.addRow(0, inputScene.getRoot());
+        ioLayout.addColumn(0, inputScene.getRoot());//add output
         runwaysLayout.addColumn(0, runwayTopDownView.getRoot());
         runwaysLayout.addColumn(1, runwaySideView.getRoot());
-        inputLayout.addRow(1, multiLevelLayout);
+        //place grids into grid
+        baseLayout.addRow(0,ioLayout);
+        baseLayout.addRow(1,runwaysLayout);
         //reset size after setting up the grid
-        configureLayoutSize(inputLayout, height, width);
+        configureLayoutSize(baseLayout, height, width);
         //addNodes
-        multiLevelLayout.getChildren().addAll(runwaysLayout, appWindow.runway.makeErrorScene(mainPane.widthProperty().divide(1), mainPane.heightProperty().divide(2)));
-        mainPane.getChildren().add(inputLayout);
+        multiLevelLayout.getChildren().addAll(baseLayout,appWindow.runway.makeErrorScene(mainPane.widthProperty().divide(1), mainPane.heightProperty().divide(2)));
+        mainPane.getChildren().add(multiLevelLayout);
         //set events
-        inputLayout.setOnMousePressed((e) -> inputLayout.requestFocus());
+        baseLayout.setOnMousePressed((e) -> baseLayout.requestFocus());
         runwaysLayout.setOnMousePressed((e) -> appWindow.startRunwayScene());
         //add listeners to width and height properties of the nodes
         root.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                setMinMaxWidth(t1,1, mainPane, inputLayout, inputScene.root);
+                setMinMaxWidth(t1,1, mainPane, baseLayout, inputScene.root);
                 setMinMaxWidth(t1,2, runwayTopDownView.root, runwaySideView.root, runwayTopDownView.mainPane, runwaySideView.mainPane);
             }
         });
         root.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                setMinMaxHeight(t1,1,mainPane,inputLayout);
+                setMinMaxHeight(t1,1,mainPane,baseLayout);
                 setMinMaxHeight(t1,2, inputScene.root, runwayTopDownView.root, runwaySideView.root, runwayTopDownView.mainPane, runwaySideView.mainPane);
             }
         });
