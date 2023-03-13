@@ -9,6 +9,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.lang.annotation.Target;
+import java.util.HashMap;
+import java.util.Map;
+
 public class BaseScene extends SceneAbstract{
     private Button airportButton;
     private Button obstacleButton;
@@ -32,41 +36,24 @@ public class BaseScene extends SceneAbstract{
     public void initialise() {
 
     }
-    public void showAirportConfig(MouseEvent mouseEvent){
-        airportButton.setBackground(new Background(new BackgroundFill(GlobalVariables.focusedBG,null,null)));
-        obstacleButton.setBackground(new Background(new BackgroundFill(GlobalVariables.unfocusedBG,null,null)));
-
-
-
-    }
-    public void showObstacleConfig(MouseEvent mouseEvent){
-        airportButton.setBackground(new Background(new BackgroundFill(GlobalVariables.unfocusedBG,null,null)));
-        obstacleButton.setBackground(new Background(new BackgroundFill(GlobalVariables.focusedBG,null,null)));
-
-    }
-
 
     public void build(){
         super.build();
         root.setBackground(new Background(new BackgroundFill(GlobalVariables.unfocusedBG,null,null)));
         mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-        airportButton = new Button("Airport Configuration");
-        obstacleButton = new Button("Obstacle Configuration");
-        airportButton.setTextFill(GlobalVariables.fg);
-        obstacleButton.setTextFill(GlobalVariables.fg);
-        airportButton.setOnMouseClicked(this::showAirportConfig);
-        obstacleButton.setOnMouseClicked(this::showObstacleConfig);
-        airportButton.maxHeightProperty().bind(root.heightProperty().divide(20).subtract(10));
-        airportButton.minHeightProperty().bind(root.heightProperty().divide(20).subtract(10));
-        obstacleButton.maxHeightProperty().bind(root.heightProperty().divide(20).subtract(10));
-        obstacleButton.minHeightProperty().bind(root.heightProperty().divide(20).subtract(10));
-        topbar = new HBox(airportButton,obstacleButton);
-        topbar.setPadding(new Insets(10,0,0,0));
-        showAirportConfig(null);
 
-
-        layout = new VBox(topbar);
-        mainPane.getChildren().add(layout);
+        Map<String,Pane> tabs = new HashMap<>();
+        tabs.put("Airport Configuration", makeAirportConfig());
+        tabs.put("Obstacle Configuration", makeObstacleConfig());
+        TabLayout tabLayout = new TabLayout(tabs,root.heightProperty().add(0),root.widthProperty().add(0));
+        mainPane.getChildren().add(tabLayout);
     }
+    public Pane makeAirportConfig(){
+        return new VBox();
+    }
+    public Pane makeObstacleConfig(){
+        return new VBox();
+    }
+
 
 }
