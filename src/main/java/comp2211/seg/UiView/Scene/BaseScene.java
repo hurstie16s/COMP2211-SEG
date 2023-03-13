@@ -52,7 +52,24 @@ public class BaseScene extends SceneAbstract{
         return new VBox();
     }
     public Pane makeObstacleConfig(){
-        return new VBox();
+        HBox obstacleLayout = new HBox();
+        VBox leftPane = new VBox();
+        Map<String,Pane> viewTabs = new HashMap<>();
+
+
+
+        RunwayScene runwayScene1 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/2.0,appWindow.getHeight()/2.0);
+        RunwayScene runwayScene2 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/2.0,appWindow.getHeight()/2.0);
+        runwayScene1.build();
+        runwayScene2.build();
+        runwayScene2.toggleView();
+        VBox dualView = new VBox(runwayScene1.getRoot(),runwayScene2.getRoot());
+        viewTabs.put("Both Views", dualView);
+        viewTabs.put("Top-Down Views", dualView);
+        viewTabs.put("Side-On Views", dualView);
+        TabLayout viewPane = new TabLayout(viewTabs, obstacleLayout.heightProperty().add(0),obstacleLayout.widthProperty().add(0));
+        obstacleLayout.getChildren().addAll(leftPane,viewPane);
+        return obstacleLayout;
     }
 
 
