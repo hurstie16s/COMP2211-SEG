@@ -85,21 +85,21 @@ public class RunwayLabel extends Group {
         Node leftHorizontal = makeLineHorizontal(
             xOffset,
             length.divide(1),
-            scene.mainPane.heightProperty().multiply(0.5 * yOffset).multiply(-1),
+                (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
             2,
             color
         );
 
         Group leftVertical = makeLineVertical(
                 xOffset,
-                scene.mainPane.heightProperty().multiply(0.5 * yOffset).multiply(-1),
+                (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
                 color
         );
 
         Group rightVertical = makeLineVertical(
                 xOffset.subtract(length),
-                scene.mainPane.heightProperty().multiply(0.5 * yOffset).multiply(-1),
+                (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
                 color
         );
@@ -171,6 +171,16 @@ public class RunwayLabel extends Group {
         box.translateXProperty().bind(start.multiply(scene.scaleFactorProperty()));
         box.translateZProperty().bind(box.depthProperty().divide(-2));
         scene.mainPane.heightProperty().addListener(new ChangeListener<>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                box.depthProperty().set(Math.sqrt(height.multiply(height).multiply(2).get()));
+                if (height.get() > 0) {
+                    box.translateZProperty().bind(box.depthProperty().divide(2));
+                } else {
+                    box.translateZProperty().bind(box.depthProperty().divide(-2));
+                }
+            }
+        });scene.mainPane.widthProperty().addListener(new ChangeListener<>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 box.depthProperty().set(Math.sqrt(height.multiply(height).multiply(2).get()));

@@ -6,6 +6,7 @@ import comp2211.seg.ProcessDataModel.Obstacle;
 import comp2211.seg.UiView.Overlay.RunwayLabel;
 import comp2211.seg.UiView.Scene.RunwayComponents.ClearedGradedArea;
 import comp2211.seg.UiView.Scene.RunwayComponents.Slope;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -51,6 +52,7 @@ public class RunwayScene extends SceneAbstract {
    * A boolean flag indicating whether the scene is in "view" mode.
    */
   private Boolean view = false;
+  public SimpleBooleanProperty portrait = new SimpleBooleanProperty(false);
 
   /**
    * The x-coordinate of the mouse when it is clicked.
@@ -92,7 +94,6 @@ public class RunwayScene extends SceneAbstract {
    */
   private final DoubleProperty angleZProperty = new SimpleDoubleProperty();
 
-  private final SimpleDoubleProperty border = new SimpleDoubleProperty(10);
 
   /**
    * Constructs a new RunwayScene object.
@@ -174,7 +175,7 @@ public class RunwayScene extends SceneAbstract {
    */
   @Override
   public void initialise() {
-    initBaseControls();
+    initControls();
   }
 
   /**
@@ -219,9 +220,9 @@ public class RunwayScene extends SceneAbstract {
     return box;
   }
   public void makeScale(){
-    addCuboid(appWindow.runway.runwayLengthProperty().divide(-2).subtract(appWindow.runway.clearwayLeftProperty()).add(new SimpleDoubleProperty(100).divide(2)),
-            new SimpleDoubleProperty(-210).add(5),
-            mainPane.heightProperty().divide(2).subtract(border).divide(scaleFactorDepth),
+    addCuboid(appWindow.runway.runwayLengthProperty().divide(-2).subtract(appWindow.runway.clearwayLeftProperty()).add(new SimpleDoubleProperty(120).divide(2)),
+            new SimpleDoubleProperty(-200).add(5),
+            (DoubleBinding) Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).subtract(20).divide(2).divide(scaleFactorDepth),
             new SimpleDoubleProperty(100).add(0),
             new SimpleDoubleProperty(10).add(0),
             new SimpleDoubleProperty(10).add(0),
@@ -297,8 +298,8 @@ public class RunwayScene extends SceneAbstract {
 //material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
     material.setDiffuseColor(Color.DARKGREEN);
     background.setMaterial(material);
-    background.widthProperty().bind(mainPane.widthProperty());
-    background.heightProperty().bind(mainPane.heightProperty());
+    background.widthProperty().bind((DoubleBinding) Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()));
+    background.heightProperty().bind((DoubleBinding) Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()));
     background.translateXProperty().bind(appWindow.runway.clearwayLeftProperty().add(appWindow.runway.clearwayRightProperty()).add(appWindow.runway.runwayLengthProperty()).divide(2)
             .subtract(appWindow.runway.clearwayLeftProperty().add(appWindow.runway.runwayLengthProperty().divide(2))).multiply(scaleFactor));
     group.getChildren().add(background);
@@ -315,12 +316,12 @@ public class RunwayScene extends SceneAbstract {
     logger.info("building");
     configureCamera();
     render();
-    root.setMaxWidth(width);
-    root.setMaxHeight(height);
-    root.setMinWidth(width);
-    root.setMinHeight(height);
-    scaleFactor.bind(mainPane.widthProperty().subtract(border).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
-    scaleFactorHeight.bind(mainPane.heightProperty().subtract(border).divide(420));
+    mainPane.maxWidthProperty().bind(root.widthProperty());
+    mainPane.minWidthProperty().bind(root.widthProperty());
+    mainPane.maxHeightProperty().bind(root.heightProperty());
+    mainPane.minHeightProperty().bind(root.heightProperty());
+    scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+    scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));
     mainPane.getChildren().add(group);
 
   }
@@ -347,7 +348,7 @@ public class RunwayScene extends SceneAbstract {
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
-            widthProperty().divide(scaleFactor.get()).multiply(1),
+            (DoubleBinding) Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(scaleFactor).multiply(1),
             new SimpleDoubleProperty(1).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             Color.BLACK);

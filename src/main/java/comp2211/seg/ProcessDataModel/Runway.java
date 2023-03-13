@@ -51,7 +51,7 @@ public class Runway {
     private final SimpleDoubleProperty inputRightTora = new SimpleDoubleProperty(1000);
     private final SimpleDoubleProperty inputRightToda = new SimpleDoubleProperty(1500);
     private final SimpleDoubleProperty inputRightAsda = new SimpleDoubleProperty(1150);
-    private final SimpleDoubleProperty inputRightLda = new SimpleDoubleProperty(900);
+    private final SimpleDoubleProperty inputRightLda = new SimpleDoubleProperty(1000);
     private final SimpleDoubleProperty inputLeftTora = new SimpleDoubleProperty(1000);
     private final SimpleDoubleProperty inputLeftToda = new SimpleDoubleProperty(1500);
     private final SimpleDoubleProperty inputLeftAsda = new SimpleDoubleProperty(1150);
