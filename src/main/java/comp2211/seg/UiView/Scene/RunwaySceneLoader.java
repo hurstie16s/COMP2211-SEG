@@ -41,7 +41,7 @@ public class RunwaySceneLoader extends SceneAbstract{
     public void build(){
         super.build();
         makeHelp(false);
-        scene = new RunwayScene(new Pane(),appWindow, width, height);
+        scene = new RunwayScene(new Pane(),appWindow, width, height,false);
         scene.build();
         scene.initialise();
         mainPane.getChildren().add(scene.getRoot());

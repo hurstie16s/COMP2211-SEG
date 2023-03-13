@@ -52,8 +52,8 @@ public class MainScene extends SceneAbstract{
         super(root, appWindow, width, height);
         this.root = root;
         scene1 = new InputScene(new Pane(),appWindow,appWindow.getWidth(),appWindow.getHeight()/2.0);
-        scene2 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/2.0,appWindow.getHeight()/2.0);
-        scene3 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/2.0,appWindow.getHeight()/2.0);
+        scene2 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/2.0,appWindow.getHeight()/2.0,false);
+        scene3 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/2.0,appWindow.getHeight()/2.0,false);
         this.appWindow = appWindow;
     }
 

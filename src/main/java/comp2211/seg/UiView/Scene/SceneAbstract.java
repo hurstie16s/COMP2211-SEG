@@ -5,6 +5,7 @@ import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
@@ -43,6 +44,13 @@ public abstract class SceneAbstract extends Scene{
 
   public SceneAbstract(Pane root, AppWindow appWindow, double width,double height) {
     super(root, appWindow.getWidth(), appWindow.getHeight(),Color.BLACK);
+    this.root = root;
+    this.width = width;
+    this.height = height;
+    this.appWindow = appWindow;
+  }
+public SceneAbstract(Pane root, AppWindow appWindow, double width,double height, boolean depthBuffer) {
+    super(root, appWindow.getWidth(), appWindow.getHeight(),depthBuffer, SceneAntialiasing.BALANCED);
     this.root = root;
     this.width = width;
     this.height = height;

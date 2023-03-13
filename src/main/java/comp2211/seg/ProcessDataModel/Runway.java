@@ -10,12 +10,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -66,6 +64,7 @@ public class Runway {
     private final SimpleDoubleProperty leftLda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty dispThresholdLeft = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(0);
+    public TextFlow changesHistory = new TextFlow();
 
     private Obstacle runwayObstacle = null;
 

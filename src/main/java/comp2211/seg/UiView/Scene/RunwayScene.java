@@ -101,8 +101,9 @@ public class RunwayScene extends SceneAbstract {
    * @param root      the root handler pane for the scene
    * @param appWindow the main application window
    */
-  public RunwayScene(Pane root, AppWindow appWindow, double width, double height) {
-    super(root, appWindow, width, height);
+  public RunwayScene(Pane root, AppWindow appWindow, double width, double height, boolean depthBuffer) {
+    super(root, appWindow, width, height, depthBuffer);
+    root.setBackground(new Background(new BackgroundFill(GlobalVariables.focusedBG,null,null)));
     this.width = width;
     this.height = height;
 
@@ -302,6 +303,7 @@ public class RunwayScene extends SceneAbstract {
     background.heightProperty().bind((DoubleBinding) Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()));
     background.translateXProperty().bind(appWindow.runway.clearwayLeftProperty().add(appWindow.runway.clearwayRightProperty()).add(appWindow.runway.runwayLengthProperty()).divide(2)
             .subtract(appWindow.runway.clearwayLeftProperty().add(appWindow.runway.runwayLengthProperty().divide(2))).multiply(scaleFactor));
+    background.setTranslateZ(2.1);
     group.getChildren().add(background);
   }
 
@@ -313,6 +315,8 @@ public class RunwayScene extends SceneAbstract {
   @Override
   public void build() {
     super.build();
+    root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+    setFill(GlobalVariables.bgRunway);
     logger.info("building");
     configureCamera();
     render();
@@ -320,6 +324,7 @@ public class RunwayScene extends SceneAbstract {
     mainPane.minWidthProperty().bind(root.widthProperty());
     mainPane.maxHeightProperty().bind(root.heightProperty());
     mainPane.minHeightProperty().bind(root.heightProperty());
+    mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
     scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));
     mainPane.getChildren().add(group);
@@ -329,7 +334,6 @@ public class RunwayScene extends SceneAbstract {
     group.getChildren().removeAll(group.getChildren());
 
     makeBackground();
-    mainPane.setBackground(new Background(new BackgroundFill(GlobalVariables.bgRunway,null,null)));
     //root.getStyleClass().add("runway-background");
 
     makeCGA(true);
@@ -412,20 +416,20 @@ public class RunwayScene extends SceneAbstract {
     addCuboid(
             appWindow.runway.runwayLengthProperty().multiply(0.5).add( appWindow.runway.clearwayRightProperty().divide(2)),
             new SimpleDoubleProperty(0).multiply(1),
-            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(-.1).multiply(1),
             appWindow.runway.clearwayRightProperty().multiply(1),
             appWindow.runway.clearwayHeightProperty().multiply(1),
-            new SimpleDoubleProperty(10).multiply(1),
+            new SimpleDoubleProperty(9.9).multiply(1),
             Color.DARKGOLDENROD);
 
     //Clearway Left
     addCuboid(
             appWindow.runway.runwayLengthProperty().multiply(-0.5).add( appWindow.runway.clearwayLeftProperty().divide(-2)),
             new SimpleDoubleProperty(0).multiply(1),
-            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(-.1).multiply(1),
             appWindow.runway.clearwayLeftProperty().multiply(1),
             appWindow.runway.clearwayHeightProperty().multiply(1),
-            new SimpleDoubleProperty(10).multiply(1),
+            new SimpleDoubleProperty(9.9).multiply(1),
             Color.DARKGOLDENROD);
 
 
@@ -489,6 +493,7 @@ public class RunwayScene extends SceneAbstract {
     cga.rightEndProperty().bind(appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(150).multiply(scaleFactor));
     cga.innerHeightProperty().bind(scaleFactorHeight.multiply(-75));
     cga.outerHeightProperty().bind(scaleFactorHeight.multiply(-105));
+    cga.setTranslateZ(2);
     group.getChildren().add(cga);
   }
 

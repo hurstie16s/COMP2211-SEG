@@ -3,16 +3,30 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.util.Pair;
 
 import java.lang.annotation.Target;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class BaseScene extends SceneAbstract{
     private Button airportButton;
@@ -43,10 +57,10 @@ public class BaseScene extends SceneAbstract{
         root.setBackground(new Background(new BackgroundFill(GlobalVariables.unfocusedBG,null,null)));
         mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
 
-        Map<String,Pane> tabs = new HashMap<>();
-        tabs.put("Airport Configuration", makeAirportConfig());
-        tabs.put("Obstacle Configuration", makeObstacleConfig());
-        TabLayout tabLayout = new TabLayout(tabs);
+        ArrayList<Pair<String, Pane>> tabs = new ArrayList<>();
+        tabs.add(new Pair<>("Airport Configuration", makeAirportConfig()));
+        tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
+        TabLayout tabLayout = new TabLayout(tabs,GlobalVariables.unfocusedBG,GlobalVariables.focusedBG);
         mainPane.maxHeightProperty().bind(root.heightProperty());
         mainPane.minHeightProperty().bind(root.heightProperty());
         mainPane.maxWidthProperty().bind(root.widthProperty());
@@ -54,6 +68,7 @@ public class BaseScene extends SceneAbstract{
         mainPane.getChildren().add(tabLayout);
     }
     public Pane makeAirportConfig(){
+        //Aleks do stuff here
         return new VBox();
     }
     public Pane makeObstacleConfig(){
@@ -122,39 +137,157 @@ public class BaseScene extends SceneAbstract{
     }
 
     private Pane makeChangeHistoryPane() {
-        Map<String,Pane> changeHistory = new HashMap<>();
-        changeHistory.put("Change History", new VBox());
-        Pane changeHistoryPane = new TabLayout(changeHistory);
+        ArrayList<Pair<String, Pane>> changeHistory = new ArrayList<>();
+        ScrollPane history = new ScrollPane(appWindow.runway.changesHistory);
+        history.setFitToWidth(true);
+        history.setPadding(new Insets(16));
+        changeHistory.add(new Pair<>("Change History", new BorderPane(history)));
+        Pane changeHistoryPane = new TabLayout(changeHistory,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
         return changeHistoryPane;
     }
 
     private Pane makeObstacleOptionsPane() {
-        Map<String,Pane> obstacleOptions = new HashMap<>();
-        obstacleOptions.put("Obstacle", new VBox());
-        Pane obstacleOptionsPane = new TabLayout(obstacleOptions);
+        ArrayList<Pair<String, Pane>> obstacleOptions = new ArrayList<>();
+        GridPane obstacleData = new GridPane();
+
+        ColumnConstraints cc1 = new ColumnConstraints();
+        cc1.setPercentWidth(60);
+        ColumnConstraints cc2 = new ColumnConstraints();
+        cc2.setPercentWidth(40);
+        obstacleData.getColumnConstraints().addAll(cc1,cc2);
+
+        ArrayList<RowConstraints> rc = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+
+            RowConstraints rcx = new RowConstraints();
+            rcx.setPercentHeight(100/7);
+            rc.add(rcx);
+        }
+        obstacleData.getRowConstraints().addAll(rc);
+
+        obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height"),makeLabel("Length"),makeLabel("Width"),makeLabel("Left Displacement"),makeLabel("Right Displacement"),makeLabel("Currently Active?"));
+
+        obstacleData.getChildren().forEach(new Consumer<Node>() {
+            @Override
+            public void accept(Node node) {
+                GridPane.setHalignment(node, HPos.RIGHT);
+            }
+        });
+
+
+        obstacleOptions.add(new Pair<>("Obstacle", obstacleData));
+        Pane obstacleOptionsPane = new TabLayout(obstacleOptions,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
         return obstacleOptionsPane;
     }
     private Pane makeDistancesPane() {
-        Map<String,Pane> declaredDistances = new HashMap<>();
-        declaredDistances.put("Declared Distances", new VBox());
-        Pane declaredDistancesPane = new TabLayout(declaredDistances);
+        GridPane distancesGrid = new GridPane();
+        distancesGrid.add(makeLabel("Designator"),1,0);
+        distancesGrid.add(makeLabel("TORA"),2,0);
+        distancesGrid.add(makeLabel("TODA"),3,0);
+        distancesGrid.add(makeLabel("ASDA"),4,0);
+        distancesGrid.add(makeLabel("LDA"),5,0);
+        Label label1 = makeLabel("Original");
+        Label label2 = makeLabel("Recalculated");
+        GridPane.setRowSpan(label1,2);
+        GridPane.setRowSpan(label2,2);
+        distancesGrid.add(label1,0,1);
+        distancesGrid.add(label2,0,3);
+        ArrayList<ColumnConstraints> cc = new ArrayList<>();
+        ColumnConstraints cc1 = new ColumnConstraints();
+        cc1.setPercentWidth(120/6.2);
+        cc.add(cc1);
+        for (int i = 0; i < 5; i++) {
+
+            ColumnConstraints ccx = new ColumnConstraints();
+            ccx.setPercentWidth(100/6.2);
+            cc.add(ccx);
+        }
+        distancesGrid.getColumnConstraints().addAll(cc);
+
+        ArrayList<RowConstraints> rc = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+
+            RowConstraints rcx = new RowConstraints();
+            rcx.setPercentHeight(100/5);
+            rc.add(rcx);
+        }
+        distancesGrid.getRowConstraints().addAll(rc);
+
+
+        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorProperty(),new SimpleBooleanProperty(true)),1,1);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftToraProperty(),new SimpleBooleanProperty(true)),2,1);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftTodaProperty(),new SimpleBooleanProperty(true)),3,1);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftLdaProperty(),new SimpleBooleanProperty(true)),4,1);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftAsdaProperty(),new SimpleBooleanProperty(true)),5,1);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorProperty(),new SimpleBooleanProperty(true)),1,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightToraProperty(),new SimpleBooleanProperty(true)),2,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightTodaProperty(),new SimpleBooleanProperty(true)),3,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightLdaProperty(),new SimpleBooleanProperty(true)),4,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightAsdaProperty(),new SimpleBooleanProperty(true)),5,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorProperty(),new SimpleBooleanProperty(true)),1,3);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.leftToraProperty(),new SimpleBooleanProperty(true)),2,3);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.leftTodaProperty(),new SimpleBooleanProperty(true)),3,3);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.leftLdaProperty(),new SimpleBooleanProperty(true)),4,3);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.leftAsdaProperty(),new SimpleBooleanProperty(true)),5,3);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorProperty(),new SimpleBooleanProperty(true)),1,4);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.rightToraProperty(),new SimpleBooleanProperty(true)),2,4);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.rightTodaProperty(),new SimpleBooleanProperty(true)),3,4);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.rightLdaProperty(),new SimpleBooleanProperty(true)),4,4);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.rightAsdaProperty(),new SimpleBooleanProperty(true)),5,4);
+
+        ArrayList<Pair<String, Pane>> declaredDistances = new ArrayList<>();
+        declaredDistances.add(new Pair<>("Declared Distances", distancesGrid));
+        Pane declaredDistancesPane = new TabLayout(declaredDistances,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
+        distancesGrid.getChildren().forEach(new Consumer<Node>() {
+            @Override
+            public void accept(Node node) {
+                GridPane.setHalignment(node, HPos.CENTER);
+            }
+        });
         return declaredDistancesPane;
     }
 
+    private Node makeOutputLabel(SimpleStringProperty runwayDesignatorProperty, SimpleBooleanProperty visibility) {
+        Label data = new Label();
+        data.setFont(GlobalVariables.font);
+        data.setTextFill(GlobalVariables.fg);
+        data.setText(String.valueOf(runwayDesignatorProperty.getValue()));
+        data.textProperty().bind(Bindings.when(visibility).then(runwayDesignatorProperty).otherwise(new
+                SimpleStringProperty("Error")));
+        return data;
+
+    }
+
+    public Label makeLabel(String string){
+        Label label = new Label(string);
+        label.setFont(GlobalVariables.font);
+        label.setTextFill(GlobalVariables.fg);
+        return label;
+    }
+    public Label makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility) {
+        Label data = new Label();
+        data.setFont(GlobalVariables.font);
+        data.setTextFill(GlobalVariables.fg);
+        data.setText(String.valueOf(property.getValue()));
+        data.textProperty().bind(Bindings.when(visibility).then(property.asString().concat(appWindow.runway.unitsProperty())).otherwise(new
+                SimpleStringProperty("Error")));
+        return data;
+    }
+
     private Pane makeBreakDownPane() {
-        Map<String,Pane> breakDown = new HashMap<>();
-        breakDown.put("TORA Breakdown", new VBox());
-        breakDown.put("TODA Breakdown", new VBox());
-        breakDown.put("ASDA Breakdown", new VBox());
-        breakDown.put("LDA Breakdown", new VBox());
-        Pane breakDownPane = new TabLayout(breakDown);
+        ArrayList<Pair<String, Pane>> breakDown = new ArrayList<>();
+        breakDown.add(new Pair<>("TORA Breakdown", new VBox()));
+        breakDown.add(new Pair<>("TODA Breakdown", new VBox()));
+        breakDown.add(new Pair<>("ASDA Breakdown", new VBox()));
+        breakDown.add(new Pair<>("LDA Breakdown", new VBox()));
+        Pane breakDownPane = new TabLayout(breakDown,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
         return breakDownPane;
     }
 
     public Pane makeRunwayTabs(){
-        Map<String,Pane> viewTabs = new HashMap<>();
-        RunwayScene runwayScene1 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0);
-        RunwayScene runwayScene2 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0);
+        ArrayList<Pair<String, Pane>> viewTabs = new ArrayList<>();
+        RunwayScene runwayScene1 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
+        RunwayScene runwayScene2 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
         runwayScene1.build();
         runwayScene2.build();
         runwayScene2.toggleView();
@@ -167,7 +300,7 @@ public class BaseScene extends SceneAbstract{
 
         }
 
-        RunwayScene runwayScene3 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0);
+        RunwayScene runwayScene3 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
         runwayScene3.build();
         runwayScene3.angleXProperty().set(180);
         runwayScene3.angleYProperty().set(0);
@@ -180,7 +313,7 @@ public class BaseScene extends SceneAbstract{
         runwayScene3.root.maxHeightProperty().bind(topView.heightProperty());
         runwayScene3.root.minHeightProperty().bind(topView.heightProperty());
 
-        RunwayScene runwayScene4 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0);
+        RunwayScene runwayScene4 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
         runwayScene4.build();
         runwayScene4.angleYProperty().set(90);
         runwayScene4.angleXProperty().set(90);
@@ -198,10 +331,10 @@ public class BaseScene extends SceneAbstract{
 
 
 
-        viewTabs.put("Both Views", dualView);
-        viewTabs.put("Side-On Views", sideView);
-        viewTabs.put("Top-Down Views", topView);
-        TabLayout viewPane = new TabLayout(viewTabs);
+        viewTabs.add(new Pair<>("Both Views", dualView));
+        viewTabs.add(new Pair<>("Side-On Views", sideView));
+        viewTabs.add(new Pair<>("Top-Down Views", topView));
+        TabLayout viewPane = new TabLayout(viewTabs,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
         return viewPane;
     }
 
