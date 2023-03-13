@@ -100,6 +100,9 @@ public class AppWindow {
     public void startMainScene() {
         loadScene(new MainScene(new Pane(),this, getWidth(),getHeight()));
     }
+    public void startBaseScene() {
+        loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
+    }
 
     /**
      * Starts the runway scene.
@@ -163,4 +166,5 @@ public class AppWindow {
     public ArrayList<Airport> getAirports() {
         return airports;
     }
+
 }

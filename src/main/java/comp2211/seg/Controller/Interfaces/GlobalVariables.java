@@ -28,7 +28,9 @@ public interface GlobalVariables {
 
   public static final Color bg = Color.gray(0.2);
   public static final Color bgRunway = Color.gray(0.15);
-  public static final Color fg = Color.AZURE;
+  public static final Color unfocusedBG = Color.gray(0.1);
+  public static final Color focusedBG = Color.gray(0.2);
+  public static final Color fg = Color.gray(0.7);
   public static final Font font =Font.font("Calibri", 20);
   /**
    * A constant string that holds the information about the home scene of the project.

@@ -78,7 +78,7 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
    * @return void
    */
   private void startApplication(MouseEvent mouseEvent) {
-    Platform.runLater(appWindow::startMainScene);
+    Platform.runLater(appWindow::startBaseScene);
   }
 
 

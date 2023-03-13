@@ -40,13 +40,6 @@ public abstract class SceneAbstract extends Scene{
    * @param root the root pane of the scene
    * @param appWindow the application window of the scene
    */
-  public SceneAbstract(HandlerPane root, AppWindow appWindow) {
-    super(root, root.getParentWidth(), root.getParentHeight(),Color.BLACK);
-    this.root = root;
-    this.width = root.getParentWidth();
-    this.height = root.getParentHeight();
-    this.appWindow = appWindow;
-  }
 
   public SceneAbstract(Pane root, AppWindow appWindow, double width,double height) {
     super(root, appWindow.getWidth(), appWindow.getHeight(),Color.BLACK);
@@ -79,7 +72,9 @@ public abstract class SceneAbstract extends Scene{
     mainPane.setMinWidth(width);
     mainPane.setMinHeight(height);
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-    root.setBackground(new Background(new BackgroundFill(GlobalVariables.bg,null,null)));
+    mainPane.setPickOnBounds(false);
+    root.setPickOnBounds(false);
+    root.setBackground(new Background(new BackgroundFill(GlobalVariables.unfocusedBG,null,null)));
     root.getChildren().add(mainPane);
 
     root.setMaxWidth(width);
@@ -101,7 +96,6 @@ public abstract class SceneAbstract extends Scene{
       root.getChildren().add(alignPane);
       help.getRoot().setPickOnBounds(false);
       alignPane.setPickOnBounds(false);
-      root.setPickOnBounds(false);
       help.toggleHelp(this.getClass().getName());
       alignPane.maxWidthProperty().bind(root.widthProperty());
       alignPane.minWidthProperty().bind(root.widthProperty());
