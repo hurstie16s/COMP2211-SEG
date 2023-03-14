@@ -31,7 +31,7 @@ public interface GlobalVariables {
   public static final Color unfocusedBG = Color.gray(0.1);
   public static final Color focusedBG = Color.gray(0.2);
   public static final Color veryfocusedBG = Color.gray(0.25);
-  public static final Color fg = Color.gray(0.7);
+  public static final Color fg = Color.gray(0.6);
   public static final Color grass = Color.web("#014130");
   public static final Color obstacle = Color.web("#e3b7b5");
   public static final Color slope = Color.web("#ecfdec");

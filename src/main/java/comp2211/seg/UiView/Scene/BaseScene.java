@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Spinner;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -166,7 +167,11 @@ public class BaseScene extends SceneAbstract{
         obstacleData.getRowConstraints().addAll(rc);
 
         obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height"),makeLabel("Length"),makeLabel("Width"),makeLabel("Left Displacement"),makeLabel("Right Displacement"),makeLabel("Currently Active?"));
-
+        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().heightProperty()),1,1);
+        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().lengthProperty()),1,2);
+        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().widthProperty()),1,3);
+        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().distFromThresholdProperty()),1,4);
+        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().distFromOtherThresholdProperty()),1,5);
         obstacleData.getChildren().forEach(new Consumer<Node>() {
             @Override
             public void accept(Node node) {
@@ -336,6 +341,13 @@ public class BaseScene extends SceneAbstract{
         viewTabs.add(new Pair<>("Top-Down Views", topView));
         TabLayout viewPane = new TabLayout(viewTabs,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
         return viewPane;
+    }
+
+    public Spinner makeSpinner(SimpleDoubleProperty binding){
+        Spinner spinner = new Spinner();
+        binding.bind(spinner.valueProperty());
+
+        return spinner;
     }
 
 

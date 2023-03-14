@@ -15,10 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -93,12 +90,14 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
 
 
     Text projectInfo = new Text(SEG_INFO);
-    projectInfo.setFill(Color.WHITE);
+    projectInfo.setFont(GlobalVariables.font);
+    projectInfo.setFill(GlobalVariables.fg);
     projectInfo.wrappingWidthProperty().bind(mainPane.widthProperty());
     projectInfo.maxHeight(mainPane.heightProperty().get());
     projectInfo.minHeight(mainPane.heightProperty().get());
     Text entryInfo = new Text(HOME_SCENE_INFO);
-    entryInfo.setFill(Color.WHITE);
+    entryInfo.setFont(GlobalVariables.font);
+    entryInfo.setFill(GlobalVariables.fg);
     nameEntry = new TextField();
     nameEntry.setPromptText("new airport name");
     nameEntry.setStyle("-fx-prompt-text-fill: gray;");
@@ -124,16 +123,17 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
 
 
     Text title = new Text("Runway Redeclaration Tool\n\n");
-    title.setFont(Font.font("Calibri", 48));
-    title.setFill(Color.WHITE);
+    title.setFont(GlobalVariables.font);
+    title.setFill(GlobalVariables.fg);
 
     Text desciption = new Text("Welcome! This runway redeclaration tool is designed to help air traffic control professionals visualise the impact of obstacles on declared distances to understand how to continue runway operations");
-    desciption.setFont(Font.font("Calibri", 24));
-    desciption.setFill(Color.WHITE);
+    desciption.setFont(GlobalVariables.font);
+    desciption.setFill(GlobalVariables.fg);
 
 
 
     airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
+    airports.setBackground(new Background(new BackgroundFill(focusedBG,null,null)));
     airports.valueProperty().addListener(new ChangeListener() {
       @Override
       public void changed(ObservableValue observableValue, Object o, Object t1) {
@@ -145,6 +145,13 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
     startApplication.setOnMousePressed(this::startApplication);
     Button importAirport = new Button("Import Airport");
     Button newAirport = new Button("New Airport");
+    startApplication.setTextFill(GlobalVariables.fg);
+    startApplication.setBackground(new Background(new BackgroundFill(focusedBG,null,null)));
+    importAirport.setTextFill(GlobalVariables.fg);
+    importAirport.setBackground(new Background(new BackgroundFill(focusedBG,null,null)));
+    newAirport.setTextFill(GlobalVariables.fg);
+    newAirport.setBackground(new Background(new BackgroundFill(focusedBG,null,null)));
+
     importAirport.setDisable(true);
     newAirport.setDisable(true);
 

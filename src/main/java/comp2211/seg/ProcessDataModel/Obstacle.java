@@ -22,6 +22,7 @@ public class Obstacle {
 
     /** The distance of the obstacle from the runway threshold. */
     private final SimpleDoubleProperty distFromThreshold = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty distFromOtherThreshold = new SimpleDoubleProperty();
 
     /**
      * Creates a new Obstacle object with the specified designator, height, and distance from the runway threshold.
@@ -124,5 +125,13 @@ public class Obstacle {
      */
     public SimpleDoubleProperty distFromThresholdProperty() {
         return distFromThreshold;
+    }
+
+    public double getDistFromOtherThreshold() {
+        return distFromOtherThreshold.get();
+    }
+
+    public SimpleDoubleProperty distFromOtherThresholdProperty() {
+        return distFromOtherThreshold;
     }
 }
