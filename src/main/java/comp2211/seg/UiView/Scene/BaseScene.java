@@ -2,34 +2,26 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.HandlerPane;
+import comp2211.seg.ProcessDataModel.Airport;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Spinner;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.util.Pair;
 
-import java.lang.annotation.Target;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
-public class BaseScene extends SceneAbstract{
+public class BaseScene extends SceneAbstract implements GlobalVariables{
     private Button airportButton;
     private Button obstacleButton;
     private HBox topbar;
@@ -70,7 +62,35 @@ public class BaseScene extends SceneAbstract{
     }
     public Pane makeAirportConfig(){
         //Aleks do stuff here
-        return new VBox();
+        VBox airportLayout = new VBox();
+
+        ComboBox airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
+        airports.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                appWindow.setAirport((Airport) t1);
+            }
+        });
+        airports.valueProperty().set(appWindow.airport);
+        ComboBox runways = new ComboBox<>();
+
+        GridPane tablePane = new GridPane();
+        makeTablePane(tablePane);
+
+        Button exportButton = new Button("Export Airport");
+        Button importButton = new Button("Import Airport");
+
+        VBox leftMenu = new VBox(airports,runways);
+        VBox rightMenu = new VBox(exportButton, importButton);
+        Region region = new Region();
+        HBox.setHgrow(region,Priority.ALWAYS);
+        HBox menuPane = new HBox(leftMenu,region,rightMenu);
+        airportLayout.getChildren().addAll(menuPane,tablePane);
+        return airportLayout;
+    }
+
+    private void makeTablePane(GridPane table) {
+
     }
     public Pane makeObstacleConfig(){
         HBox obstacleLayout = new HBox();
