@@ -81,8 +81,8 @@ public class RunwayLabel extends Group {
         } else {
             labelRotateGroup.translateXProperty().bind(xOffset.multiply(scene.scaleFactorProperty()).subtract(label.getBoundsInLocal().getWidth() / 2));
         }
-        labelRotateGroup.translateYProperty().bind(scene.mainPane.heightProperty().multiply(-0.5 * yOffset));
-        labelRotateGroup.translateZProperty().bind(scene.mainPane.heightProperty().multiply(-0.5 * yOffset));
+        labelRotateGroup.translateYProperty().bind(Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(-0.5 * yOffset));
+        labelRotateGroup.translateZProperty().bind(Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(-0.5 * yOffset));
 
         Node leftHorizontal = makeLineHorizontal(
             xOffset,
