@@ -25,6 +25,9 @@ public class RunwayLabel extends Group {
     private final RunwayScene scene;
     private final boolean direction;
     private final String name;
+    private Rotate xRotate;
+    private Rotate yRotate;
+    private Rotate zRotate;
     /**
      * Constructs a new RunwayLabel with the specified name, color, x-offset, y-offset, length, scene, and direction.
      *
@@ -40,12 +43,14 @@ public class RunwayLabel extends Group {
         this.scene = scene;
         this.direction = direction;
         this.name = name;
+        /**
         visibleProperty().bind
                 (Bindings.and(
                         Bindings.when(new SimpleBooleanProperty(direction))
                         .then(Bindings.greaterThanOrEqual(0, length))
                         .otherwise(Bindings.lessThanOrEqual(0, length)),
                         visibility));
+         */
 
         Group labelRotateGroup = new Group();
         Text label = new Text(name);
@@ -60,18 +65,14 @@ public class RunwayLabel extends Group {
             label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 - 5);
         }
 
-        Rotate xRotate;
-        Rotate yRotate;
-        Rotate zRotate;
         labelRotateGroup.getTransforms().addAll(
             xRotate = new Rotate(0, Rotate.X_AXIS),
             yRotate = new Rotate(0, Rotate.Y_AXIS),
             zRotate = new Rotate(0, Rotate.Z_AXIS)
         );
-
-        xRotate.angleProperty().bind(scene.angleXProperty().multiply(-1));
-        yRotate.angleProperty().bind(scene.angleZProperty().multiply(-1));
-        zRotate.angleProperty().bind(scene.angleYProperty().multiply(-1));
+        scene.angleXProperty().addListener((observableValue, number, t1) -> {setAngle();});
+        scene.angleYProperty().addListener((observableValue, number, t1) -> {setAngle();});
+        scene.angleZProperty().addListener((observableValue, number, t1) -> {setAngle();});
 
         labelRotateGroup.getChildren().add(label);
         if (direction) {
@@ -132,6 +133,16 @@ public class RunwayLabel extends Group {
         getChildren().addAll(labelRotateGroup,leftHorizontal,rightHorizontal,leftVertical,rightVertical);
         );
          */
+    }
+    public void setAngle(){
+        //xRotate.angleProperty().bind(scene.lableAngleXProperty);
+        //yRotate.angleProperty().bind(scene.lableAngleYProperty);
+        //zRotate.angleProperty().bind(scene.lableAngleZProperty);
+
+
+        xRotate.angleProperty().set(-scene.getAngleXProperty()*(Math.cos(Math.toRadians(scene.getAngleZProperty()))));
+        yRotate.angleProperty().set(scene.getAngleXProperty()*(Math.sin(Math.toRadians(scene.getAngleZProperty()))));
+        zRotate.angleProperty().set(-scene.getAngleZProperty());
     }
     /**
      * Creates a horizontal line in a 3D space, represented by a Box object.

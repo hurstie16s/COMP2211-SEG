@@ -11,15 +11,20 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -93,6 +98,20 @@ public class RunwayScene extends SceneAbstract {
    * A DoubleProperty object representing the z angle of rotation of the runway scene.
    */
   private final DoubleProperty angleZProperty = new SimpleDoubleProperty();
+  /**
+   * A DoubleProperty object representing the x angle of rotation of the runway scene.
+   */
+  public final DoubleProperty lableAngleXProperty = new SimpleDoubleProperty();
+
+  /**
+   * A DoubleProperty object representing the y angle of rotation of the runway scene.
+   */
+  public final DoubleProperty lableAngleYProperty = new SimpleDoubleProperty();
+
+  /**
+   * A DoubleProperty object representing the z angle of rotation of the runway scene.
+   */
+  public final DoubleProperty lableAngleZProperty = new SimpleDoubleProperty();
 
 
   /**
@@ -520,23 +539,53 @@ public class RunwayScene extends SceneAbstract {
     //Lengths and xOffsets need binding to back-end variables, work hasn't been done yet so constants used
 
     //RunwayArrow TODARightLabel = new RunwayArrowRight("TODA", Color.RED, scaleFactor, 100, 25, 3000);
-    RunwayLabel TODALeftLabel = new RunwayLabel("TODA", Color.MAGENTA, appWindow.runway.runwayLengthProperty().multiply(-0.5),
+    RunwayLabel TODALeftLabel = new RunwayLabel("TODA", Color.TAN, appWindow.runway.runwayLengthProperty().multiply(-0.5),
             0.9, appWindow.runway.leftTodaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
     RunwayLabel ASDALeftLabel = new RunwayLabel("ASDA", Color.YELLOW, appWindow.runway.runwayLengthProperty().multiply(-0.5),
             0.7, appWindow.runway.leftAsdaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
     RunwayLabel TORALeftLabel = new RunwayLabel("TORA", Color.AQUA, appWindow.runway.runwayLengthProperty().multiply(-0.5),
             0.5, appWindow.runway.leftToraProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
-    RunwayLabel LDALeftLabel = new RunwayLabel("LDA", Color.FIREBRICK, appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()),
+    RunwayLabel LDALeftLabel = new RunwayLabel("LDA", Color.LIMEGREEN, appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()),
             0.3, appWindow.runway.leftLdaProperty().multiply(-1),this,true, appWindow.runway.leftLandProperty());
-    RunwayLabel TODARightLabel = new RunwayLabel("TODA", Color.MAGENTA, appWindow.runway.runwayLengthProperty().multiply(0.5),
+    RunwayLabel TODARightLabel = new RunwayLabel("TODA", Color.TAN, appWindow.runway.runwayLengthProperty().multiply(0.5),
             -0.9, appWindow.runway.rightTodaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
     RunwayLabel ASDARightLabel = new RunwayLabel("ASDA", Color.YELLOW, appWindow.runway.runwayLengthProperty().multiply(0.5),
             -0.7, appWindow.runway.rightAsdaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
     RunwayLabel TORARightLabel = new RunwayLabel("TORA", Color.AQUA, appWindow.runway.runwayLengthProperty().multiply(0.5),
             -0.5, appWindow.runway.rightToraProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
-    RunwayLabel LDARightLabel = new RunwayLabel("LDA", Color.FIREBRICK, appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()),
+    RunwayLabel LDARightLabel = new RunwayLabel("LDA", Color.LIMEGREEN, appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()),
             -0.3, appWindow.runway.rightLdaProperty().multiply(1),this,false, appWindow.runway.rightLandProperty());
     group.getChildren().addAll(TODARightLabel, ASDARightLabel, TORARightLabel, LDARightLabel, TODALeftLabel, ASDALeftLabel, TORALeftLabel, LDALeftLabel);
+
+    TextField lx = new TextField();
+    lx.textProperty().addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+        angleXProperty.set(Double.parseDouble(t1));
+      }
+    });
+    TextField ly = new TextField();
+    ly.textProperty().addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+        angleYProperty.set(Double.parseDouble(t1));
+      }
+    });
+    TextField lz = new TextField();
+    lz.textProperty().addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+        angleZProperty.set(Double.parseDouble(t1));
+      }
+    });
+    Text x = new Text();
+    x.textProperty().bind(angleXProperty.asString());
+
+    Text z = new Text();
+    z.textProperty().bind(angleZProperty.asString());
+    VBox box = new VBox(lx,ly,lz,x,z);
+    //root.getChildren().add(box);
+
   }
 
   public double getAngleXProperty() {
