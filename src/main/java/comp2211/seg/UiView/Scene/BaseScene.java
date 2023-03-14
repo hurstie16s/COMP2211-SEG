@@ -90,7 +90,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     }
 
     private void makeTablePane(GridPane table) {
-
+        //Aleks: To do
     }
     public Pane makeObstacleConfig(){
         HBox obstacleLayout = new HBox();
