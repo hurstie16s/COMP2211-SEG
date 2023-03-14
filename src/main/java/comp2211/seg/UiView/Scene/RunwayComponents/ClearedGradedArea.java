@@ -1,5 +1,6 @@
 package comp2211.seg.UiView.Scene.RunwayComponents;
 
+import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Parent;
@@ -41,9 +42,9 @@ public class ClearedGradedArea extends Polygon {
             prop.addListener((observableValue, o, t1) -> redraw());
         }
         if (filled) {
-            setFill(Color.BLUE);
+            setFill(GlobalVariables.cga);
         } else {
-            setStroke(Color.BLACK);
+            setStroke(Color.DARKGREY);
             setFill(Color.TRANSPARENT);
             setStrokeWidth(2);
         }

@@ -73,6 +73,7 @@ public class RunwayLabel extends Group {
         scene.angleXProperty().addListener((observableValue, number, t1) -> {setAngle();});
         scene.angleYProperty().addListener((observableValue, number, t1) -> {setAngle();});
         scene.angleZProperty().addListener((observableValue, number, t1) -> {setAngle();});
+        scene.portrait.addListener((observableValue, number, t1) -> {setAngle();});
 
         labelRotateGroup.getChildren().add(label);
         if (direction) {
@@ -143,6 +144,9 @@ public class RunwayLabel extends Group {
         xRotate.angleProperty().set(-scene.getAngleXProperty()*(Math.cos(Math.toRadians(scene.getAngleZProperty()))));
         yRotate.angleProperty().set(scene.getAngleXProperty()*(Math.sin(Math.toRadians(scene.getAngleZProperty()))));
         zRotate.angleProperty().set(-scene.getAngleZProperty());
+        if (scene.portrait.get()){
+            zRotate.setAngle(zRotate.getAngle() +90 - scene.angleYProperty().get());
+        }
     }
     /**
      * Creates a horizontal line in a 3D space, represented by a Box object.
