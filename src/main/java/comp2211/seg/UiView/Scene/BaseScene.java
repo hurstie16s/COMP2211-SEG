@@ -2,18 +2,12 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.ProcessDataModel.Airport;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -24,7 +18,6 @@ import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -79,7 +72,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //table
         VBox vBoxTable = new VBox();
         VBox.setMargin(vBoxTable,new Insets(150,20,20,20));//Top/Right/Bottom/Left
-        vBoxTable.getChildren().add(makeRunwayGridTable());
+        //vBoxTable.getChildren().add(makeRunwayGridTable());
+        vBoxTable.getChildren().add(buildTableView(vBoxTable));
 
         //left menu
         Button airportsTempButton = new Button("Airports");
@@ -121,8 +115,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             button.getStyleClass().add("button-dark");
         }
 
-
-
         HBox hBoxMenuButtons = new HBox();
         Region region = new Region();
         HBox.setHgrow(region,Priority.ALWAYS);
@@ -133,105 +125,58 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return vBoxAirportLayout;
     }
 
-    private Pane makeRunwayGridTable() {
+    private TableView buildTableView(VBox container) {
 
-        GridPane runwayGrid = new GridPane();
+        TableView table = new TableView<>();
+        final Label label = new Label("Runway Data");
+        label.setFont(GlobalVariables.font);
+        //table.setEditable(true);
 
-        runwayGrid.setVgap(20);
-        runwayGrid.setGridLinesVisible(true);
+        //columns
+        TableColumn emptyColumn1 = new TableColumn<>("Runway\nDesignators");
+        TableColumn firstColumn = new TableColumn<>("Runway(RWY)");
+        TableColumn secondColumn = new TableColumn<>("Runway Strip");
+        TableColumn thirdColumn = new TableColumn<>("Stopway(SWY)");
+        TableColumn fourthColumn = new TableColumn<>("Clearway(CWY)");
+        TableColumn fifthColumn = new TableColumn<>("RESA");
+        TableColumn sixthColumn = new TableColumn<>("Threshold\nDisplacement");
+        TableColumn seventhColumn = new TableColumn<>("Strip End");
+        TableColumn eighthColumn = new TableColumn<>("Blast\nProtection");
+        TableColumn lengthColumn = new TableColumn<>("Length");
+        TableColumn widthColumn = new TableColumn<>("Width");
+        firstColumn.getColumns().addAll(lengthColumn,widthColumn);
+        secondColumn.getColumns().addAll(lengthColumn,widthColumn);
+        thirdColumn.getColumns().addAll(lengthColumn,widthColumn);
+        fourthColumn.getColumns().addAll(lengthColumn,widthColumn);
+        fifthColumn.getColumns().addAll(lengthColumn,widthColumn);
+        //add columns
+        table.getColumns().addAll(
+            emptyColumn1,
+            firstColumn,
+            secondColumn,
+            thirdColumn,
+            fourthColumn,
+            fifthColumn,
+            sixthColumn,
+            seventhColumn,
+            eighthColumn);
 
-        Label label1 = makeLabel("Runway(RWY)");
-        Label label2 = makeLabel("Runway Strip");
-        Label label3 = makeLabel("Stopway(SWY)");
-        Label label4 = makeLabel("Clearway(CWY)");
-        Label label5 = makeLabel("RESA");
-        Label label6 = makeLabel("Threshold\nDisplacement");
-        Label label7 = makeLabel("Strip End");
-        Label label8 = makeLabel("Blast\nProtection");
-        Label label9 = makeLabel("60m");
-        Label label10 = makeLabel("300m");
-
-        GridPane.setColumnSpan(label1,2);
-        GridPane.setColumnSpan(label2,2);
-        GridPane.setColumnSpan(label3,2);
-        GridPane.setColumnSpan(label4,2);
-        GridPane.setColumnSpan(label5,2);
-        GridPane.setColumnSpan(label6,2);
-        GridPane.setRowSpan(label6,2);
-        GridPane.setRowSpan(label7,2);
-        GridPane.setRowSpan(label8,2);
-        GridPane.setRowSpan(label9,2);
-        GridPane.setRowSpan(label10,2);
-
-        runwayGrid.add(label1,1,0);
-        runwayGrid.add(label2,3,0);
-        runwayGrid.add(label3,5,0);
-        runwayGrid.add(label4,7,0);
-        runwayGrid.add(label5,9,0);
-        runwayGrid.add(label6,11,0);
-        runwayGrid.add(label7,13,0);
-        runwayGrid.add(label8,14,0);
-        runwayGrid.add(label9,13,2);
-        runwayGrid.add(label10,14,2);
-
-        runwayGrid.add(makeLabel("Length"),1,1);
-        runwayGrid.add(makeLabel("Length"),3,1);
-        runwayGrid.add(makeLabel("Length"),5,1);
-        runwayGrid.add(makeLabel("Length"),7,1);
-        runwayGrid.add(makeLabel("Length"),9,1);
-
-        runwayGrid.add(makeLabel("Width"),2,1);
-        runwayGrid.add(makeLabel("Width"),4,1);
-        runwayGrid.add(makeLabel("Width"),6,1);
-        runwayGrid.add(makeLabel("Width"),8,1);
-        runwayGrid.add(makeLabel("Width"),10,1);
+        sixthColumn.setMinWidth(100);
 
 
-        runwayGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorProperty(),new SimpleBooleanProperty(true)),0,2);
-        runwayGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorProperty(),new SimpleBooleanProperty(true)),0,3);
+        table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 
-        ArrayList<ColumnConstraints> cc = new ArrayList<>();
-        ColumnConstraints cc1 = new ColumnConstraints();
-        cc1.setPercentWidth(120/6.2);
-        //cc1.setPercentWidth(60/6.2);
-        cc.add(cc1);
-        for (int i = 0; i < 14; i++) {
-            ColumnConstraints ccx = new ColumnConstraints();
-            if(i>11) {
-             ccx.setPercentWidth(100/5.2);
-             logger.info("constrains1:" + ccx + "/i: " + i);
-            } else {
-                //ccx.setPercentWidth(100/6.2);
-                ccx.setPercentWidth(100 / 6.2);
-                logger.info("constrains2:" + ccx + "/i: " + i);
-            }
-            cc.add(ccx);
-
+        for (Object column : table.getColumns()) {
+            ((TableColumn<?, ?>) column).setMinWidth(Control.USE_PREF_SIZE);
+            ((TableColumn<?, ?>) column).setMaxWidth(Double.MAX_VALUE);
+            ((TableColumn<?, ?>) column).prefWidthProperty().bind(table.widthProperty().divide(table.getColumns().size()));
         }
-        runwayGrid.getColumnConstraints().addAll(cc);
+        //bind the table size to the container
+        table.prefWidthProperty().bind(container.widthProperty());
+        //table.prefHeightProperty().bind(container.heightProperty());
+        table.setMaxWidth(Double.MAX_VALUE);
 
-        /*ArrayList<RowConstraints> rc = new ArrayList<>();
-        for (int i = 0; i < 14; i++) {
-
-            RowConstraints rcx = new RowConstraints();
-            rcx.setPercentHeight(100/5);
-            logger.info("constrains3:" + rcx + "/i: " + i);
-            rc.add(rcx);
-        }
-        runwayGrid.getRowConstraints().addAll(rc);
-
-        /*ArrayList<Pair<String, Pane>> runwayTable = new ArrayList<>();
-        runwayTable.add(new Pair<>("Runway Table", runwayGrid));
-        Pane runwayGridPane = new TabLayout(runwayTable,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
-        */
-
-        runwayGrid.getChildren().forEach(new Consumer<Node>() {
-            @Override
-            public void accept(Node node) {
-                GridPane.setHalignment(node, HPos.CENTER);
-            }
-        });
-        return runwayGrid;
+        return table;
     }
 
     public Pane makeObstacleConfig(){
