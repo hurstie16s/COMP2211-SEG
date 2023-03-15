@@ -10,8 +10,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -74,8 +76,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         airports.valueProperty().set(appWindow.airport);
         ComboBox runways = new ComboBox<>();
 
-        GridPane tablePane = new GridPane();
-        makeTablePane(tablePane);
+        VBox runwayTable = new VBox();
+        makeTablePane(runwayTable);
 
         Button exportButton = new Button("Export Airport");
         Button importButton = new Button("Import Airport");
@@ -85,12 +87,53 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         Region region = new Region();
         HBox.setHgrow(region,Priority.ALWAYS);
         HBox menuPane = new HBox(leftMenu,region,rightMenu);
-        airportLayout.getChildren().addAll(menuPane,tablePane);
+        airportLayout.getChildren().addAll(menuPane,runwayTable);
         return airportLayout;
     }
 
-    private void makeTablePane(GridPane table) {
+    private void makeTablePane(VBox runwayTable) {
         //Aleks: To do now
+        GridPane grid = new GridPane();
+        grid.setHgap(2);
+        grid.setVgap(2);
+        int numRows = 4;
+        int numCols = 14;
+
+        TextField[][] cells = new TextField[numRows][numCols];
+
+        // Add text fields to the grid
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                if (col == 0 & row < 2) {
+                    Region region = new Region();
+                    grid.add(region,col,row);
+                } else {
+                    TextField textField = new TextField("TextField");
+                    cells[row][col] = textField;
+                    grid.add(textField, col, row);
+                    if ((col+1) % 2 == 0 && col < 10 && row == 0) {
+                        textField.setAlignment(Pos.CENTER);
+                        textField.setMaxWidth(Double.MAX_VALUE);
+                        GridPane.setColumnSpan(textField,2);
+                        col++;
+                    } else if (col > 10 && row == 0 || col > 11 && row == 2) {
+                        textField.setAlignment(Pos.CENTER);
+                        textField.setMaxHeight(Double.MAX_VALUE);
+                        GridPane.setRowSpan(textField,2);
+                    }
+                }
+            }
+        }
+        // Define the row and column indexes of the text fields to be removed
+        int[] rowsToRemove = {1, 1, 1, 3, 3};
+        int[] colsToRemove = {11, 12, 13, 12, 13};
+        // Remove the specified text fields from the grid
+        for (int i = 0; i < rowsToRemove.length; i++) {
+            TextField removedTextField = cells[rowsToRemove[i]][colsToRemove[i]];
+            grid.getChildren().remove(removedTextField);
+        }
+        runwayTable.getChildren().add(grid);
+
     }
     public Pane makeObstacleConfig(){
         HBox obstacleLayout = new HBox();
