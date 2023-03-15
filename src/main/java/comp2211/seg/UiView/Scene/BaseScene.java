@@ -3,6 +3,7 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.ProcessDataModel.Airport;
+import comp2211.seg.ProcessDataModel.FileHandler;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -16,8 +17,11 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -52,6 +56,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         ArrayList<Pair<String, Pane>> tabs = new ArrayList<>();
         tabs.add(new Pair<>("Airport Configuration", makeAirportConfig()));
+
+
         tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
         TabLayout tabLayout = new TabLayout(tabs,GlobalVariables.unfocusedBG,GlobalVariables.focusedBG);
         mainPane.maxHeightProperty().bind(root.heightProperty());
@@ -87,7 +93,15 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         HBox menuPane = new HBox(leftMenu,region,rightMenu);
         airportLayout.getChildren().addAll(menuPane,tablePane);
         return airportLayout;
+
+
+
+
+
     }
+
+
+
 
     private void makeTablePane(GridPane table) {
         //Aleks: To do

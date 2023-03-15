@@ -11,6 +11,23 @@ public class Airport {
     /** The name of the airport. */
     public String name;
 
+    public String getCity() {
+        return city;
+    }
+    public String city;
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public Double latitude;
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public Double longitude;
+
     /**
      * Creates a new Airport object with the specified name and a default runway.
      *
@@ -40,5 +57,6 @@ public class Airport {
     public ArrayList<Runway> getRunways() {
         return runways;
     }
+
 
 }
