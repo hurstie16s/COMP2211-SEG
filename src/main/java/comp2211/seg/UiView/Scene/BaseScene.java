@@ -19,6 +19,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -28,6 +30,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private Button obstacleButton;
     private HBox topbar;
     private VBox layout;
+
+    private static final Logger logger = LogManager.getLogger(BaseScene.class);
 
 
     /**
@@ -64,7 +68,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     }
     public Pane makeAirportConfig(){
         //Aleks do stuff here
+
         VBox airportLayout = new VBox();
+        VBox tablePane = new VBox();
+        VBox.setMargin(tablePane,(new Insets(20,20,20,20)));
+
+        tablePane.getChildren().add(makeRunwayGridTable(tablePane));
 
         ComboBox airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
         airports.valueProperty().addListener(new ChangeListener() {
@@ -75,66 +84,144 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         });
         airports.valueProperty().set(appWindow.airport);
         ComboBox runways = new ComboBox<>();
-
-        VBox runwayTable = new VBox();
-        makeTablePane(runwayTable);
+        runways.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                appWindow.runway.runwayDesignatorProperty();
+            }
+        });
+        runways.valueProperty().set(appWindow.runway);
 
         Button exportButton = new Button("Export Airport");
         Button importButton = new Button("Import Airport");
 
         VBox leftMenu = new VBox(airports,runways);
         VBox rightMenu = new VBox(exportButton, importButton);
+        VBox.setMargin(leftMenu,(new Insets(20,20,20,20)));
+        VBox.setMargin(rightMenu,(new Insets(20,20,20,20)));
         Region region = new Region();
         HBox.setHgrow(region,Priority.ALWAYS);
-        HBox menuPane = new HBox(leftMenu,region,rightMenu);
-        airportLayout.getChildren().addAll(menuPane,runwayTable);
+        HBox menuPane = new HBox();
+        HBox.setMargin(menuPane,(new Insets(50,50,50,50)));
+
+        menuPane.maxHeightProperty().bind(root.heightProperty().divide(4));
+        menuPane.minHeightProperty().bind(root.heightProperty().divide(4));
+        menuPane.maxWidthProperty().bind(root.widthProperty().subtract(20));
+        menuPane.minWidthProperty().bind(root.widthProperty().subtract(20));
+        tablePane.maxHeightProperty().bind(root.heightProperty().divide(2));
+        tablePane.minHeightProperty().bind(root.heightProperty().divide(2));
+        tablePane.maxWidthProperty().bind(root.widthProperty().subtract(10));
+        tablePane.minWidthProperty().bind(root.widthProperty().subtract(10));
+
+        menuPane.getChildren().addAll(leftMenu,region,rightMenu);
+        airportLayout.getChildren().addAll(menuPane,tablePane);
         return airportLayout;
     }
 
-    private void makeTablePane(VBox runwayTable) {
-        //Aleks: To do now
-        GridPane grid = new GridPane();
-        grid.setHgap(2);
-        grid.setVgap(2);
-        int numRows = 4;
-        int numCols = 14;
+    private Pane makeRunwayGridTable(VBox tableBox) {
 
-        TextField[][] cells = new TextField[numRows][numCols];
+        GridPane runwayGrid = new GridPane();
+        runwayGrid.maxHeightProperty().bind(tableBox.heightProperty().subtract(10));
+        runwayGrid.minHeightProperty().bind(tableBox.heightProperty().subtract(10));
+        runwayGrid.maxWidthProperty().bind(tableBox.widthProperty().subtract(40));
+        runwayGrid.minWidthProperty().bind(tableBox.widthProperty().subtract(40));
+        runwayGrid.setVgap(20);
+        runwayGrid.setGridLinesVisible(true);
 
-        // Add text fields to the grid
-        for (int row = 0; row < numRows; row++) {
-            for (int col = 0; col < numCols; col++) {
-                if (col == 0 & row < 2) {
-                    Region region = new Region();
-                    grid.add(region,col,row);
-                } else {
-                    TextField textField = new TextField("TextField");
-                    cells[row][col] = textField;
-                    grid.add(textField, col, row);
-                    if ((col+1) % 2 == 0 && col < 10 && row == 0) {
-                        textField.setAlignment(Pos.CENTER);
-                        textField.setMaxWidth(Double.MAX_VALUE);
-                        GridPane.setColumnSpan(textField,2);
-                        col++;
-                    } else if (col > 10 && row == 0 || col > 11 && row == 2) {
-                        textField.setAlignment(Pos.CENTER);
-                        textField.setMaxHeight(Double.MAX_VALUE);
-                        GridPane.setRowSpan(textField,2);
-                    }
-                }
+        Label label1 = makeLabel("Runway(RWY)");
+        Label label2 = makeLabel("Runway Strip");
+        Label label3 = makeLabel("Stopway(SWY)");
+        Label label4 = makeLabel("Clearway(CWY)");
+        Label label5 = makeLabel("RESA");
+        Label label6 = makeLabel("Threshold\nDisplacement");
+        Label label7 = makeLabel("Strip End");
+        Label label8 = makeLabel("Blast\nProtection");
+        Label label9 = makeLabel("60m");
+        Label label10 = makeLabel("300m");
+
+        GridPane.setColumnSpan(label1,2);
+        GridPane.setColumnSpan(label2,2);
+        GridPane.setColumnSpan(label3,2);
+        GridPane.setColumnSpan(label4,2);
+        GridPane.setColumnSpan(label5,2);
+        GridPane.setColumnSpan(label6,2);
+        GridPane.setRowSpan(label6,2);
+        GridPane.setRowSpan(label7,2);
+        GridPane.setRowSpan(label8,2);
+        GridPane.setRowSpan(label9,2);
+        GridPane.setRowSpan(label10,2);
+
+        runwayGrid.add(label1,1,0);
+        runwayGrid.add(label2,3,0);
+        runwayGrid.add(label3,5,0);
+        runwayGrid.add(label4,7,0);
+        runwayGrid.add(label5,9,0);
+        runwayGrid.add(label6,11,0);
+        runwayGrid.add(label7,13,0);
+        runwayGrid.add(label8,14,0);
+        runwayGrid.add(label9,13,2);
+        runwayGrid.add(label10,14,2);
+
+        runwayGrid.add(makeLabel("Length"),1,1);
+        runwayGrid.add(makeLabel("Length"),3,1);
+        runwayGrid.add(makeLabel("Length"),5,1);
+        runwayGrid.add(makeLabel("Length"),7,1);
+        runwayGrid.add(makeLabel("Length"),9,1);
+
+        runwayGrid.add(makeLabel("Width"),2,1);
+        runwayGrid.add(makeLabel("Width"),4,1);
+        runwayGrid.add(makeLabel("Width"),6,1);
+        runwayGrid.add(makeLabel("Width"),8,1);
+        runwayGrid.add(makeLabel("Width"),10,1);
+
+
+        runwayGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorProperty(),new SimpleBooleanProperty(true)),0,2);
+        runwayGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorProperty(),new SimpleBooleanProperty(true)),0,3);
+
+        ArrayList<ColumnConstraints> cc = new ArrayList<>();
+        ColumnConstraints cc1 = new ColumnConstraints();
+        cc1.setPercentWidth(120/6.2);
+        //cc1.setPercentWidth(60/6.2);
+        cc.add(cc1);
+        for (int i = 0; i < 14; i++) {
+            ColumnConstraints ccx = new ColumnConstraints();
+            if(i>11) {
+             ccx.setPercentWidth(100/5.2);
+             logger.info("constrains1:" + ccx + "/i: " + i);
+            } else {
+                //ccx.setPercentWidth(100/6.2);
+                ccx.setPercentWidth(100 / 6.2);
+                logger.info("constrains2:" + ccx + "/i: " + i);
             }
-        }
-        // Define the row and column indexes of the text fields to be removed
-        int[] rowsToRemove = {1, 1, 1, 3, 3};
-        int[] colsToRemove = {11, 12, 13, 12, 13};
-        // Remove the specified text fields from the grid
-        for (int i = 0; i < rowsToRemove.length; i++) {
-            TextField removedTextField = cells[rowsToRemove[i]][colsToRemove[i]];
-            grid.getChildren().remove(removedTextField);
-        }
-        runwayTable.getChildren().add(grid);
+            cc.add(ccx);
 
+        }
+        runwayGrid.getColumnConstraints().addAll(cc);
+
+        /*ArrayList<RowConstraints> rc = new ArrayList<>();
+        for (int i = 0; i < 14; i++) {
+
+            RowConstraints rcx = new RowConstraints();
+            rcx.setPercentHeight(100/5);
+            logger.info("constrains3:" + rcx + "/i: " + i);
+            rc.add(rcx);
+        }
+        runwayGrid.getRowConstraints().addAll(rc);
+
+        /*ArrayList<Pair<String, Pane>> runwayTable = new ArrayList<>();
+        runwayTable.add(new Pair<>("Runway Table", runwayGrid));
+        Pane runwayGridPane = new TabLayout(runwayTable,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
+        */
+
+        runwayGrid.getChildren().forEach(new Consumer<Node>() {
+            @Override
+            public void accept(Node node) {
+                GridPane.setHalignment(node, HPos.CENTER);
+            }
+        });
+        return runwayGrid;
     }
+
     public Pane makeObstacleConfig(){
         HBox obstacleLayout = new HBox();
         VBox leftPane = new VBox();

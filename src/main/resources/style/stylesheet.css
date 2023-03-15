@@ -18,7 +18,12 @@
 .scroll-pane{
    -fx-background-color: transparent;
 }
-.combobox{
-   -fx-base: rgba(26, 26, 26, 255);
-   background-color: rgba(26, 26, 26, 255);
+.combobox {
+    -fx-base: rgba(26, 26, 26, 255);
+    background-color: rgba(26, 26, 26, 255);
+}
+.grid-border-text-style {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
 }
