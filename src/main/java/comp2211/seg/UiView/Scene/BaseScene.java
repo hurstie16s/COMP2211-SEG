@@ -16,14 +16,18 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class BaseScene extends SceneAbstract implements GlobalVariables{
@@ -52,7 +56,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     }
 
-    public void build(){
+    public void build()  {
         super.build();
         root.setBackground(new Background(new BackgroundFill(GlobalVariables.unfocusedBG,null,null)));
         mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
@@ -67,28 +71,45 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         mainPane.minWidthProperty().bind(root.widthProperty());
         mainPane.getChildren().add(tabLayout);
     }
-    public Pane makeAirportConfig(){
+    public Pane makeAirportConfig() {
         //Aleks do stuff here
 
         //main vBox
         VBox vBoxAirportLayout = new VBox();
         //table
         VBox vBoxTable = new VBox();
-        VBox.setMargin(vBoxTable,new Insets(200,20,20,20));//Top/Right/Bottom/Left
+        VBox.setMargin(vBoxTable,new Insets(150,20,20,20));//Top/Right/Bottom/Left
         vBoxTable.getChildren().add(makeRunwayGridTable());
 
         //left menu
         Button airportsTempButton = new Button("Airports");
         Button runwaysTempButton = new Button("Runways");
         VBox leftMenu = new VBox(airportsTempButton,runwaysTempButton);
-        VBox.setMargin(airportsTempButton,new Insets(20,20,20,20));
-        VBox.setMargin(runwaysTempButton,new Insets(20,20,20,20));
+        VBox.setMargin(airportsTempButton,new Insets(30,20,20,20));
+        VBox.setMargin(runwaysTempButton,new Insets(10,20,20,20));
+
         //right menu
-        Button exportButton = new Button("Export Airport");
-        Button importButton = new Button("Import Airport");
+
+        // Create image views for the icons
+        ImageView exportIcon = new ImageView(new Image(Objects.requireNonNull(getClass()
+            .getResource("/images/export.png")).toExternalForm()));
+        ImageView importIcon = new ImageView(new Image(Objects.requireNonNull(getClass()
+            .getResource("/images/import.png")).toExternalForm()));
+
+
+        // Create the buttons and set their graphics
+        Button exportButton = new Button("Export Airport", exportIcon);
+        Button importButton = new Button("Import Airport", importIcon);
+
+        // Set the size of the icon
+        exportIcon.setFitHeight(16);
+        exportIcon.setFitWidth(16);
+        importIcon.setFitHeight(16);
+        importIcon.setFitWidth(16);
+
         VBox rightMenu = new VBox(exportButton, importButton);
-        VBox.setMargin(exportButton,new Insets(20,20,20,20));
-        VBox.setMargin(importButton,new Insets(20,20,20,20));
+        VBox.setMargin(exportButton,new Insets(30,20,20,20));
+        VBox.setMargin(importButton,new Insets(10,20,20,20));
         //Dark buttons style from css, can be done globally
         List<Button> darkButtons = new ArrayList<>();
         darkButtons.add(airportsTempButton);
