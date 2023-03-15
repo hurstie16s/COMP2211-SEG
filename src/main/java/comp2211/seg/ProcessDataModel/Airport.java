@@ -11,11 +11,6 @@ public class Airport {
     /** The name of the airport. */
     public String name;
 
-    public String getCity() {
-        return city;
-    }
-    public String city;
-
     public Double getLatitude() {
         return latitude;
     }

@@ -84,6 +84,24 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         makeTablePane(tablePane);
 
         Button exportButton = new Button("Export Airport");
+
+        exportButton.setOnAction(e -> {
+
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Choose file to export");
+            fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml"));
+            File file = fileChooser.showSaveDialog(new Stage());
+
+            if (file == null)
+                return;
+
+            if(!file.getName().contains(".xml"))
+                file = new File(file.getAbsolutePath()+".xml");
+
+
+
+        });
+
         Button importButton = new Button("Import Airport");
 
         VBox leftMenu = new VBox(airports,runways);
