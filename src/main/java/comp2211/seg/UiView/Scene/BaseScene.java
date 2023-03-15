@@ -23,6 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class BaseScene extends SceneAbstract implements GlobalVariables{
@@ -69,62 +70,52 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     public Pane makeAirportConfig(){
         //Aleks do stuff here
 
-        VBox airportLayout = new VBox();
-        VBox tablePane = new VBox();
-        VBox.setMargin(tablePane,(new Insets(20,20,20,20)));
+        //main vBox
+        VBox vBoxAirportLayout = new VBox();
+        //table
+        VBox vBoxTable = new VBox();
+        VBox.setMargin(vBoxTable,new Insets(200,20,20,20));//Top/Right/Bottom/Left
+        vBoxTable.getChildren().add(makeRunwayGridTable());
 
-        tablePane.getChildren().add(makeRunwayGridTable(tablePane));
-
-        ComboBox airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
-        airports.valueProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                appWindow.setAirport((Airport) t1);
-            }
-        });
-        airports.valueProperty().set(appWindow.airport);
-        ComboBox runways = new ComboBox<>();
-        runways.valueProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                appWindow.runway.runwayDesignatorProperty();
-            }
-        });
-        runways.valueProperty().set(appWindow.runway);
-
+        //left menu
+        Button airportsTempButton = new Button("Airports");
+        Button runwaysTempButton = new Button("Runways");
+        VBox leftMenu = new VBox(airportsTempButton,runwaysTempButton);
+        VBox.setMargin(airportsTempButton,new Insets(20,20,20,20));
+        VBox.setMargin(runwaysTempButton,new Insets(20,20,20,20));
+        //right menu
         Button exportButton = new Button("Export Airport");
         Button importButton = new Button("Import Airport");
-
-        VBox leftMenu = new VBox(airports,runways);
         VBox rightMenu = new VBox(exportButton, importButton);
-        VBox.setMargin(leftMenu,(new Insets(20,20,20,20)));
-        VBox.setMargin(rightMenu,(new Insets(20,20,20,20)));
-        //Region region = new Region();
-        //HBox.setHgrow(region,Priority.ALWAYS);
-        HBox menuPane = new HBox();
-        HBox.setMargin(menuPane,(new Insets(50,50,50,50)));
+        VBox.setMargin(exportButton,new Insets(20,20,20,20));
+        VBox.setMargin(importButton,new Insets(20,20,20,20));
+        //Dark buttons style from css, can be done globally
+        List<Button> darkButtons = new ArrayList<>();
+        darkButtons.add(airportsTempButton);
+        darkButtons.add(runwaysTempButton);
+        darkButtons.add(exportButton);
+        darkButtons.add(importButton);
 
-        menuPane.maxHeightProperty().bind(root.heightProperty().divide(4));
-        menuPane.minHeightProperty().bind(root.heightProperty().divide(4));
-        menuPane.maxWidthProperty().bind(root.widthProperty().subtract(20));
-        menuPane.minWidthProperty().bind(root.widthProperty().subtract(20));
-        tablePane.maxHeightProperty().bind(root.heightProperty().divide(2));
-        tablePane.minHeightProperty().bind(root.heightProperty().divide(2));
-        tablePane.maxWidthProperty().bind(root.widthProperty().subtract(10));
-        tablePane.minWidthProperty().bind(root.widthProperty().subtract(10));
+        for (Button button : darkButtons) {
+            button.getStyleClass().add("button-dark");
+        }
 
-        menuPane.getChildren().addAll(leftMenu,rightMenu);
-        airportLayout.getChildren().addAll(menuPane,tablePane);
-        return airportLayout;
+
+
+        HBox hBoxMenuButtons = new HBox();
+        Region region = new Region();
+        HBox.setHgrow(region,Priority.ALWAYS);
+        hBoxMenuButtons.getChildren().addAll(leftMenu,region,rightMenu);
+
+        vBoxAirportLayout.getChildren().addAll(hBoxMenuButtons,vBoxTable);
+        //return vBox
+        return vBoxAirportLayout;
     }
 
-    private Pane makeRunwayGridTable(VBox tableBox) {
+    private Pane makeRunwayGridTable() {
 
         GridPane runwayGrid = new GridPane();
-        runwayGrid.maxHeightProperty().bind(tableBox.heightProperty().subtract(10));
-        runwayGrid.minHeightProperty().bind(tableBox.heightProperty().subtract(10));
-        runwayGrid.maxWidthProperty().bind(tableBox.widthProperty().subtract(40));
-        runwayGrid.minWidthProperty().bind(tableBox.widthProperty().subtract(40));
+
         runwayGrid.setVgap(20);
         runwayGrid.setGridLinesVisible(true);
 
