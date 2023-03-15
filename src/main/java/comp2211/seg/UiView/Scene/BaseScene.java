@@ -99,8 +99,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         VBox rightMenu = new VBox(exportButton, importButton);
         VBox.setMargin(leftMenu,(new Insets(20,20,20,20)));
         VBox.setMargin(rightMenu,(new Insets(20,20,20,20)));
-        Region region = new Region();
-        HBox.setHgrow(region,Priority.ALWAYS);
+        //Region region = new Region();
+        //HBox.setHgrow(region,Priority.ALWAYS);
         HBox menuPane = new HBox();
         HBox.setMargin(menuPane,(new Insets(50,50,50,50)));
 
@@ -113,7 +113,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         tablePane.maxWidthProperty().bind(root.widthProperty().subtract(10));
         tablePane.minWidthProperty().bind(root.widthProperty().subtract(10));
 
-        menuPane.getChildren().addAll(leftMenu,region,rightMenu);
+        menuPane.getChildren().addAll(leftMenu,rightMenu);
         airportLayout.getChildren().addAll(menuPane,tablePane);
         return airportLayout;
     }
