@@ -39,7 +39,7 @@ public class FileHandler {
             document.appendChild(rootElement);
 
             Element name = document.createElement("name");
-            name.appendChild(document.createTextNode(airport.getCity()));
+            name.appendChild(document.createTextNode(airport.toString()));
             rootElement.appendChild(name);
 
 //            Element city = document.createElement("city");
