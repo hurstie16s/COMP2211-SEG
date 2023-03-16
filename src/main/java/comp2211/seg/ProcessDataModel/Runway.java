@@ -45,8 +45,8 @@ public class Runway {
     if the azimuth of the centre-line is 153 then the runway designator will be 15
     followed by either L C or R to differentiate between parallel runways
      */
-    private final SimpleStringProperty runwayDesignatorRight = new SimpleStringProperty("09L");
-    private final SimpleStringProperty runwayDesignatorLeft = new SimpleStringProperty("");
+    private final SimpleStringProperty runwayDesignatorLeft = new SimpleStringProperty("09L");
+    private final SimpleStringProperty runwayDesignatorRight = new SimpleStringProperty("");
     private final SimpleDoubleProperty inputRightTora = new SimpleDoubleProperty(1000);
     private final SimpleDoubleProperty inputRightToda = new SimpleDoubleProperty(1500);
     private final SimpleDoubleProperty inputRightAsda = new SimpleDoubleProperty(1150);
@@ -101,7 +101,7 @@ public class Runway {
      */
     public Runway() {
         for (Property prop: new Property[] {
-                runwayDesignatorRight,
+                runwayDesignatorLeft,
                 runwayLength,
                 hasRunwayObstacle
         }) {
@@ -125,14 +125,15 @@ public class Runway {
      * Calculates the runway designator for the runway in the opposite direction
      */
     private void calculateRunwayDesignatorLeft() {
-        var number = (Integer.parseInt(runwayDesignatorRight.get().substring(0,2)) + 18) % 36;
-        var character = runwayDesignatorRight.get().substring(2);
+        var number = (Integer.parseInt(runwayDesignatorLeft.get().substring(0,2)) + 18) % 36;
+        var character = runwayDesignatorLeft.get().substring(2);
         character = switch(character) {
             case "R" -> "L";
             case "L" -> "R";
             case "C" -> "C";
+            default -> "error";
         };
-        runwayDesignatorLeft.set(number + character);
+        runwayDesignatorRight.set(number + character);
     }
 
     /**
@@ -141,7 +142,7 @@ public class Runway {
      */
     public void addObstacle() {
         hasRunwayObstacle.set(true);
-        logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorRight.get());
+        logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
     }
     /**
      * Removing the obstacle from the runway
@@ -151,7 +152,7 @@ public class Runway {
         hasRunwayObstacle.set(false);
 
         recalculate();
-        logger.info("Removed Obstacle "+ runwayObstacle.getObstacleDesignator() + " from runway " + runwayDesignatorRight.get());
+        logger.info("Removed Obstacle "+ runwayObstacle.getObstacleDesignator() + " from runway " + runwayDesignatorLeft.get());
         logger.info("Return runway to original state");
     }
 
@@ -174,8 +175,6 @@ public class Runway {
         leftLda.bind(inputLeftLda);
 
         if (hasRunwayObstacle.get()) {
-            // TODO: Correct recalculate
-            // TODO: Run all 4 calculation methods - bind to correct values
             if (direction.get()) {
                 calculateTakeOffToward();
                 calculateLandTowards();
@@ -278,6 +277,7 @@ public class Runway {
     /**
      Calculations for when a plane is landing over an obstacle
      */
+    // TODO: Check working
     public void calculateLandOver() {
         /*
         Not really needed for landing calculations
@@ -285,24 +285,9 @@ public class Runway {
         workingAsda.bind(workingTora.add(stopway));
         workingToda.bind(workingTora.add(clearway));
          */
-        SimpleDoubleProperty obstacleSlopeCalculation = new SimpleDoubleProperty();
-        obstacleSlopeCalculation
-                .bind(Bindings
-                        .when(Bindings
-                                .greaterThan(runwayObstacle.heightProperty()
-                                        .multiply(SLOPE),MINRESA
-                                        .add(runwayObstacle.widthProperty()
-                                                .divide(2))))
-                        .then(runwayObstacle
-                                .heightProperty()
-                                .multiply(SLOPE))
-                        .otherwise(MINRESA
-                                .add(runwayObstacle
-                                        .widthProperty()
-                                        .divide(2))));
+        /*
 
 
-        SimpleDoubleProperty leftLdaSubtraction = new SimpleDoubleProperty();
         SimpleDoubleProperty rightLdaSubtraction= new SimpleDoubleProperty();
 
         leftLdaSubtraction.bind(
@@ -327,7 +312,40 @@ public class Runway {
                         .otherwise(BLASTZONE));
 
         rightLda.bind(inputRightLda.subtract(rightLdaSubtraction));
-        leftLda.bind(inputLeftLda.subtract(leftLdaSubtraction));
+         */
+
+        // Calculate Land Over for Left
+
+        var obstacleSlopeCalculation = new SimpleDoubleProperty();
+        obstacleSlopeCalculation
+                .bind(Bindings
+                        .when(Bindings
+                                .greaterThan(runwayObstacle.heightProperty()
+                                        .multiply(SLOPE),MINRESA
+                                        .add(runwayObstacle.widthProperty()
+                                                .divide(2))))
+                        .then(runwayObstacle
+                                .heightProperty()
+                                .multiply(SLOPE))
+                        .otherwise(MINRESA
+                                .add(runwayObstacle
+                                        .widthProperty()
+                                        .divide(2))));
+
+        var ldaSubtraction = new SimpleDoubleProperty();
+        ldaSubtraction.bind(
+                Bindings.when(
+                        Bindings.greaterThan(
+                                runwayObstacle.distFromThresholdProperty()
+                                        .add(obstacleSlopeCalculation)
+                                        .add(STRIPEND),BLASTZONE)).then(runwayObstacle.distFromThresholdProperty()
+                        .add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE));
+
+        leftLda.bind(inputLeftLda.subtract(ldaSubtraction));
+
+        // Calculate Land Towards for Right
+
+        rightLda.bind(inputRightLda.subtract(runwayObstacle.distFromOtherThresholdProperty()).subtract(MINRESA).subtract(STRIPEND));
     }
 
     /**
@@ -340,6 +358,11 @@ public class Runway {
         workingAsda.bind(workingTora);
         workingToda.bind(workingTora);
          */
+
+        // Calculate Land Towards for Left
+
+        // Calculate Land Over for Right
+
         leftLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
         rightLda.bind(inputLeftLda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(MINRESA).subtract(STRIPEND));
         logger.info("Re-calculated LDA");
@@ -469,14 +492,14 @@ public class Runway {
      * @return The runway designator string.
      */
     public String getRunwayDesignator() {
-        return runwayDesignatorRight.get();
+        return runwayDesignatorLeft.get();
     }
     /**
      * Returns the SimpleStringProperty object representing the runway designator.
      * @return The SimpleStringProperty object representing the runway designator.
      */
     public SimpleStringProperty runwayDesignatorProperty() {
-        return runwayDesignatorRight;
+        return runwayDesignatorLeft;
     }
 
     /**
