@@ -45,8 +45,8 @@ public class Runway {
     if the azimuth of the centre-line is 153 then the runway designator will be 15
     followed by either L C or R to differentiate between parallel runways
      */
-    private final SimpleStringProperty runwayDesignatorLeft = new SimpleStringProperty("09L");
-    private final SimpleStringProperty runwayDesignatorRight = new SimpleStringProperty("");
+    private final SimpleStringProperty runwayDesignatorLeft = new SimpleStringProperty("VOID");
+    private final SimpleStringProperty runwayDesignatorRight = new SimpleStringProperty("VOID");
     private final SimpleDoubleProperty inputRightTora = new SimpleDoubleProperty(1000);
     private final SimpleDoubleProperty inputRightToda = new SimpleDoubleProperty(1500);
     private final SimpleDoubleProperty inputRightAsda = new SimpleDoubleProperty(1150);
@@ -121,17 +121,20 @@ public class Runway {
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
         recalculate();
         validityChecks();
-        runwayDesignatorRight.bind(calculateRunwayDesignatorLeft());
+
+        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get())));
+        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get())));
     }
 
     /**
      * Calculates the runway designator for the runway in the opposite direction
      */
-    private SimpleStringProperty calculateRunwayDesignatorLeft() {
-        var number = (Integer.parseInt(runwayDesignatorLeft.get().substring(0,2)) + 18) % 36;
-        var character = runwayDesignatorLeft.get().substring(2);
-
-        logger.info(runwayDesignatorLeft.get());
+    private String calculateRunwayDesignator(String designator) {
+        var number = String.valueOf((Integer.parseInt(designator.substring(0,2)) + 18) % 36);
+        if (number.length() == 1) {
+            number = "0"+number;
+        }
+        var character = designator.substring(2);
 
         var newCharacter = "";
         if (character.equals("R")) {
@@ -144,7 +147,18 @@ public class Runway {
             newCharacter = "ERROR";
             logger.error("Incorrect initial character");
         }
-        return new SimpleStringProperty(number + newCharacter);
+
+        var newDesignator = number + newCharacter;
+
+        logger.info("Runway Designators: "+designator+", "+newDesignator);
+
+        return newDesignator;
+    }
+
+    public static void main(String[] args) {
+        var runway = new Runway();
+        runway.runwayDesignatorLeft.set("09L");
+        logger.info(runway.runwayDesignatorRight.get());
     }
 
     /**

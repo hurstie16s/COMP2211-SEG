@@ -67,7 +67,7 @@ class RunwayTest {
             int rightAsda,
             int rightLda,
             Runway runway) {
-        runway.runwayDesignatorLeftProperty().bind(new SimpleStringProperty(designator));
+        runway.runwayDesignatorLeftProperty().set(designator);
         runway.inputLeftToraProperty().bind(new SimpleDoubleProperty(leftTora));
         runway.inputLeftTodaProperty().bind(new SimpleDoubleProperty(leftToda));
         runway.inputLeftAsdaProperty().bind(new SimpleDoubleProperty(leftAsda));
@@ -92,12 +92,10 @@ class RunwayTest {
     @MethodSource("generateCheckDesignatorTestData")
     void checkDesignatorTestData(Runway runway, String expectedDesignator) {
 
-        logger.info("Runway "+runway.getRunwayDesignatorLeft());
-
         var expectedNumber = expectedDesignator.substring(0,2);
         var expectedCharacter = expectedDesignator.substring(2);
 
-        assertEquals(expectedNumber, runway.getRunwayDesignatorRight().substring(0,2), "Number for runway designator incorrect");
+        //assertEquals(expectedNumber, runway.getRunwayDesignatorRight().substring(0,2), "Number for runway designator incorrect");
         assertEquals(expectedCharacter, runway.getRunwayDesignatorRight().substring(2), "Character for runway designator incorrect");
         assertEquals(expectedDesignator, runway.getRunwayDesignatorRight(), "Runway designator incorrect");
     }
