@@ -45,7 +45,7 @@ public class AppWindow {
         this.width = width;
         this.height = height;
         airports = new ArrayList<>();
-        //Theme.makeDark();
+        Theme.makeDark();
 
         addAirport(new Airport("Heathrow"));
         addAirport(new Airport("Gatwick"));

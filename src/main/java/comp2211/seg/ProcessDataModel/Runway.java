@@ -355,6 +355,8 @@ public class Runway {
         rightTora.bind(runwayObstacle.distFromThresholdProperty().subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).add(dispThresholdLeft));
         rightAsda.bind(rightTora.add(stopwayLeft));
         rightToda.bind(rightTora.add(clearwayLeft));
+
+
         leftTora.bind(inputLeftTora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).subtract(dispThresholdLeft));
         leftAsda.bind(leftTora.add(stopwayRight));
         leftToda.bind(leftTora.add(clearwayRight));

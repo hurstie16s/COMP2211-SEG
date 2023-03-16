@@ -45,23 +45,23 @@ public class Theme {
     }
 
     public static void makeDark(){
-        bg = inverse(bg);
-        bgRunway = inverse(bgRunway);
-        unfocusedBG = inverse(unfocusedBG);
-        focusedBG = inverse(focusedBG);
-        veryfocusedBG = inverse(veryfocusedBG);
-        fg = inverse(fg);
-        grass = reverse(grass);
-        obstacle = reverse(obstacle);
-        slope = reverse(slope);
-        cga = reverse(cga);
-        clearway = reverse(clearway);
-        stopway = reverse(stopway);
-        physicalResa = reverse(physicalResa);
-        runway = reverse(runway);
-        toda = reverse(toda);
-        tora = reverse(tora);
-        asda = reverse(asda);
-        lda = reverse(lda);
+        bg = Color.gray(0.2);
+        bgRunway = Color.gray(0.15);
+        unfocusedBG = Color.gray(0.1);
+        focusedBG = Color.gray(0.2);
+        veryfocusedBG = Color.gray(0.25);
+        fg = Color.gray(0.6);
+        grass = Color.web("#014130");
+        obstacle = Color.web("#e3b7b5");
+        slope = Color.web("#ecfdec");
+        cga = Color.web("#006166");
+        clearway = Color.web("#465d52");
+        stopway = Color.web("#c1d095");
+        resa = Color.web("#698320");
+        runway = Color.web("#333432");
+        toda = Color.web("#c3d1f4");
+        tora = Color.web("#9afece");
+        asda = Color.web("#49ba26");
+        lda = Color.web("#00edfa");
     }
 }
