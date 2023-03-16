@@ -7,6 +7,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -578,10 +580,45 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         Spinner spinner = new Spinner();
         SpinnerValueFactory<Double> svf = new SpinnerValueFactory.DoubleSpinnerValueFactory(0,999999999,binding.get());
         spinner.setValueFactory(svf);
-        binding.bind(spinner.valueProperty());
+        spinner.editableProperty().set(true);
+
+        spinner.getEditor().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if (Objects.equals(t1, "")) {
+                    binding.set(0);
+                } else {
+                    try {
+                        binding.set(Double.parseDouble(t1));
+                    } catch (Exception e) {
+                        displayErrorMessage("Invalid Entry", t1 + " must be a number");
+                        spinner.getEditor().setText(s);
+                    }
+                }
+            }
+        });
+        binding.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                spinner.getEditor().setText(Double.toString(t1.doubleValue()));
+            }
+        });
 
         return spinner;
     }
 
+    /**
+     * Displays an error message dialog box with the specified title and message.
+     *
+     * @param title   the title of the dialog box
+     * @param message the message to display in the dialog box
+     */
+    private void displayErrorMessage(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
 }
