@@ -45,7 +45,8 @@ public class Runway {
     if the azimuth of the centre-line is 153 then the runway designator will be 15
     followed by either L C or R to differentiate between parallel runways
      */
-    private final SimpleStringProperty runwayDesignator = new SimpleStringProperty("36C");
+    private final SimpleStringProperty runwayDesignatorRight = new SimpleStringProperty("09L");
+    private final SimpleStringProperty runwayDesignatorLeft = new SimpleStringProperty("");
     private final SimpleDoubleProperty inputRightTora = new SimpleDoubleProperty(1000);
     private final SimpleDoubleProperty inputRightToda = new SimpleDoubleProperty(1500);
     private final SimpleDoubleProperty inputRightAsda = new SimpleDoubleProperty(1150);
@@ -100,7 +101,7 @@ public class Runway {
      */
     public Runway() {
         for (Property prop: new Property[] {
-                runwayDesignator,
+                runwayDesignatorRight,
                 runwayLength,
                 hasRunwayObstacle
         }) {
@@ -117,6 +118,21 @@ public class Runway {
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
         recalculate();
         validityChecks();
+        calculateRunwayDesignatorLeft();
+    }
+
+    /**
+     * Calculates the runway designator for the runway in the opposite direction
+     */
+    private void calculateRunwayDesignatorLeft() {
+        var number = (Integer.parseInt(runwayDesignatorRight.get().substring(0,2)) + 18) % 36;
+        var character = runwayDesignatorRight.get().substring(2);
+        character = switch(character) {
+            case "R" -> "L";
+            case "L" -> "R";
+            case "C" -> "C";
+        };
+        runwayDesignatorLeft.set(number + character);
     }
 
     /**
@@ -125,7 +141,7 @@ public class Runway {
      */
     public void addObstacle() {
         hasRunwayObstacle.set(true);
-        logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignator.get());
+        logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorRight.get());
     }
     /**
      * Removing the obstacle from the runway
@@ -135,9 +151,10 @@ public class Runway {
         hasRunwayObstacle.set(false);
 
         recalculate();
-        logger.info("Removed Obstacle "+ runwayObstacle.getObstacleDesignator() + " from runway " + runwayDesignator.get());
+        logger.info("Removed Obstacle "+ runwayObstacle.getObstacleDesignator() + " from runway " + runwayDesignatorRight.get());
         logger.info("Return runway to original state");
     }
+
     /**
      *
      Recalculates the runway values based on the landing/takeoff direction and LDA/TORA values.
@@ -157,6 +174,8 @@ public class Runway {
         leftLda.bind(inputLeftLda);
 
         if (hasRunwayObstacle.get()) {
+            // TODO: Correct recalculate
+            // TODO: Run all 4 calculation methods - bind to correct values
             if (direction.get()) {
                 calculateTakeOffToward();
                 calculateLandTowards();
@@ -167,7 +186,7 @@ public class Runway {
         }
     }
     public void validityChecks(){
-        //Bindings.greaterThan(greater,lesser) = true;
+        // Bindings.greaterThan(greater,lesser) = true;
         leftTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftAsda,inputLeftTora),Bindings.greaterThanOrEqual(inputLeftToda,leftAsda)));
         leftLand.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftLda,0),
                 Bindings.lessThanOrEqual(inputLeftLda,inputLeftTora))
@@ -450,14 +469,14 @@ public class Runway {
      * @return The runway designator string.
      */
     public String getRunwayDesignator() {
-        return runwayDesignator.get();
+        return runwayDesignatorRight.get();
     }
     /**
      * Returns the SimpleStringProperty object representing the runway designator.
      * @return The SimpleStringProperty object representing the runway designator.
      */
     public SimpleStringProperty runwayDesignatorProperty() {
-        return runwayDesignator;
+        return runwayDesignatorRight;
     }
 
     /**
