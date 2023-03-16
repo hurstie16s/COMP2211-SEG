@@ -192,13 +192,13 @@ public class Runway {
         );
 
         Text label = new Text();
-        label.textProperty().bind(new SimpleStringProperty("Top ASDA (").concat(inputLeftAsda.asString()).concat(") < Top TORA (").concat( inputLeftTora.asString()).concat(") + Stopway (").concat(STOPWAYMIN).concat(")"));
-        label.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftAsda,inputLeftTora.add(STOPWAYMIN)).not());
+        label.textProperty().bind(new SimpleStringProperty("Top ASDA (").concat(inputLeftAsda.asString()).concat(") < Top TORA (").concat( inputLeftTora.asString()).concat(")"));
+        label.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftAsda,inputLeftTora).not());
         label.setFill(Color.RED);
         label.setFont(GlobalVariables.font);
         Text label2 = new Text();
-        label2.textProperty().bind(new SimpleStringProperty("Top TODA (").concat(inputLeftToda.asString()).concat(") < Top ASDA (").concat( inputLeftAsda.asString()).concat(") + Strip end (").concat(STRIPEND).concat(") + Resa (").concat(RESAWidth).concat(")"));
-        label2.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftToda,inputLeftAsda.add(STRIPEND).add(RESAWidth)).not());
+        label2.textProperty().bind(new SimpleStringProperty("Top TODA (").concat(inputLeftToda.asString()).concat(") < Top ASDA (").concat( inputLeftAsda.asString()).concat(")"));
+        label2.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftToda,inputLeftAsda).not());
         label2.setFill(Color.RED);
         label2.setFont(GlobalVariables.font);
         Text label3 = new Text();
@@ -212,13 +212,13 @@ public class Runway {
         label4.setFill(Color.RED);
         label4.setFont(GlobalVariables.font);
         Text label5= new Text();
-        label5.textProperty().bind(new SimpleStringProperty("Bottom ASDA (").concat(inputRightAsda.asString()).concat(") < Bottom TORA (").concat( inputRightTora.asString()).concat(") + Stopway (").concat(STOPWAYMIN).concat(")"));
-        label5.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora.add(STOPWAYMIN)).not());
+        label5.textProperty().bind(new SimpleStringProperty("Bottom ASDA (").concat(inputRightAsda.asString()).concat(") < Bottom TORA (").concat( inputRightTora.asString()).concat(")"));
+        label5.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora).not());
         label5.setFill(Color.RED);
         label5.setFont(GlobalVariables.font);
         Text label6= new Text();
-        label6.textProperty().bind(new SimpleStringProperty("Bottom TODA (").concat(inputRightToda.asString()).concat(") < Bottom ASDA (").concat( inputRightAsda.asString()).concat(") + Strip end (").concat(STRIPEND).concat(") + Resa (").concat(RESAWidth).concat(")"));
-        label6.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda.add(STRIPEND).add(RESAWidth)).not());
+        label6.textProperty().bind(new SimpleStringProperty("Bottom TODA (").concat(inputRightToda.asString()).concat(") < Bottom ASDA (").concat( inputRightAsda.asString()).concat(")"));
+        label6.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda).not());
         label6.setFill(Color.RED);
         label6.setFont(GlobalVariables.font);
         Text label7= new Text();
