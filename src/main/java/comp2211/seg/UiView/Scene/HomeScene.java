@@ -126,7 +126,8 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
     title.setFont(Theme.font);
     title.setFill(Theme.fg);
 
-    Text desciption = new Text("Welcome! This runway redeclaration tool is designed to help air traffic control professionals visualise the impact of obstacles on declared distances to understand how to continue runway operations");
+    Text desciption = new Text("Welcome! This runway redeclaration tool is designed to help air traffic " +
+        "control professionals visualise the impact of obstacles on declared distances to understand how to continue runway operations");
     desciption.setFont(Theme.font);
     desciption.setFill(Theme.fg);
 
