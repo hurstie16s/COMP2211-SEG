@@ -127,26 +127,26 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return vBoxAirportLayout;
     }
 
-    private TableView buildTableView(VBox container) {
+    private TableView<Object> buildTableView(VBox container) {
 
-        TableView table = new TableView<>();
+        TableView<Object> table = new TableView<>();
         table.setBackground(new Background(new BackgroundFill(unfocusedBG,null,null)));
         final Label label = new Label("Runway Data");
         label.setFont(GlobalVariables.font);
         //table.setEditable(true);
 
         //columns
-        TableColumn emptyColumn1 = new TableColumn<>("Runway\nDesignators");
-        TableColumn firstColumn = new TableColumn<>("Runway(RWY)");
-        TableColumn secondColumn = new TableColumn<>("Runway Strip");
-        TableColumn thirdColumn = new TableColumn<>("Stopway(SWY)");
-        TableColumn fourthColumn = new TableColumn<>("Clearway(CWY)");
-        TableColumn fifthColumn = new TableColumn<>("RESA");
-        TableColumn sixthColumn = new TableColumn<>("Threshold\nDisplacement");
-        TableColumn seventhColumn = new TableColumn<>("Strip End");
-        TableColumn eighthColumn = new TableColumn<>("Blast\nProtection");
-        TableColumn lengthColumn = new TableColumn<>("Length");
-        TableColumn widthColumn = new TableColumn<>("Width");
+        TableColumn<Object, Object> emptyColumn1 = new TableColumn<>("Runway\nDesignators");
+        TableColumn<Object, Object> firstColumn = new TableColumn<>("Runway(RWY)");
+        TableColumn<Object, Object> secondColumn = new TableColumn<>("Runway Strip");
+        TableColumn<Object, Object> thirdColumn = new TableColumn<>("Stopway(SWY)");
+        TableColumn<Object, Object> fourthColumn = new TableColumn<>("Clearway(CWY)");
+        TableColumn<Object, Object> fifthColumn = new TableColumn<>("RESA");
+        TableColumn<Object, Object> sixthColumn = new TableColumn<>("Threshold\nDisplacement");
+        TableColumn<Object, Object> seventhColumn = new TableColumn<>("Strip End");
+        TableColumn<Object, Object> eighthColumn = new TableColumn<>("Blast\nProtection");
+        TableColumn<Object, Object> lengthColumn = new TableColumn<>("Length");
+        TableColumn<Object, Object> widthColumn = new TableColumn<>("Width");
         firstColumn.getColumns().addAll(lengthColumn,widthColumn);
         secondColumn.getColumns().addAll(lengthColumn,widthColumn);
         thirdColumn.getColumns().addAll(lengthColumn,widthColumn);
@@ -169,9 +169,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         //table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 
-        for (Object column : table.getColumns()) {
-            ((TableColumn<?, ?>) column).maxWidthProperty().bind(container.widthProperty().divide(9));
-            ((TableColumn<?, ?>) column).minWidthProperty().bind(container.widthProperty().divide(9));
+        for (TableColumn<?, ?> column : table.getColumns()) {
+            column.maxWidthProperty().bind(container.widthProperty().divide(9));
+            column.minWidthProperty().bind(container.widthProperty().divide(9));
         }
         lengthColumn.maxWidthProperty().bind(container.widthProperty().divide(18));
         lengthColumn.minWidthProperty().bind(container.widthProperty().divide(18));
