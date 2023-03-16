@@ -1,7 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
-import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
+import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Obstacle;
 import comp2211.seg.UiView.Overlay.RunwayLabel;
 import comp2211.seg.UiView.Scene.RunwayComponents.ClearedGradedArea;
@@ -13,7 +13,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.control.TextField;
@@ -256,7 +255,7 @@ public class RunwayScene extends SceneAbstract {
    */
   public void makeRunway() {
     PhongMaterial material = new PhongMaterial();
-    material.setDiffuseColor(GlobalVariables.runway);
+    material.setDiffuseColor(Theme.runway);
     //import these from runway somehow
     Box box = new Box(0,0,runwayOffset.get());
     box.widthProperty().bind(appWindow.runway.runwayLengthProperty().multiply(scaleFactor));
@@ -315,7 +314,7 @@ public class RunwayScene extends SceneAbstract {
     Box background = new Box(width,height,0);
     PhongMaterial material = new PhongMaterial();
 //material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
-    material.setDiffuseColor(GlobalVariables.grass);
+    material.setDiffuseColor(Theme.grass);
     background.setMaterial(material);
     background.widthProperty().bind((DoubleBinding) Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()));
     background.heightProperty().bind((DoubleBinding) Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()));
@@ -333,7 +332,7 @@ public class RunwayScene extends SceneAbstract {
   @Override
   public void build() {
     super.build();
-    setFill(GlobalVariables.bgRunway);
+    setFill(Theme.bgRunway);
     logger.info("building");
     configureCamera();
     render();
@@ -391,7 +390,7 @@ public class RunwayScene extends SceneAbstract {
             obstacle.widthProperty().multiply(1),
             obstacle.lengthProperty().multiply(1),
             obstacle.heightProperty().multiply(1),
-            GlobalVariables.obstacle
+            Theme.obstacle
             );
     obstacleView.visibleProperty().bind(appWindow.runway.hasRunwayObstacleProperty());
 
@@ -402,7 +401,7 @@ public class RunwayScene extends SceneAbstract {
             new SimpleDoubleProperty(0).multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             obstacle.heightProperty().multiply(1),
-            GlobalVariables.slope,
+            Theme.slope,
             new SimpleBooleanProperty(true),
             scaleFactor,
             scaleFactorHeight,
@@ -416,7 +415,7 @@ public class RunwayScene extends SceneAbstract {
             new SimpleDoubleProperty(0).multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             obstacle.heightProperty().multiply(1),
-            GlobalVariables.slope,
+            Theme.slope,
             new SimpleBooleanProperty(false),
             scaleFactor,
             scaleFactorHeight,
@@ -439,7 +438,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.clearwayRightProperty().multiply(1),
             appWindow.runway.clearwayHeightProperty().multiply(1),
             new SimpleDoubleProperty(9.9).multiply(1),
-            GlobalVariables.clearway);
+            Theme.clearway);
 
     //Clearway Left
     addCuboid(
@@ -449,7 +448,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.clearwayLeftProperty().multiply(1),
             appWindow.runway.clearwayHeightProperty().multiply(1),
             new SimpleDoubleProperty(9.9).multiply(1),
-            GlobalVariables.clearway);
+            Theme.clearway);
 
 
 
@@ -461,7 +460,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.RESAWidthProperty().multiply(1),
             appWindow.runway.RESAHeightProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            GlobalVariables.resa);
+            Theme.physicalResa);
 
     //RESA Left
     addCuboid(
@@ -471,7 +470,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.RESAWidthProperty().multiply(1),
             appWindow.runway.RESAHeightProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            GlobalVariables.resa);
+            Theme.physicalResa);
 
     //Stopway Left
     addCuboid(
@@ -481,7 +480,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.stopwayLeftProperty().multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            GlobalVariables.stopway);
+            Theme.stopway);
 
     //Stopway Right
     addCuboid(
@@ -491,7 +490,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.stopwayRightProperty().multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            GlobalVariables.stopway);
+            Theme.stopway);
 
   }
   /**
@@ -540,21 +539,21 @@ public class RunwayScene extends SceneAbstract {
     //Lengths and xOffsets need binding to back-end variables, work hasn't been done yet so constants used
 
     //RunwayArrow TODARightLabel = new RunwayArrowRight("TODA", Color.RED, scaleFactor, 100, 25, 3000);
-    RunwayLabel TODALeftLabel = new RunwayLabel("TODA", GlobalVariables.toda, appWindow.runway.runwayLengthProperty().multiply(-0.5),
+    RunwayLabel TODALeftLabel = new RunwayLabel("TODA", Theme.toda, appWindow.runway.runwayLengthProperty().multiply(-0.5),
             0.9, appWindow.runway.leftTodaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
-    RunwayLabel ASDALeftLabel = new RunwayLabel("ASDA", GlobalVariables.asda, appWindow.runway.runwayLengthProperty().multiply(-0.5),
+    RunwayLabel ASDALeftLabel = new RunwayLabel("ASDA", Theme.asda, appWindow.runway.runwayLengthProperty().multiply(-0.5),
             0.7, appWindow.runway.leftAsdaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
-    RunwayLabel TORALeftLabel = new RunwayLabel("TORA", GlobalVariables.tora, appWindow.runway.runwayLengthProperty().multiply(-0.5),
+    RunwayLabel TORALeftLabel = new RunwayLabel("TORA", Theme.tora, appWindow.runway.runwayLengthProperty().multiply(-0.5),
             0.5, appWindow.runway.leftToraProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
-    RunwayLabel LDALeftLabel = new RunwayLabel("LDA", GlobalVariables.lda, appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()),
+    RunwayLabel LDALeftLabel = new RunwayLabel("LDA", Theme.lda, appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()),
             0.3, appWindow.runway.leftLdaProperty().multiply(-1),this,true, appWindow.runway.leftLandProperty());
-    RunwayLabel TODARightLabel = new RunwayLabel("TODA", GlobalVariables.toda, appWindow.runway.runwayLengthProperty().multiply(0.5),
+    RunwayLabel TODARightLabel = new RunwayLabel("TODA", Theme.toda, appWindow.runway.runwayLengthProperty().multiply(0.5),
             -0.9, appWindow.runway.rightTodaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
-    RunwayLabel ASDARightLabel = new RunwayLabel("ASDA", GlobalVariables.asda, appWindow.runway.runwayLengthProperty().multiply(0.5),
+    RunwayLabel ASDARightLabel = new RunwayLabel("ASDA", Theme.asda, appWindow.runway.runwayLengthProperty().multiply(0.5),
             -0.7, appWindow.runway.rightAsdaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
-    RunwayLabel TORARightLabel = new RunwayLabel("TORA", GlobalVariables.tora, appWindow.runway.runwayLengthProperty().multiply(0.5),
+    RunwayLabel TORARightLabel = new RunwayLabel("TORA", Theme.tora, appWindow.runway.runwayLengthProperty().multiply(0.5),
             -0.5, appWindow.runway.rightToraProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
-    RunwayLabel LDARightLabel = new RunwayLabel("LDA", GlobalVariables.lda, appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()),
+    RunwayLabel LDARightLabel = new RunwayLabel("LDA", Theme.lda, appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()),
             -0.3, appWindow.runway.rightLdaProperty().multiply(1),this,false, appWindow.runway.rightLandProperty());
     group.getChildren().addAll(TODARightLabel, ASDARightLabel, TORARightLabel, LDARightLabel, TODALeftLabel, ASDALeftLabel, TORALeftLabel, LDALeftLabel);
 

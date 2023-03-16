@@ -27,10 +27,6 @@
     background-color: rgba(26, 26, 26, 255);
    -fx-background-color: rgba(26, 26, 26, 255);
 }
-.label{
-    -fx-text-fill: darkgrey;
-    -fx-font-size: 14px;
-}
 .grid-border-text-style {
     -fx-border-color: black;
     -fx-border-width: 2px;
@@ -38,7 +34,5 @@
 }
 .button-dark {
     -fx-background-color: rgba(26, 26, 26, 255);
-    -fx-text-fill: darkgrey;
     -fx-font-size: 14px;
 }
-

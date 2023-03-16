@@ -1,6 +1,7 @@
 package comp2211.seg.UiView.Overlay;
 
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
+import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.UiView.Scene.RunwayScene;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
@@ -28,6 +29,7 @@ public class RunwayLabel extends Group {
     private Rotate xRotate;
     private Rotate yRotate;
     private Rotate zRotate;
+    private Text label;
     /**
      * Constructs a new RunwayLabel with the specified name, color, x-offset, y-offset, length, scene, and direction.
      *
@@ -53,10 +55,10 @@ public class RunwayLabel extends Group {
          */
 
         Group labelRotateGroup = new Group();
-        Text label = new Text(name);
+        label = new Text(name);
         label.textProperty().bind((new SimpleStringProperty(name)).concat(" (").concat(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(length.asString()).otherwise(length.multiply(-1).asString())).concat(scene.appWindow.runway.unitsProperty()).concat(")"));
         label.setFill(color);
-        label.setFont(GlobalVariables.font);
+        label.setFont(Theme.font);
         if (direction) {
             label.yProperty().set(label.getBoundsInLocal().getHeight() / 2 + 8);
             label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 + 5);
@@ -142,7 +144,13 @@ public class RunwayLabel extends Group {
         yRotate.angleProperty().set(scene.getAngleXProperty()*(Math.sin(Math.toRadians(scene.getAngleZProperty()))));
         zRotate.angleProperty().set(-scene.getAngleZProperty());
         if (scene.portrait.get()){
-            zRotate.setAngle(zRotate.getAngle() +90 - scene.angleYProperty().get());
+            zRotate.setAngle(zRotate.getAngle() + 90 - scene.angleYProperty().get());
+            if (direction) {
+                label.yProperty().set(-5);
+            } else {
+                label.yProperty().set(label.getBoundsInLocal().getHeight() / 2 + 8);
+            }
+
         }
     }
     /**

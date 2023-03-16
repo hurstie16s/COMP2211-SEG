@@ -2,6 +2,7 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
+import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -51,13 +52,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     public void build()  {
         super.build();
-        root.setBackground(new Background(new BackgroundFill(GlobalVariables.unfocusedBG,null,null)));
+        root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
         mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
 
         ArrayList<Pair<String, Pane>> tabs = new ArrayList<>();
         tabs.add(new Pair<>("Airport Configuration", makeAirportConfig()));
         tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
-        TabLayout tabLayout = new TabLayout(tabs,GlobalVariables.unfocusedBG,GlobalVariables.focusedBG);
+        TabLayout tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
         mainPane.maxHeightProperty().bind(root.heightProperty());
         mainPane.minHeightProperty().bind(root.heightProperty());
         mainPane.maxWidthProperty().bind(root.widthProperty());
@@ -130,9 +131,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private TableView<Object> buildTableView(VBox container) {
 
         TableView<Object> table = new TableView<>();
-        table.setBackground(new Background(new BackgroundFill(unfocusedBG,null,null)));
+        table.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
         final Label label = new Label("Runway Data");
-        label.setFont(GlobalVariables.font);
+        label.setFont(Theme.font);
         //table.setEditable(true);
 
         //columns
@@ -165,7 +166,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             eighthColumn);
 
         //sixthColumn.setMinWidth(100);
-
 
         //table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 
@@ -254,7 +254,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         history.setFitToWidth(true);
         history.setPadding(new Insets(16));
         changeHistory.add(new Pair<>("Change History", new BorderPane(history)));
-        Pane changeHistoryPane = new TabLayout(changeHistory,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
+        Pane changeHistoryPane = new TabLayout(changeHistory,Theme.focusedBG,Theme.veryfocusedBG);
         return changeHistoryPane;
     }
 
@@ -292,7 +292,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
         obstacleOptions.add(new Pair<>("Obstacle", obstacleData));
-        Pane obstacleOptionsPane = new TabLayout(obstacleOptions,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
+        Pane obstacleOptionsPane = new TabLayout(obstacleOptions,Theme.focusedBG,Theme.veryfocusedBG);
         return obstacleOptionsPane;
     }
     private Pane makeDistancesPane() {
@@ -353,7 +353,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         ArrayList<Pair<String, Pane>> declaredDistances = new ArrayList<>();
         declaredDistances.add(new Pair<>("Declared Distances", distancesGrid));
-        Pane declaredDistancesPane = new TabLayout(declaredDistances,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
+        Pane declaredDistancesPane = new TabLayout(declaredDistances,Theme.focusedBG,Theme.veryfocusedBG);
         distancesGrid.getChildren().forEach(new Consumer<Node>() {
             @Override
             public void accept(Node node) {
@@ -365,8 +365,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Node makeOutputLabel(SimpleStringProperty runwayDesignatorProperty, SimpleBooleanProperty visibility) {
         Label data = new Label();
-        data.setFont(GlobalVariables.font);
-        data.setTextFill(GlobalVariables.fg);
+        data.setFont(Theme.font);
+        data.setTextFill(Theme.fg);
         data.setText(String.valueOf(runwayDesignatorProperty.getValue()));
         data.textProperty().bind(Bindings.when(visibility).then(runwayDesignatorProperty).otherwise(new
                 SimpleStringProperty("Error")));
@@ -376,14 +376,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     public Label makeLabel(String string){
         Label label = new Label(string);
-        label.setFont(GlobalVariables.font);
-        label.setTextFill(GlobalVariables.fg);
+        label.setFont(Theme.font);
+        label.setTextFill(Theme.fg);
         return label;
     }
     public Label makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility) {
         Label data = new Label();
-        data.setFont(GlobalVariables.font);
-        data.setTextFill(GlobalVariables.fg);
+        data.setFont(Theme.font);
+        data.setTextFill(Theme.fg);
         data.setText(String.valueOf(property.getValue()));
         data.textProperty().bind(Bindings.when(visibility).then(property.asString().concat(appWindow.runway.unitsProperty())).otherwise(new
                 SimpleStringProperty("Error")));
@@ -396,7 +396,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         breakDown.add(new Pair<>("TODA", new VBox()));
         breakDown.add(new Pair<>("ASDA", new VBox()));
         breakDown.add(new Pair<>("LDA", new VBox()));
-        Pane breakDownPane = new TabLayout(breakDown,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
+        Pane breakDownPane = new TabLayout(breakDown,Theme.focusedBG,Theme.veryfocusedBG);
         return breakDownPane;
     }
 
@@ -450,7 +450,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         viewTabs.add(new Pair<>("Both Views", dualView));
         viewTabs.add(new Pair<>("Side-On Views", sideView));
         viewTabs.add(new Pair<>("Top-Down Views", topView));
-        TabLayout viewPane = new TabLayout(viewTabs,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
+        TabLayout viewPane = new TabLayout(viewTabs,Theme.focusedBG,Theme.veryfocusedBG);
         return viewPane;
     }
 
