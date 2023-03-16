@@ -122,7 +122,6 @@ public class RunwayScene extends SceneAbstract {
    */
   public RunwayScene(Pane root, AppWindow appWindow, double width, double height, boolean depthBuffer) {
     super(root, appWindow, width, height, depthBuffer);
-    root.setBackground(new Background(new BackgroundFill(GlobalVariables.focusedBG,null,null)));
     this.width = width;
     this.height = height;
 
@@ -178,7 +177,7 @@ public class RunwayScene extends SceneAbstract {
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
-          appWindow.startMainScene();
+          appWindow.startBaseScene();
           break;
         case T:
           toggleView();
@@ -292,9 +291,9 @@ public class RunwayScene extends SceneAbstract {
    * Binds angle properties to corresponding rotate angles.
    */
   public void configureCamera() {
-    AmbientLight light = new AmbientLight();
-    light.setLightOn(true);
-    group.getChildren().add(light);
+    //AmbientLight light = new AmbientLight();
+    //light.setLightOn(true);
+    //group.getChildren().add(light);
     camera = new PerspectiveCamera();
     setCamera(camera);
     Rotate xRotate;
@@ -334,7 +333,6 @@ public class RunwayScene extends SceneAbstract {
   @Override
   public void build() {
     super.build();
-    root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     setFill(GlobalVariables.bgRunway);
     logger.info("building");
     configureCamera();
@@ -343,6 +341,7 @@ public class RunwayScene extends SceneAbstract {
     mainPane.minWidthProperty().bind(root.widthProperty());
     mainPane.maxHeightProperty().bind(root.heightProperty());
     mainPane.minHeightProperty().bind(root.heightProperty());
+    root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
     scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));

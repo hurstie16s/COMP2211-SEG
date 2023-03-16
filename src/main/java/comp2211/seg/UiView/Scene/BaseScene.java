@@ -74,6 +74,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         VBox.setMargin(vBoxTable,new Insets(150,20,20,20));//Top/Right/Bottom/Left
         //vBoxTable.getChildren().add(makeRunwayGridTable());
         vBoxTable.getChildren().add(buildTableView(vBoxTable));
+        vBoxTable.maxWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
+        vBoxTable.minWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
 
         //left menu
         Button airportsTempButton = new Button("Airports");
@@ -128,6 +130,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private TableView buildTableView(VBox container) {
 
         TableView table = new TableView<>();
+        table.setBackground(new Background(new BackgroundFill(unfocusedBG,null,null)));
         final Label label = new Label("Runway Data");
         label.setFont(GlobalVariables.font);
         //table.setEditable(true);
@@ -161,20 +164,21 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             seventhColumn,
             eighthColumn);
 
-        sixthColumn.setMinWidth(100);
+        //sixthColumn.setMinWidth(100);
 
 
-        table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        //table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 
         for (Object column : table.getColumns()) {
-            ((TableColumn<?, ?>) column).setMinWidth(Control.USE_PREF_SIZE);
-            ((TableColumn<?, ?>) column).setMaxWidth(Double.MAX_VALUE);
-            ((TableColumn<?, ?>) column).prefWidthProperty().bind(table.widthProperty().divide(table.getColumns().size()));
+            ((TableColumn<?, ?>) column).maxWidthProperty().bind(container.widthProperty().divide(9));
+            ((TableColumn<?, ?>) column).minWidthProperty().bind(container.widthProperty().divide(9));
         }
+        lengthColumn.maxWidthProperty().bind(container.widthProperty().divide(18));
+        lengthColumn.minWidthProperty().bind(container.widthProperty().divide(18));
+        widthColumn.maxWidthProperty().bind(container.widthProperty().divide(18));
+        widthColumn.minWidthProperty().bind(container.widthProperty().divide(18));
         //bind the table size to the container
-        table.prefWidthProperty().bind(container.widthProperty());
         //table.prefHeightProperty().bind(container.heightProperty());
-        table.setMaxWidth(Double.MAX_VALUE);
 
         return table;
     }
@@ -388,10 +392,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Pane makeBreakDownPane() {
         ArrayList<Pair<String, Pane>> breakDown = new ArrayList<>();
-        breakDown.add(new Pair<>("TORA Breakdown", new VBox()));
-        breakDown.add(new Pair<>("TODA Breakdown", new VBox()));
-        breakDown.add(new Pair<>("ASDA Breakdown", new VBox()));
-        breakDown.add(new Pair<>("LDA Breakdown", new VBox()));
+        breakDown.add(new Pair<>("TORA", new VBox()));
+        breakDown.add(new Pair<>("TODA", new VBox()));
+        breakDown.add(new Pair<>("ASDA", new VBox()));
+        breakDown.add(new Pair<>("LDA", new VBox()));
         Pane breakDownPane = new TabLayout(breakDown,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
         return breakDownPane;
     }

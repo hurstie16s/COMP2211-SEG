@@ -136,9 +136,6 @@ public class RunwayLabel extends Group {
          */
     }
     public void setAngle(){
-        //xRotate.angleProperty().bind(scene.lableAngleXProperty);
-        //yRotate.angleProperty().bind(scene.lableAngleYProperty);
-        //zRotate.angleProperty().bind(scene.lableAngleZProperty);
 
 
         xRotate.angleProperty().set(-scene.getAngleXProperty()*(Math.cos(Math.toRadians(scene.getAngleZProperty()))));

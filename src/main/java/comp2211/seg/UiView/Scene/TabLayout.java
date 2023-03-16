@@ -38,7 +38,6 @@ public class TabLayout extends VBox {
 
                 width.bind(((Pane) t1).widthProperty());
                 height.bind(((Pane) t1).heightProperty());
-                System.out.println("Parent added");
             }
         });
         setPadding(new Insets(5));
@@ -89,6 +88,7 @@ public class TabLayout extends VBox {
                 contents.getChildren().add(tab.getValue());
             }
         });
+        tabButton.setFont(GlobalVariables.font);
         return tabButton;
     }
 }
