@@ -40,7 +40,8 @@ public class Theme {
     }
 
     public static Color inverse(Color colour) {
-        Color res = new Color((1 - (colour.getGreen() + colour.getBlue())/2),(1 - (colour.getRed() + colour.getBlue())/2),(1 - (colour.getGreen() + colour.getRed())/2),colour.getOpacity());
+        Color res = new Color((1 - (colour.getGreen() + colour.getBlue())/2),(1 - (colour.getRed() + colour.getBlue())/2),
+            (1 - (colour.getGreen() + colour.getRed())/2),colour.getOpacity());
         return res;
     }
 
