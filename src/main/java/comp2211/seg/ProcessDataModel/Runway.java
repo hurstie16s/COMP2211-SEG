@@ -168,11 +168,11 @@ public class Runway {
     }
     public void validityChecks(){
         //Bindings.greaterThan(greater,lesser) = true;
-        leftTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftAsda,inputLeftTora.add(STOPWAYMIN)),Bindings.greaterThanOrEqual(inputLeftToda,leftAsda.add(STRIPEND).add(RESAWidth))));
+        leftTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftAsda,inputLeftTora),Bindings.greaterThanOrEqual(inputLeftToda,leftAsda)));
         leftLand.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftLda,0),
                 Bindings.lessThanOrEqual(inputLeftLda,inputLeftTora))
         );
-        rightTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora.add(STOPWAYMIN)),Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda.add(STRIPEND).add(RESAWidth))));
+        rightTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora),Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda)));
         rightLand.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightLda,0),
                 Bindings.lessThanOrEqual(inputRightLda,inputRightTora))
         );
