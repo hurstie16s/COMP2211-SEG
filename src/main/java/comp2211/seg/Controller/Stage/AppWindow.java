@@ -1,6 +1,7 @@
 package comp2211.seg.Controller.Stage;
 
 import comp2211.seg.App;
+import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.Runway;
 import comp2211.seg.UiView.Scene.*;
@@ -44,8 +45,7 @@ public class AppWindow {
         this.width = width;
         this.height = height;
         airports = new ArrayList<>();
-
-
+        Theme.makeDark();
 
         addAirport(new Airport("Heathrow"));
         addAirport(new Airport("Gatwick"));
@@ -108,8 +108,8 @@ public class AppWindow {
      * Starts the runway scene.
      */
     public void startRunwayScene() {
-        //loadScene(new RunwayScene(new Pane(),this,getWidth(),getHeight(),true));
-        loadScene(new RunwaySceneLoader(new Pane(),this,getWidth(),getHeight()));
+        loadScene(new RunwayScene(new Pane(),this,getWidth(),getHeight(),true));
+        //loadScene(new RunwaySceneLoader(new Pane(),this,getWidth(),getHeight()));
     }
 
     /**

@@ -3,6 +3,7 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.App;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
+import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.StringExpression;
@@ -153,7 +154,7 @@ public class InputScene extends SceneAbstract {
     TextField entry = new TextField();
     //remove autofocus
     entry.setFocusTraversable(false);
-    entry.setFont(GlobalVariables.font);
+    entry.setFont(Theme.font);
 
     HBox segment = makeBoundingBoxAlt(label,root.widthProperty().divide(2),entry);
     parent.getChildren().add(segment);
@@ -192,7 +193,7 @@ public class InputScene extends SceneAbstract {
   public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleDoubleProperty property) {
     TextField entry = new TextField();
     entry.setFocusTraversable(false);
-    entry.setFont(GlobalVariables.font);
+    entry.setFont(Theme.font);
 
     HBox segment = makeBoundingBoxAlt(label,root.widthProperty().divide(2),entry);
     parent.getChildren().add(segment);
@@ -229,10 +230,10 @@ public class InputScene extends SceneAbstract {
   public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleDoubleProperty property, SimpleDoubleProperty property2) {
     TextField entry = new TextField();
     entry.setFocusTraversable(false);
-    entry.setFont(GlobalVariables.font);
+    entry.setFont(Theme.font);
     TextField entry2 = new TextField();
     entry2.setFocusTraversable(false);
-    entry2.setFont(GlobalVariables.font);
+    entry2.setFont(Theme.font);
     GridPane entries = new GridPane();
     entries.addColumn(0,entry);
     entries.addColumn(1,entry2);
@@ -341,8 +342,8 @@ public class InputScene extends SceneAbstract {
    */
   public Label makeOutputLabel(javafx.scene.layout.Pane parent, String label, SimpleDoubleProperty property,SimpleDoubleProperty limit, SimpleBooleanProperty visibility) {
     Label data = new Label();
-    data.setFont(GlobalVariables.font);
-    data.setTextFill(GlobalVariables.fg);
+    data.setFont(Theme.font);
+    data.setTextFill(Theme.fg);
     data.setPadding(new Insets(5,10,5,10));
     data.setText(String.valueOf(property.getValue()));
 
@@ -357,8 +358,8 @@ public class InputScene extends SceneAbstract {
     HBox segment = new HBox();
     Label title = new Label(label.getValue());
     title.textProperty().bind(label);
-    title.setFont(GlobalVariables.font);
-    title.setTextFill(GlobalVariables.fg);
+    title.setFont(Theme.font);
+    title.setTextFill(Theme.fg);
     title.setPadding(new Insets(5,10,5,10));
     title.setMaxWidth(root.widthProperty().get() / 10);
     title.setMinWidth(root.widthProperty().get() / 10);
@@ -372,8 +373,8 @@ public class InputScene extends SceneAbstract {
     HBox segment = new HBox();
     Label title = new Label(label.getValue());
     title.textProperty().bind(label);
-    title.setFont(GlobalVariables.font);
-    title.setTextFill(GlobalVariables.fg);
+    title.setFont(Theme.font);
+    title.setTextFill(Theme.fg);
     title.setPadding(new Insets(5,10,5,10));
     title.setMaxWidth(root.widthProperty().get() / 5);
     title.setMinWidth(root.widthProperty().get() / 5);

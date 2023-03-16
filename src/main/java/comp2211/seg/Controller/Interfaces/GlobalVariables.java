@@ -26,29 +26,12 @@ public interface GlobalVariables {
       "Josh Willson\n" +
       "jjrw1g21\n";
 
-  public static final Color bg = Color.gray(0.2);
-  public static final Color bgRunway = Color.gray(0.15);
-  public static final Color unfocusedBG = Color.gray(0.1);
-  public static final Color focusedBG = Color.gray(0.2);
-  public static final Color veryfocusedBG = Color.gray(0.25);
-  public static final Color fg = Color.gray(0.6);
-  public static final Color grass = Color.web("#014130");
-  public static final Color obstacle = Color.web("#e3b7b5");
-  public static final Color slope = Color.web("#ecfdec");
-  public static final Color cga = Color.web("#006166");
-  public static final Color clearway = Color.web("#465d52");
-  public static final Color stopway = Color.web("#c1d095");
-  public static final Color resa = Color.web("#698320");
-  public static final Color runway = Color.web("#333432");
-  public static final Color toda = Color.web("#c3d1f4");
-  public static final Color tora = Color.web("#9afece");
-  public static final Color asda = Color.web("#49ba26");
-  public static final Color lda = Color.web("#00edfa");
-  public static final Font font =Font.font("Calibri", 20);
+
   /**
    * A constant string that holds the information about the home scene of the project.
    */
   public static final String HOME_SCENE_INFO = "To start, enter name of a new airport followed by ENTER\n" +
       "or just press ENTER to accept default settings\n" +
       "Press ESC to exit application.";
+
 }

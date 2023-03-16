@@ -1,6 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
+import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
@@ -38,7 +39,6 @@ public class TabLayout extends VBox {
 
                 width.bind(((Pane) t1).widthProperty());
                 height.bind(((Pane) t1).heightProperty());
-                System.out.println("Parent added");
             }
         });
         setPadding(new Insets(5));
@@ -77,7 +77,7 @@ public class TabLayout extends VBox {
         tab.getValue().minHeightProperty().bind(contents.heightProperty());
         tab.getValue().maxWidthProperty().bind(contents.widthProperty());
         tab.getValue().minWidthProperty().bind(contents.widthProperty());
-        tabButton.setTextFill(GlobalVariables.fg);
+        tabButton.setTextFill(Theme.fg);
         tabButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -89,6 +89,7 @@ public class TabLayout extends VBox {
                 contents.getChildren().add(tab.getValue());
             }
         });
+        tabButton.setFont(Theme.font);
         return tabButton;
     }
 }
