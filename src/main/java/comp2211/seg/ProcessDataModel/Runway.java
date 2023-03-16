@@ -65,6 +65,9 @@ public class Runway {
     private final SimpleDoubleProperty leftLda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty dispThresholdLeft = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(0);
+    /**
+     * The Changes history.
+     */
     public TextFlow changesHistory = new TextFlow();
 
     private Obstacle runwayObstacle = null;
@@ -118,34 +121,43 @@ public class Runway {
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
         recalculate();
         validityChecks();
-        calculateRunwayDesignatorLeft();
+        runwayDesignatorRight.bind(calculateRunwayDesignatorLeft());
     }
 
     /**
      * Calculates the runway designator for the runway in the opposite direction
      */
-    private void calculateRunwayDesignatorLeft() {
+    private SimpleStringProperty calculateRunwayDesignatorLeft() {
         var number = (Integer.parseInt(runwayDesignatorLeft.get().substring(0,2)) + 18) % 36;
         var character = runwayDesignatorLeft.get().substring(2);
-        character = switch(character) {
-            case "R" -> "L";
-            case "L" -> "R";
-            case "C" -> "C";
-            default -> "error";
-        };
-        runwayDesignatorRight.set(number + character);
+
+        logger.info(runwayDesignatorLeft.get());
+
+        var newCharacter = "";
+        if (character.equals("R")) {
+            newCharacter = "L";
+        } else if (character.equals("L")) {
+            newCharacter = "R";
+        } else if (character.equals("C")) {
+            newCharacter = "C";
+        } else {
+            newCharacter = "ERROR";
+            logger.error("Incorrect initial character");
+        }
+        return new SimpleStringProperty(number + newCharacter);
     }
 
     /**
-
-     Adds an obstacle to the list of obstacles on the runway.
+     * Adds an obstacle to the list of obstacles on the runway.
      */
     public void addObstacle() {
         hasRunwayObstacle.set(true);
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
     }
+
     /**
      * Removing the obstacle from the runway
+     *
      * @param obstacleToRemove The obstacle to remove from the runway
      */
     public void removeObstacle(Obstacle obstacleToRemove) {
@@ -157,12 +169,11 @@ public class Runway {
     }
 
     /**
-     *
-     Recalculates the runway values based on the landing/takeoff direction and LDA/TORA values.
-     If landing direction is true, runwayLength is set to LDA and either calculateLandOver() or
-     calculateLandTowards() is called based on the takeoff direction. If landing direction is false,
-     runwayLength is set to TORA and either calculateTakeOffAway() or calculateTakeOffToward() is called
-     based on the takeoff direction.
+     * Recalculates the runway values based on the landing/takeoff direction and LDA/TORA values.
+     * If landing direction is true, runwayLength is set to LDA and either calculateLandOver() or
+     * calculateLandTowards() is called based on the takeoff direction. If landing direction is false,
+     * runwayLength is set to TORA and either calculateTakeOffAway() or calculateTakeOffToward() is called
+     * based on the takeoff direction.
      */
     public void recalculate(){
         rightTora.bind(inputRightTora);
@@ -184,6 +195,10 @@ public class Runway {
             }
         }
     }
+
+    /**
+     * Validity checks.
+     */
     public void validityChecks(){
         // Bindings.greaterThan(greater,lesser) = true;
         leftTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftAsda,inputLeftTora),Bindings.greaterThanOrEqual(inputLeftToda,leftAsda)));
@@ -195,6 +210,14 @@ public class Runway {
                 Bindings.lessThanOrEqual(inputRightLda,inputRightTora))
         );
     }
+
+    /**
+     * Make error scene border pane.
+     *
+     * @param width  the width
+     * @param height the height
+     * @return the border pane
+     */
     public BorderPane makeErrorScene(NumberBinding width, NumberBinding height){
         BorderPane errorPane = new BorderPane();
         errorPane.setBackground(new Background(new BackgroundFill(Color.BLACK,null,null)));
@@ -275,9 +298,9 @@ public class Runway {
     }
 
     /**
-     Calculations for when a plane is landing over an obstacle
+     * Calculations for when a plane is landing over an obstacle
      */
-    // TODO: Check working
+// TODO: Check working
     public void calculateLandOver() {
 
         // Calculate Land Over for Left
@@ -296,7 +319,7 @@ public class Runway {
     }
 
     /**
-     Calculations for when a plane is landing towards an obstacle
+     * Calculations for when a plane is landing towards an obstacle
      */
     public void calculateLandTowards() {
         /*
@@ -368,7 +391,7 @@ public class Runway {
     }
 
     /**
-    Calculations for when a plane is taking-off towards an obstacle
+     * Calculations for when a plane is taking-off towards an obstacle
      */
     public void calculateTakeOffToward() {
 
@@ -387,7 +410,7 @@ public class Runway {
     }
 
     /**
-     Calculations for when a plane is taking-off away from an obstacle
+     * Calculations for when a plane is taking-off away from an obstacle
      */
     public void calculateTakeOffAway() {
 
@@ -409,338 +432,692 @@ public class Runway {
 
     // Getters
 
+    /**
+     * Gets input right tora.
+     *
+     * @return the input right tora
+     */
     public double getInputRightTora() {
         return inputRightTora.get();
     }
 
+    /**
+     * Input right tora property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty inputRightToraProperty() {
         return inputRightTora;
     }
 
+    /**
+     * Gets input right toda.
+     *
+     * @return the input right toda
+     */
     public double getInputRightToda() {
         return inputRightToda.get();
     }
 
+    /**
+     * Input right toda property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty inputRightTodaProperty() {
         return inputRightToda;
     }
 
+    /**
+     * Gets input right asda.
+     *
+     * @return the input right asda
+     */
     public double getInputRightAsda() {
         return inputRightAsda.get();
     }
 
+    /**
+     * Input right asda property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty inputRightAsdaProperty() {
         return inputRightAsda;
     }
 
+    /**
+     * Gets input right lda.
+     *
+     * @return the input right lda
+     */
     public double getInputRightLda() {
         return inputRightLda.get();
     }
 
+    /**
+     * Input right lda property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty inputRightLdaProperty() {
         return inputRightLda;
     }
 
+    /**
+     * Gets input left tora.
+     *
+     * @return the input left tora
+     */
     public double getInputLeftTora() {
         return inputLeftTora.get();
     }
 
+    /**
+     * Input left tora property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty inputLeftToraProperty() {
         return inputLeftTora;
     }
 
+    /**
+     * Gets input left toda.
+     *
+     * @return the input left toda
+     */
     public double getInputLeftToda() {
         return inputLeftToda.get();
     }
 
+    /**
+     * Input left toda property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty inputLeftTodaProperty() {
         return inputLeftToda;
     }
 
+    /**
+     * Gets input left asda.
+     *
+     * @return the input left asda
+     */
     public double getInputLeftAsda() {
         return inputLeftAsda.get();
     }
 
+    /**
+     * Input left asda property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty inputLeftAsdaProperty() {
         return inputLeftAsda;
     }
 
+    /**
+     * Gets input left lda.
+     *
+     * @return the input left lda
+     */
     public double getInputLeftLda() {
         return inputLeftLda.get();
     }
 
+    /**
+     * Input left lda property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty inputLeftLdaProperty() {
         return inputLeftLda;
     }
 
 
+    /**
+     * Gets runway obstacle.
+     *
+     * @return the runway obstacle
+     */
     public Obstacle getRunwayObstacle() {
         return runwayObstacle;
     }
 
+    /**
+     * Is landing mode boolean.
+     *
+     * @return the boolean
+     */
     public boolean isLandingMode() {
         return landingMode.get();
     }
 
+    /**
+     * Landing mode property simple boolean property.
+     *
+     * @return the simple boolean property
+     */
     public SimpleBooleanProperty landingModeProperty() {
         return landingMode;
     }
+
     /**
      * Returns the runway designator string.
+     *
      * @return The runway designator string.
      */
-    public String getRunwayDesignator() {
+    public String getRunwayDesignatorLeft() {
         return runwayDesignatorLeft.get();
     }
+
+    /**
+     * Gets runway designator right.
+     *
+     * @return the runway designator right
+     */
+    public String getRunwayDesignatorRight() {
+        return runwayDesignatorRight.get();
+    }
+
     /**
      * Returns the SimpleStringProperty object representing the runway designator.
+     *
      * @return The SimpleStringProperty object representing the runway designator.
      */
-    public SimpleStringProperty runwayDesignatorProperty() {
+    public SimpleStringProperty runwayDesignatorLeftProperty() {
         return runwayDesignatorLeft;
+    }
+
+    public SimpleStringProperty runwayDesignatorRightProperty() {
+        return runwayDesignatorRight;
     }
 
     /**
      * Returns the value of direction.
+     *
      * @return The value of direction.
      */
     public boolean isDirection() {
         return direction.get();
     }
+
     /**
      * Returns the SimpleBooleanProperty object representing direction.
+     *
      * @return The SimpleBooleanProperty object representing direction.
      */
     public SimpleBooleanProperty directionProperty() {
         return direction;
     }
+
     /**
      * Returns the value of runwayLength.
+     *
      * @return The value of runwayLength.
      */
     public double getRunwayLength() {
         return runwayLength.get();
     }
+
     /**
      * Returns the SimpleDoubleProperty object representing runwayLength.
+     *
      * @return The SimpleDoubleProperty object representing runwayLength.
      */
     public SimpleDoubleProperty runwayLengthProperty() {
         return runwayLength;
     }
+
     /**
      * Returns the value of runwayWidth.
+     *
      * @return The value of runwayWidth.
      */
     public double getRunwayWidth() {
         return runwayWidth.get();
     }
+
     /**
      * Returns the SimpleDoubleProperty object representing runwayWidth.
+     *
      * @return The SimpleDoubleProperty object representing runwayWidth.
      */
     public SimpleDoubleProperty runwayWidthProperty() {
         return runwayWidth;
     }
+
     /**
      * Returns the value of clearwayLeftHeight.
+     *
      * @return The value of clearwayLeftHeight.
      */
     public double getClearwayHeight() {
         return clearwayHeight.get();
     }
+
     /**
      * Returns the SimpleDoubleProperty object representing clearwayLeftHeight.
+     *
      * @return The SimpleDoubleProperty object representing clearwayLeftHeight.
      */
     public SimpleDoubleProperty clearwayHeightProperty() {
         return clearwayHeight;
     }
+
+
     /**
      * Returns the value of stopwayRight.
+     *
      * @return The value of stopwayRight.
      */
-
-
     public double getRightTora() {
         return rightTora.get();
     }
 
+    /**
+     * Right tora property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty rightToraProperty() {
         return rightTora;
     }
 
+    /**
+     * Gets right toda.
+     *
+     * @return the right toda
+     */
     public double getRightToda() {
         return rightToda.get();
     }
 
+    /**
+     * Right toda property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty rightTodaProperty() {
         return rightToda;
     }
 
+    /**
+     * Gets right asda.
+     *
+     * @return the right asda
+     */
     public double getRightAsda() {
         return rightAsda.get();
     }
 
+    /**
+     * Right asda property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty rightAsdaProperty() {
         return rightAsda;
     }
 
+    /**
+     * Gets right lda.
+     *
+     * @return the right lda
+     */
     public double getRightLda() {
         return rightLda.get();
     }
 
+    /**
+     * Right lda property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty rightLdaProperty() {
         return rightLda;
     }
 
+    /**
+     * Gets left tora.
+     *
+     * @return the left tora
+     */
     public double getLeftTora() {
         return leftTora.get();
     }
 
+    /**
+     * Left tora property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty leftToraProperty() {
         return leftTora;
     }
 
+    /**
+     * Gets left toda.
+     *
+     * @return the left toda
+     */
     public double getLeftToda() {
         return leftToda.get();
     }
 
+    /**
+     * Left toda property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty leftTodaProperty() {
         return leftToda;
     }
 
+    /**
+     * Gets left asda.
+     *
+     * @return the left asda
+     */
     public double getLeftAsda() {
         return leftAsda.get();
     }
 
+    /**
+     * Left asda property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty leftAsdaProperty() {
         return leftAsda;
     }
 
+    /**
+     * Gets left lda.
+     *
+     * @return the left lda
+     */
     public double getLeftLda() {
         return leftLda.get();
     }
 
+    /**
+     * Left lda property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty leftLdaProperty() {
         return leftLda;
     }
+
+    /**
+     * Gets strip end.
+     *
+     * @return the strip end
+     */
     public double getStripEnd() {
         return stripEnd.get();
     }
 
+    /**
+     * Strip end property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty stripEndProperty() {
         return stripEnd;
     }
 
+    /**
+     * Gets resa width.
+     *
+     * @return the resa width
+     */
     public double getRESAWidth() {
         return RESAWidth.get();
     }
 
+    /**
+     * Resa width property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty RESAWidthProperty() {
         return RESAWidth;
     }
 
+    /**
+     * Gets resa height.
+     *
+     * @return the resa height
+     */
     public double getRESAHeight() {
         return RESAHeight.get();
     }
 
+    /**
+     * Resa height property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty RESAHeightProperty() {
         return RESAHeight;
     }
 
+    /**
+     * Is has runway obstacle boolean.
+     *
+     * @return the boolean
+     */
     public boolean isHasRunwayObstacle() {
         return hasRunwayObstacle.get();
     }
 
+    /**
+     * Has runway obstacle property simple boolean property.
+     *
+     * @return the simple boolean property
+     */
     public SimpleBooleanProperty hasRunwayObstacleProperty() {
         return hasRunwayObstacle;
     }
 
+    /**
+     * Gets units.
+     *
+     * @return the units
+     */
     public String getUnits() {
         return units.get();
     }
 
+    /**
+     * Units property simple string property.
+     *
+     * @return the simple string property
+     */
     public SimpleStringProperty unitsProperty() {
         return units;
     }
 
+    /**
+     * Gets clearway left.
+     *
+     * @return the clearway left
+     */
     public double getClearwayLeft() {
         return clearwayLeft.get();
     }
 
+    /**
+     * Clearway left property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty clearwayLeftProperty() {
         return clearwayLeft;
     }
 
+    /**
+     * Gets clearway right.
+     *
+     * @return the clearway right
+     */
     public double getClearwayRight() {
         return clearwayRight.get();
     }
 
+    /**
+     * Clearway right property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty clearwayRightProperty() {
         return clearwayRight;
     }
 
+    /**
+     * Gets stopway left.
+     *
+     * @return the stopway left
+     */
     public double getStopwayLeft() {
         return stopwayLeft.get();
     }
 
+    /**
+     * Stopway left property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty stopwayLeftProperty() {
         return stopwayLeft;
     }
 
+    /**
+     * Gets stopway right.
+     *
+     * @return the stopway right
+     */
     public double getStopwayRight() {
         return stopwayRight.get();
     }
 
+    /**
+     * Stopway right property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty stopwayRightProperty() {
         return stopwayRight;
     }
 
+    /**
+     * Gets disp threshold left.
+     *
+     * @return the disp threshold left
+     */
     public double getDispThresholdLeft() {
         return dispThresholdLeft.get();
     }
 
+    /**
+     * Disp threshold left property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty dispThresholdLeftProperty() {
         return dispThresholdLeft;
     }
 
+    /**
+     * Gets disp threshold right.
+     *
+     * @return the disp threshold right
+     */
     public double getDispThresholdRight() {
         return dispThresholdRight.get();
     }
 
+    /**
+     * Disp threshold right property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty dispThresholdRightProperty() {
         return dispThresholdRight;
     }
 
+    /**
+     * Is left take off boolean.
+     *
+     * @return the boolean
+     */
     public boolean isLeftTakeOff() {
         return leftTakeOff.get();
     }
 
+    /**
+     * Left take off property simple boolean property.
+     *
+     * @return the simple boolean property
+     */
     public SimpleBooleanProperty leftTakeOffProperty() {
         return leftTakeOff;
     }
 
+    /**
+     * Is left land boolean.
+     *
+     * @return the boolean
+     */
     public boolean isLeftLand() {
         return leftLand.get();
     }
 
+    /**
+     * Left land property simple boolean property.
+     *
+     * @return the simple boolean property
+     */
     public SimpleBooleanProperty leftLandProperty() {
         return leftLand;
     }
 
+    /**
+     * Is right take off boolean.
+     *
+     * @return the boolean
+     */
     public boolean isRightTakeOff() {
         return rightTakeOff.get();
     }
 
+    /**
+     * Right take off property simple boolean property.
+     *
+     * @return the simple boolean property
+     */
     public SimpleBooleanProperty rightTakeOffProperty() {
         return rightTakeOff;
     }
 
+    /**
+     * Is right land boolean.
+     *
+     * @return the boolean
+     */
     public boolean isRightLand() {
         return rightLand.get();
     }
 
+    /**
+     * Right land property simple boolean property.
+     *
+     * @return the simple boolean property
+     */
     public SimpleBooleanProperty rightLandProperty() {
         return rightLand;
     }
