@@ -279,43 +279,75 @@ public class Runway {
      */
     // TODO: Check working
     public void calculateLandOver() {
-        /*
-        Not really needed for landing calculations
-        workingTora.bind(tora.subtract(BLASTZONE).subtract(runwayObstacle.distFromThresholdProperty()).subtract(dispThreshold));
-        workingAsda.bind(workingTora.add(stopway));
-        workingToda.bind(workingTora.add(clearway));
-         */
-        /*
-
-
-        SimpleDoubleProperty rightLdaSubtraction= new SimpleDoubleProperty();
-
-        leftLdaSubtraction.bind(
-                Bindings.when(
-                        Bindings.greaterThan(
-                                runwayObstacle.distFromThresholdProperty()
-                                        .add(obstacleSlopeCalculation)
-                                        .add(STRIPEND),BLASTZONE)).then(runwayObstacle.distFromThresholdProperty()
-                        .add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE));
-
-        rightLdaSubtraction.bind(
-                Bindings.when(
-                        Bindings.greaterThan(
-                                inputLeftLda
-                                        .subtract(runwayObstacle.distFromThresholdProperty())
-                                        .add(obstacleSlopeCalculation)
-                                        .add(STRIPEND),BLASTZONE))
-                        .then(inputLeftLda
-                                .subtract(runwayObstacle.distFromThresholdProperty())
-                                .add(obstacleSlopeCalculation)
-                                .add(STRIPEND))
-                        .otherwise(BLASTZONE));
-
-        rightLda.bind(inputRightLda.subtract(rightLdaSubtraction));
-         */
 
         // Calculate Land Over for Left
 
+        var ldaSubtraction = getLdaSubtraction(runwayObstacle.distFromThresholdProperty());
+
+        leftLda.bind(inputLeftLda.subtract(ldaSubtraction));
+
+        logger.info("New LDA calculated for landing over an obstacle for runway "+runwayDesignatorLeft.get());
+
+        // Calculate Land Towards for Right
+
+        rightLda.bind(inputRightLda.subtract(runwayObstacle.distFromOtherThresholdProperty()).subtract(MINRESA).subtract(STRIPEND));
+
+        logger.info("New LDA calculated for landing towards and obstacle for runway "+runwayDesignatorRight.get());
+    }
+
+    /**
+     Calculations for when a plane is landing towards an obstacle
+     */
+    public void calculateLandTowards() {
+        /*
+        Not really needed for landing calc
+        workingTora.bind(runwayObstacle.distFromThresholdProperty().subtract(runwayObstacle.heightProperty().multiply(50)).subtract(STRIPEND.get()));
+        workingAsda.bind(workingTora);
+        workingToda.bind(workingTora);
+         */
+
+        // Calculate Land Towards for Left
+
+        leftLda.bind(inputLeftLda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(MINRESA).subtract(STRIPEND));
+
+        logger.info("New LDA calculated for landing towards and obstacle for runway "+runwayDesignatorLeft.get());
+
+        // Calculate Land Over for Right
+
+        var ldaSubtraction = getLdaSubtraction(runwayObstacle.distFromOtherThresholdProperty());
+
+        rightLda.bind(inputRightLda.subtract(ldaSubtraction));
+
+        logger.info("New LDA calculated for landing over an obstacle for runway "+runwayDesignatorRight.get());
+
+    }
+
+    /**
+     * Calculating the LDA subtraction
+     * @param distFromThreshold The correct distance from threshold for the obstacle for the direction
+     * @return The calculated subtraction from the LDA
+     */
+    private SimpleDoubleProperty getLdaSubtraction(SimpleDoubleProperty distFromThreshold) {
+
+        var obstacleSlopeCalculation = getObstacleSlopeCalculation();
+
+        var ldaSubtraction = new SimpleDoubleProperty();
+        ldaSubtraction.bind(
+                Bindings.when(
+                        Bindings.greaterThan(
+                                distFromThreshold
+                                        .add(obstacleSlopeCalculation)
+                                        .add(STRIPEND),BLASTZONE)).then(distFromThreshold
+                        .add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE));
+
+        return ldaSubtraction;
+    }
+
+    /**
+     * Calculate the slope value for an obstacle
+     * @return The appropriate slope over an obstacle
+     */
+    private SimpleDoubleProperty getObstacleSlopeCalculation() {
         var obstacleSlopeCalculation = new SimpleDoubleProperty();
         obstacleSlopeCalculation
                 .bind(Bindings
@@ -332,41 +364,7 @@ public class Runway {
                                         .widthProperty()
                                         .divide(2))));
 
-        var ldaSubtraction = new SimpleDoubleProperty();
-        ldaSubtraction.bind(
-                Bindings.when(
-                        Bindings.greaterThan(
-                                runwayObstacle.distFromThresholdProperty()
-                                        .add(obstacleSlopeCalculation)
-                                        .add(STRIPEND),BLASTZONE)).then(runwayObstacle.distFromThresholdProperty()
-                        .add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE));
-
-        leftLda.bind(inputLeftLda.subtract(ldaSubtraction));
-
-        // Calculate Land Towards for Right
-
-        rightLda.bind(inputRightLda.subtract(runwayObstacle.distFromOtherThresholdProperty()).subtract(MINRESA).subtract(STRIPEND));
-    }
-
-    /**
-     Calculations for when a plane is landing towards an obstacle
-     */
-    public void calculateLandTowards() {
-        /*
-        Not really needed for landing calc
-        workingTora.bind(runwayObstacle.distFromThresholdProperty().subtract(runwayObstacle.heightProperty().multiply(50)).subtract(STRIPEND.get()));
-        workingAsda.bind(workingTora);
-        workingToda.bind(workingTora);
-         */
-
-        // Calculate Land Towards for Left
-
-        // Calculate Land Over for Right
-
-        leftLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
-        rightLda.bind(inputLeftLda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(MINRESA).subtract(STRIPEND));
-        logger.info("Re-calculated LDA");
-
+        return obstacleSlopeCalculation;
     }
 
     /**
