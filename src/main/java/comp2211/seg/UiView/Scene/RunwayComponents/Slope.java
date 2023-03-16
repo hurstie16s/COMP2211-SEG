@@ -112,7 +112,10 @@ public class Slope extends MeshView {
         TriangleMesh mesh = new TriangleMesh();
         mesh.getPoints().addAll(coords);
         mesh.getFaces().addAll(faces);
-        mesh.getTexCoords().addAll(1,1);
+        mesh.getTexCoords().setAll(1,1,
+                1,1,
+                1,1,
+                1,1);
         setMesh(mesh);
     }
 

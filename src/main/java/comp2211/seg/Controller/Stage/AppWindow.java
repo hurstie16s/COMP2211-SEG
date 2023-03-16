@@ -59,6 +59,7 @@ public class AppWindow {
     public void addAirport(Airport airport){
         airports.add(airport);
         runway = airport.getRunways().get(0);
+        runway.addObstacle();
     }
     public void setAirport(Airport airport){
         if (airport.name.equals("")){

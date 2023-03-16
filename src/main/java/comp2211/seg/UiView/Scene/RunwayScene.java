@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.control.TextField;
@@ -290,9 +291,9 @@ public class RunwayScene extends SceneAbstract {
    * Binds angle properties to corresponding rotate angles.
    */
   public void configureCamera() {
-    //AmbientLight light = new AmbientLight();
-    //light.setLightOn(true);
-    //group.getChildren().add(light);
+    AmbientLight light = new AmbientLight();
+    light.setLightOn(true);
+    group.getChildren().add(light);
     camera = new PerspectiveCamera();
     setCamera(camera);
     Rotate xRotate;
@@ -358,7 +359,7 @@ public class RunwayScene extends SceneAbstract {
     makeRunway();
     makeCGA(false);
     try {
-      renderObstacle(appWindow.runway.getRunwayObstacle());
+      renderObstacle();
     } catch (Exception e){
       logger.error(e);
     }
@@ -379,17 +380,16 @@ public class RunwayScene extends SceneAbstract {
 
   /**
    * Renders an obstacle as a cuboid and a slope, and adds them to the 3D scene.
-   * @param obstacle The obstacle to render.
    */
-  public void renderObstacle(Obstacle obstacle){
+  public void renderObstacle(){
 
     Box obstacleView = addCuboid(
-            appWindow.runway.runwayLengthProperty().divide(-2).add(obstacle.distFromThresholdProperty()),
+            appWindow.runway.runwayLengthProperty().divide(-2).add(appWindow.runway.runwayObstacle.distFromThresholdProperty()),
             new SimpleDoubleProperty(0).multiply(1),
-            obstacle.heightProperty().multiply(1),
-            obstacle.widthProperty().multiply(1),
-            obstacle.lengthProperty().multiply(1),
-            obstacle.heightProperty().multiply(1),
+            appWindow.runway.runwayObstacle.heightProperty().multiply(1),
+            appWindow.runway.runwayObstacle.widthProperty().multiply(1),
+            appWindow.runway.runwayObstacle.lengthProperty().multiply(1),
+            appWindow.runway.runwayObstacle.heightProperty().multiply(1),
             Theme.obstacle
             );
     obstacleView.visibleProperty().bind(appWindow.runway.hasRunwayObstacleProperty());
@@ -400,7 +400,7 @@ public class RunwayScene extends SceneAbstract {
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
-            obstacle.heightProperty().multiply(1),
+            appWindow.runway.runwayObstacle.heightProperty().multiply(1),
             Theme.slope,
             new SimpleBooleanProperty(true),
             scaleFactor,
@@ -414,7 +414,7 @@ public class RunwayScene extends SceneAbstract {
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
-            obstacle.heightProperty().multiply(1),
+            appWindow.runway.runwayObstacle.heightProperty().multiply(1),
             Theme.slope,
             new SimpleBooleanProperty(false),
             scaleFactor,

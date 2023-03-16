@@ -68,7 +68,7 @@ public class Runway {
     private final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(0);
     public TextFlow changesHistory = new TextFlow();
 
-    private Obstacle runwayObstacle = null;
+    public Obstacle runwayObstacle = new Obstacle("One", 10,0);;
 
     private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
 
@@ -109,7 +109,6 @@ public class Runway {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
         logger.info("Created Runway object");
-        runwayObstacle = new Obstacle("One", 0,0);
         runwayLength.bind(Bindings.when(Bindings.greaterThan(inputLeftTora,inputRightTora)).then(inputLeftTora).otherwise(inputRightTora));
         clearwayLeft.bind(inputRightToda.subtract(inputRightTora));
         stopwayLeft.bind(inputRightAsda.subtract(inputRightTora));

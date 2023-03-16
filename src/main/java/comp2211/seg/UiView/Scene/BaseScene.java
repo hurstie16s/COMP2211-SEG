@@ -576,6 +576,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     public Spinner makeSpinner(SimpleDoubleProperty binding){
         Spinner spinner = new Spinner();
+        SpinnerValueFactory<Double> svf = new SpinnerValueFactory.DoubleSpinnerValueFactory(0,999999999,binding.get());
+        spinner.setValueFactory(svf);
         binding.bind(spinner.valueProperty());
 
         return spinner;
