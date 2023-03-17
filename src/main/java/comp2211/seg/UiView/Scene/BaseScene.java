@@ -2,6 +2,8 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
+import comp2211.seg.ProcessDataModel.Airport;
+import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
@@ -22,10 +24,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -64,6 +69,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         ArrayList<Pair<String, Pane>> tabs = new ArrayList<>();
         tabs.add(new Pair<>("Airport Configuration", makeAirportConfig()));
+
+
         tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
         TabLayout tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
         mainPane.maxHeightProperty().bind(root.heightProperty());
@@ -101,9 +108,26 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             .getResource("/images/import.png")).toExternalForm()));
 
 
-        // Create the buttons and set their graphics
-        Button exportButton = new Button("Export Airport", exportIcon);
-        Button importButton = new Button("Import Airport", importIcon);
+        Button exportButton = new Button("Export Airport");
+
+        exportButton.setOnAction(e -> {
+
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Choose file to export");
+            fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml"));
+            File file = fileChooser.showSaveDialog(new Stage());
+
+            if (file == null)
+                return;
+
+            if(!file.getName().contains(".xml"))
+                file = new File(file.getAbsolutePath()+".xml");
+
+
+
+        });
+
+        Button importButton = new Button("Import Airport");
 
         // Set the size of the icon
         exportIcon.setFitHeight(16);
@@ -134,6 +158,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //return vBox
         return vBoxAirportLayout;
     }
+
+
+
 
     public TableView<RunwayData> buildTableView(VBox container) {
         TableView<RunwayData> table = new TableView<>();

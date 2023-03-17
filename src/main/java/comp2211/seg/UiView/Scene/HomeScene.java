@@ -31,7 +31,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class HomeScene extends SceneAbstract implements GlobalVariables {
 
-  /**
+  /*
    * Logger object used for logging messages.
    */
   private static final Logger logger = LogManager.getLogger(HomeScene.class);
