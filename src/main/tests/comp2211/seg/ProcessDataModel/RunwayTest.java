@@ -222,7 +222,7 @@ class RunwayTest {
     // Test Data Generation
 
     // Obstacles defined in given scenario's
-    static Obstacle obstacle1 = new Obstacle("ob1", 12, -50, 3646);
+    static Obstacle obstacle1 = new Obstacle("ob1", 12, -50, 3645);
     static Obstacle obstacle2 = new Obstacle("ob2", 25, 2853, 500);
     static Obstacle obstacle3 = new Obstacle("ob3", 15, 150, 3203);
     static Obstacle obstacle4 = new Obstacle("ob4", 20, 3546, 50);
@@ -232,7 +232,8 @@ class RunwayTest {
     private static Stream<Arguments> generateCheckDesignatorTestData() {
         return Stream.of(
                 Arguments.of(runway1, "27L"),
-                Arguments.of(runway2, "27R")
+                Arguments.of(runway2, "27R"),
+                Arguments.of(runway3, "25L")
         );
     }
     //TODO: Generate test data for recalculate
@@ -248,7 +249,7 @@ class RunwayTest {
                         2985, //TORA right
                         2985, //ASDA right
                         2985, //TODA right
-                        3346, //LDA right
+                        3345, //LDA right
                         "Test: Given Scenario 1"
                 ),
                 Arguments.of(
@@ -297,10 +298,10 @@ class RunwayTest {
                         1582,
                         2663,
                         1322,
-                        1250,
-                        1250,
-                        1250,
-                        1710,
+                        1404,
+                        1404,
+                        1404,
+                        1782,
                         "Test: Own Scenario 1"
                 )
         );
