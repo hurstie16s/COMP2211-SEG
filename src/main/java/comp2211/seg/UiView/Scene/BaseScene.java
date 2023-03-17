@@ -7,10 +7,13 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -128,167 +131,118 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return vBoxAirportLayout;
     }
 
-    private TableView<Object> buildTableView(VBox container) {
-
-        class RunwayData {
-            String column1 = "Runway\nDesignators";
-            String column2 = "Runway(RWY)";
-            String column3 = "Runway Strip";
-            String column4 = "Stopway(SWY)";
-            String column5 = "Clearway(CWY)";
-            String column6 = "RESA";
-            String column7 = "Threshold\nDisplacement";
-            String column8 = "Strip End";
-            String column9 = "Blast\nProtection";
-            String column10 = "Length";
-            String column11 = "Width";
-
-            public RunwayData() {}
-            public RunwayData(String column1, String column2,
-                              String column3, String column4,
-                              String column5, String column6,
-                              String column7, String column8,
-                              String column9, String column10, String column11) {
-                this.column1 = column1;
-                this.column2 = column2;
-                this.column3 = column3;
-                this.column4 = column4;
-                this.column5 = column5;
-                this.column6 = column6;
-                this.column7 = column7;
-                this.column8 = column8;
-                this.column9 = column9;
-                this.column10 = column10;
-                this.column11 = column11;
-            }
-            public String getColumn1() {
-                return column1;
-            }
-
-            public void setColumn1(String column1) {
-                this.column1 = column1;
-            }
-
-            public String getColumn2() {
-                return column2;
-            }
-
-            public void setColumn2(String column2) {
-                this.column2 = column2;
-            }
-
-            public String getColumn3() {
-                return column3;
-            }
-
-            public void setColumn3(String column3) {
-                this.column3 = column3;
-            }
-
-            public String getColumn4() {
-                return column4;
-            }
-
-            public void setColumn4(String column4) {
-                this.column4 = column4;
-            }
-
-            public String getColumn5() {
-                return column5;
-            }
-
-            public void setColumn5(String column5) {
-                this.column5 = column5;
-            }
-
-            public String getColumn6() {
-                return column6;
-            }
-
-            public void setColumn6(String column6) {
-                this.column6 = column6;
-            }
-
-            public String getColumn7() {
-                return column7;
-            }
-
-            public void setColumn7(String column7) {
-                this.column7 = column7;
-            }
-
-            public String getColumn8() {
-                return column8;
-            }
-
-            public void setColumn8(String column8) {
-                this.column8 = column8;
-            }
-
-            public String getColumn9() {
-                return column9;
-            }
-
-            public void setColumn9(String column9) {
-                this.column9 = column9;
-            }
-
-            public String getColumn10() {
-                return column10;
-            }
-
-            public void setColumn10(String column10) {
-                this.column10 = column10;
-            }
-
-            public String getColumn11() {
-                return column11;
-            }
-
-            public void setColumn11(String column11) {
-                this.column11 = column11;
-            }
-        }
-
-        TableView<Object> table = new TableView<>();
-        table.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
-        final Label label = new Label("Runway Data");
-        label.setFont(Theme.font);
-        //table.setEditable(true);
+    private TableView<RunwayData> buildTableView(VBox container) {
+        TableView<RunwayData> table = new TableView<>();
+        //table.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+        //final Label label = new Label("Runway Data");
+        //label.setFont(Theme.font);
 
         //columns
-        TableColumn<Object, Object> emptyColumn1 = new TableColumn<>("Runway\nDesignators");
-        TableColumn<Object, Object> firstColumn = new TableColumn<>("Runway(RWY)");
-        TableColumn<Object, Object> secondColumn = new TableColumn<>("Runway Strip");
-        TableColumn<Object, Object> thirdColumn = new TableColumn<>("Stopway(SWY)");
-        TableColumn<Object, Object> fourthColumn = new TableColumn<>("Clearway(CWY)");
-        TableColumn<Object, Object> fifthColumn = new TableColumn<>("RESA");
-        TableColumn<Object, Object> sixthColumn = new TableColumn<>("Threshold\nDisplacement");
-        TableColumn<Object, Object> seventhColumn = new TableColumn<>("Strip End");
-        TableColumn<Object, Object> eighthColumn = new TableColumn<>("Blast\nProtection");
-        TableColumn<Object, Object> lengthColumn = new TableColumn<>("Length");
-        TableColumn<Object, Object> widthColumn = new TableColumn<>("Width");
-        firstColumn.getColumns().addAll(lengthColumn,widthColumn);
-        secondColumn.getColumns().addAll(lengthColumn,widthColumn);
-        thirdColumn.getColumns().addAll(lengthColumn,widthColumn);
-        fourthColumn.getColumns().addAll(lengthColumn,widthColumn);
-        fifthColumn.getColumns().addAll(lengthColumn,widthColumn);
-        //add columns
-        table.getColumns().addAll(
-            emptyColumn1,
-            firstColumn,
-            secondColumn,
-            thirdColumn,
-            fourthColumn,
-            fifthColumn,
-            sixthColumn,
-            seventhColumn,
-            eighthColumn);
+        TableColumn<RunwayData, String> col1 = createColumn("Runway\nDesignators");
+        col1.setCellValueFactory(new PropertyValueFactory<>("column1"));
+        TableColumn<RunwayData, String> col2 = new TableColumn<>("Runway(RWY)");
+        TableColumn<RunwayData, String> col21 = createColumn("Length");
+        col21.setCellValueFactory(new PropertyValueFactory<>("column21"));
+        TableColumn<RunwayData, String> col22 = createColumn("Width");
+        col22.setCellValueFactory(new PropertyValueFactory<>("column22"));
+        TableColumn<RunwayData, String> col3 = new TableColumn<>("Runway Strip");
+        TableColumn<RunwayData, String> col31 = createColumn("Length");
+        col31.setCellValueFactory(new PropertyValueFactory<>("column31"));
+        TableColumn<RunwayData, String> col32 = createColumn("Width");
+        col32.setCellValueFactory(new PropertyValueFactory<>("column32"));
+        TableColumn<RunwayData, String> col4 = new TableColumn<>("Stopway(SWY)");
+        TableColumn<RunwayData, String> col41 = createColumn("Length");
+        col41.setCellValueFactory(new PropertyValueFactory<>("column41"));
+        TableColumn<RunwayData, String> col42 = createColumn("Width");
+        col42.setCellValueFactory(new PropertyValueFactory<>("column42"));
+        TableColumn<RunwayData, String> col5 = new TableColumn<>("Clearway(CWY)");
+        TableColumn<RunwayData, String> col51 = createColumn("Length");
+        col51.setCellValueFactory(new PropertyValueFactory<>("column51"));
+        TableColumn<RunwayData, String> col52 = createColumn("Width");
+        col52.setCellValueFactory(new PropertyValueFactory<>("column52"));
+        TableColumn<RunwayData, String> col6 = new TableColumn<>("RESA");
+        TableColumn<RunwayData, String> col61 = createColumn("Length");
+        col52.setCellValueFactory(new PropertyValueFactory<>("column61"));
+        TableColumn<RunwayData, String> col62 = createColumn("Width");
+        col52.setCellValueFactory(new PropertyValueFactory<>("column62"));
+        TableColumn<RunwayData, String> col7 = createColumn("Threshold\nDisplacement");
+        col52.setCellValueFactory(new PropertyValueFactory<>("column7"));
+        TableColumn<RunwayData, String> col8 = createColumn("Strip End");
+        col52.setCellValueFactory(new PropertyValueFactory<>("column8"));
+        TableColumn<RunwayData, String> col9 = createColumn("Blast\nProtection");
+        col52.setCellValueFactory(new PropertyValueFactory<>("column9"));
 
-        //sixthColumn.setMinWidth(100);
+        List<TableColumn<RunwayData, ?>> col2Columns = new ArrayList<>();
+        col2Columns.add(col21);
+        col2Columns.add(col22);
+        col2.getColumns().addAll(col2Columns);
 
-        //table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        List<TableColumn<RunwayData, ?>> col3Columns = new ArrayList<>();
+        col3Columns.add(col31);
+        col3Columns.add(col32);
+        col3.getColumns().addAll(col3Columns);
 
+        List<TableColumn<RunwayData, ?>> col4Columns = new ArrayList<>();
+        col4Columns.add(col41);
+        col4Columns.add(col42);
+        col4.getColumns().addAll(col4Columns);
+
+        List<TableColumn<RunwayData, ?>> col5Columns = new ArrayList<>();
+        col5Columns.add(col51);
+        col5Columns.add(col52);
+        col5.getColumns().addAll(col5Columns);
+
+        List<TableColumn<RunwayData, ?>> col6Columns = new ArrayList<>();
+        col6Columns.add(col61);
+        col6Columns.add(col62);
+        col6.getColumns().addAll(col6Columns);
+
+        List<TableColumn<RunwayData, ?>> columns = new ArrayList<>();
+        columns.add(col1);
+        columns.add(col2);
+        columns.add(col3);
+        columns.add(col4);
+        columns.add(col5);
+        columns.add(col6);
+        columns.add(col7);
+        columns.add(col8);
+        columns.add(col9);
+        table.getColumns().addAll(columns);
+
+        // create an ObservableList of RunwayData objects
+        ObservableList<RunwayData> data = FXCollections.observableArrayList();
+//TEST
+// create some sample data
+        RunwayData data1 = new RunwayData(
+            "09L",
+            "xxxxm", "xxxxm",
+            "xxxxm", "xxxxm",
+            "xxxxm", "xxxxm",
+            "xxxxm", "xxxxm",
+            "xxxxm", "xxxxm",
+            "xxxxm",
+            "60m",
+            "300m");
+        RunwayData data2 = new RunwayData(
+            "27L",
+            "xxxxm", "xxxxm",
+            "xxxxm", "xxxxm",
+            "xxxxm", "xxxxm",
+            "xxxxm", "xxxxm",
+            "xxxxm", "xxxxm",
+            "xxxxm");
+// add the sample data to the ObservableList
+        data.addAll(data1, data2);
+// set the items of the TableView to the ObservableList
+        table.setItems(data);
+        logger.info("Table populated with sample data.");
+// retrieve the first RunwayData object from the table data
+        RunwayData firstData = table.getItems().get(0);
+// retrieve the value of column1 from the first RunwayData object
+        String column1Value = firstData.getColumn1();
+// log the value of column1
+        logger.info("Value of column1: " + column1Value);
+        /*
         for (TableColumn<?, ?> column : table.getColumns()) {
             column.maxWidthProperty().bind(container.widthProperty().divide(9));
             column.minWidthProperty().bind(container.widthProperty().divide(9));
@@ -297,10 +251,35 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         lengthColumn.minWidthProperty().bind(container.widthProperty().divide(18));
         widthColumn.maxWidthProperty().bind(container.widthProperty().divide(18));
         widthColumn.minWidthProperty().bind(container.widthProperty().divide(18));
+         */
         //bind the table size to the container
         //table.prefHeightProperty().bind(container.heightProperty());
 
         return table;
+    }
+
+    private void addColumns(TableColumn<RunwayData, String> parentColumn, TableColumn<RunwayData, String>[] columns) {
+        parentColumn.getColumns().addAll(columns);
+    }
+
+
+    private <T> TableColumn<RunwayData, T> createColumn(String columnName) {
+        TableColumn<RunwayData, T> tableColumn = new TableColumn<>(columnName);
+        tableColumn.setCellFactory(column -> {
+            TableCell<RunwayData, T> cell = new TableCell<RunwayData, T>() {
+                @Override
+                protected void updateItem(T item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.toString());
+                    }
+                }
+            };
+            return cell;
+        });
+        return tableColumn;
     }
 
     public Pane makeObstacleConfig(){
