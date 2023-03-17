@@ -7,8 +7,6 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -70,7 +68,7 @@ public class Runway {
      */
     public TextFlow changesHistory = new TextFlow();
 
-    private Obstacle runwayObstacle = null;
+    private Obstacle runwayObstacle;
 
     private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
 
@@ -111,7 +109,10 @@ public class Runway {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
         logger.info("Created Runway object");
-        runwayObstacle = new Obstacle("One", 0,0, 0);
+
+        logger.info("Created initial VOID runway obstacle");
+        runwayObstacle = new Obstacle("VOID", 0,0, 0);
+
         runwayLength.bind(Bindings.when(Bindings.greaterThan(inputLeftTora,inputRightTora)).then(inputLeftTora).otherwise(inputRightTora));
         clearwayLeft.bind(inputRightToda.subtract(inputRightTora));
         stopwayLeft.bind(inputRightAsda.subtract(inputRightTora));
@@ -119,6 +120,7 @@ public class Runway {
         clearwayRight.bind(inputLeftToda.subtract(inputLeftTora));
         stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
+
         recalculate();
         validityChecks();
 
@@ -138,15 +140,14 @@ public class Runway {
         var character = designator.substring(2);
 
         var newCharacter = "";
-        if (character.equals("R")) {
-            newCharacter = "L";
-        } else if (character.equals("L")) {
-            newCharacter = "R";
-        } else if (character.equals("C")) {
-            newCharacter = "C";
-        } else {
-            newCharacter = "ERROR";
-            logger.error("Incorrect initial character");
+        switch (character) {
+            case "R" -> newCharacter = "L";
+            case "L" -> newCharacter = "R";
+            case "C" -> newCharacter = "C";
+            default -> {
+                newCharacter = "ERROR";
+                logger.error("Incorrect initial character");
+            }
         }
 
         var newDesignator = number + newCharacter;
@@ -161,7 +162,7 @@ public class Runway {
      */
     public void addObstacle(Obstacle obstacleToAdd) {
         runwayObstacle = obstacleToAdd;
-        hasRunwayObstacle.set(true);
+        hasRunwayObstacle.set(true); // Listener will call recalculate
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
     }
 
@@ -192,6 +193,7 @@ public class Runway {
         leftLda.bind(inputLeftLda);
 
         if (hasRunwayObstacle.get()) {
+            logger.info("Runway has obstacle: calculation methods will be called");
             if (runwayObstacle.getDistFromThreshold() *  2 > runwayLength.get()) {
                 logger.info("Calculate take-off towards for left");
                 logger.info("Calculate land towards for right");
@@ -203,6 +205,8 @@ public class Runway {
                 calculateLandOver();
                 calculateTakeOffAway();
             }
+        } else {
+            logger.info("Runway has no obstacle: runway returned to original state");
         }
     }
 
@@ -285,23 +289,17 @@ public class Runway {
         VBox labels = new VBox(label,label2,label3,label4,label5,label6,label7,label8);
         labels.setAlignment(Pos.CENTER);
         errorPane.setCenter(labels);
-        width.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                labels.setMaxWidth((Double) t1);
-                labels.setMinWidth((Double) t1);
-                errorPane.setMaxWidth((Double) t1);
-                errorPane.setMinWidth((Double) t1);
-            }
+        width.addListener((observableValue, number, t1) -> {
+            labels.setMaxWidth((Double) t1);
+            labels.setMinWidth((Double) t1);
+            errorPane.setMaxWidth((Double) t1);
+            errorPane.setMinWidth((Double) t1);
         });
-        height.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                labels.setMaxHeight((Double) t1);
-                labels.setMinHeight((Double) t1);
-                errorPane.setMaxHeight((Double) t1);
-                errorPane.setMinHeight((Double) t1);
-            }
+        height.addListener((observableValue, number, t1) -> {
+            labels.setMaxHeight((Double) t1);
+            labels.setMinHeight((Double) t1);
+            errorPane.setMaxHeight((Double) t1);
+            errorPane.setMinHeight((Double) t1);
         });
 
         return errorPane;
@@ -417,10 +415,6 @@ public class Runway {
         leftTora.bind(runwayObstacle.distFromThresholdProperty().add(dispThresholdLeft).subtract(Bindings.max(runwayObstacle.heightProperty().multiply(SLOPE), MINRESA.add(runwayObstacle.widthProperty().divide(2)))).subtract(STRIPEND));
         leftAsda.bind(leftTora);
         leftToda.bind(leftTora);
-        /*
-        not needed for take-off
-        workingLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA.get()).subtract(STRIPEND.get()));
-        */
     }
 
     /**
@@ -894,7 +888,7 @@ public class Runway {
     }
 
     /**
-     * Resa width property simple double property.
+     * RESA width property simple double property.
      *
      * @return the simple double property
      */
@@ -912,7 +906,7 @@ public class Runway {
     }
 
     /**
-     * Resa height property simple double property.
+     * RESA height property simple double property.
      *
      * @return the simple double property
      */
