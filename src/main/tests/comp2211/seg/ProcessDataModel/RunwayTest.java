@@ -226,6 +226,7 @@ class RunwayTest {
     static Obstacle obstacle2 = new Obstacle("ob2", 25, 2853, 500);
     static Obstacle obstacle3 = new Obstacle("ob3", 15, 150, 3203);
     static Obstacle obstacle4 = new Obstacle("ob4", 20, 3546, 50);
+    static Obstacle obstacle5 = new Obstacle("ob5", 14, 80, 2082);
 
     //TODO: Change generation to fit new tests
     private static Stream<Arguments> generateCheckDesignatorTestData() {
@@ -288,6 +289,19 @@ class RunwayTest {
                         3431,
                         2774,
                         "Test: Given Scenario 4"
+                ),
+                Arguments.of(
+                        runway3,
+                        obstacle4,
+                        1582,
+                        1582,
+                        2663,
+                        1322,
+                        1250,
+                        1250,
+                        1250,
+                        1710,
+                        "Test: Own Scenario 1"
                 )
         );
     }
