@@ -292,7 +292,7 @@ class RunwayTest {
                 ),
                 Arguments.of(
                         runway3,
-                        obstacle4,
+                        obstacle5,
                         1582,
                         1582,
                         2663,
