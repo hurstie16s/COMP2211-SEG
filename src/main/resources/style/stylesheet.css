@@ -1,8 +1,8 @@
-.root {
-    -fx-background-color: rgba(26, 26, 26, 255);
-}
 
-.spinner { -fx-base: rgba(60, 63, 65, 255); }
+
+.spinner {
+-fx-base: rgba(60, 63, 65, 255);
+}
 
 .home-background {
     -fx-background-image: url("../images/heathrowRunway.jpg");
@@ -18,7 +18,21 @@
 .scroll-pane{
    -fx-background-color: transparent;
 }
-.combobox{
-   -fx-base: rgba(26, 26, 26, 255);
-   background-color: rgba(26, 26, 26, 255);
+.combobox {
+    -fx-base: rgba(26, 26, 26, 255);
+    background-color: rgba(26, 26, 26, 255);
+}
+.table-view {
+    -fx-base: rgba(26, 26, 26, 255);
+    background-color: rgba(26, 26, 26, 255);
+   -fx-background-color: rgba(26, 26, 26, 255);
+}
+.grid-border-text-style {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+}
+.button-dark {
+    -fx-background-color: rgba(26, 26, 26, 255);
+    -fx-font-size: 14px;
 }

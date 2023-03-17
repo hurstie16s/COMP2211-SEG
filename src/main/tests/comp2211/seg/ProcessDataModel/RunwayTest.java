@@ -42,15 +42,15 @@ class RunwayTest {
         );
         // Blank runway
         setProperties(
-                "27R",
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
+                "07",
+                2162,
+                3243,
+                2162,
+                2162,
+                2162,
+                3243,
+                2219,
+                2080,
                 runway2
         );
         // Runway 09R & 27L
@@ -68,7 +68,7 @@ class RunwayTest {
         );
         // Blank runway
         setProperties(
-                "27L",
+                "___",
                 0,
                 0,
                 0,
@@ -203,7 +203,8 @@ class RunwayTest {
                 Arguments.of(runway1, new Obstacle("obT1", 12, -50), "L", 2985),
                 Arguments.of(runway3, new Obstacle("obT2", 25, 2853), "R", 1850),
                 Arguments.of(runway3, new Obstacle("obT3", 15, 150), "L", 2393),
-                Arguments.of(runway1, new Obstacle("obT4", 20, 3546), "R", 2775)
+                Arguments.of(runway1, new Obstacle("obT4", 20, 3546), "R", 2775),
+                Arguments.of(runway2, new Obstacle("obT5", 14, 80), "L", 1322)
         );
     }
     private static Stream<Arguments> generateLandTowardsTestData() {
@@ -211,7 +212,8 @@ class RunwayTest {
                 Arguments.of(runway1, new Obstacle("obT1", 12, -50), "R", 3345),
                 Arguments.of(runway3, new Obstacle("obT2", 25, 2853), "L", 2553),
                 Arguments.of(runway3, new Obstacle("obT3", 15, 150), "R", 2903),
-                Arguments.of(runway1, new Obstacle("obT4", 20, 3546), "L", 3246)
+                Arguments.of(runway1, new Obstacle("obT4", 20, 3546), "L", 3246),
+                Arguments.of(runway2, new Obstacle("obT6", 14, 2010), "L", 1710)
         );
     }
     /*
@@ -225,7 +227,8 @@ class RunwayTest {
                 Arguments.of(runway1, new Obstacle("obT1", 12, -50),"R", 2985, 2985, 2985),
                 Arguments.of(runway3, new Obstacle("obT2", 25, 2853), "L", 1850, 1850, 1850),
                 Arguments.of(runway3, new Obstacle("obT3", 15, 150), "R", 2393, 2393, 2393),
-                Arguments.of(runway1, new Obstacle("obT4", 20, 3546), "L", 2793, 2793, 2793)
+                Arguments.of(runway1, new Obstacle("obT4", 20, 3546), "L", 2793, 2793, 2793),
+                Arguments.of(runway2, new Obstacle("obT6", 14, 2010), "L", 1250, 1250, 1250)
         );
     }
     //TODO: Generate test data for take-off away
@@ -234,7 +237,8 @@ class RunwayTest {
             Arguments.of(runway1, new Obstacle("obT1", 12, -50), "L", 3145, 3145, 3145),
             Arguments.of(runway3, new Obstacle("obT2", 25, 2853), "R", 2660, 2660, 2660),
             Arguments.of(runway3, new Obstacle("obT3", 15, 150), "L", 2703, 2703, 2703),
-            Arguments.of(runway1, new Obstacle("obT4", 20, 3546), "R", 3353, 3353, 3431)
+            Arguments.of(runway1, new Obstacle("obT4", 20, 3546), "R", 3353, 3353, 3431),
+            Arguments.of(runway2, new Obstacle("obT5", 14, 80), "L", 1582, 1582, 2663)
         );
     }
 }

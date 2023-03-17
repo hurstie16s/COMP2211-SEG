@@ -4,17 +4,19 @@ import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
+import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -25,6 +27,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class BaseScene extends SceneAbstract implements GlobalVariables{
@@ -33,6 +37,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private HBox topbar;
     private VBox layout;
     //logger for BaseScene
+    private static final Logger logger = LogManager.getLogger(BaseScene.class);
+
     private static final Logger logger = LogManager.getLogger(BaseScene.class);
 
 
@@ -53,9 +59,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     }
 
-    public void build(){
+    public void build()  {
         super.build();
-        root.setBackground(new Background(new BackgroundFill(GlobalVariables.unfocusedBG,null,null)));
+        root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
         mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
 
         ArrayList<Pair<String, Pane>> tabs = new ArrayList<>();
@@ -63,30 +69,45 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
         tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
-        TabLayout tabLayout = new TabLayout(tabs,GlobalVariables.unfocusedBG,GlobalVariables.focusedBG);
+        TabLayout tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
         mainPane.maxHeightProperty().bind(root.heightProperty());
         mainPane.minHeightProperty().bind(root.heightProperty());
         mainPane.maxWidthProperty().bind(root.widthProperty());
         mainPane.minWidthProperty().bind(root.widthProperty());
         mainPane.getChildren().add(tabLayout);
     }
-    public Pane makeAirportConfig(){
+    public Pane makeAirportConfig() {
         //Aleks do stuff here
-        VBox airportLayout = new VBox();
 
-        ComboBox airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
-        airports.valueProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                appWindow.setAirport((Airport) t1);
-            }
-        });
-        airports.valueProperty().set(appWindow.airport);
-        ComboBox runways = new ComboBox<>();
+        //main vBox
+        VBox vBoxAirportLayout = new VBox();
+        //table
+        VBox vBoxTable = new VBox();
+        VBox.setMargin(vBoxTable,new Insets(150,20,20,20));//Top/Right/Bottom/Left
+        //vBoxTable.getChildren().add(makeRunwayGridTable());
+        vBoxTable.getChildren().add(buildTableView(vBoxTable));
+        vBoxTable.maxWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
+        vBoxTable.minWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
 
-        GridPane tablePane = new GridPane();
-        makeTablePane(tablePane);
+        //left menu
+        Button airportsTempButton = new Button("Airports");
+        Button runwaysTempButton = new Button("Runways");
+        VBox leftMenu = new VBox(airportsTempButton,runwaysTempButton);
+        VBox.setMargin(airportsTempButton,new Insets(30,20,20,20));
+        VBox.setMargin(runwaysTempButton,new Insets(10,20,20,20));
 
+        //right menu
+
+        // Create image views for the icons
+        ImageView exportIcon = new ImageView(new Image(Objects.requireNonNull(getClass()
+            .getResource("/images/export.png")).toExternalForm()));
+        ImageView importIcon = new ImageView(new Image(Objects.requireNonNull(getClass()
+            .getResource("/images/import.png")).toExternalForm()));
+
+
+        // Create the buttons and set their graphics
+        Button exportButton = new Button("Export Airport", exportIcon);
+        Button importButton = new Button("Import Airport", importIcon);
         Button exportButton = new Button("Export Airport");
 
         exportButton.setOnAction(e -> {
@@ -120,26 +141,211 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         Button importButton = new Button("Import Airport");
 
-        VBox leftMenu = new VBox(airports,runways);
+        // Set the size of the icon
+        exportIcon.setFitHeight(16);
+        exportIcon.setFitWidth(16);
+        importIcon.setFitHeight(16);
+        importIcon.setFitWidth(16);
+
         VBox rightMenu = new VBox(exportButton, importButton);
+        VBox.setMargin(exportButton,new Insets(30,20,20,20));
+        VBox.setMargin(importButton,new Insets(10,20,20,20));
+        //Dark buttons style from css, can be done globally
+        List<Button> darkButtons = new ArrayList<>();
+        darkButtons.add(airportsTempButton);
+        darkButtons.add(runwaysTempButton);
+        darkButtons.add(exportButton);
+        darkButtons.add(importButton);
+
+        for (Button button : darkButtons) {
+            button.getStyleClass().add("button-dark");
+        }
+
+        HBox hBoxMenuButtons = new HBox();
         Region region = new Region();
         HBox.setHgrow(region,Priority.ALWAYS);
-        HBox menuPane = new HBox(leftMenu,region,rightMenu);
-        airportLayout.getChildren().addAll(menuPane,tablePane);
-        return airportLayout;
+        hBoxMenuButtons.getChildren().addAll(leftMenu,region,rightMenu);
 
-
-
-
-
+        vBoxAirportLayout.getChildren().addAll(hBoxMenuButtons,vBoxTable);
+        //return vBox
+        return vBoxAirportLayout;
     }
 
+    private TableView<Object> buildTableView(VBox container) {
 
+        class RunwayData {
+            String column1 = "Runway\nDesignators";
+            String column2 = "Runway(RWY)";
+            String column3 = "Runway Strip";
+            String column4 = "Stopway(SWY)";
+            String column5 = "Clearway(CWY)";
+            String column6 = "RESA";
+            String column7 = "Threshold\nDisplacement";
+            String column8 = "Strip End";
+            String column9 = "Blast\nProtection";
+            String column10 = "Length";
+            String column11 = "Width";
 
+            public RunwayData() {}
+            public RunwayData(String column1, String column2,
+                              String column3, String column4,
+                              String column5, String column6,
+                              String column7, String column8,
+                              String column9, String column10, String column11) {
+                this.column1 = column1;
+                this.column2 = column2;
+                this.column3 = column3;
+                this.column4 = column4;
+                this.column5 = column5;
+                this.column6 = column6;
+                this.column7 = column7;
+                this.column8 = column8;
+                this.column9 = column9;
+                this.column10 = column10;
+                this.column11 = column11;
+            }
+            public String getColumn1() {
+                return column1;
+            }
 
-    private void makeTablePane(GridPane table) {
-        //Aleks: To do
+            public void setColumn1(String column1) {
+                this.column1 = column1;
+            }
+
+            public String getColumn2() {
+                return column2;
+            }
+
+            public void setColumn2(String column2) {
+                this.column2 = column2;
+            }
+
+            public String getColumn3() {
+                return column3;
+            }
+
+            public void setColumn3(String column3) {
+                this.column3 = column3;
+            }
+
+            public String getColumn4() {
+                return column4;
+            }
+
+            public void setColumn4(String column4) {
+                this.column4 = column4;
+            }
+
+            public String getColumn5() {
+                return column5;
+            }
+
+            public void setColumn5(String column5) {
+                this.column5 = column5;
+            }
+
+            public String getColumn6() {
+                return column6;
+            }
+
+            public void setColumn6(String column6) {
+                this.column6 = column6;
+            }
+
+            public String getColumn7() {
+                return column7;
+            }
+
+            public void setColumn7(String column7) {
+                this.column7 = column7;
+            }
+
+            public String getColumn8() {
+                return column8;
+            }
+
+            public void setColumn8(String column8) {
+                this.column8 = column8;
+            }
+
+            public String getColumn9() {
+                return column9;
+            }
+
+            public void setColumn9(String column9) {
+                this.column9 = column9;
+            }
+
+            public String getColumn10() {
+                return column10;
+            }
+
+            public void setColumn10(String column10) {
+                this.column10 = column10;
+            }
+
+            public String getColumn11() {
+                return column11;
+            }
+
+            public void setColumn11(String column11) {
+                this.column11 = column11;
+            }
+        }
+
+        TableView<Object> table = new TableView<>();
+        table.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+        final Label label = new Label("Runway Data");
+        label.setFont(Theme.font);
+        //table.setEditable(true);
+
+        //columns
+        TableColumn<Object, Object> emptyColumn1 = new TableColumn<>("Runway\nDesignators");
+        TableColumn<Object, Object> firstColumn = new TableColumn<>("Runway(RWY)");
+        TableColumn<Object, Object> secondColumn = new TableColumn<>("Runway Strip");
+        TableColumn<Object, Object> thirdColumn = new TableColumn<>("Stopway(SWY)");
+        TableColumn<Object, Object> fourthColumn = new TableColumn<>("Clearway(CWY)");
+        TableColumn<Object, Object> fifthColumn = new TableColumn<>("RESA");
+        TableColumn<Object, Object> sixthColumn = new TableColumn<>("Threshold\nDisplacement");
+        TableColumn<Object, Object> seventhColumn = new TableColumn<>("Strip End");
+        TableColumn<Object, Object> eighthColumn = new TableColumn<>("Blast\nProtection");
+        TableColumn<Object, Object> lengthColumn = new TableColumn<>("Length");
+        TableColumn<Object, Object> widthColumn = new TableColumn<>("Width");
+        firstColumn.getColumns().addAll(lengthColumn,widthColumn);
+        secondColumn.getColumns().addAll(lengthColumn,widthColumn);
+        thirdColumn.getColumns().addAll(lengthColumn,widthColumn);
+        fourthColumn.getColumns().addAll(lengthColumn,widthColumn);
+        fifthColumn.getColumns().addAll(lengthColumn,widthColumn);
+        //add columns
+        table.getColumns().addAll(
+            emptyColumn1,
+            firstColumn,
+            secondColumn,
+            thirdColumn,
+            fourthColumn,
+            fifthColumn,
+            sixthColumn,
+            seventhColumn,
+            eighthColumn);
+
+        //sixthColumn.setMinWidth(100);
+
+        //table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+
+        for (TableColumn<?, ?> column : table.getColumns()) {
+            column.maxWidthProperty().bind(container.widthProperty().divide(9));
+            column.minWidthProperty().bind(container.widthProperty().divide(9));
+        }
+        lengthColumn.maxWidthProperty().bind(container.widthProperty().divide(18));
+        lengthColumn.minWidthProperty().bind(container.widthProperty().divide(18));
+        widthColumn.maxWidthProperty().bind(container.widthProperty().divide(18));
+        widthColumn.minWidthProperty().bind(container.widthProperty().divide(18));
+        //bind the table size to the container
+        //table.prefHeightProperty().bind(container.heightProperty());
+
+        return table;
     }
+
     public Pane makeObstacleConfig(){
         HBox obstacleLayout = new HBox();
         VBox leftPane = new VBox();
@@ -211,7 +417,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         history.setFitToWidth(true);
         history.setPadding(new Insets(16));
         changeHistory.add(new Pair<>("Change History", new BorderPane(history)));
-        Pane changeHistoryPane = new TabLayout(changeHistory,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
+        Pane changeHistoryPane = new TabLayout(changeHistory,Theme.focusedBG,Theme.veryfocusedBG);
         return changeHistoryPane;
     }
 
@@ -249,7 +455,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
         obstacleOptions.add(new Pair<>("Obstacle", obstacleData));
-        Pane obstacleOptionsPane = new TabLayout(obstacleOptions,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
+        Pane obstacleOptionsPane = new TabLayout(obstacleOptions,Theme.focusedBG,Theme.veryfocusedBG);
         return obstacleOptionsPane;
     }
     private Pane makeDistancesPane() {
@@ -310,7 +516,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         ArrayList<Pair<String, Pane>> declaredDistances = new ArrayList<>();
         declaredDistances.add(new Pair<>("Declared Distances", distancesGrid));
-        Pane declaredDistancesPane = new TabLayout(declaredDistances,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
+        Pane declaredDistancesPane = new TabLayout(declaredDistances,Theme.focusedBG,Theme.veryfocusedBG);
         distancesGrid.getChildren().forEach(new Consumer<Node>() {
             @Override
             public void accept(Node node) {
@@ -322,8 +528,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Node makeOutputLabel(SimpleStringProperty runwayDesignatorProperty, SimpleBooleanProperty visibility) {
         Label data = new Label();
-        data.setFont(GlobalVariables.font);
-        data.setTextFill(GlobalVariables.fg);
+        data.setFont(Theme.font);
+        data.setTextFill(Theme.fg);
         data.setText(String.valueOf(runwayDesignatorProperty.getValue()));
         data.textProperty().bind(Bindings.when(visibility).then(runwayDesignatorProperty).otherwise(new
                 SimpleStringProperty("Error")));
@@ -333,14 +539,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     public Label makeLabel(String string){
         Label label = new Label(string);
-        label.setFont(GlobalVariables.font);
-        label.setTextFill(GlobalVariables.fg);
+        label.setFont(Theme.font);
+        label.setTextFill(Theme.fg);
         return label;
     }
     public Label makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility) {
         Label data = new Label();
-        data.setFont(GlobalVariables.font);
-        data.setTextFill(GlobalVariables.fg);
+        data.setFont(Theme.font);
+        data.setTextFill(Theme.fg);
         data.setText(String.valueOf(property.getValue()));
         data.textProperty().bind(Bindings.when(visibility).then(property.asString().concat(appWindow.runway.unitsProperty())).otherwise(new
                 SimpleStringProperty("Error")));
@@ -349,11 +555,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Pane makeBreakDownPane() {
         ArrayList<Pair<String, Pane>> breakDown = new ArrayList<>();
-        breakDown.add(new Pair<>("TORA Breakdown", new VBox()));
-        breakDown.add(new Pair<>("TODA Breakdown", new VBox()));
-        breakDown.add(new Pair<>("ASDA Breakdown", new VBox()));
-        breakDown.add(new Pair<>("LDA Breakdown", new VBox()));
-        Pane breakDownPane = new TabLayout(breakDown,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
+        breakDown.add(new Pair<>("TORA", new VBox()));
+        breakDown.add(new Pair<>("TODA", new VBox()));
+        breakDown.add(new Pair<>("ASDA", new VBox()));
+        breakDown.add(new Pair<>("LDA", new VBox()));
+        Pane breakDownPane = new TabLayout(breakDown,Theme.focusedBG,Theme.veryfocusedBG);
         return breakDownPane;
     }
 
@@ -407,16 +613,53 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         viewTabs.add(new Pair<>("Both Views", dualView));
         viewTabs.add(new Pair<>("Side-On Views", sideView));
         viewTabs.add(new Pair<>("Top-Down Views", topView));
-        TabLayout viewPane = new TabLayout(viewTabs,GlobalVariables.focusedBG,GlobalVariables.veryfocusedBG);
+        TabLayout viewPane = new TabLayout(viewTabs,Theme.focusedBG,Theme.veryfocusedBG);
         return viewPane;
     }
 
     public Spinner makeSpinner(SimpleDoubleProperty binding){
         Spinner spinner = new Spinner();
-        binding.bind(spinner.valueProperty());
+        SpinnerValueFactory<Double> svf = new SpinnerValueFactory.DoubleSpinnerValueFactory(0,999999999,binding.get());
+        spinner.setValueFactory(svf);
+        spinner.editableProperty().set(true);
+
+        spinner.getEditor().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if (Objects.equals(t1, "")) {
+                    binding.set(0);
+                } else {
+                    try {
+                        binding.set(Double.parseDouble(t1));
+                    } catch (Exception e) {
+                        displayErrorMessage("Invalid Entry", t1 + " must be a number");
+                        spinner.getEditor().setText(s);
+                    }
+                }
+            }
+        });
+        binding.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                spinner.getEditor().setText(Double.toString(t1.doubleValue()));
+            }
+        });
 
         return spinner;
     }
 
+    /**
+     * Displays an error message dialog box with the specified title and message.
+     *
+     * @param title   the title of the dialog box
+     * @param message the message to display in the dialog box
+     */
+    private void displayErrorMessage(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
 }

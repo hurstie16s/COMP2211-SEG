@@ -3,6 +3,7 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import comp2211.seg.Controller.Stage.Theme;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
@@ -82,7 +83,7 @@ public SceneAbstract(Pane root, AppWindow appWindow, double width,double height,
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     mainPane.setPickOnBounds(false);
     root.setPickOnBounds(false);
-    root.setBackground(new Background(new BackgroundFill(GlobalVariables.unfocusedBG,null,null)));
+    root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
     root.getChildren().add(mainPane);
 
     root.setMaxWidth(width);

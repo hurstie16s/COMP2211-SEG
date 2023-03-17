@@ -1,6 +1,7 @@
 package comp2211.seg.ProcessDataModel;
 
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
+import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.Property;
@@ -45,7 +46,8 @@ public class Runway {
     if the azimuth of the centre-line is 153 then the runway designator will be 15
     followed by either L C or R to differentiate between parallel runways
      */
-    private final SimpleStringProperty runwayDesignator = new SimpleStringProperty("36C");
+    private final SimpleStringProperty runwayDesignatorLeft = new SimpleStringProperty("09L");
+    private final SimpleStringProperty runwayDesignatorRight = new SimpleStringProperty("");
     private final SimpleDoubleProperty inputRightTora = new SimpleDoubleProperty(1000);
     private final SimpleDoubleProperty inputRightToda = new SimpleDoubleProperty(1500);
     private final SimpleDoubleProperty inputRightAsda = new SimpleDoubleProperty(1150);
@@ -66,7 +68,7 @@ public class Runway {
     private final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(0);
     public TextFlow changesHistory = new TextFlow();
 
-    private Obstacle runwayObstacle = null;
+    public Obstacle runwayObstacle = new Obstacle("One", 10,0);;
 
     private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
 
@@ -100,14 +102,13 @@ public class Runway {
      */
     public Runway() {
         for (Property prop: new Property[] {
-                runwayDesignator,
+                runwayDesignatorLeft,
                 runwayLength,
                 hasRunwayObstacle
         }) {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
         logger.info("Created Runway object");
-        runwayObstacle = new Obstacle("One", 0,0);
         runwayLength.bind(Bindings.when(Bindings.greaterThan(inputLeftTora,inputRightTora)).then(inputLeftTora).otherwise(inputRightTora));
         clearwayLeft.bind(inputRightToda.subtract(inputRightTora));
         stopwayLeft.bind(inputRightAsda.subtract(inputRightTora));
@@ -117,6 +118,22 @@ public class Runway {
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
         recalculate();
         validityChecks();
+        calculateRunwayDesignatorLeft();
+    }
+
+    /**
+     * Calculates the runway designator for the runway in the opposite direction
+     */
+    private void calculateRunwayDesignatorLeft() {
+        var number = (Integer.parseInt(runwayDesignatorLeft.get().substring(0,2)) + 18) % 36;
+        var character = runwayDesignatorLeft.get().substring(2);
+        character = switch(character) {
+            case "R" -> "L";
+            case "L" -> "R";
+            case "C" -> "C";
+            default -> "error";
+        };
+        runwayDesignatorRight.set(number + character);
     }
 
     /**
@@ -125,7 +142,7 @@ public class Runway {
      */
     public void addObstacle() {
         hasRunwayObstacle.set(true);
-        logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignator.get());
+        logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
     }
     /**
      * Removing the obstacle from the runway
@@ -135,9 +152,10 @@ public class Runway {
         hasRunwayObstacle.set(false);
 
         recalculate();
-        logger.info("Removed Obstacle "+ runwayObstacle.getObstacleDesignator() + " from runway " + runwayDesignator.get());
+        logger.info("Removed Obstacle "+ runwayObstacle.getObstacleDesignator() + " from runway " + runwayDesignatorLeft.get());
         logger.info("Return runway to original state");
     }
+
     /**
      *
      Recalculates the runway values based on the landing/takeoff direction and LDA/TORA values.
@@ -167,12 +185,12 @@ public class Runway {
         }
     }
     public void validityChecks(){
-        //Bindings.greaterThan(greater,lesser) = true;
-        leftTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftAsda,inputLeftTora.add(STOPWAYMIN)),Bindings.greaterThanOrEqual(inputLeftToda,leftAsda.add(STRIPEND).add(RESAWidth))));
+        // Bindings.greaterThan(greater,lesser) = true;
+        leftTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftAsda,inputLeftTora),Bindings.greaterThanOrEqual(inputLeftToda,leftAsda)));
         leftLand.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftLda,0),
                 Bindings.lessThanOrEqual(inputLeftLda,inputLeftTora))
         );
-        rightTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora.add(STOPWAYMIN)),Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda.add(STRIPEND).add(RESAWidth))));
+        rightTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora),Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda)));
         rightLand.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightLda,0),
                 Bindings.lessThanOrEqual(inputRightLda,inputRightTora))
         );
@@ -192,45 +210,45 @@ public class Runway {
         );
 
         Text label = new Text();
-        label.textProperty().bind(new SimpleStringProperty("Top ASDA (").concat(inputLeftAsda.asString()).concat(") < Top TORA (").concat( inputLeftTora.asString()).concat(") + Stopway (").concat(STOPWAYMIN).concat(")"));
-        label.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftAsda,inputLeftTora.add(STOPWAYMIN)).not());
+        label.textProperty().bind(new SimpleStringProperty("Top ASDA (").concat(inputLeftAsda.asString()).concat(") < Top TORA (").concat( inputLeftTora.asString()).concat(")"));
+        label.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftAsda,inputLeftTora).not());
         label.setFill(Color.RED);
-        label.setFont(GlobalVariables.font);
+        label.setFont(Theme.font);
         Text label2 = new Text();
-        label2.textProperty().bind(new SimpleStringProperty("Top TODA (").concat(inputLeftToda.asString()).concat(") < Top ASDA (").concat( inputLeftAsda.asString()).concat(") + Strip end (").concat(STRIPEND).concat(") + Resa (").concat(RESAWidth).concat(")"));
-        label2.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftToda,inputLeftAsda.add(STRIPEND).add(RESAWidth)).not());
+        label2.textProperty().bind(new SimpleStringProperty("Top TODA (").concat(inputLeftToda.asString()).concat(") < Top ASDA (").concat( inputLeftAsda.asString()).concat(")"));
+        label2.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftToda,inputLeftAsda).not());
         label2.setFill(Color.RED);
-        label2.setFont(GlobalVariables.font);
+        label2.setFont(Theme.font);
         Text label3 = new Text();
         label3.textProperty().bind(new SimpleStringProperty("Top LDA (").concat(inputLeftLda.asString()).concat(") < 0"));
         label3.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftLda,0).not());
         label3.setFill(Color.RED);
-        label3.setFont(GlobalVariables.font);
+        label3.setFont(Theme.font);
         Text label4 = new Text();
         label4.textProperty().bind(new SimpleStringProperty("Top TORA (").concat(inputLeftTora.asString()).concat(") < Top LDA (").concat( inputLeftLda.asString()).concat(")"));
         label4.visibleProperty().bind(Bindings.lessThanOrEqual(inputLeftLda,inputLeftTora).not());
         label4.setFill(Color.RED);
-        label4.setFont(GlobalVariables.font);
+        label4.setFont(Theme.font);
         Text label5= new Text();
-        label5.textProperty().bind(new SimpleStringProperty("Bottom ASDA (").concat(inputRightAsda.asString()).concat(") < Bottom TORA (").concat( inputRightTora.asString()).concat(") + Stopway (").concat(STOPWAYMIN).concat(")"));
-        label5.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora.add(STOPWAYMIN)).not());
+        label5.textProperty().bind(new SimpleStringProperty("Bottom ASDA (").concat(inputRightAsda.asString()).concat(") < Bottom TORA (").concat( inputRightTora.asString()).concat(")"));
+        label5.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora).not());
         label5.setFill(Color.RED);
-        label5.setFont(GlobalVariables.font);
+        label5.setFont(Theme.font);
         Text label6= new Text();
-        label6.textProperty().bind(new SimpleStringProperty("Bottom TODA (").concat(inputRightToda.asString()).concat(") < Bottom ASDA (").concat( inputRightAsda.asString()).concat(") + Strip end (").concat(STRIPEND).concat(") + Resa (").concat(RESAWidth).concat(")"));
-        label6.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda.add(STRIPEND).add(RESAWidth)).not());
+        label6.textProperty().bind(new SimpleStringProperty("Bottom TODA (").concat(inputRightToda.asString()).concat(") < Bottom ASDA (").concat( inputRightAsda.asString()).concat(")"));
+        label6.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda).not());
         label6.setFill(Color.RED);
-        label6.setFont(GlobalVariables.font);
+        label6.setFont(Theme.font);
         Text label7= new Text();
         label7.textProperty().bind(new SimpleStringProperty("Bottom LDA (").concat(inputRightLda.asString()).concat(") < 0"));
         label7.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightLda,0).not());
         label7.setFill(Color.RED);
-        label7.setFont(GlobalVariables.font);
+        label7.setFont(Theme.font);
         Text label8 = new Text();
         label8.textProperty().bind(new SimpleStringProperty("Bottom TORA (").concat(inputRightTora.asString()).concat(") < Bottom LDA (").concat( inputRightLda.asString()).concat(")"));
         label8.visibleProperty().bind(Bindings.lessThanOrEqual(inputRightLda,inputRightTora).not());
         label8.setFill(Color.RED);
-        label8.setFont(GlobalVariables.font);
+        label8.setFont(Theme.font);
         VBox labels = new VBox(label,label2,label3,label4,label5,label6,label7,label8);
         labels.setAlignment(Pos.CENTER);
         errorPane.setCenter(labels);
@@ -259,6 +277,7 @@ public class Runway {
     /**
      Calculations for when a plane is landing over an obstacle
      */
+    // TODO: Check working
     public void calculateLandOver() {
         /*
         Not really needed for landing calculations
@@ -266,24 +285,9 @@ public class Runway {
         workingAsda.bind(workingTora.add(stopway));
         workingToda.bind(workingTora.add(clearway));
          */
-        SimpleDoubleProperty obstacleSlopeCalculation = new SimpleDoubleProperty();
-        obstacleSlopeCalculation
-                .bind(Bindings
-                        .when(Bindings
-                                .greaterThan(runwayObstacle.heightProperty()
-                                        .multiply(SLOPE),MINRESA
-                                        .add(runwayObstacle.widthProperty()
-                                                .divide(2))))
-                        .then(runwayObstacle
-                                .heightProperty()
-                                .multiply(SLOPE))
-                        .otherwise(MINRESA
-                                .add(runwayObstacle
-                                        .widthProperty()
-                                        .divide(2))));
+        /*
 
 
-        SimpleDoubleProperty leftLdaSubtraction = new SimpleDoubleProperty();
         SimpleDoubleProperty rightLdaSubtraction= new SimpleDoubleProperty();
 
         leftLdaSubtraction.bind(
@@ -308,7 +312,40 @@ public class Runway {
                         .otherwise(BLASTZONE));
 
         rightLda.bind(inputRightLda.subtract(rightLdaSubtraction));
-        leftLda.bind(inputLeftLda.subtract(leftLdaSubtraction));
+         */
+
+        // Calculate Land Over for Left
+
+        var obstacleSlopeCalculation = new SimpleDoubleProperty();
+        obstacleSlopeCalculation
+                .bind(Bindings
+                        .when(Bindings
+                                .greaterThan(runwayObstacle.heightProperty()
+                                        .multiply(SLOPE),MINRESA
+                                        .add(runwayObstacle.widthProperty()
+                                                .divide(2))))
+                        .then(runwayObstacle
+                                .heightProperty()
+                                .multiply(SLOPE))
+                        .otherwise(MINRESA
+                                .add(runwayObstacle
+                                        .widthProperty()
+                                        .divide(2))));
+
+        var ldaSubtraction = new SimpleDoubleProperty();
+        ldaSubtraction.bind(
+                Bindings.when(
+                        Bindings.greaterThan(
+                                runwayObstacle.distFromThresholdProperty()
+                                        .add(obstacleSlopeCalculation)
+                                        .add(STRIPEND),BLASTZONE)).then(runwayObstacle.distFromThresholdProperty()
+                        .add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE));
+
+        leftLda.bind(inputLeftLda.subtract(ldaSubtraction));
+
+        // Calculate Land Towards for Right
+
+        rightLda.bind(inputRightLda.subtract(runwayObstacle.distFromOtherThresholdProperty()).subtract(MINRESA).subtract(STRIPEND));
     }
 
     /**
@@ -321,6 +358,11 @@ public class Runway {
         workingAsda.bind(workingTora);
         workingToda.bind(workingTora);
          */
+
+        // Calculate Land Towards for Left
+
+        // Calculate Land Over for Right
+
         leftLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
         rightLda.bind(inputLeftLda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(MINRESA).subtract(STRIPEND));
         logger.info("Re-calculated LDA");
@@ -354,6 +396,8 @@ public class Runway {
         rightTora.bind(runwayObstacle.distFromThresholdProperty().subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).add(dispThresholdLeft));
         rightAsda.bind(rightTora.add(stopwayLeft));
         rightToda.bind(rightTora.add(clearwayLeft));
+
+
         leftTora.bind(inputLeftTora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).subtract(dispThresholdLeft));
         leftAsda.bind(leftTora.add(stopwayRight));
         leftToda.bind(leftTora.add(clearwayRight));
@@ -450,14 +494,14 @@ public class Runway {
      * @return The runway designator string.
      */
     public String getRunwayDesignator() {
-        return runwayDesignator.get();
+        return runwayDesignatorLeft.get();
     }
     /**
      * Returns the SimpleStringProperty object representing the runway designator.
      * @return The SimpleStringProperty object representing the runway designator.
      */
     public SimpleStringProperty runwayDesignatorProperty() {
-        return runwayDesignator;
+        return runwayDesignatorLeft;
     }
 
     /**
