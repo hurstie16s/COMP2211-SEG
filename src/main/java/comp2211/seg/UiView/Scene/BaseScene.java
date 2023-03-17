@@ -41,8 +41,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private Button obstacleButton;
     private HBox topbar;
     private VBox layout;
-
+    //logger for BaseScene
     private static final Logger logger = LogManager.getLogger(BaseScene.class);
+
 
 
     /**
@@ -108,7 +109,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             .getResource("/images/import.png")).toExternalForm()));
 
 
-        Button exportButton = new Button("Export Airport");
+        // Create the buttons and set their graphics
+        Button exportButton = new Button("Export Airport", exportIcon);
+        Button importButton = new Button("Import Airport", importIcon);
+
 
         exportButton.setOnAction(e -> {
 
@@ -117,17 +121,28 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml"));
             File file = fileChooser.showSaveDialog(new Stage());
 
-            if (file == null)
+            if (file == null) {
                 return;
+            }
 
-            if(!file.getName().contains(".xml"))
-                file = new File(file.getAbsolutePath()+".xml");
+            System.out.println("hello");
 
+            if(!file.getName().contains(".xml")) {
 
+                System.out.println("reached");
+                file = new File(file.getAbsolutePath() + ".xml");
+                System.out.println(file.getAbsolutePath());
+            }
+
+            if (FileHandler.exportAirport(file, appWindow.airport)) {
+                FileHandler.exportAirport(file, appWindow.airport);
+                logger.info("Exporting Successful");
+            } else {
+                logger.info("Exporting Airport failed");
+            }
 
         });
 
-        Button importButton = new Button("Import Airport");
 
         // Set the size of the icon
         exportIcon.setFitHeight(16);

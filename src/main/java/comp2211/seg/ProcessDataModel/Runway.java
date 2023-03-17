@@ -566,80 +566,80 @@ public class Runway {
      */
 
 
-    public String getRightTora() {
-        return rightTora.toString();
+    public double getRightTora() {
+        return (rightTora.get());
     }
 
     public SimpleDoubleProperty rightToraProperty() {
         return rightTora;
     }
 
-    public String getRightToda() {
-        return rightToda.toString();
+    public double getRightToda() {
+        return rightToda.get();
     }
 
     public SimpleDoubleProperty rightTodaProperty() {
         return rightToda;
     }
 
-    public String getRightAsda() {
-        return rightAsda.toString();
+    public double getRightAsda() {
+        return rightAsda.get();
     }
 
     public SimpleDoubleProperty rightAsdaProperty() {
         return rightAsda;
     }
 
-    public String getRightLda() {
-        return rightLda.toString();
+    public double getRightLda() {
+        return rightLda.get();
     }
 
     public SimpleDoubleProperty rightLdaProperty() {
         return rightLda;
     }
 
-    public String getLeftTora() {
-        return leftTora.toString();
+    public double getLeftTora() {
+        return leftTora.get();
     }
 
     public SimpleDoubleProperty leftToraProperty() {
         return leftTora;
     }
 
-    public String getLeftToda() {
-        return leftToda.toString();
+    public double getLeftToda() {
+        return leftToda.get();
     }
 
     public SimpleDoubleProperty leftTodaProperty() {
         return leftToda;
     }
 
-    public String getLeftAsda() {
-        return leftAsda.toString();
+    public double getLeftAsda() {
+        return leftAsda.get();
     }
 
     public SimpleDoubleProperty leftAsdaProperty() {
         return leftAsda;
     }
 
-    public String getLeftLda() {
-        return leftLda.toString();
+    public double getLeftLda() {
+        return leftLda.get();
     }
 
     public SimpleDoubleProperty leftLdaProperty() {
         return leftLda;
     }
 
-    public String getStripEnd() {
-        return stripEnd.toString();
+    public double getStripEnd() {
+        return stripEnd.get();
     }
 
     public SimpleDoubleProperty stripEndProperty() {
         return stripEnd;
     }
 
-    public String getRESAWidth() {
-        return RESAWidth.toString();
+    public double getRESAWidth() {
+        return RESAWidth.get();
     }
 
     public SimpleDoubleProperty RESAWidthProperty() {
@@ -670,48 +670,48 @@ public class Runway {
         return units;
     }
 
-    public String getClearwayLeft() {
-        return clearwayLeft.toString();
+    public double getClearwayLeft() {
+        return clearwayLeft.get();
     }
 
     public SimpleDoubleProperty clearwayLeftProperty() {
         return clearwayLeft;
     }
 
-    public String getClearwayRight() {
-        return clearwayRight.toString();
+    public double getClearwayRight() {
+        return clearwayRight.get();
     }
 
     public SimpleDoubleProperty clearwayRightProperty() {
         return clearwayRight;
     }
 
-    public String getStopwayLeft() {
-        return stopwayLeft.toString();
+    public double getStopwayLeft() {
+        return stopwayLeft.get();
     }
 
     public SimpleDoubleProperty stopwayLeftProperty() {
         return stopwayLeft;
     }
 
-    public String getStopwayRight() {
-        return stopwayRight.toString();
+    public double getStopwayRight() {
+        return stopwayRight.get();
     }
 
     public SimpleDoubleProperty stopwayRightProperty() {
         return stopwayRight;
     }
 
-    public String getDispThresholdLeft() {
-        return dispThresholdLeft.toString();
+    public double getDispThresholdLeft() {
+        return dispThresholdLeft.get();
     }
 
     public SimpleDoubleProperty dispThresholdLeftProperty() {
         return dispThresholdLeft;
     }
 
-    public String getDispThresholdRight() {
-        return dispThresholdRight.toString();
+    public double getDispThresholdRight() {
+        return dispThresholdRight.get();
     }
 
     public SimpleDoubleProperty dispThresholdRightProperty() {

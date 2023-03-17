@@ -27,7 +27,7 @@ public class FileHandler {
 //    private final String airportTag = "airport";
 
 
-    public boolean exportAirport (File file, Airport airport) {
+    public static boolean exportAirport (File file, Airport airport) {
 
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -47,11 +47,11 @@ public class FileHandler {
 //            rootElement.appendChild(city);
 
             Element lat = document.createElement("Latitude");
-            lat.appendChild(document.createTextNode(airport.getLatitude().toString()));
+            lat.appendChild(document.createTextNode(Double.toString(airport.getLatitude())));
             rootElement.appendChild(lat);
 
             Element longitude = document.createElement("Longitude");
-            longitude.appendChild(document.createTextNode(airport.getLongitude().toString()));
+            longitude.appendChild(document.createTextNode(Double.toString(airport.getLongitude())));
             rootElement.appendChild(longitude);
 
             Element runways = document.createElement("Runways");
@@ -66,68 +66,79 @@ public class FileHandler {
                 designator.appendChild(document.createTextNode(runwayy.getRunwayDesignator()));
                 runways.appendChild(designator);
 
-                Element right = document.createElement("Right Properties");
+                Element resaHeight = document.createElement("Resa_Height");
+                resaHeight.appendChild(document.createTextNode(Double.toString(runwayy.getRESAHeight())));
+                runways.appendChild(resaHeight);
+
+                Element resaWidth = document.createElement("Resa_Width");
+                resaWidth.appendChild(document.createTextNode(Double.toString(runwayy.getRESAWidth())));
+                runways.appendChild(resaWidth);
+
+                Element obstacles = document.createElement("Obstacle");
+                obstacles.appendChild(document.createTextNode(Boolean.toString(runwayy.isHasRunwayObstacle())));
+                runways.appendChild(obstacles);
+
+                Element right = document.createElement("Right_Properties");
                 runways.appendChild(right);
 
                 Element tora = document.createElement("TORA");
-                tora.appendChild(document.createTextNode(runwayy.getRightTora()));
+                tora.appendChild(document.createTextNode(Double.toString(runwayy.getRightTora())));
                 right.appendChild(tora);
 
                 Element toda = document.createElement("TODA");
-                toda.appendChild(document.createTextNode(runwayy.getRightToda()));
+                toda.appendChild(document.createTextNode(Double.toString(runwayy.getRightToda())));
                 right.appendChild(toda);
 
                 Element asda = document.createElement("ASDA");
-                asda.appendChild(document.createTextNode(runwayy.getRightAsda()));
+                asda.appendChild(document.createTextNode(Double.toString(runwayy.getRightAsda())));
                 right.appendChild(asda);
 
                 Element lda = document.createElement("LDA");
-                lda.appendChild(document.createTextNode(runwayy.getRightLda()));
+                lda.appendChild(document.createTextNode(Double.toString(runwayy.getRightLda())));
                 right.appendChild(lda);
 
                 Element clearway = document.createElement("Clearway");
-                clearway.appendChild(document.createTextNode(runwayy.getClearwayRight()));
+                clearway.appendChild(document.createTextNode(Double.toString(runwayy.getClearwayRight())));
                 right.appendChild(clearway);
 
                 Element stopway = document.createElement("Stopway");
-                stopway.appendChild(document.createTextNode(runwayy.getClearwayRight()));
+                stopway.appendChild(document.createTextNode(Double.toString(runwayy.getStopwayRight())));
                 right.appendChild(stopway);
 
-                Element displacementThreshold = document.createElement("Displacement Threshold");
-                displacementThreshold.appendChild(document.createTextNode(runwayy.getDispThresholdRight()));
+                Element displacementThreshold = document.createElement("Displacement_Threshold");
+                displacementThreshold.appendChild(document.createTextNode(Double.toString(runwayy.getDispThresholdRight())));
                 right.appendChild(displacementThreshold);
 
-                Element left = document.createElement("Left Properties");
+                Element left = document.createElement("Left_Properties");
                 runways.appendChild(left);
 
                 Element toraL = document.createElement("TORA");
-                toraL.appendChild(document.createTextNode(runwayy.getLeftTora()));
+                toraL.appendChild(document.createTextNode(Double.toString(runwayy.getLeftTora())));
                 left.appendChild(toraL);
 
                 Element todaL = document.createElement("TODA");
-                todaL.appendChild(document.createTextNode(runwayy.getLeftToda()));
+                todaL.appendChild(document.createTextNode(Double.toString(runwayy.getLeftToda())));
                 left.appendChild(todaL);
 
                 Element asdaL = document.createElement("ASDA");
-                asdaL.appendChild(document.createTextNode(runwayy.getLeftAsda()));
+                asdaL.appendChild(document.createTextNode(Double.toString(runwayy.getLeftAsda())));
                 left.appendChild(asdaL);
 
                 Element ldaL = document.createElement("LDA");
-                ldaL.appendChild(document.createTextNode(runwayy.getLeftLda()));
+                ldaL.appendChild(document.createTextNode(Double.toString(runwayy.getLeftLda())));
                 left.appendChild(ldaL);
 
                 Element clearwayL = document.createElement("Clearway");
-                clearwayL.appendChild(document.createTextNode(runwayy.getClearwayLeft()));
+                clearwayL.appendChild(document.createTextNode(Double.toString(runwayy.getClearwayLeft())));
                 left.appendChild(clearwayL);
 
                 Element stopwayL = document.createElement("Stopway");
-                stopwayL.appendChild(document.createTextNode(runwayy.getStopwayLeft()));
+                stopwayL.appendChild(document.createTextNode(Double.toString(runwayy.getStopwayLeft())));
                 left.appendChild(stopwayL);
 
-                Element displacementThresholdL = document.createElement("Displacement Threshold");
-                displacementThresholdL.appendChild(document.createTextNode(runwayy.getDispThresholdLeft()));
+                Element displacementThresholdL = document.createElement("Displacement_Threshold");
+                displacementThresholdL.appendChild(document.createTextNode(Double.toString(runwayy.getDispThresholdLeft())));
                 left.appendChild(displacementThresholdL);
-
 
             }
 

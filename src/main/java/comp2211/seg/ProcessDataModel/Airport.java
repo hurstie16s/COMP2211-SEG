@@ -15,13 +15,21 @@ public class Airport {
         return latitude;
     }
 
-    public Double latitude;
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double latitude = 0.0;
 
     public Double getLongitude() {
         return longitude;
     }
 
-    public Double longitude;
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double longitude = 0.0;
 
     /**
      * Creates a new Airport object with the specified name and a default runway.
