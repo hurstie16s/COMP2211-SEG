@@ -1,7 +1,6 @@
 package comp2211.seg.ProcessDataModel;
 
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,7 +9,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,11 +76,7 @@ class RunwayTest {
         runway.inputRightLdaProperty().bind(new SimpleDoubleProperty(rightLda));
     }
     void addObstacle(Runway runway, Obstacle obstacle){
-        runway.addObstacle();
-        runway.getRunwayObstacle().heightProperty().set(obstacle.getHeight());
-        runway.getRunwayObstacle().widthProperty().set(obstacle.getWidth());
-        runway.getRunwayObstacle().lengthProperty().set(obstacle.getLength());
-        runway.getRunwayObstacle().distFromThresholdProperty().set(obstacle.getDistFromThreshold());
+        runway.addObstacle(obstacle);
     }
 
     // Unit Tests
@@ -104,24 +98,49 @@ class RunwayTest {
     @DisplayName("Landing/ take-off calculations : Recalculate appropriate values")
     @ParameterizedTest
     @MethodSource("generateRecalculateTestData")
-    void recalculateTest() {
-        assert false;
+    void recalculateTest(Runway runway,
+                         Obstacle obstacleToAdd,
+                         double expectedTORALeft,
+                         double expectedASDALeft,
+                         double expectedTODALeft,
+                         double expectedLDALeft,
+                         double expectedTORARight,
+                         double expectedASDARight,
+                         double expectedTODARight,
+                         double expectedLDARight,
+                         String message
+    ) {
+        logger.info(message);
+        addObstacle(runway, obstacleToAdd);
+
+        assertEquals(expectedLDALeft, runway.getLeftLda(), "Left LDA Incorrect");
+        assertEquals(expectedTORALeft, runway.getLeftTora(), "Left TORA Incorrect");
+        assertEquals(expectedASDALeft, runway.getLeftAsda(), "Left ASDA Incorrect");
+        assertEquals(expectedTODALeft, runway.getLeftToda(), "Left TODA Incorrect");
+
+        assertEquals(expectedLDARight, runway.getRightLda(), "Right LDA Incorrect");
+        assertEquals(expectedTORARight, runway.getRightTora(), "Right TORA Incorrect");
+        assertEquals(expectedASDARight, runway.getRightAsda(), "Right ASDA Incorrect");
+        assertEquals(expectedTODARight, runway.getRightToda(), "Right TODA Incorrect");
     }
 
-    @DisplayName("Landing calculations : Land over an obstacle")
+    @DisplayName("Landing calculations : Land over left : Land towards right")
     @ParameterizedTest
     @MethodSource("generateLandOverTestData")
-    void calculateLandOverTest(Runway runway, Obstacle obstacleToAdd, double expectedLDALeft, double expectedLDARight) {
+    void calculateLandOverTest(Runway runway, Obstacle obstacleToAdd, double expectedLDALeft, double expectedLDARight, String message) {
+        logger.info(message);
         addObstacle(runway,obstacleToAdd);
         runway.calculateLandOver();
+
         assertEquals(expectedLDALeft, runway.getLeftLda(), "Left LDA Incorrect");
         assertEquals(expectedLDARight, runway.getRightLda(), "Right LDA Incorrect");
     }
 
-    @DisplayName("Landing calculations : Land towards an obstacle")
+    @DisplayName("Landing calculations : Land towards left : Land over right")
     @ParameterizedTest
     @MethodSource("generateLandTowardsTestData")
-    void calculateLandTowardsTest(Runway runway, Obstacle obstacleToAdd, double expectedLDALeft, double expectedLDARight) {
+    void calculateLandTowardsTest(Runway runway, Obstacle obstacleToAdd, double expectedLDALeft, double expectedLDARight, String message) {
+        logger.info(message);
         addObstacle(runway,obstacleToAdd);
         runway.calculateLandTowards();
 
@@ -129,7 +148,7 @@ class RunwayTest {
         assertEquals(expectedLDARight, runway.getRightLda(), "Right LDA Incorrect");
     }
 
-    @DisplayName("Take-off calculations : Take-off towards an obstacle")
+    @DisplayName("Take-off calculations : Take-off towards left : Take-off away right")
     @ParameterizedTest
     @MethodSource("generateTakeOffTowardTestData")
     void calculateTakeOffTowardTest(
@@ -140,8 +159,10 @@ class RunwayTest {
             double expectedTODALeft,
             double expectedTORARight,
             double expectedASDARight,
-            double expectedTODARight
+            double expectedTODARight,
+            String message
     ) {
+        logger.info(message);
         addObstacle(runway,obstacleToAdd);
         runway.calculateTakeOffToward();
 
@@ -154,7 +175,7 @@ class RunwayTest {
         assertEquals(expectedTODARight, runway.getRightToda(), "Right TODA Incorrect");
     }
 
-    @DisplayName("Take-off calculations : Take-off away from an obstacle")
+    @DisplayName("Take-off calculations : Take-off away left : Take-off towards right")
     @ParameterizedTest
     @MethodSource("generateTakeOffAwayTestData")
     void calculateTakeOffAwayTest(
@@ -165,8 +186,10 @@ class RunwayTest {
             double expectedTODALeft,
             double expectedTORARight,
             double expectedASDARight,
-            double expectedTODARight
+            double expectedTODARight,
+            String message
     ) {
+        logger.info(message);
         addObstacle(runway,obstacleToAdd);
         runway.calculateTakeOffAway();
 
@@ -180,6 +203,13 @@ class RunwayTest {
     }
 
     // Test Data Generation
+
+    // Obstacles defined in given scenario's
+    static Obstacle obstacle1 = new Obstacle("ob1", 12, -50, 3646);
+    static Obstacle obstacle2 = new Obstacle("ob2", 25, 2853, 500);
+    static Obstacle obstacle3 = new Obstacle("ob3", 15, 150, 3203);
+    static Obstacle obstacle4 = new Obstacle("ob4", 20, 3546, 50);
+
     //TODO: Change generation to fit new tests
     private static Stream<Arguments> generateCheckDesignatorTestData() {
         return Stream.of(
@@ -189,41 +219,72 @@ class RunwayTest {
     }
     //TODO: Generate test data for recalculate
     private static Stream<Arguments> generateRecalculateTestData() {
-        return Stream.of();
+        return Stream.of(
+                Arguments.of(
+                        runway2,
+                        obstacle1,
+                        3346,
+                        3346,
+                        3346,
+                        2985,
+                        2986,
+                        2986,
+                        2986,
+                        3346,
+                        "Test: Given Scenario 1"
+                ),
+                Arguments.of(
+                        runway1,
+                        obstacle2,
+                        1850,
+                        1850,
+                        1850,
+                        2553,
+                        2860,
+                        2860,
+                        2860,
+                        1850,
+                        "Test: Given Scenario 2"
+                ),
+                Arguments.of(
+                        runway1,
+                        obstacle3,
+                        2903,
+                        2903,
+                        2903,
+                        2393,
+                        2393,
+                        2393,
+                        2393,
+                        2903,
+                        "Test: Given Scenario 3"
+                ),
+                Arguments.of(
+                        runway2,
+                        obstacle4,
+                        2792,
+                        2792,
+                        2792,
+                        3246,
+                        3534,
+                        3534,
+                        3612,
+                        2774,
+                        "Test: Given Scenario 4"
+                )
+        );
     }
     private static Stream<Arguments> generateLandOverTestData() {
-        return Stream.of(
-                Arguments.of(runway1, new Obstacle("obT1", 12, -50), "L", 2985),
-                Arguments.of(runway1, new Obstacle("obT4", 20, 3546), "R", 2775),
-                Arguments.of(runway2, new Obstacle("obT5", 14, 80), "L", 1322)
-        );
+        return Stream.of();
     }
     private static Stream<Arguments> generateLandTowardsTestData() {
-        return Stream.of(
-                Arguments.of(runway1, new Obstacle("obT1", 12, -50), "R", 3345),
-                Arguments.of(runway1, new Obstacle("obT4", 20, 3546), "L", 3246),
-                Arguments.of(runway2, new Obstacle("obT6", 14, 2010), "L", 1710)
-        );
+        return Stream.of();
     }
-    /*
-    runway1 = 09L & 27R
-    runway2 =
-    runway3 = 09R & 27L
-    runway4 =
-     */
     private static Stream<Arguments> generateTakeOffTowardTestData() {
-        return Stream.of(
-                Arguments.of(runway1, new Obstacle("obT1", 12, -50),"R", 2985, 2985, 2985),
-                Arguments.of(runway1, new Obstacle("obT4", 20, 3546), "L", 2793, 2793, 2793),
-                Arguments.of(runway2, new Obstacle("obT6", 14, 2010), "L", 1250, 1250, 1250)
-        );
+        return Stream.of();
     }
     //TODO: Generate test data for take-off away
     private static Stream<Arguments> generateTakeOffAwayTestData() {
-        return Stream.of(
-            Arguments.of(runway1, new Obstacle("obT1", 12, -50), "L", 3145, 3145, 3145),
-            Arguments.of(runway1, new Obstacle("obT4", 20, 3546), "R", 3353, 3353, 3431),
-            Arguments.of(runway2, new Obstacle("obT5", 14, 80), "L", 1582, 1582, 2663)
-        );
+        return Stream.of();
     }
 }

@@ -111,7 +111,7 @@ public class Runway {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
         logger.info("Created Runway object");
-        runwayObstacle = new Obstacle("One", 0,0);
+        runwayObstacle = new Obstacle("One", 0,0, 0);
         runwayLength.bind(Bindings.when(Bindings.greaterThan(inputLeftTora,inputRightTora)).then(inputLeftTora).otherwise(inputRightTora));
         clearwayLeft.bind(inputRightToda.subtract(inputRightTora));
         stopwayLeft.bind(inputRightAsda.subtract(inputRightTora));
@@ -159,7 +159,8 @@ public class Runway {
     /**
      * Adds an obstacle to the list of obstacles on the runway.
      */
-    public void addObstacle() {
+    public void addObstacle(Obstacle obstacleToAdd) {
+        runwayObstacle = obstacleToAdd;
         hasRunwayObstacle.set(true);
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
     }
@@ -181,6 +182,9 @@ public class Runway {
      * Recalculates runway values based on objects distance from the left hand threshold
      */
     public void recalculate(){
+
+        logger.info("Recalculating runway values");
+
         rightTora.bind(inputRightTora);
         rightToda.bind(inputRightToda);
         rightAsda.bind(inputRightAsda);
@@ -192,9 +196,13 @@ public class Runway {
 
         if (hasRunwayObstacle.get()) {
             if (runwayObstacle.getDistFromThreshold() *  2 > runwayLength.get()) {
+                logger.info("Calculate take-off towards for left");
+                logger.info("Calculate land towards for right");
                 calculateTakeOffToward();
                 calculateLandTowards();
             } else {
+                logger.info("Calculate take-off away for left");
+                logger.info("Calculate land over for right");
                 calculateLandOver();
                 calculateTakeOffAway();
             }
@@ -318,7 +326,7 @@ public class Runway {
 
         // Calculate Land Towards for Right
 
-        rightLda.bind(inputRightLda.subtract(runwayObstacle.distFromOtherThresholdProperty()).subtract(MINRESA).subtract(STRIPEND));
+        rightLda.bind(runwayObstacle.distFromOtherThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
 
         logger.info("New LDA calculated for landing towards and obstacle for runway "+runwayDesignatorRight.get());
     }
@@ -336,7 +344,7 @@ public class Runway {
 
         // Calculate Land Towards for Left
 
-        leftLda.bind(inputLeftLda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(MINRESA).subtract(STRIPEND));
+        leftLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
 
         logger.info("New LDA calculated for landing towards and obstacle for runway "+runwayDesignatorLeft.get());
 
@@ -368,6 +376,8 @@ public class Runway {
                                         .add(STRIPEND),BLASTZONE)).then(distFromThreshold
                         .add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE));
 
+        logger.info("LDA Subtraction: "+ldaSubtraction.get());
+
         return ldaSubtraction;
     }
 
@@ -391,6 +401,8 @@ public class Runway {
                                 .add(runwayObstacle
                                         .widthProperty()
                                         .divide(2))));
+
+        logger.info("Obstacle Slop Calculation: "+obstacleSlopeCalculation.get());
 
         return obstacleSlopeCalculation;
     }
