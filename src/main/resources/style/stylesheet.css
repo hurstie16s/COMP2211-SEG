@@ -24,9 +24,50 @@
 }
 .table-view {
     -fx-base: rgba(26, 26, 26, 255);
-    background-color: rgba(26, 26, 26, 255);
-   -fx-background-color: rgba(26, 26, 26, 255);
+    -fx-background-color: grey;
+    -fx-border-style: solid;
+    -fx-border-color: black;
+    /* -fx-border-width: 0; */
 }
+/* just die! */
+.table-view .scroll-bar * {
+    -fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+}
+/*Style of entire tableView when is getting focused*/
+.table-view:focused{
+    -fx-background-color: grey;
+}
+/*Style of each column header's label  in the tableView*/
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-font-weight:bold;
+    -fx-font-size:17px;
+    -fx-text-fill: black;
+}
+/*Style of each table cell*/
+.table-view .table-cell{
+    -fx-font-size:16px;
+    -fx-border-color: black;
+    /* -fx-text-fill:orange; */
+}
+/*Style of each column in the tableView*/
+.table-view .table-column{
+    -fx-alignment:center;
+}
+/*Style of each entire row in the table view when is getting focused*/
+.table-row-cell:focused {
+    -fx-background-color: grey;
+}
+.table-row-cell:selected {
+    -fx-background-color: grey;
+}
+
 .grid-border-text-style {
     -fx-border-color: black;
     -fx-border-width: 2px;
@@ -36,3 +77,16 @@
     -fx-background-color: rgba(26, 26, 26, 255);
     -fx-font-size: 14px;
 }
+/* useless but for a record */
+.table-row-cell:empty {
+    -fx-background-color: rgba(26, 26, 26, 255);
+}
+
+.table-row-cell:empty .table-cell {
+    -fx-border-width: 0px;
+}
+
+.table-view .table-column:empty {
+    -fx-background-color: transparent;
+}
+

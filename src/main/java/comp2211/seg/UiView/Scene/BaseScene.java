@@ -77,7 +77,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         VBox vBoxAirportLayout = new VBox();
         //table
         VBox vBoxTable = new VBox();
-        VBox.setMargin(vBoxTable,new Insets(150,20,20,20));//Top/Right/Bottom/Left
+        VBox.setMargin(vBoxTable,new Insets(150,20,100,20));//Top/Right/Bottom/Left
         //vBoxTable.getChildren().add(makeRunwayGridTable());
         vBoxTable.getChildren().add(buildTableView(vBoxTable));
         vBoxTable.maxWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
@@ -135,6 +135,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     public TableView<RunwayData> buildTableView(VBox container) {
         TableView<RunwayData> table = new TableView<>();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         //table.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
         //final Label label = new Label("Runway Data");
         //label.setFont(Theme.font);
@@ -174,32 +176,26 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         TableColumn<RunwayData, String> col9 = createColumn("Blast\nProtection");
         col9.setCellValueFactory(new PropertyValueFactory<>("column9"));
 
-
         List<TableColumn<RunwayData, ?>> col2Columns = new ArrayList<>();
         col2Columns.add(col21);
         col2Columns.add(col22);
         col2.getColumns().addAll(col2Columns);
-
         List<TableColumn<RunwayData, ?>> col3Columns = new ArrayList<>();
         col3Columns.add(col31);
         col3Columns.add(col32);
         col3.getColumns().addAll(col3Columns);
-
         List<TableColumn<RunwayData, ?>> col4Columns = new ArrayList<>();
         col4Columns.add(col41);
         col4Columns.add(col42);
         col4.getColumns().addAll(col4Columns);
-
         List<TableColumn<RunwayData, ?>> col5Columns = new ArrayList<>();
         col5Columns.add(col51);
         col5Columns.add(col52);
         col5.getColumns().addAll(col5Columns);
-
         List<TableColumn<RunwayData, ?>> col6Columns = new ArrayList<>();
         col6Columns.add(col61);
         col6Columns.add(col62);
         col6.getColumns().addAll(col6Columns);
-
         List<TableColumn<RunwayData, ?>> columns = new ArrayList<>();
         columns.add(col1);
         columns.add(col2);
@@ -210,12 +206,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         columns.add(col7);
         columns.add(col8);
         columns.add(col9);
-
-
         // create an ObservableList of RunwayData objects
         ObservableList<RunwayData> data = FXCollections.observableArrayList();
-//TEST
-// create some sample data
         RunwayData data1 = new RunwayData(
             "09L",
             "xxxxm", "xxxxm",
@@ -233,49 +225,34 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             "xxxxm", "xxxxm",
             "xxxxm", "xxxxm",
             "xxxxm", "xxxxm",
-            "xxxxm");
-// add the sample data to the ObservableList
-        data.addAll(data1,data2);
-// set the items of the TableView to the ObservableList
-        table.setItems(data);
-        logger.info("Table populated with sample data.");
-// retrieve the first RunwayData object from the table data
-        RunwayData firstData = table.getItems().get(0);
-// retrieve the value of column1 from the first RunwayData object
-        String column1Value = firstData.getColumn1();
-// log the value of column1
-        logger.info("Value of column1: " + column1Value);
+            "xxxxm",
+            "60m",
+            "300m");
+        data.add(data1);
+        data.add(data2);
 
-        for (TableColumn<?, ?> column : table.getColumns()) {
-            if (column.getText().matches(".*\\d{2}.*")) {
-                column.maxWidthProperty().bind(container.widthProperty().divide(18));
-                column.minWidthProperty().bind(container.widthProperty().divide(18));
-                //column.prefWidthProperty().bind(container.widthProperty().divide(18));
-            } else {
-                column.maxWidthProperty().bind(container.widthProperty().divide(9));
-                column.minWidthProperty().bind(container.widthProperty().divide(9));
-                //column.prefWidthProperty().bind(container.widthProperty().divide(9));
-            }
-        }
+        table.setItems(data);
+
+        table.fixedCellSizeProperty().bind(container.heightProperty()
+            .subtract(55).divide(2));//table.getItems().size()));
         table.maxWidthProperty().bind(container.widthProperty());
         table.minWidthProperty().bind(container.widthProperty());
-        table.prefWidthProperty().bind(container.widthProperty());
-
         table.getColumns().addAll(columns);
-
-
-
-
-        //bind height to something
-        //table.prefHeightProperty().bind();
-
-        logger.info("table: " + table.getWidth());
-        logger.info("col22Width: " + col22.getWidth());
-        logger.info("col2Width: " + col2.getWidth());
-        //table.getColumns().setAll(columns);
+        for (TableColumn<RunwayData, ?> tableColumn : table.getColumns()) {
+            //logger.info("for");
+            if (tableColumn.getText().matches(".*\\d{2}.*")) {
+                //logger.info("if");
+                tableColumn.maxWidthProperty().bind(container.widthProperty().divide(18));
+                tableColumn.minWidthProperty().bind(container.widthProperty().divide(18));
+            } else {
+                //logger.info("else");
+                tableColumn.maxWidthProperty().bind(container.widthProperty().divide(9));
+                tableColumn.minWidthProperty().bind(container.widthProperty().divide(9));
+            }
+        }
+        table.setPlaceholder(null);
         return table;
     }
-
 
     private <T> TableColumn<RunwayData, T> createColumn(String columnName) {
         TableColumn<RunwayData, T> tableColumn = new TableColumn<>(columnName);
