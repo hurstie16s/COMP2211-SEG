@@ -12,13 +12,13 @@ public class Obstacle {
     private final SimpleStringProperty obstacleDesignator = new SimpleStringProperty();
 
     /** The height of the obstacle. */
-    private final SimpleDoubleProperty height = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty height = new SimpleDoubleProperty(10);
 
     /** The width of the obstacle. */
-    private final SimpleDoubleProperty width = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty width = new SimpleDoubleProperty(100);
 
     /** The length of the obstacle. */
-    private final SimpleDoubleProperty length = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty length = new SimpleDoubleProperty(60);
 
     /** The distance of the obstacle from the runway threshold. */
     private final SimpleDoubleProperty distFromThreshold = new SimpleDoubleProperty();
