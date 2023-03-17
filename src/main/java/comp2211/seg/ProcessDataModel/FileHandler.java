@@ -62,9 +62,6 @@ public class FileHandler {
                 Element runway = document.createElement("Runway");
                 runways.appendChild(runway);
 
-                Element designator = document.createElement("Designator");
-                designator.appendChild(document.createTextNode(runwayy.getRunwayDesignator()));
-                runways.appendChild(designator);
 
                 Element resaHeight = document.createElement("Resa_Height");
                 resaHeight.appendChild(document.createTextNode(Double.toString(runwayy.getRESAHeight())));
@@ -80,6 +77,10 @@ public class FileHandler {
 
                 Element right = document.createElement("Right_Properties");
                 runways.appendChild(right);
+
+                Element designatorR = document.createElement("Designator");
+                designatorR.appendChild(document.createTextNode(runwayy.getRunwayDesignatorRight()));
+                runways.appendChild(designatorR);
 
                 Element tora = document.createElement("TORA");
                 tora.appendChild(document.createTextNode(Double.toString(runwayy.getRightTora())));
@@ -111,6 +112,11 @@ public class FileHandler {
 
                 Element left = document.createElement("Left_Properties");
                 runways.appendChild(left);
+
+                Element designatorL = document.createElement("Designator");
+                designatorL.appendChild(document.createTextNode(runwayy.getRunwayDesignatorLeft()));
+                runways.appendChild(designatorL);
+
 
                 Element toraL = document.createElement("TORA");
                 toraL.appendChild(document.createTextNode(Double.toString(runwayy.getLeftTora())));

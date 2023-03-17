@@ -69,7 +69,7 @@ public class Runway {
      */
     public TextFlow changesHistory = new TextFlow();
 
-    public Obstacle runwayObstacle = new Obstacle("One", 10,0);;
+    public Obstacle runwayObstacle = new Obstacle("One", 10,0,0);
 
     private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
 
