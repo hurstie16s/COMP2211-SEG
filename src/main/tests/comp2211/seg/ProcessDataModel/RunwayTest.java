@@ -149,7 +149,7 @@ class RunwayTest {
     static Obstacle obstacle3 = new Obstacle("ob3", 15, 150, 3203);
     static Obstacle obstacle4 = new Obstacle("ob4", 20, 3546, 50);
     static Obstacle obstacle5 = new Obstacle("ob5", 14, 80, 2082);
-    static Obstacle obstacle6 = new Obstacle("ob5", 11, 2285, -123);
+    static Obstacle obstacle6 = new Obstacle("ob6", 11, 2285, -123);
 
     //TODO: Change generation to fit new tests
     private static Stream<Arguments> generateCheckDesignatorTestData() {
