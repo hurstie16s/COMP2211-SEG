@@ -368,8 +368,8 @@ public class Runway {
                         Bindings.greaterThan(
                                 distFromThreshold
                                         .add(obstacleSlopeCalculation)
-                                        .add(STRIPEND),BLASTZONE)).then(distFromThreshold
-                        .add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE));
+                                        .add(STRIPEND),BLASTZONE.add(distFromThreshold))).then(distFromThreshold
+                        .add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE.add(distFromThreshold)));
 
         logger.info("LDA Subtraction: "+ldaSubtraction.get());
 
