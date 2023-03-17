@@ -167,14 +167,11 @@ public class Runway {
 
     /**
      * Removing the obstacle from the runway
-     *
-     * @param obstacleToRemove The obstacle to remove from the runway
      */
-    public void removeObstacle(Obstacle obstacleToRemove) {
+    public void removeObstacle() {
+        runwayObstacle = null;
         hasRunwayObstacle.set(false);
-
-        recalculate();
-        logger.info("Removed Obstacle "+ runwayObstacle.getObstacleDesignator() + " from runway " + runwayDesignatorLeft.get());
+        logger.info("Removed Obstacle from runway " + runwayDesignatorLeft.get());
         logger.info("Return runway to original state");
     }
 

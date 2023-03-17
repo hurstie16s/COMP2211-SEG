@@ -76,6 +76,7 @@ class RunwayTest {
         runway.inputRightLdaProperty().bind(new SimpleDoubleProperty(rightLda));
     }
     void addObstacle(Runway runway, Obstacle obstacle){
+        runway.removeObstacle();
         runway.addObstacle(obstacle);
     }
 
@@ -114,13 +115,15 @@ class RunwayTest {
         addObstacle(runway, obstacleToAdd);
 
         assertEquals(expectedLDALeft, runway.getLeftLda(), "Left LDA Incorrect");
-        assertEquals(expectedTORALeft, runway.getLeftTora(), "Left TORA Incorrect");
-        assertEquals(expectedASDALeft, runway.getLeftAsda(), "Left ASDA Incorrect");
-        assertEquals(expectedTODALeft, runway.getLeftToda(), "Left TODA Incorrect");
-
         assertEquals(expectedLDARight, runway.getRightLda(), "Right LDA Incorrect");
+
+        assertEquals(expectedTORALeft, runway.getLeftTora(), "Left TORA Incorrect");
         assertEquals(expectedTORARight, runway.getRightTora(), "Right TORA Incorrect");
+
+        assertEquals(expectedASDALeft, runway.getLeftAsda(), "Left ASDA Incorrect");
         assertEquals(expectedASDARight, runway.getRightAsda(), "Right ASDA Incorrect");
+
+        assertEquals(expectedTODALeft, runway.getLeftToda(), "Left TODA Incorrect");
         assertEquals(expectedTODARight, runway.getRightToda(), "Right TODA Incorrect");
     }
 
