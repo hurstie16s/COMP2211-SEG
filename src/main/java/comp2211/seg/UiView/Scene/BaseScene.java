@@ -20,6 +20,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,6 +32,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private Button obstacleButton;
     private HBox topbar;
     private VBox layout;
+    //logger for BaseScene
+    private static final Logger logger = LogManager.getLogger(BaseScene.class);
 
 
     /**
@@ -92,13 +96,25 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml"));
             File file = fileChooser.showSaveDialog(new Stage());
 
-            if (file == null)
+            if (file == null) {
                 return;
+            }
 
-            if(!file.getName().contains(".xml"))
-                file = new File(file.getAbsolutePath()+".xml");
+            System.out.println("hello");
 
+            if(!file.getName().contains(".xml")) {
 
+                System.out.println("reached");
+                file = new File(file.getAbsolutePath() + ".xml");
+                System.out.println(file.getAbsolutePath());
+            }
+
+            if (FileHandler.exportAirport(file, appWindow.airport)) {
+                FileHandler.exportAirport(file, appWindow.airport);
+                logger.info("Exporting Successful");
+            } else {
+                logger.info("Exporting Airport failed");
+            }
 
         });
 
