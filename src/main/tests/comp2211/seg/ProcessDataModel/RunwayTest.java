@@ -141,84 +141,6 @@ class RunwayTest {
         assertEquals(expectedTODARight, runway.getRightToda(), "Right TODA Incorrect");
     }
 
-    @DisplayName("Landing calculations : Land over left : Land towards right")
-    @ParameterizedTest
-    @MethodSource("generateLandOverTestData")
-    void calculateLandOverTest(Runway runway, Obstacle obstacleToAdd, double expectedLDALeft, double expectedLDARight, String message) {
-        logger.info(message);
-        addObstacle(runway,obstacleToAdd);
-        runway.calculateLandOver();
-
-        assertEquals(expectedLDALeft, runway.getLeftLda(), "Left LDA Incorrect");
-        assertEquals(expectedLDARight, runway.getRightLda(), "Right LDA Incorrect");
-    }
-
-    @DisplayName("Landing calculations : Land towards left : Land over right")
-    @ParameterizedTest
-    @MethodSource("generateLandTowardsTestData")
-    void calculateLandTowardsTest(Runway runway, Obstacle obstacleToAdd, double expectedLDALeft, double expectedLDARight, String message) {
-        logger.info(message);
-        addObstacle(runway,obstacleToAdd);
-        runway.calculateLandTowards();
-
-        assertEquals(expectedLDALeft, runway.getLeftLda(), "Left LDA Incorrect");
-        assertEquals(expectedLDARight, runway.getRightLda(), "Right LDA Incorrect");
-    }
-
-    @DisplayName("Take-off calculations : Take-off towards left : Take-off away right")
-    @ParameterizedTest
-    @MethodSource("generateTakeOffTowardTestData")
-    void calculateTakeOffTowardTest(
-            Runway runway,
-            Obstacle obstacleToAdd,
-            double expectedTORALeft,
-            double expectedASDALeft,
-            double expectedTODALeft,
-            double expectedTORARight,
-            double expectedASDARight,
-            double expectedTODARight,
-            String message
-    ) {
-        logger.info(message);
-        addObstacle(runway,obstacleToAdd);
-        runway.calculateTakeOffToward();
-
-        assertEquals(expectedTORALeft, runway.getLeftTora(), "Left TORA Incorrect");
-        assertEquals(expectedASDALeft, runway.getLeftAsda(), "Left ASDA Incorrect");
-        assertEquals(expectedTODALeft, runway.getLeftToda(), "Left TODA Incorrect");
-
-        assertEquals(expectedTORARight, runway.getRightTora(), "Right TORA Incorrect");
-        assertEquals(expectedASDARight, runway.getRightAsda(), "Right ASDA Incorrect");
-        assertEquals(expectedTODARight, runway.getRightToda(), "Right TODA Incorrect");
-    }
-
-    @DisplayName("Take-off calculations : Take-off away left : Take-off towards right")
-    @ParameterizedTest
-    @MethodSource("generateTakeOffAwayTestData")
-    void calculateTakeOffAwayTest(
-            Runway runway,
-            Obstacle obstacleToAdd,
-            double expectedTORALeft,
-            double expectedASDALeft,
-            double expectedTODALeft,
-            double expectedTORARight,
-            double expectedASDARight,
-            double expectedTODARight,
-            String message
-    ) {
-        logger.info(message);
-        addObstacle(runway,obstacleToAdd);
-        runway.calculateTakeOffAway();
-
-        assertEquals(expectedTORALeft, runway.getLeftTora(), "Left TORA Incorrect");
-        assertEquals(expectedASDALeft, runway.getLeftAsda(), "Left ASDA Incorrect");
-        assertEquals(expectedTODALeft, runway.getLeftToda(), "Left TODA Incorrect");
-
-        assertEquals(expectedTORARight, runway.getRightTora(), "Right TORA Incorrect");
-        assertEquals(expectedASDARight, runway.getRightAsda(), "Right ASDA Incorrect");
-        assertEquals(expectedTODARight, runway.getRightToda(), "Right TODA Incorrect");
-    }
-
     // Test Data Generation
 
     // Obstacles defined in given scenario's
@@ -305,18 +227,5 @@ class RunwayTest {
                         "Test: Own Scenario 1"
                 )
         );
-    }
-    private static Stream<Arguments> generateLandOverTestData() {
-        return Stream.of();
-    }
-    private static Stream<Arguments> generateLandTowardsTestData() {
-        return Stream.of();
-    }
-    private static Stream<Arguments> generateTakeOffTowardTestData() {
-        return Stream.of();
-    }
-    //TODO: Generate test data for take-off away
-    private static Stream<Arguments> generateTakeOffAwayTestData() {
-        return Stream.of();
     }
 }
