@@ -408,9 +408,9 @@ public class Runway {
     public void calculateTakeOffToward() {
 
 
-        rightTora.bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(runwayObstacle.heightProperty().multiply(SLOPE), MINRESA.add(runwayObstacle.widthProperty().divide(2)))).subtract(STRIPEND));
-        rightAsda.bind(rightTora);
-        rightToda.bind(rightTora);
+        rightTora.bind(runwayObstacle.distFromThresholdProperty().subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).add(dispThresholdLeft));
+        rightAsda.bind(rightTora.add(stopwayLeft));
+        rightToda.bind(rightTora.add(clearwayLeft));
 
         leftTora.bind(runwayObstacle.distFromThresholdProperty().add(dispThresholdLeft).subtract(Bindings.max(runwayObstacle.heightProperty().multiply(SLOPE), MINRESA.add(runwayObstacle.widthProperty().divide(2)))).subtract(STRIPEND));
         leftAsda.bind(leftTora);
@@ -422,9 +422,12 @@ public class Runway {
      */
     public void calculateTakeOffAway() {
 
-        rightTora.bind(runwayObstacle.distFromThresholdProperty().subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).add(dispThresholdLeft));
-        rightAsda.bind(rightTora.add(stopwayLeft));
-        rightToda.bind(rightTora.add(clearwayLeft));
+
+
+        rightTora.bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(runwayObstacle.heightProperty().multiply(SLOPE), MINRESA.add(runwayObstacle.widthProperty().divide(2)))).subtract(STRIPEND));
+        rightAsda.bind(rightTora);
+        rightToda.bind(rightTora);
+
         leftTora.bind(inputLeftTora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).subtract(dispThresholdLeft));
         leftAsda.bind(leftTora.add(stopwayRight));
         leftToda.bind(leftTora.add(clearwayRight));
