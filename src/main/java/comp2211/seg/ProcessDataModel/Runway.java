@@ -1,6 +1,6 @@
 package comp2211.seg.ProcessDataModel;
 
-import comp2211.seg.Controller.Interfaces.GlobalVariables;
+import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.Property;
@@ -68,7 +68,7 @@ public class Runway {
      */
     public TextFlow changesHistory = new TextFlow();
 
-    private Obstacle runwayObstacle;
+    public Obstacle runwayObstacle;
 
     private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
 
@@ -250,42 +250,42 @@ public class Runway {
         label.textProperty().bind(new SimpleStringProperty("Top ASDA (").concat(inputLeftAsda.asString()).concat(") < Top TORA (").concat( inputLeftTora.asString()).concat(")"));
         label.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftAsda,inputLeftTora).not());
         label.setFill(Color.RED);
-        label.setFont(GlobalVariables.font);
+        label.setFont(Theme.font);
         Text label2 = new Text();
         label2.textProperty().bind(new SimpleStringProperty("Top TODA (").concat(inputLeftToda.asString()).concat(") < Top ASDA (").concat( inputLeftAsda.asString()).concat(")"));
         label2.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftToda,inputLeftAsda).not());
         label2.setFill(Color.RED);
-        label2.setFont(GlobalVariables.font);
+        label2.setFont(Theme.font);
         Text label3 = new Text();
         label3.textProperty().bind(new SimpleStringProperty("Top LDA (").concat(inputLeftLda.asString()).concat(") < 0"));
         label3.visibleProperty().bind(Bindings.greaterThanOrEqual(inputLeftLda,0).not());
         label3.setFill(Color.RED);
-        label3.setFont(GlobalVariables.font);
+        label3.setFont(Theme.font);
         Text label4 = new Text();
         label4.textProperty().bind(new SimpleStringProperty("Top TORA (").concat(inputLeftTora.asString()).concat(") < Top LDA (").concat( inputLeftLda.asString()).concat(")"));
         label4.visibleProperty().bind(Bindings.lessThanOrEqual(inputLeftLda,inputLeftTora).not());
         label4.setFill(Color.RED);
-        label4.setFont(GlobalVariables.font);
+        label4.setFont(Theme.font);
         Text label5= new Text();
         label5.textProperty().bind(new SimpleStringProperty("Bottom ASDA (").concat(inputRightAsda.asString()).concat(") < Bottom TORA (").concat( inputRightTora.asString()).concat(")"));
         label5.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora).not());
         label5.setFill(Color.RED);
-        label5.setFont(GlobalVariables.font);
+        label5.setFont(Theme.font);
         Text label6= new Text();
         label6.textProperty().bind(new SimpleStringProperty("Bottom TODA (").concat(inputRightToda.asString()).concat(") < Bottom ASDA (").concat( inputRightAsda.asString()).concat(")"));
         label6.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda).not());
         label6.setFill(Color.RED);
-        label6.setFont(GlobalVariables.font);
+        label6.setFont(Theme.font);
         Text label7= new Text();
         label7.textProperty().bind(new SimpleStringProperty("Bottom LDA (").concat(inputRightLda.asString()).concat(") < 0"));
         label7.visibleProperty().bind(Bindings.greaterThanOrEqual(inputRightLda,0).not());
         label7.setFill(Color.RED);
-        label7.setFont(GlobalVariables.font);
+        label7.setFont(Theme.font);
         Text label8 = new Text();
         label8.textProperty().bind(new SimpleStringProperty("Bottom TORA (").concat(inputRightTora.asString()).concat(") < Bottom LDA (").concat( inputRightLda.asString()).concat(")"));
         label8.visibleProperty().bind(Bindings.lessThanOrEqual(inputRightLda,inputRightTora).not());
         label8.setFill(Color.RED);
-        label8.setFont(GlobalVariables.font);
+        label8.setFont(Theme.font);
         VBox labels = new VBox(label,label2,label3,label4,label5,label6,label7,label8);
         labels.setAlignment(Pos.CENTER);
         errorPane.setCenter(labels);

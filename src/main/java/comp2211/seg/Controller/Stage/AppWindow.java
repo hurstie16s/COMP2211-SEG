@@ -3,6 +3,7 @@ package comp2211.seg.Controller.Stage;
 import comp2211.seg.App;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.ProcessDataModel.Airport;
+import comp2211.seg.ProcessDataModel.Obstacle;
 import comp2211.seg.ProcessDataModel.Runway;
 import comp2211.seg.UiView.Scene.*;
 import javafx.application.Platform;
@@ -59,7 +60,7 @@ public class AppWindow {
     public void addAirport(Airport airport){
         airports.add(airport);
         runway = airport.getRunways().get(0);
-        runway.addObstacle();
+        runway.addObstacle(new Obstacle("VOID", 0, 0, 0));
     }
     public void setAirport(Airport airport){
         if (airport.name.equals("")){

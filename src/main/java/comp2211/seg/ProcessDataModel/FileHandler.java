@@ -63,7 +63,7 @@ public class FileHandler {
                 runways.appendChild(runway);
 
                 Element designator = document.createElement("Designator");
-                designator.appendChild(document.createTextNode(runwayy.getRunwayDesignator()));
+                designator.appendChild(document.createTextNode(runwayy.getRunwayDesignatorLeft()));
                 runways.appendChild(designator);
 
                 Element resaHeight = document.createElement("Resa_Height");
