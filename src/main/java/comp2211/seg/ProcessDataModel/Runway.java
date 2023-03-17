@@ -330,12 +330,6 @@ public class Runway {
      * Calculations for when a plane is landing towards an obstacle
      */
     public void calculateLandTowards() {
-        /*
-        Not really needed for landing calc
-        workingTora.bind(runwayObstacle.distFromThresholdProperty().subtract(runwayObstacle.heightProperty().multiply(50)).subtract(STRIPEND.get()));
-        workingAsda.bind(workingTora);
-        workingToda.bind(workingTora);
-         */
 
         // Calculate Land Towards for Left
 
@@ -431,11 +425,6 @@ public class Runway {
         leftTora.bind(inputLeftTora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).subtract(dispThresholdLeft));
         leftAsda.bind(leftTora.add(stopwayRight));
         leftToda.bind(leftTora.add(clearwayRight));
-
-        /*
-        not needed for take-off
-        workingLda.bind(lda.subtract(runwayObstacle.distFromThresholdProperty()).subtract(runwayObstacle.heightProperty().multiply(SLOPE).subtract(STRIPEND.get())));
-        */
     }
 
 

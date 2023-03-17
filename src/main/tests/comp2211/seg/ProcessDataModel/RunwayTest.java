@@ -27,6 +27,8 @@ class RunwayTest {
     static Runway runway2 = new Runway();
     // 07R and 25L
     static Runway runway3 = new Runway();
+    // 19C and 01C
+    static Runway runway4 = new Runway();
 
     @BeforeAll
     static void setUpRunways() {
