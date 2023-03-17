@@ -347,6 +347,7 @@ public class RunwayScene extends SceneAbstract {
     scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));
     mainPane.getChildren().add(group);
 
+
   }
   public void render(){
     group.getChildren().removeAll(group.getChildren());
