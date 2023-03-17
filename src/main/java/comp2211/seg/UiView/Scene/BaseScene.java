@@ -24,6 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -111,7 +112,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         // Create the buttons and set their graphics
         Button exportButton = new Button("Export Airport", exportIcon);
+        exportButton.setTextFill(Color.WHITE);
         Button importButton = new Button("Import Airport", importIcon);
+        importButton.setTextFill(Color.WHITE);
 
 
         exportButton.setOnAction(e -> {
