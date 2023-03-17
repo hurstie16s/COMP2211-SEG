@@ -107,7 +107,7 @@ public class InputScene extends SceneAbstract {
     makeTextField(inputs, new SimpleStringProperty("TODA (").concat(units).concat(")"), appWindow.runway.inputLeftTodaProperty(), appWindow.runway.inputRightTodaProperty());
     makeTextField(inputs, new SimpleStringProperty("ASDA (").concat(units).concat(")"), appWindow.runway.inputLeftAsdaProperty(), appWindow.runway.inputRightAsdaProperty());
     makeTextField(inputs, new SimpleStringProperty("LDA (").concat(units).concat(")"), appWindow.runway.inputLeftLdaProperty(), appWindow.runway.inputRightLdaProperty());
-    makeTextField(inputs, new SimpleStringProperty("Runway Designator").concat(""), appWindow.runway.runwayDesignatorProperty(), "([0-9]|0[1-9]|[1-2][0-9]|3[0-6])[lrcLRC]?");
+    makeTextField(inputs, new SimpleStringProperty("Runway Designator").concat(""), appWindow.runway.runwayDesignatorLeftProperty(), "([0-9]|0[1-9]|[1-2][0-9]|3[0-6])[lrcLRC]?");
     makeTextField(inputs, new SimpleStringProperty("Obstacle width (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().widthProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle length (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().lengthProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle height (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().heightProperty());
