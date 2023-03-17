@@ -39,7 +39,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     //logger for BaseScene
     private static final Logger logger = LogManager.getLogger(BaseScene.class);
 
-    private static final Logger logger = LogManager.getLogger(BaseScene.class);
 
 
     /**
