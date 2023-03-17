@@ -128,6 +128,7 @@ public class Runway {
 
     /**
      * Calculates the runway designator for the runway in the opposite direction
+     * @param designator The designator that has been changes, used to calculate the new designator for the runways complement direction
      */
     private String calculateRunwayDesignator(String designator) {
         var number = String.valueOf((Integer.parseInt(designator.substring(0,2)) + 18) % 36);
@@ -155,12 +156,6 @@ public class Runway {
         return newDesignator;
     }
 
-    public static void main(String[] args) {
-        var runway = new Runway();
-        runway.runwayDesignatorLeft.set("09L");
-        logger.info(runway.runwayDesignatorRight.get());
-    }
-
     /**
      * Adds an obstacle to the list of obstacles on the runway.
      */
@@ -183,11 +178,7 @@ public class Runway {
     }
 
     /**
-     * Recalculates the runway values based on the landing/takeoff direction and LDA/TORA values.
-     * If landing direction is true, runwayLength is set to LDA and either calculateLandOver() or
-     * calculateLandTowards() is called based on the takeoff direction. If landing direction is false,
-     * runwayLength is set to TORA and either calculateTakeOffAway() or calculateTakeOffToward() is called
-     * based on the takeoff direction.
+     * Recalculates runway values based on objects distance from the left hand threshold
      */
     public void recalculate(){
         rightTora.bind(inputRightTora);
@@ -200,7 +191,7 @@ public class Runway {
         leftLda.bind(inputLeftLda);
 
         if (hasRunwayObstacle.get()) {
-            if (direction.get()) {
+            if (runwayObstacle.getDistFromThreshold() *  2 > runwayLength.get()) {
                 calculateTakeOffToward();
                 calculateLandTowards();
             } else {

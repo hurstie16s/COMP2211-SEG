@@ -95,7 +95,7 @@ class RunwayTest {
         var expectedNumber = expectedDesignator.substring(0,2);
         var expectedCharacter = expectedDesignator.substring(2);
 
-        //assertEquals(expectedNumber, runway.getRunwayDesignatorRight().substring(0,2), "Number for runway designator incorrect");
+        assertEquals(expectedNumber, runway.getRunwayDesignatorRight().substring(0,2), "Number for runway designator incorrect");
         assertEquals(expectedCharacter, runway.getRunwayDesignatorRight().substring(2), "Character for runway designator incorrect");
         assertEquals(expectedDesignator, runway.getRunwayDesignatorRight(), "Runway designator incorrect");
     }
@@ -111,27 +111,22 @@ class RunwayTest {
     @DisplayName("Landing calculations : Land over an obstacle")
     @ParameterizedTest
     @MethodSource("generateLandOverTestData")
-    void calculateLandOverTest(Runway runway, Obstacle obstacleToAdd, String direction, double expectedLDA) {
+    void calculateLandOverTest(Runway runway, Obstacle obstacleToAdd, double expectedLDALeft, double expectedLDARight) {
         addObstacle(runway,obstacleToAdd);
         runway.calculateLandOver();
-        if (Objects.equals(direction, "L")) {
-            assertEquals(expectedLDA, runway.getLeftLda());
-        } else {
-            assertEquals(expectedLDA, runway.getRightLda());
-        }
+        assertEquals(expectedLDALeft, runway.getLeftLda(), "Left LDA Incorrect");
+        assertEquals(expectedLDARight, runway.getRightLda(), "Right LDA Incorrect");
     }
 
     @DisplayName("Landing calculations : Land towards an obstacle")
     @ParameterizedTest
     @MethodSource("generateLandTowardsTestData")
-    void calculateLandTowardsTest(Runway runway, Obstacle obstacleToAdd, String direction, double expectedLDA) {
+    void calculateLandTowardsTest(Runway runway, Obstacle obstacleToAdd, double expectedLDALeft, double expectedLDARight) {
         addObstacle(runway,obstacleToAdd);
         runway.calculateLandTowards();
-        if (Objects.equals(direction, "L")) {
-            assertEquals(expectedLDA, runway.getLeftLda());
-        } else {
-            assertEquals(expectedLDA, runway.getRightLda());
-        }
+
+        assertEquals(expectedLDALeft, runway.getLeftLda(), "Left LDA Incorrect");
+        assertEquals(expectedLDARight, runway.getRightLda(), "Right LDA Incorrect");
     }
 
     @DisplayName("Take-off calculations : Take-off towards an obstacle")
@@ -140,22 +135,23 @@ class RunwayTest {
     void calculateTakeOffTowardTest(
             Runway runway,
             Obstacle obstacleToAdd,
-            String direction,
-            double expectedTORA,
-            double exceptedASDA,
-            double expectedTODA
+            double expectedTORALeft,
+            double expectedASDALeft,
+            double expectedTODALeft,
+            double expectedTORARight,
+            double expectedASDARight,
+            double expectedTODARight
     ) {
         addObstacle(runway,obstacleToAdd);
         runway.calculateTakeOffToward();
-        if (Objects.equals(direction, "L")) {
-            assertEquals(expectedTORA, runway.getLeftTora());
-            assertEquals(exceptedASDA, runway.getLeftAsda());
-            assertEquals(expectedTODA, runway.getLeftToda());
-        } else {
-            assertEquals(expectedTORA, runway.getRightTora());
-            assertEquals(exceptedASDA, runway.getRightAsda());
-            assertEquals(expectedTODA, runway.getRightToda());
-        }
+
+        assertEquals(expectedTORALeft, runway.getLeftTora(), "Left TORA Incorrect");
+        assertEquals(expectedASDALeft, runway.getLeftAsda(), "Left ASDA Incorrect");
+        assertEquals(expectedTODALeft, runway.getLeftToda(), "Left TODA Incorrect");
+
+        assertEquals(expectedTORARight, runway.getRightTora(), "Right TORA Incorrect");
+        assertEquals(expectedASDARight, runway.getRightAsda(), "Right ASDA Incorrect");
+        assertEquals(expectedTODARight, runway.getRightToda(), "Right TODA Incorrect");
     }
 
     @DisplayName("Take-off calculations : Take-off away from an obstacle")
@@ -164,22 +160,23 @@ class RunwayTest {
     void calculateTakeOffAwayTest(
             Runway runway,
             Obstacle obstacleToAdd,
-            String direction,
-            double expectedTORA,
-            double expectedASDA,
-            double expectedTODA
+            double expectedTORALeft,
+            double expectedASDALeft,
+            double expectedTODALeft,
+            double expectedTORARight,
+            double expectedASDARight,
+            double expectedTODARight
     ) {
         addObstacle(runway,obstacleToAdd);
         runway.calculateTakeOffAway();
-        if (Objects.equals(direction, "L")) {
-            assertEquals(expectedTORA, runway.getLeftTora());
-            assertEquals(expectedASDA, runway.getLeftAsda());
-            assertEquals(expectedTODA, runway.getLeftToda());
-        } else {
-            assertEquals(expectedTORA, runway.getRightTora());
-            assertEquals(expectedASDA, runway.getRightAsda());
-            assertEquals(expectedTODA, runway.getRightToda());
-        }
+
+        assertEquals(expectedTORALeft, runway.getLeftTora(), "Left TORA Incorrect");
+        assertEquals(expectedASDALeft, runway.getLeftAsda(), "Left ASDA Incorrect");
+        assertEquals(expectedTODALeft, runway.getLeftToda(), "Left TODA Incorrect");
+
+        assertEquals(expectedTORARight, runway.getRightTora(), "Right TORA Incorrect");
+        assertEquals(expectedASDARight, runway.getRightAsda(), "Right ASDA Incorrect");
+        assertEquals(expectedTODARight, runway.getRightToda(), "Right TODA Incorrect");
     }
 
     // Test Data Generation
