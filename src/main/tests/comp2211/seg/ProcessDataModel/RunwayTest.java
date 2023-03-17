@@ -25,6 +25,8 @@ class RunwayTest {
     static Runway runway1 = new Runway();
     // 09L and 27R
     static Runway runway2 = new Runway();
+    // 07R and 25L
+    static Runway runway3 = new Runway();
 
     @BeforeAll
     static void setUpRunways() {
@@ -51,6 +53,18 @@ class RunwayTest {
                 3884,
                 3884,
                 runway2
+        );
+        setProperties(
+                "07R",
+                2162,
+                3243,
+                2162,
+                2162,
+                2162,
+                3243,
+                2219,
+                2080,
+                runway3
         );
     }
 
@@ -226,14 +240,14 @@ class RunwayTest {
                 Arguments.of(
                         runway2,
                         obstacle1,
-                        3346,
-                        3346,
-                        3346,
-                        2985,
-                        2986,
-                        2986,
-                        2986,
-                        3346,
+                        3145, //TORA left
+                        3145, //ASDA left
+                        3145, //TODA left
+                        2985, //LDA left
+                        2985, //TORA right
+                        2985, //ASDA right
+                        2985, //TODA right
+                        3346, //LDA right
                         "Test: Given Scenario 1"
                 ),
                 Arguments.of(
@@ -243,18 +257,18 @@ class RunwayTest {
                         1850,
                         1850,
                         2553,
-                        2860,
-                        2860,
-                        2860,
+                        2660,
+                        2660,
+                        2660,
                         1850,
                         "Test: Given Scenario 2"
                 ),
                 Arguments.of(
                         runway1,
                         obstacle3,
-                        2903,
-                        2903,
-                        2903,
+                        2703,
+                        2703,
+                        2703,
                         2393,
                         2393,
                         2393,
@@ -265,13 +279,13 @@ class RunwayTest {
                 Arguments.of(
                         runway2,
                         obstacle4,
-                        2792,
-                        2792,
-                        2792,
+                        2793,
+                        2793,
+                        2793,
                         3246,
-                        3534,
-                        3534,
-                        3612,
+                        3353,
+                        3353,
+                        3431,
                         2774,
                         "Test: Given Scenario 4"
                 )
