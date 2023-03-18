@@ -112,33 +112,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         Button exportButton = new Button("Export Airport", exportIcon);
         Button importButton = new Button("Import Airport", importIcon);
 
+        //Button events
         exportButton.setOnAction(e -> {
-
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Choose file to export");
-            fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml"));
-            File file = fileChooser.showSaveDialog(new Stage());
-
-            if (file == null) {
-                return;
-            }
-
-            System.out.println("hello");
-
-            if(!file.getName().contains(".xml")) {
-
-                System.out.println("reached");
-                file = new File(file.getAbsolutePath() + ".xml");
-                System.out.println(file.getAbsolutePath());
-            }
-
-            if (FileHandler.exportAirport(file, appWindow.airport)) {
-                FileHandler.exportAirport(file, appWindow.airport);
-                logger.info("Exporting Successful");
-            } else {
-                logger.info("Exporting Airport failed");
-            }
-
+            exportButtonEvent();
         });
 
         // Set the size of the icon
@@ -169,6 +145,33 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         vBoxAirportLayout.getChildren().addAll(hBoxMenuButtons,vBoxTable);
         //return vBox
         return vBoxAirportLayout;
+    }
+
+    public void exportButtonEvent() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose file to export");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml"));
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        if (file == null) {
+            return;
+        }
+
+        System.out.println("hello");
+
+        if(!file.getName().contains(".xml")) {
+
+            System.out.println("reached");
+            file = new File(file.getAbsolutePath() + ".xml");
+            System.out.println(file.getAbsolutePath());
+        }
+
+        if (FileHandler.exportAirport(file, appWindow.airport)) {
+            FileHandler.exportAirport(file, appWindow.airport);
+            logger.info("Exporting Successful");
+        } else {
+            logger.info("Exporting Airport failed");
+        }
     }
 
     public TableView<RunwayData> buildTableView(VBox container) {
