@@ -153,24 +153,27 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml"));
         File file = fileChooser.showSaveDialog(new Stage());
 
-        if (file == null) {
-            return;
-        }
+        try {
+            if (file == null) {
+                return;
+            }
 
-        System.out.println("hello");
+            if (!file.getName().contains(".xml")) {
+                logger.info("reached");
+                file = new File(file.getAbsolutePath() + ".xml");
+                logger.info(file.getAbsolutePath());
+            }
 
-        if(!file.getName().contains(".xml")) {
-
-            System.out.println("reached");
-            file = new File(file.getAbsolutePath() + ".xml");
-            System.out.println(file.getAbsolutePath());
-        }
-
-        if (FileHandler.exportAirport(file, appWindow.airport)) {
-            FileHandler.exportAirport(file, appWindow.airport);
-            logger.info("Exporting Successful");
-        } else {
-            logger.info("Exporting Airport failed");
+            if (FileHandler.exportAirport(file, appWindow.airport)) {
+                FileHandler.exportAirport(file, appWindow.airport);
+                logger.info("Exporting Successful");
+            } else {
+                logger.info("Exporting Airport failed");
+            }
+        } catch (NullPointerException nullPointerException) {
+            logger.info("No airport initiated, hence: " +
+                "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
+                "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
         }
     }
 
