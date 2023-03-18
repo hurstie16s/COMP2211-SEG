@@ -27,7 +27,7 @@ public class FileHandler {
 //    private final String airportTag = "airport";
 
 
-    public static boolean exportAirport (File file, Airport airport) {
+    public static boolean exportAirport(File file, Airport airport) {
 
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -57,96 +57,39 @@ public class FileHandler {
             Element runways = document.createElement("Runways");
             rootElement.appendChild(runways);
 
-            for (Runway runwayy : airport.getRunways()) {
+            for (Runway runway : airport.getRunways()) {
+                Element runwayElement = document.createElement("Runway");
+                runways.appendChild(runwayElement);
 
-                Element runway = document.createElement("Runway");
-                runways.appendChild(runway);
+                appendElementWithNewline(runwayElement, "Resa_Height", Double.toString(runway.getRESAHeight()), document);
+                appendElementWithNewline(runwayElement, "Resa_Width", Double.toString(runway.getRESAWidth()), document);
+                appendElementWithNewline(runwayElement, "Obstacle", Boolean.toString(runway.isHasRunwayObstacle()), document);
 
+                Element rightElement = document.createElement("Right_Properties");
+                runwayElement.appendChild(rightElement);
+                appendElementWithNewline(rightElement, "Designator", runway.getRunwayDesignatorRight(), document);
+                appendElementWithNewline(rightElement, "TORA", Double.toString(runway.getRightTora()), document);
+                appendElementWithNewline(rightElement, "TODA", Double.toString(runway.getRightToda()), document);
+                appendElementWithNewline(rightElement, "ASDA", Double.toString(runway.getRightAsda()), document);
+                appendElementWithNewline(rightElement, "LDA", Double.toString(runway.getRightLda()), document);
+                appendElementWithNewline(rightElement, "Clearway", Double.toString(runway.getClearwayRight()), document);
+                appendElementWithNewline(rightElement, "Stopway", Double.toString(runway.getStopwayRight()), document);
+                appendElementWithNewline(rightElement, "Displacement_Threshold", Double.toString(runway.getDispThresholdRight()), document);
 
-                Element resaHeight = document.createElement("Resa_Height");
-                resaHeight.appendChild(document.createTextNode(Double.toString(runwayy.getRESAHeight())));
-                runways.appendChild(resaHeight);
+                Element leftElement = document.createElement("Left_Properties");
+                runwayElement.appendChild(leftElement);
+                appendElementWithNewline(leftElement, "Designator", runway.getRunwayDesignatorLeft(), document);
+                appendElementWithNewline(leftElement, "TORA", Double.toString(runway.getLeftTora()), document);
+                appendElementWithNewline(leftElement, "TODA", Double.toString(runway.getLeftToda()), document);
+                appendElementWithNewline(leftElement, "ASDA", Double.toString(runway.getLeftAsda()), document);
+                appendElementWithNewline(leftElement, "LDA", Double.toString(runway.getLeftLda()), document);
+                appendElementWithNewline(leftElement, "Clearway", Double.toString(runway.getClearwayLeft()), document);
+                appendElementWithNewline(leftElement, "Stopway", Double.toString(runway.getStopwayLeft()), document);
+                appendElementWithNewline(leftElement, "Displacement_Threshold", Double.toString(runway.getDispThresholdLeft()), document);
 
-                Element resaWidth = document.createElement("Resa_Width");
-                resaWidth.appendChild(document.createTextNode(Double.toString(runwayy.getRESAWidth())));
-                runways.appendChild(resaWidth);
-
-                Element obstacles = document.createElement("Obstacle");
-                obstacles.appendChild(document.createTextNode(Boolean.toString(runwayy.isHasRunwayObstacle())));
-                runways.appendChild(obstacles);
-
-                Element right = document.createElement("Right_Properties");
-                runways.appendChild(right);
-
-                Element designatorR = document.createElement("Designator");
-                designatorR.appendChild(document.createTextNode(runwayy.getRunwayDesignatorRight()));
-                runways.appendChild(designatorR);
-
-                Element tora = document.createElement("TORA");
-                tora.appendChild(document.createTextNode(Double.toString(runwayy.getRightTora())));
-                right.appendChild(tora);
-
-                Element toda = document.createElement("TODA");
-                toda.appendChild(document.createTextNode(Double.toString(runwayy.getRightToda())));
-                right.appendChild(toda);
-
-                Element asda = document.createElement("ASDA");
-                asda.appendChild(document.createTextNode(Double.toString(runwayy.getRightAsda())));
-                right.appendChild(asda);
-
-                Element lda = document.createElement("LDA");
-                lda.appendChild(document.createTextNode(Double.toString(runwayy.getRightLda())));
-                right.appendChild(lda);
-
-                Element clearway = document.createElement("Clearway");
-                clearway.appendChild(document.createTextNode(Double.toString(runwayy.getClearwayRight())));
-                right.appendChild(clearway);
-
-                Element stopway = document.createElement("Stopway");
-                stopway.appendChild(document.createTextNode(Double.toString(runwayy.getStopwayRight())));
-                right.appendChild(stopway);
-
-                Element displacementThreshold = document.createElement("Displacement_Threshold");
-                displacementThreshold.appendChild(document.createTextNode(Double.toString(runwayy.getDispThresholdRight())));
-                right.appendChild(displacementThreshold);
-
-                Element left = document.createElement("Left_Properties");
-                runways.appendChild(left);
-
-                Element designatorL = document.createElement("Designator");
-                designatorL.appendChild(document.createTextNode(runwayy.getRunwayDesignatorLeft()));
-                runways.appendChild(designatorL);
-
-
-                Element toraL = document.createElement("TORA");
-                toraL.appendChild(document.createTextNode(Double.toString(runwayy.getLeftTora())));
-                left.appendChild(toraL);
-
-                Element todaL = document.createElement("TODA");
-                todaL.appendChild(document.createTextNode(Double.toString(runwayy.getLeftToda())));
-                left.appendChild(todaL);
-
-                Element asdaL = document.createElement("ASDA");
-                asdaL.appendChild(document.createTextNode(Double.toString(runwayy.getLeftAsda())));
-                left.appendChild(asdaL);
-
-                Element ldaL = document.createElement("LDA");
-                ldaL.appendChild(document.createTextNode(Double.toString(runwayy.getLeftLda())));
-                left.appendChild(ldaL);
-
-                Element clearwayL = document.createElement("Clearway");
-                clearwayL.appendChild(document.createTextNode(Double.toString(runwayy.getClearwayLeft())));
-                left.appendChild(clearwayL);
-
-                Element stopwayL = document.createElement("Stopway");
-                stopwayL.appendChild(document.createTextNode(Double.toString(runwayy.getStopwayLeft())));
-                left.appendChild(stopwayL);
-
-                Element displacementThresholdL = document.createElement("Displacement_Threshold");
-                displacementThresholdL.appendChild(document.createTextNode(Double.toString(runwayy.getDispThresholdLeft())));
-                left.appendChild(displacementThresholdL);
-
+                runwayElement.appendChild(document.createTextNode("\n"));
             }
+
 
             DOMSource domSource = new DOMSource(document);
             StreamResult res = new StreamResult(file);
@@ -178,6 +121,13 @@ public class FileHandler {
 
         DOMSource source = new DOMSource(doc);
         StreamResult result = new StreamResult(output);
+    }
+
+    private static void appendElementWithNewline(Element parent, String elementName, String textContent, Document document) {
+        Element element = document.createElement(elementName);
+        element.appendChild(document.createTextNode(textContent));
+        parent.appendChild(element);
+        parent.appendChild(document.createTextNode("\n"));
     }
 
 
