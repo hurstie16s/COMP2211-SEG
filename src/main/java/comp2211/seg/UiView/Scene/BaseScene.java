@@ -102,20 +102,15 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         VBox.setMargin(runwaysTempButton,new Insets(10,20,20,20));
 
         //right menu
-
         // Create image views for the icons
         ImageView exportIcon = new ImageView(new Image(Objects.requireNonNull(getClass()
             .getResource("/images/export.png")).toExternalForm()));
         ImageView importIcon = new ImageView(new Image(Objects.requireNonNull(getClass()
             .getResource("/images/import.png")).toExternalForm()));
 
-
         // Create the buttons and set their graphics
         Button exportButton = new Button("Export Airport", exportIcon);
-        exportButton.setTextFill(Color.WHITE);
         Button importButton = new Button("Import Airport", importIcon);
-        importButton.setTextFill(Color.WHITE);
-
 
         exportButton.setOnAction(e -> {
 
@@ -146,7 +141,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         });
 
-
         // Set the size of the icon
         exportIcon.setFitHeight(16);
         exportIcon.setFitWidth(16);
@@ -176,9 +170,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //return vBox
         return vBoxAirportLayout;
     }
-
-
-
 
     public TableView<RunwayData> buildTableView(VBox container) {
         TableView<RunwayData> table = new TableView<>();
@@ -300,7 +291,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         table.setPlaceholder(null);
         return table;
     }
-
     private <T> TableColumn<RunwayData, T> createColumn(String columnName) {
         TableColumn<RunwayData, T> tableColumn = new TableColumn<>(columnName);
         tableColumn.setCellFactory(column -> {
@@ -335,7 +325,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         rightPane.maxHeightProperty().bind(obstacleLayout.heightProperty().subtract(10));
         rightPane.minHeightProperty().bind(obstacleLayout.heightProperty().subtract(10));
 
-
         obstacleLayout.getChildren().addAll(leftPane,rightPane);
         return obstacleLayout;
     }
@@ -345,7 +334,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         topHalf.minWidthProperty().bind(obstaclePane.widthProperty());
         topHalf.maxHeightProperty().bind(obstaclePane.heightProperty().divide(2));
         topHalf.minHeightProperty().bind(obstaclePane.heightProperty().divide(2));
-
 
         Pane obstacleOptionsPane = new Pane(makeObstacleOptionsPane());
         obstacleOptionsPane.maxWidthProperty().bind(topHalf.widthProperty().divide(1.5));
@@ -382,7 +370,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         bottomHalf.getChildren().addAll(declaredDistancesPane, breakDownPane);
 
         obstaclePane.getChildren().addAll(topHalf,bottomHalf);
-
     }
 
     private Pane makeChangeHistoryPane() {
