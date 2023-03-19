@@ -29,8 +29,10 @@ class RunwayTest {
     static Runway runway2 = new Runway();
     // 07R and 25L
     static Runway runway3 = new Runway();
-    // 19C and 01C
+    // 16L and 34R
     static Runway runway4 = new Runway();
+    // 04C and 22C
+    static Runway runway5 = new Runway();
 
     @BeforeAll
     static void setUpRunways() {
@@ -69,6 +71,30 @@ class RunwayTest {
                 2219,
                 2080,
                 runway3
+        );
+        setProperties(
+                "16L",
+                1953,
+                2152,
+                1953,
+                1953,
+                1953,
+                2091,
+                1953,
+                1953,
+                runway4
+        );
+        setProperties(
+                "04C",
+                968,
+                968,
+                968,
+                968,
+                968,
+                968,
+                968,
+                968,
+                runway5
         );
     }
 
@@ -155,13 +181,18 @@ class RunwayTest {
     static Obstacle obstacle4 = new Obstacle("ob4", 20, 3546, 50);
     static Obstacle obstacle5 = new Obstacle("ob5", 14, 80, 2082);
     static Obstacle obstacle6 = new Obstacle("ob6", 11, 2285, -123);
+    static Obstacle obstacle7 = new Obstacle("ob7", 13, 976, 977);
+    static Obstacle obstacle8 = new Obstacle("ob8", 17, 0, 1953);
+    static Obstacle obstacle9 = new Obstacle("ob9", 8, 484, 484);
 
     //TODO: Change generation to fit new tests
     private static Stream<Arguments> generateCheckDesignatorTestData() {
         return Stream.of(
                 Arguments.of(runway1, "27L"),
                 Arguments.of(runway2, "27R"),
-                Arguments.of(runway3, "25L")
+                Arguments.of(runway3, "25L"),
+                Arguments.of(runway4, "34R"),
+                Arguments.of(runway5, "22C")
         );
     }
     //TODO: Generate test data for recalculate
@@ -244,6 +275,45 @@ class RunwayTest {
                         2866,
                         1593,
                         "Test: Own Scenario 2"
+                ),
+                Arguments.of(
+                        runway4,
+                        obstacle7,
+                        477,
+                        477,
+                        676,
+                        267,
+                        267,
+                        267,
+                        267,
+                        677,
+                        "Test: Own Scenario 3"
+                ),
+                Arguments.of(
+                        runway4,
+                        obstacle8,
+                        1453,
+                        1453,
+                        1652,
+                        1043,
+                        1043,
+                        1043,
+                        1043,
+                        1653,
+                        "Test: Own Scenario 4"
+                ),
+                Arguments.of(
+                        runway5,
+                        obstacle9,
+                        -16,
+                        -16,
+                        -16,
+                        -16,
+                        24,
+                        24,
+                        24,
+                        184,
+                        "Test: Own Scenario 5"
                 )
         );
     }

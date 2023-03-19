@@ -60,7 +60,7 @@ public class AppWindow {
     public void addAirport(Airport airport){
         airports.add(airport);
         runway = airport.getRunways().get(0);
-        runway.addObstacle(new Obstacle("One", 10,0,0));
+        runway.addObstacle(new Obstacle("VOID", 0, 0, 0));
     }
     public void setAirport(Airport airport){
         if (airport.name.equals("")){
@@ -70,6 +70,9 @@ public class AppWindow {
         }
         this.airport = airport;
         runway = airport.getRunways().get(0);
+    }
+    public void setRunway(Runway runway){
+        this.runway = runway;
     }
 
     /**

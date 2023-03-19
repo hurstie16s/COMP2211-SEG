@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class Theme {
-    static public Color bg = Color.gray(0.9);
+    static public Color bg = Color.gray(0.8);
     static public Color bgRunway = Color.gray(0.85);
     static public Color unfocusedBG = Color.gray(0.9);
     static public Color focusedBG = Color.gray(0.8);
@@ -40,9 +40,26 @@ public class Theme {
     }
 
     public static Color inverse(Color colour) {
-        Color res = new Color((1 - (colour.getGreen() + colour.getBlue())/2),(1 - (colour.getRed() + colour.getBlue())/2),
-            (1 - (colour.getGreen() + colour.getRed())/2),colour.getOpacity());
-        return res;
+        double total = (Math.exp(1 - Math.log(1+(colour.getRed()+ colour.getGreen()+colour.getBlue())*(Math.E-1)/3))-1)/(Math.E-1);
+        return makeColour(total, colour);
+
+    }
+    public static Color makeColour(double brightness, Color colour){
+        double total = (colour.getRed() + colour.getGreen() + colour.getBlue())/3;
+        double red;
+        double green;
+        double blue;
+        if (total > 0){
+            red = Math.min(colour.getRed()/total,1/brightness);
+            green = Math.min(colour.getGreen()/total,1/brightness);
+            blue = Math.min(colour.getBlue()/total,1/brightness);
+        } else {
+            red = 1;
+            green = 1;
+            blue = 1;
+        }
+        return new Color(red*brightness,green*brightness,blue*brightness,1);
+
     }
 
     public static void makeDark(){
@@ -64,5 +81,30 @@ public class Theme {
         tora = Color.web("#9afece");
         asda = Color.web("#49ba26");
         lda = Color.web("#00edfa");
+    }
+    public static void makeDark2(){
+
+        bg = inverse(bg);
+        bgRunway = inverse(bgRunway);
+        unfocusedBG = inverse(unfocusedBG);
+        focusedBG = inverse(focusedBG);
+        veryfocusedBG = inverse(veryfocusedBG);
+        fg = inverse(fg);
+        grass = inverse(grass);
+        obstacle = inverse(obstacle);
+        slope = inverse(slope);
+        cga = inverse(cga);
+        clearway = inverse(clearway);
+        stopway = inverse(stopway);
+        physicalResa = inverse(physicalResa);
+        runway = inverse(runway);
+        toda = inverse(toda);
+        tora = inverse(tora);
+        asda = inverse(asda);
+        lda  = inverse(lda );
+        resa = inverse(resa);
+        stripend = inverse(stripend);
+        blastallowance = inverse(blastallowance);
+
     }
 }
