@@ -5,6 +5,7 @@ import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.Controller.Stage.Theme;
+import comp2211.seg.ProcessDataModel.Runway;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
@@ -39,14 +40,9 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 public class BaseScene extends SceneAbstract implements GlobalVariables{
-    private Button airportButton;
-    private Button obstacleButton;
-    private HBox topbar;
-    private VBox layout;
+
     //logger for BaseScene
     private static final Logger logger = LogManager.getLogger(BaseScene.class);
-
-
 
     /**
      * Constructor to create a SceneAbstract object.
@@ -113,16 +109,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         //bottom
 
-        //NEEDS FIXING!
-
         ComboBox runwaysCombo = new ComboBox(); //FXCollections.observableArrayList(appWindow.airport.getRunways()));
         runwaysCombo.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
-        /*airportsCombo.valueProperty().addListener(new ChangeListener() {
+        airportsCombo.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
-                appWindow.airport.setRunway((Runway) t1);
+                appWindow.setRunway((Runway) t1);
             }
-        });*/
+        });
         Label runwaysLabel = makeLabel("Runway");
         HBox hBoxRunways = new HBox();
         hBoxRunways.getChildren().addAll(runwaysLabel,runwaysCombo);
