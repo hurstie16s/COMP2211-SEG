@@ -626,6 +626,29 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         Pane breakDownPane = new TabLayout(breakDown,Theme.focusedBG,Theme.veryfocusedBG);
         return breakDownPane;
     }
+    private TextField makeTableCell(SimpleDoubleProperty property){
+        TextField textField = new TextField();
+        textField.textProperty().bind(property.asString());
+        textField.editableProperty().set(false);
+        textField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if (!s.equals(t1)){
+                    if (Objects.equals(t1, "")) {
+                        property.set(0);
+                    } else {
+                        try {
+                            property.set(Double.parseDouble(t1));
+                        } catch (Exception e) {
+                            displayErrorMessage("Invalid Entry", t1 + " must be a number");
+                            textField.setText(s);
+                        }
+                    }
+                }
+            }
+        });
+        return textField;
+    }
 
     public Pane makeRunwayTabs(){
         ArrayList<Pair<String, Pane>> viewTabs = new ArrayList<>();
