@@ -403,21 +403,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.runwayWidthProperty().multiply(1),
             appWindow.runway.runwayObstacle.heightProperty().multiply(1),
             Theme.slope,
-            new SimpleBooleanProperty(true),
-            scaleFactor,
-            scaleFactorHeight,
-            scaleFactorDepth
-    ));
-
-    group.getChildren().add(new Slope(
-            appWindow,
-            appWindow.runway.runwayLengthProperty().divide(-2),
-            new SimpleDoubleProperty(0).multiply(1),
-            new SimpleDoubleProperty(0).multiply(1),
-            appWindow.runway.runwayWidthProperty().multiply(1),
-            appWindow.runway.runwayObstacle.heightProperty().multiply(1),
-            Theme.slope,
-            new SimpleBooleanProperty(false),
+            appWindow.runway.directionProperty(),
             scaleFactor,
             scaleFactorHeight,
             scaleFactorDepth
@@ -539,7 +525,7 @@ public class RunwayScene extends SceneAbstract {
     Pane labelPane = new Pane();
     //Lengths and xOffsets need binding to back-end variables, work hasn't been done yet so constants used
     DoubleBinding leftDisplacementT = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(Bindings.when(appWindow.runway.directionProperty().not()).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)).add(appWindow.runway.getBLASTZONE())).otherwise(0));
-    DoubleBinding leftDisplacementL = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdRightProperty()).add(Bindings.when(appWindow.runway.directionProperty().not()).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)).add(appWindow.runway.slopeLengthProperty())).otherwise(0));
+    DoubleBinding leftDisplacementL = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()).add(Bindings.when(appWindow.runway.directionProperty().not()).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)).add(appWindow.runway.slopeLengthProperty())).otherwise(0));
     DoubleBinding rightDisplacementT = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(Bindings.when(appWindow.runway.directionProperty()).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)).add(appWindow.runway.getBLASTZONE())).otherwise(0));
     DoubleBinding rightDisplacementL = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()).subtract(Bindings.when(appWindow.runway.directionProperty()).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)).add(appWindow.runway.slopeLengthProperty())).otherwise(0));
 
