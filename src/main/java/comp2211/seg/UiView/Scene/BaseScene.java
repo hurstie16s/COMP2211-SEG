@@ -98,23 +98,39 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //left menu
         //top
         ComboBox airportsCombo = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
-        //airportsCombo.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+        airportsCombo.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
         airportsCombo.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
                 appWindow.setAirport((Airport) t1);
             }
         });
-        Text airportsLabel = new Text("Airports");
+        Label airportsLabel = makeLabel("Airport");
         airportsCombo.valueProperty().set(appWindow.airport);
         HBox hBoxAirports = new HBox();
         hBoxAirports.getChildren().addAll(airportsLabel,airportsCombo);
-        //HBox.setMargin(airportsLabel,new Insets(30,20,20,20));
-        //bottom
-        Button runwaysTempButton = new Button("Runways");
-        VBox leftMenu = new VBox(hBoxAirports,runwaysTempButton);
+        HBox.setMargin(airportsCombo,new Insets(0,0,0,10));
 
-        VBox.setMargin(runwaysTempButton,new Insets(10,20,20,20));
+        //bottom
+
+        //NEEDS FIXING!
+
+        ComboBox runwaysCombo = new ComboBox(); //FXCollections.observableArrayList(appWindow.airport.getRunways()));
+        runwaysCombo.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+        /*airportsCombo.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                appWindow.airport.setRunway((Runway) t1);
+            }
+        });*/
+        Label runwaysLabel = makeLabel("Runway");
+        HBox hBoxRunways = new HBox();
+        hBoxRunways.getChildren().addAll(runwaysLabel,runwaysCombo);
+        HBox.setMargin(runwaysCombo,new Insets(0,0,0,10));
+        //left menu children
+        VBox leftMenu = new VBox(hBoxAirports,hBoxRunways);
+        VBox.setMargin(hBoxAirports,new Insets(30,20,20,20));
+        VBox.setMargin(hBoxRunways,new Insets(10,20,20,20));
 
         //right menu
         // Create image views for the icons
@@ -144,7 +160,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         VBox.setMargin(importButton,new Insets(10,20,20,20));
         //Dark buttons style from css, can be done globally
         List<Button> darkButtons = new ArrayList<>();
-        darkButtons.add(runwaysTempButton);
         darkButtons.add(exportButton);
         darkButtons.add(importButton);
 
