@@ -437,11 +437,17 @@ public class Runway {
 
         // Ensure Declared distance isn't more than original value
         if (leftTora.get() > inputLeftTora.get()) {
+            var distanceFromToraEnd = new SimpleDoubleProperty();
+            distanceFromToraEnd.bind(leftTora.subtract(inputLeftTora));
             leftTora.bind(inputLeftTora);
-        }
 
-        leftAsda.bind(leftTora);
-        leftToda.bind(leftTora);
+            leftAsda.bind(Bindings.min(leftTora.add(distanceFromToraEnd), leftTora.add(stopwayRight)));
+            leftToda.bind(Bindings.min(leftTora.add(distanceFromToraEnd), leftTora.add(clearwayRight)));
+
+        } else {
+            leftAsda.bind(leftTora);
+            leftToda.bind(leftTora);
+        }
 
     }
 
@@ -455,11 +461,17 @@ public class Runway {
 
         // Ensure Declared distance isn't more than original value
         if (rightTora.get() > inputRightTora.get()) {
+            var distanceFromToraEnd = new SimpleDoubleProperty();
+            distanceFromToraEnd.bind(rightTora.subtract(inputRightTora));
             rightTora.bind(inputRightTora);
-        }
 
-        rightAsda.bind(rightTora);
-        rightToda.bind(rightTora);
+            rightAsda.bind(Bindings.min(rightTora.add(distanceFromToraEnd), rightTora.add(stopwayLeft)));
+            rightToda.bind(Bindings.min(rightTora.add(distanceFromToraEnd), rightTora.add(clearwayLeft)));
+
+        } else {
+            rightAsda.bind(rightTora);
+            rightToda.bind(rightTora);
+        }
 
         // Calculate left take-off values, taking off away from the obstacle
         leftTora.bind(inputLeftTora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).subtract(dispThresholdLeft));
