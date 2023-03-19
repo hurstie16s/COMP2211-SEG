@@ -134,6 +134,9 @@ public class Runway {
         runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get())));
         runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get())));
     }
+    public String toString(){
+        return runwayDesignatorLeft.concat("/").concat(runwayDesignatorRight).get();
+    }
 
     /**
      * Calculates the runway designator for the runway in the opposite direction

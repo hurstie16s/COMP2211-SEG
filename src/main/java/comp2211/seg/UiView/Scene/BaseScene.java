@@ -100,24 +100,31 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
                 appWindow.setAirport((Airport) t1);
+                if (!o.equals(t1)) {
+                    appWindow.startBaseScene();
+                }
             }
         });
-        Label airportsLabel = makeLabel("Airport");
         airportsCombo.valueProperty().set(appWindow.airport);
+        Label airportsLabel = makeLabel("Airport");
         HBox hBoxAirports = new HBox();
         hBoxAirports.getChildren().addAll(airportsLabel,airportsCombo);
         HBox.setMargin(airportsCombo,new Insets(0,0,0,10));
 
         //bottom
 
-        ComboBox runwaysCombo = new ComboBox(); //FXCollections.observableArrayList(appWindow.airport.getRunways()));
+        ComboBox runwaysCombo = new ComboBox(FXCollections.observableArrayList(appWindow.airport.getRunways())); //FXCollections.observableArrayList(appWindow.airport.getRunways()));
         runwaysCombo.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
-        airportsCombo.valueProperty().addListener(new ChangeListener() {
+        runwaysCombo.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
                 appWindow.setRunway((Runway) t1);
+                if (!o.equals(t1)) {
+                    appWindow.startBaseScene();
+                }
             }
         });
+        runwaysCombo.valueProperty().set(appWindow.runway);
         Label runwaysLabel = makeLabel("Runway");
         HBox hBoxRunways = new HBox();
         hBoxRunways.getChildren().addAll(runwaysLabel,runwaysCombo);

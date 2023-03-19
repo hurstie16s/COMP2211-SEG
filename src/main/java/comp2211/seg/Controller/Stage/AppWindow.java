@@ -51,6 +51,8 @@ public class AppWindow {
         addAirport(new Airport("Heathrow"));
         addAirport(new Airport("Gatwick"));
         addAirport(new Airport("Southampton"));
+        airport = airports.get(0);
+        airport.makeRunway();
         // Setup appWindow
         setupStage();
         startHomeScene();
