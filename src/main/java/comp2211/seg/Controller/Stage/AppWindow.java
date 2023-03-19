@@ -71,6 +71,9 @@ public class AppWindow {
         this.airport = airport;
         runway = airport.getRunways().get(0);
     }
+    public void setRunway(Runway runway){
+        this.runway = runway;
+    }
 
     /**
      * Loads any required resources for the application.

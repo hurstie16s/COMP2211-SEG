@@ -73,7 +73,7 @@ public class Runway {
 
     private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
 
-    private final SimpleBooleanProperty direction = new SimpleBooleanProperty(false);
+    private final SimpleBooleanProperty direction = new SimpleBooleanProperty(true);
     private final SimpleBooleanProperty leftTakeOff = new SimpleBooleanProperty(false);
     private final SimpleBooleanProperty leftLand = new SimpleBooleanProperty(false);
     private final SimpleBooleanProperty rightTakeOff = new SimpleBooleanProperty(false);
@@ -85,11 +85,12 @@ public class Runway {
 
     // Typical values, may become variable down the line
     // Constants
-    private static final SimpleDoubleProperty MINRESA = new SimpleDoubleProperty(240);
-    private static final SimpleDoubleProperty STRIPEND = new SimpleDoubleProperty(60);
-    private static final SimpleDoubleProperty BLASTZONE = new SimpleDoubleProperty(500);
-    private static final SimpleDoubleProperty SLOPE = new SimpleDoubleProperty(50);
-    private static final SimpleDoubleProperty STOPWAYMIN = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty MINRESA = new SimpleDoubleProperty(240);
+    private final SimpleDoubleProperty STRIPEND = new SimpleDoubleProperty(60);
+    private final SimpleDoubleProperty BLASTZONE = new SimpleDoubleProperty(500);
+    private final SimpleDoubleProperty SLOPE = new SimpleDoubleProperty(50);
+    private final SimpleDoubleProperty STOPWAYMIN = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty slopeLength = new SimpleDoubleProperty(50);
 
     // Runway dimensions
     private final SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
@@ -121,6 +122,8 @@ public class Runway {
         clearwayRight.bind(inputLeftToda.subtract(inputLeftTora));
         stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
+
+
 
         recalculate();
         validityChecks();
@@ -165,6 +168,7 @@ public class Runway {
         runwayObstacle = obstacleToAdd;
         hasRunwayObstacle.set(true); // Listener will call recalculate
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
+
     }
 
     /**
@@ -183,7 +187,7 @@ public class Runway {
     public void recalculate(){
 
         logger.info("Recalculating runway values");
-
+        slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.widthProperty().divide(2)).greaterThan(runwayObstacle.widthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.widthProperty().divide(2))).otherwise(runwayObstacle.widthProperty().divide(2).add(240)));
         rightTora.bind(inputRightTora);
         rightToda.bind(inputRightToda);
         rightAsda.bind(inputRightAsda);
@@ -1121,5 +1125,57 @@ public class Runway {
      */
     public SimpleBooleanProperty rightLandProperty() {
         return rightLand;
+    }
+
+    public TextFlow getChangesHistory() {
+        return changesHistory;
+    }
+
+    public double getMINRESA() {
+        return MINRESA.get();
+    }
+
+    public SimpleDoubleProperty MINRESAProperty() {
+        return MINRESA;
+    }
+
+    public double getSTRIPEND() {
+        return STRIPEND.get();
+    }
+
+    public SimpleDoubleProperty STRIPENDProperty() {
+        return STRIPEND;
+    }
+
+    public double getBLASTZONE() {
+        return BLASTZONE.get();
+    }
+
+    public SimpleDoubleProperty BLASTZONEProperty() {
+        return BLASTZONE;
+    }
+
+    public double getSLOPE() {
+        return SLOPE.get();
+    }
+
+    public SimpleDoubleProperty SLOPEProperty() {
+        return SLOPE;
+    }
+
+    public double getSTOPWAYMIN() {
+        return STOPWAYMIN.get();
+    }
+
+    public SimpleDoubleProperty STOPWAYMINProperty() {
+        return STOPWAYMIN;
+    }
+
+    public double getSlopeLength() {
+        return slopeLength.get();
+    }
+
+    public SimpleDoubleProperty slopeLengthProperty() {
+        return slopeLength;
     }
 }
