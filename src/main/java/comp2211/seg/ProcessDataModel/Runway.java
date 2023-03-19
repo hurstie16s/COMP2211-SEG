@@ -317,11 +317,21 @@ public class Runway {
 
         leftLda.bind(inputLeftLda.subtract(ldaSubtraction));
 
+        // Ensure Declared distance isn't more than original value
+        if (leftLda.get() > inputLeftLda.get()) {
+            leftLda.bind(inputLeftLda);
+        }
+
         logger.info("New LDA calculated for landing over an obstacle for runway "+runwayDesignatorLeft.get());
 
         // Calculate Land Towards for Right
 
         rightLda.bind(runwayObstacle.distFromOtherThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
+
+        // Ensure Declared distance isn't more than original value
+        if (rightLda.get() > inputRightLda.get()) {
+            rightLda.bind(inputRightLda);
+        }
 
         logger.info("New LDA calculated for landing towards and obstacle for runway "+runwayDesignatorRight.get());
     }
@@ -335,6 +345,11 @@ public class Runway {
 
         leftLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
 
+        // Ensure Declared distance isn't more than original value
+        if (leftLda.get() > inputLeftLda.get()) {
+            leftLda.bind(inputLeftLda);
+        }
+
         logger.info("New LDA calculated for landing towards and obstacle for runway "+runwayDesignatorLeft.get());
 
         // Calculate Land Over for Right
@@ -342,6 +357,11 @@ public class Runway {
         var ldaSubtraction = getLdaSubtraction(runwayObstacle.distFromOtherThresholdProperty());
 
         rightLda.bind(inputRightLda.subtract(ldaSubtraction));
+
+        // Ensure Declared distance isn't more than original value
+        if (rightLda.get() > inputRightLda.get()) {
+            rightLda.bind(inputRightLda);
+        }
 
         logger.info("New LDA calculated for landing over an obstacle for runway "+runwayDesignatorRight.get());
 
@@ -401,14 +421,28 @@ public class Runway {
      */
     public void calculateTakeOffToward() {
 
-
+        // Calculate right take-off values, taking off away from the obstacle
         rightTora.bind(runwayObstacle.distFromThresholdProperty().subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).add(dispThresholdLeft));
+
+        // Ensure Declared distance isn't more than original value
+        if (rightTora.get() > inputRightTora.get()) {
+            rightTora.bind(inputRightTora);
+        }
+
         rightAsda.bind(rightTora.add(stopwayLeft));
         rightToda.bind(rightTora.add(clearwayLeft));
 
+        // Calculate left take-off values, taking off towards the obstacle
         leftTora.bind(runwayObstacle.distFromThresholdProperty().add(dispThresholdLeft).subtract(Bindings.max(runwayObstacle.heightProperty().multiply(SLOPE), MINRESA.add(runwayObstacle.widthProperty().divide(2)))).subtract(STRIPEND));
+
+        // Ensure Declared distance isn't more than original value
+        if (leftTora.get() > inputLeftTora.get()) {
+            leftTora.bind(inputLeftTora);
+        }
+
         leftAsda.bind(leftTora);
         leftToda.bind(leftTora);
+
     }
 
     /**
@@ -416,13 +450,25 @@ public class Runway {
      */
     public void calculateTakeOffAway() {
 
-
-
+        // Calculate right take-off values, taking off towards the obstacle
         rightTora.bind(runwayObstacle.distFromOtherThresholdProperty().add(dispThresholdRightProperty()).subtract(Bindings.max(runwayObstacle.heightProperty().multiply(SLOPE), MINRESA.add(runwayObstacle.widthProperty().divide(2)))).subtract(STRIPEND));
+
+        // Ensure Declared distance isn't more than original value
+        if (rightTora.get() > inputRightTora.get()) {
+            rightTora.bind(inputRightTora);
+        }
+
         rightAsda.bind(rightTora);
         rightToda.bind(rightTora);
 
+        // Calculate left take-off values, taking off away from the obstacle
         leftTora.bind(inputLeftTora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).subtract(dispThresholdLeft));
+
+        // Ensure Declared distance isn't more than original value
+        if (leftTora.get() > inputLeftTora.get()) {
+            leftTora.bind(inputLeftTora);
+        }
+
         leftAsda.bind(leftTora.add(stopwayRight));
         leftToda.bind(leftTora.add(clearwayRight));
     }
