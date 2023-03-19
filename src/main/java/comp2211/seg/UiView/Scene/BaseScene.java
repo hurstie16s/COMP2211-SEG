@@ -100,8 +100,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
                 appWindow.setAirport((Airport) t1);
-                if (!o.equals(t1)) {
-                    appWindow.startBaseScene();
+                if (! (o == null)) {
+                    if (!o.equals(t1)) {
+                        appWindow.startBaseScene();
+                    }
                 }
             }
         });
@@ -119,8 +121,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
                 appWindow.setRunway((Runway) t1);
-                if (!o.equals(t1)) {
-                    appWindow.startBaseScene();
+                if (! (o == null)) {
+                    if (!o.equals(t1)) {
+                        appWindow.startBaseScene();
+                    }
                 }
             }
         });
