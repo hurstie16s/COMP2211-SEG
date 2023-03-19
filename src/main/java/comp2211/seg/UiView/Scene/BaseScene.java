@@ -25,6 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -95,10 +96,24 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         vBoxTable.minWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
 
         //left menu
-        Button airportsTempButton = new Button("Airports");
+        //top
+        ComboBox airportsCombo = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
+        //airportsCombo.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+        airportsCombo.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                appWindow.setAirport((Airport) t1);
+            }
+        });
+        Text airportsLabel = new Text("Airports");
+        airportsCombo.valueProperty().set(appWindow.airport);
+        HBox hBoxAirports = new HBox();
+        hBoxAirports.getChildren().addAll(airportsLabel,airportsCombo);
+        //HBox.setMargin(airportsLabel,new Insets(30,20,20,20));
+        //bottom
         Button runwaysTempButton = new Button("Runways");
-        VBox leftMenu = new VBox(airportsTempButton,runwaysTempButton);
-        VBox.setMargin(airportsTempButton,new Insets(30,20,20,20));
+        VBox leftMenu = new VBox(hBoxAirports,runwaysTempButton);
+
         VBox.setMargin(runwaysTempButton,new Insets(10,20,20,20));
 
         //right menu
@@ -123,12 +138,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         importIcon.setFitHeight(16);
         importIcon.setFitWidth(16);
 
+
         VBox rightMenu = new VBox(exportButton, importButton);
         VBox.setMargin(exportButton,new Insets(30,20,20,20));
         VBox.setMargin(importButton,new Insets(10,20,20,20));
         //Dark buttons style from css, can be done globally
         List<Button> darkButtons = new ArrayList<>();
-        darkButtons.add(airportsTempButton);
         darkButtons.add(runwaysTempButton);
         darkButtons.add(exportButton);
         darkButtons.add(importButton);
