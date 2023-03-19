@@ -51,6 +51,7 @@ public class Airport {
     public void makeRunway() {
         runways.add(new Runway());
     }
+    public void addRunway(Runway runway){runways.add(runway);}
 
     /**
      * Returns the list of runways at the airport.

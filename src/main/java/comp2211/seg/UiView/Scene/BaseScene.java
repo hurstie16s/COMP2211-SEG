@@ -218,10 +218,33 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         String[] extractAirportAndColumns = betterTempInputProtocol.split(":");
         String airportName = extractAirportAndColumns[0];
         String[] columnsEntries = extractAirportAndColumns[1].split(",");
-        Platform.runLater(() -> {
-          appWindow.addAirport(new Airport(airportName));
-          appWindow.runway.runwayDesignatorLeftProperty().set(columnsEntries[0]);
-        });
+        Airport airport = new Airport("TempName");
+        airport.setLatitude(0.0);
+        airport.setLongitude(0.0);
+        String[][] runways = new String[][] {new  String[] {""}};
+        for (String[] runway: runways) {
+            Runway r = new Runway();
+            r.setRESAHeight(90);
+            r.setRESAWidth(240);
+            r.setHasRunwayObstacle(true);
+            r.setRunwayDesignatorRight("Void");
+            r.setInputRightTora(1000);
+            r.setInputRightToda(1500);
+            r.setInputRightAsda(1150);
+            r.setInputRightLda(1000);
+            r.setClearwayRight(500);
+            r.setStopwayRight(150);
+            r.setDispThresholdRight(0);
+            r.setRunwayDesignatorLeft("Void");
+            r.setInputLeftTora(1000);
+            r.setInputLeftToda(1500);
+            r.setInputLeftAsda(1150);
+            r.setInputLeftLda(1000);
+            r.setClearwayLeft(500);
+            r.setStopwayLeft(150);
+            r.setDispThresholdLeft(0);
+            airport.addRunway(r);
+        }
 
     // Initialize the RunwayData object using the columnsEntries elements
         RunwayData runwayData = new RunwayData(

@@ -1187,4 +1187,188 @@ public class Runway {
     public SimpleDoubleProperty slopeLengthProperty() {
         return slopeLength;
     }
+
+    public void setClearwayLeft(double clearwayLeft) {
+        this.clearwayLeft.set(clearwayLeft);
+    }
+
+    public void setClearwayRight(double clearwayRight) {
+        this.clearwayRight.set(clearwayRight);
+    }
+
+    public void setClearwayHeight(double clearwayHeight) {
+        this.clearwayHeight.set(clearwayHeight);
+    }
+
+    public void setStopwayLeft(double stopwayLeft) {
+        this.stopwayLeft.set(stopwayLeft);
+    }
+
+    public void setStopwayRight(double stopwayRight) {
+        this.stopwayRight.set(stopwayRight);
+    }
+
+    public void setStripEnd(double stripEnd) {
+        this.stripEnd.set(stripEnd);
+    }
+
+    public void setRESAWidth(double RESAWidth) {
+        this.RESAWidth.set(RESAWidth);
+    }
+
+    public void setRESAHeight(double RESAHeight) {
+        this.RESAHeight.set(RESAHeight);
+    }
+
+    public void setRunwayDesignatorLeft(String runwayDesignatorLeft) {
+        this.runwayDesignatorLeft.set(runwayDesignatorLeft);
+    }
+
+    public void setRunwayDesignatorRight(String runwayDesignatorRight) {
+        this.runwayDesignatorRight.set(runwayDesignatorRight);
+    }
+
+    public void setInputRightTora(double inputRightTora) {
+        this.inputRightTora.set(inputRightTora);
+    }
+
+    public void setInputRightToda(double inputRightToda) {
+        this.inputRightToda.set(inputRightToda);
+    }
+
+    public void setInputRightAsda(double inputRightAsda) {
+        this.inputRightAsda.set(inputRightAsda);
+    }
+
+    public void setInputRightLda(double inputRightLda) {
+        this.inputRightLda.set(inputRightLda);
+    }
+
+    public void setInputLeftTora(double inputLeftTora) {
+        this.inputLeftTora.set(inputLeftTora);
+    }
+
+    public void setInputLeftToda(double inputLeftToda) {
+        this.inputLeftToda.set(inputLeftToda);
+    }
+
+    public void setInputLeftAsda(double inputLeftAsda) {
+        this.inputLeftAsda.set(inputLeftAsda);
+    }
+
+    public void setInputLeftLda(double inputLeftLda) {
+        this.inputLeftLda.set(inputLeftLda);
+    }
+
+    public void setRightTora(double rightTora) {
+        this.rightTora.set(rightTora);
+    }
+
+    public void setRightToda(double rightToda) {
+        this.rightToda.set(rightToda);
+    }
+
+    public void setRightAsda(double rightAsda) {
+        this.rightAsda.set(rightAsda);
+    }
+
+    public void setRightLda(double rightLda) {
+        this.rightLda.set(rightLda);
+    }
+
+    public void setLeftTora(double leftTora) {
+        this.leftTora.set(leftTora);
+    }
+
+    public void setLeftToda(double leftToda) {
+        this.leftToda.set(leftToda);
+    }
+
+    public void setLeftAsda(double leftAsda) {
+        this.leftAsda.set(leftAsda);
+    }
+
+    public void setLeftLda(double leftLda) {
+        this.leftLda.set(leftLda);
+    }
+
+    public void setDispThresholdLeft(double dispThresholdLeft) {
+        this.dispThresholdLeft.set(dispThresholdLeft);
+    }
+
+    public void setDispThresholdRight(double dispThresholdRight) {
+        this.dispThresholdRight.set(dispThresholdRight);
+    }
+
+    public void setChangesHistory(TextFlow changesHistory) {
+        this.changesHistory = changesHistory;
+    }
+
+    public void setRunwayObstacle(Obstacle runwayObstacle) {
+        this.runwayObstacle = runwayObstacle;
+    }
+
+    public void setLandingMode(boolean landingMode) {
+        this.landingMode.set(landingMode);
+    }
+
+    public void setDirection(boolean direction) {
+        this.direction.set(direction);
+    }
+
+    public void setLeftTakeOff(boolean leftTakeOff) {
+        this.leftTakeOff.set(leftTakeOff);
+    }
+
+    public void setLeftLand(boolean leftLand) {
+        this.leftLand.set(leftLand);
+    }
+
+    public void setRightTakeOff(boolean rightTakeOff) {
+        this.rightTakeOff.set(rightTakeOff);
+    }
+
+    public void setRightLand(boolean rightLand) {
+        this.rightLand.set(rightLand);
+    }
+
+    public void setMINRESA(double MINRESA) {
+        this.MINRESA.set(MINRESA);
+    }
+
+    public void setSTRIPEND(double STRIPEND) {
+        this.STRIPEND.set(STRIPEND);
+    }
+
+    public void setBLASTZONE(double BLASTZONE) {
+        this.BLASTZONE.set(BLASTZONE);
+    }
+
+    public void setSLOPE(double SLOPE) {
+        this.SLOPE.set(SLOPE);
+    }
+
+    public void setSTOPWAYMIN(double STOPWAYMIN) {
+        this.STOPWAYMIN.set(STOPWAYMIN);
+    }
+
+    public void setSlopeLength(double slopeLength) {
+        this.slopeLength.set(slopeLength);
+    }
+
+    public void setRunwayLength(double runwayLength) {
+        this.runwayLength.set(runwayLength);
+    }
+
+    public void setRunwayWidth(double runwayWidth) {
+        this.runwayWidth.set(runwayWidth);
+    }
+
+    public void setHasRunwayObstacle(boolean hasRunwayObstacle) {
+        this.hasRunwayObstacle.set(hasRunwayObstacle);
+    }
+
+    public void setUnits(String units) {
+        this.units.set(units);
+    }
 }
