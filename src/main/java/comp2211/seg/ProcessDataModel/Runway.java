@@ -106,7 +106,8 @@ public class Runway {
         for (Property prop: new Property[] {
                 runwayDesignatorLeft,
                 runwayLength,
-                hasRunwayObstacle
+                hasRunwayObstacle,
+                direction
         }) {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
@@ -122,6 +123,8 @@ public class Runway {
         clearwayRight.bind(inputLeftToda.subtract(inputLeftTora));
         stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
+        direction.bind(runwayObstacle.distFromThresholdProperty().lessThan(runwayObstacle.distFromOtherThresholdProperty()));
+        slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.widthProperty().divide(2)).greaterThan(runwayObstacle.widthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.widthProperty().divide(2))).otherwise(runwayObstacle.widthProperty().divide(2).add(240)));
 
 
 
@@ -165,7 +168,11 @@ public class Runway {
      * Adds an obstacle to the list of obstacles on the runway.
      */
     public void addObstacle(Obstacle obstacleToAdd) {
-        runwayObstacle = obstacleToAdd;
+        runwayObstacle.heightProperty().set(obstacleToAdd.heightProperty().get());
+        runwayObstacle.widthProperty().set(obstacleToAdd.widthProperty().get());
+        runwayObstacle.lengthProperty().set(obstacleToAdd.lengthProperty().get());
+        runwayObstacle.distFromThresholdProperty().set(obstacleToAdd.distFromThresholdProperty().get());
+        runwayObstacle.distFromOtherThresholdProperty().set(obstacleToAdd.distFromOtherThresholdProperty().get());
         hasRunwayObstacle.set(true); // Listener will call recalculate
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
 
@@ -187,7 +194,6 @@ public class Runway {
     public void recalculate(){
 
         logger.info("Recalculating runway values");
-        slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.widthProperty().divide(2)).greaterThan(runwayObstacle.widthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.widthProperty().divide(2))).otherwise(runwayObstacle.widthProperty().divide(2).add(240)));
         rightTora.bind(inputRightTora);
         rightToda.bind(inputRightToda);
         rightAsda.bind(inputRightAsda);
