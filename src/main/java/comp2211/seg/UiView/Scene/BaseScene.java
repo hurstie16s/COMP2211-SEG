@@ -231,24 +231,26 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             r.setRESAHeight(90);
             r.setRESAWidth(240);
             r.setHasRunwayObstacle(true);
-            r.setRunwayDesignatorRight("Void");
+            r.setRunwayDesignatorRight("18L");
             r.setInputRightTora(1000);
             r.setInputRightToda(1500);
             r.setInputRightAsda(1150);
             r.setInputRightLda(1000);
-            r.setClearwayRight(500);
-            r.setStopwayRight(150);
-            r.setDispThresholdRight(0);
-            r.setRunwayDesignatorLeft("Void");
+            //r.setClearwayRight(500);
+            //r.setStopwayRight(150);
+            //r.setDispThresholdRight(0);
+            r.setRunwayDesignatorLeft("36R");
             r.setInputLeftTora(1000);
             r.setInputLeftToda(1500);
             r.setInputLeftAsda(1150);
             r.setInputLeftLda(1000);
-            r.setClearwayLeft(500);
-            r.setStopwayLeft(150);
-            r.setDispThresholdLeft(0);
+            //r.setClearwayLeft(500);
+            //r.setStopwayLeft(150);
+            //r.setDispThresholdLeft(0);
             airport.addRunway(r);
         }
+        appWindow.addAirport(airport);
+
 
     // Initialize the RunwayData object using the columnsEntries elements
         RunwayData runwayData = new RunwayData(
