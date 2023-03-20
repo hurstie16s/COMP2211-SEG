@@ -12,6 +12,7 @@ public class Theme {
     static public Color veryfocusedBG = Color.gray(0.75);
     static public Color extremelyfocusedBG = Color.gray(0.7);
     static public Color fg = Color.gray(0.4);
+    static public Color labelfg = Color.gray(0);
     static public Color grass = Color.web("#93cd81");
     static public Color obstacle = Color.web("#ff0000");
     static public Color slope = Color.web("#008080");
@@ -72,6 +73,7 @@ public class Theme {
         veryfocusedBG = Color.gray(0.25);
         extremelyfocusedBG = Color.gray(0.3);
         fg = Color.gray(0.6);
+        labelfg = Color.gray(1);
         grass = Color.web("#014130");
         obstacle = Color.web("#e3b7b5");
         slope = Color.web("#ecfdec");

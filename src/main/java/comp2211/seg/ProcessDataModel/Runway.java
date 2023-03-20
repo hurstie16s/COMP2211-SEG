@@ -63,7 +63,7 @@ public class Runway {
     private final SimpleDoubleProperty leftAsda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty leftLda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty dispThresholdLeft = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(60);
     /**
      * The Changes history.
      */

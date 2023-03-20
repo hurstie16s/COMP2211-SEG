@@ -599,23 +599,23 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorLeftProperty(),new SimpleBooleanProperty(true)),1,1);
         distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftToraProperty(),new SimpleBooleanProperty(true)),2,1);
         distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftTodaProperty(),new SimpleBooleanProperty(true)),3,1);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftLdaProperty(),new SimpleBooleanProperty(true)),4,1);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftAsdaProperty(),new SimpleBooleanProperty(true)),5,1);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorLeftProperty(),new SimpleBooleanProperty(true)),1,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftAsdaProperty(),new SimpleBooleanProperty(true)),4,1);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftLdaProperty(),new SimpleBooleanProperty(true)),5,1);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorRightProperty(),new SimpleBooleanProperty(true)),1,2);
         distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightToraProperty(),new SimpleBooleanProperty(true)),2,2);
         distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightTodaProperty(),new SimpleBooleanProperty(true)),3,2);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightLdaProperty(),new SimpleBooleanProperty(true)),4,2);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightAsdaProperty(),new SimpleBooleanProperty(true)),5,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightAsdaProperty(),new SimpleBooleanProperty(true)),4,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightLdaProperty(),new SimpleBooleanProperty(true)),5,2);
         distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorLeftProperty(),new SimpleBooleanProperty(true)),1,3);
         distancesGrid.add(makeOutputLabel(appWindow.runway.leftToraProperty(),new SimpleBooleanProperty(true)),2,3);
         distancesGrid.add(makeOutputLabel(appWindow.runway.leftTodaProperty(),new SimpleBooleanProperty(true)),3,3);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.leftLdaProperty(),new SimpleBooleanProperty(true)),4,3);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.leftAsdaProperty(),new SimpleBooleanProperty(true)),5,3);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorLeftProperty(),new SimpleBooleanProperty(true)),1,4);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.leftAsdaProperty(),new SimpleBooleanProperty(true)),4,3);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.leftLdaProperty(),new SimpleBooleanProperty(true)),5,3);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorRightProperty(),new SimpleBooleanProperty(true)),1,4);
         distancesGrid.add(makeOutputLabel(appWindow.runway.rightToraProperty(),new SimpleBooleanProperty(true)),2,4);
         distancesGrid.add(makeOutputLabel(appWindow.runway.rightTodaProperty(),new SimpleBooleanProperty(true)),3,4);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.rightLdaProperty(),new SimpleBooleanProperty(true)),4,4);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.rightAsdaProperty(),new SimpleBooleanProperty(true)),5,4);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.rightAsdaProperty(),new SimpleBooleanProperty(true)),4,4);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.rightLdaProperty(),new SimpleBooleanProperty(true)),5,4);
 
         ArrayList<Pair<String, Pane>> declaredDistances = new ArrayList<>();
         declaredDistances.add(new Pair<>("Declared Distances", distancesGrid));
@@ -658,10 +658,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Pane makeBreakDownPane() {
         ArrayList<Pair<String, Pane>> breakDown = new ArrayList<>();
-        breakDown.add(new Pair<>("TORA", new VBox()));
-        breakDown.add(new Pair<>("TODA", new VBox()));
-        breakDown.add(new Pair<>("ASDA", new VBox()));
-        breakDown.add(new Pair<>("LDA", new VBox()));
+        breakDown.add(new Pair<>("TORA Maths", new VBox()));
+        breakDown.add(new Pair<>("TODA Maths", new VBox()));
+        breakDown.add(new Pair<>("ASDA Maths", new VBox()));
+        breakDown.add(new Pair<>("LDA Maths", new VBox()));
         Pane breakDownPane = new TabLayout(breakDown,Theme.focusedBG,Theme.veryfocusedBG);
         return breakDownPane;
     }

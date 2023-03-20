@@ -368,15 +368,42 @@ public class RunwayScene extends SceneAbstract {
 
     makeScale();
     group.translateXProperty().set(0);
+    makeRunwayOverlay();
+  }
+
+  public void makeRunwayOverlay(){
+
     //CentreLine
     addCuboid(
+            appWindow.runway.dispThresholdLeftProperty().subtract(appWindow.runway.dispThresholdRightProperty()).divide(2),
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
-            new SimpleDoubleProperty(0).multiply(1),
-            (DoubleBinding) Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(scaleFactor).multiply(1),
-            new SimpleDoubleProperty(1).multiply(scaleFactorHeight),
+            appWindow.runway.runwayLengthProperty().subtract(appWindow.runway.dispThresholdLeftProperty()).subtract(appWindow.runway.dispThresholdRightProperty()),
+            new SimpleDoubleProperty(2).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             Color.WHITE);
+
+    //LeftDispThreshold
+    addCuboid(
+            appWindow.runway.runwayLengthProperty().divide(-2).add(appWindow.runway.dispThresholdLeftProperty()),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(4).divide(scaleFactor),
+            appWindow.runway.runwayWidthProperty().multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            Color.WHITE);
+    //RightDispThreshold
+    addCuboid(
+            appWindow.runway.runwayLengthProperty().divide(2).subtract(appWindow.runway.dispThresholdRightProperty()),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(4).divide(scaleFactor),
+            appWindow.runway.runwayWidthProperty().multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            Color.WHITE);
+  }
+  public Group makeRwyID(){
+    return new Group();
   }
 
   /**
