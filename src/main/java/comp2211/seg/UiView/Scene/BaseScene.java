@@ -353,8 +353,38 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         columns.add(col9);
         // create an ObservableList of RunwayData objects
         ObservableList<RunwayData> data = FXCollections.observableArrayList();
-        RunwayData baseData = new RunwayData(
-            makeTableCell(appWindow.runway.runwayDesignatorLeftProperty())
+        RunwayData leftData = new RunwayData(
+            makeTableCell(appWindow.runway.runwayDesignatorLeftProperty()),
+            makeTableCell(appWindow.runway.runwayLengthProperty()),
+            makeTableCell(appWindow.runway.runwayWidthProperty()),
+            new TextField("?"),
+            new TextField("?"),
+            new TextField("?"),
+            new TextField("?"),
+            new TextField("?"),
+            new TextField("?"),
+            new TextField("?"),
+            makeTableCell(appWindow.runway.RESAWidthProperty()),
+            makeTableCell(appWindow.runway.dispThresholdLeftProperty()),
+            makeTableCell(appWindow.runway.stripEndProperty()),
+            new TextField("500m")
+        );
+
+        RunwayData rightData = new RunwayData(
+            makeTableCell(appWindow.runway.runwayDesignatorRightProperty()),
+            makeTableCell(appWindow.runway.runwayLengthProperty()),
+            makeTableCell(appWindow.runway.runwayWidthProperty()),
+            new TextField("?"),
+            new TextField("?"),
+            new TextField("?"),
+            new TextField("?"),
+            new TextField("?"),
+            new TextField("?"),
+            new TextField("?"),
+            makeTableCell(appWindow.runway.RESAWidthProperty()),
+            makeTableCell(appWindow.runway.dispThresholdRightProperty()),
+            makeTableCell(appWindow.runway.stripEndProperty()),
+            new TextField("500m")
         );
         /*RunwayData data1 = new RunwayData(
             "09L",
@@ -376,9 +406,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             "xxxxm",
             "60m",
             "300m");*/
-        data.add(baseData);
-        //data.add(data1);
-        //data.add(data2);
+        data.add(leftData);
+        data.add(rightData);
+
 
         table.setItems(data);
 
