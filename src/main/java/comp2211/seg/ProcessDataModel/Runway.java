@@ -1,6 +1,5 @@
 package comp2211.seg.ProcessDataModel;
 
-import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
@@ -63,7 +62,7 @@ public class Runway {
     private final SimpleDoubleProperty leftAsda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty leftLda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty dispThresholdLeft = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(60);
     /**
      * The Changes history.
      */
@@ -331,11 +330,21 @@ public class Runway {
 
         leftLda.bind(inputLeftLda.subtract(ldaSubtraction));
 
+        // Ensure Declared distance isn't more than original value
+        if (leftLda.get() > inputLeftLda.get()) {
+            leftLda.bind(inputLeftLda);
+        }
+
         logger.info("New LDA calculated for landing over an obstacle for runway "+runwayDesignatorLeft.get());
 
         // Calculate Land Towards for Right
 
         rightLda.bind(runwayObstacle.distFromOtherThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
+
+        // Ensure Declared distance isn't more than original value
+        if (rightLda.get() > inputRightLda.get()) {
+            rightLda.bind(inputRightLda);
+        }
 
         logger.info("New LDA calculated for landing towards and obstacle for runway "+runwayDesignatorRight.get());
     }
@@ -349,6 +358,11 @@ public class Runway {
 
         leftLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
 
+        // Ensure Declared distance isn't more than original value
+        if (leftLda.get() > inputLeftLda.get()) {
+            leftLda.bind(inputLeftLda);
+        }
+
         logger.info("New LDA calculated for landing towards and obstacle for runway "+runwayDesignatorLeft.get());
 
         // Calculate Land Over for Right
@@ -356,6 +370,11 @@ public class Runway {
         var ldaSubtraction = getLdaSubtraction(runwayObstacle.distFromOtherThresholdProperty());
 
         rightLda.bind(inputRightLda.subtract(ldaSubtraction));
+
+        // Ensure Declared distance isn't more than original value
+        if (rightLda.get() > inputRightLda.get()) {
+            rightLda.bind(inputRightLda);
+        }
 
         logger.info("New LDA calculated for landing over an obstacle for runway "+runwayDesignatorRight.get());
 
@@ -415,14 +434,34 @@ public class Runway {
      */
     public void calculateTakeOffToward() {
 
-
+        // Calculate right take-off values, taking off away from the obstacle
         rightTora.bind(runwayObstacle.distFromThresholdProperty().subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).add(dispThresholdLeft));
+
+        // Ensure Declared distance isn't more than original value
+        if (rightTora.get() > inputRightTora.get()) {
+            rightTora.bind(inputRightTora);
+        }
+
         rightAsda.bind(rightTora.add(stopwayLeft));
         rightToda.bind(rightTora.add(clearwayLeft));
 
+        // Calculate left take-off values, taking off towards the obstacle
         leftTora.bind(runwayObstacle.distFromThresholdProperty().add(dispThresholdLeft).subtract(Bindings.max(runwayObstacle.heightProperty().multiply(SLOPE), MINRESA.add(runwayObstacle.widthProperty().divide(2)))).subtract(STRIPEND));
-        leftAsda.bind(leftTora);
-        leftToda.bind(leftTora);
+
+        // Ensure Declared distance isn't more than original value
+        if (leftTora.get() > inputLeftTora.get()) {
+            var distanceFromToraEnd = new SimpleDoubleProperty();
+            distanceFromToraEnd.bind(leftTora.subtract(inputLeftTora));
+            leftTora.bind(inputLeftTora);
+
+            leftAsda.bind(Bindings.min(leftTora.add(distanceFromToraEnd), leftTora.add(stopwayRight)));
+            leftToda.bind(Bindings.min(leftTora.add(distanceFromToraEnd), leftTora.add(clearwayRight)));
+
+        } else {
+            leftAsda.bind(leftTora);
+            leftToda.bind(leftTora);
+        }
+
     }
 
     /**
@@ -430,12 +469,24 @@ public class Runway {
      */
     public void calculateTakeOffAway() {
 
-
-
+        // Calculate right take-off values, taking off towards the obstacle
         rightTora.bind(runwayObstacle.distFromOtherThresholdProperty().add(dispThresholdRightProperty()).subtract(Bindings.max(runwayObstacle.heightProperty().multiply(SLOPE), MINRESA.add(runwayObstacle.widthProperty().divide(2)))).subtract(STRIPEND));
-        rightAsda.bind(rightTora);
-        rightToda.bind(rightTora);
 
+        // Ensure Declared distance isn't more than original value
+        if (rightTora.get() > inputRightTora.get()) {
+            var distanceFromToraEnd = new SimpleDoubleProperty();
+            distanceFromToraEnd.bind(rightTora.subtract(inputRightTora));
+            rightTora.bind(inputRightTora);
+
+            rightAsda.bind(Bindings.min(rightTora.add(distanceFromToraEnd), rightTora.add(stopwayLeft)));
+            rightToda.bind(Bindings.min(rightTora.add(distanceFromToraEnd), rightTora.add(clearwayLeft)));
+
+        } else {
+            rightAsda.bind(rightTora);
+            rightToda.bind(rightTora);
+        }
+
+        // Calculate left take-off values, taking off away from the obstacle
         leftTora.bind(inputLeftTora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).subtract(dispThresholdLeft));
         leftAsda.bind(leftTora.add(stopwayRight));
         leftToda.bind(leftTora.add(clearwayRight));
@@ -728,7 +779,7 @@ public class Runway {
      * @return The value of stopwayRight.
      */
     public double getRightTora() {
-        return (rightTora.get());
+        return rightTora.get();
     }
 
     /**

@@ -1,5 +1,6 @@
 package comp2211.seg.Controller.Stage;
 
+import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -9,7 +10,9 @@ public class Theme {
     static public Color unfocusedBG = Color.gray(0.9);
     static public Color focusedBG = Color.gray(0.8);
     static public Color veryfocusedBG = Color.gray(0.75);
+    static public Color extremelyfocusedBG = Color.gray(0.7);
     static public Color fg = Color.gray(0.4);
+    static public Color labelfg = Color.gray(0);
     static public Color grass = Color.web("#93cd81");
     static public Color obstacle = Color.web("#ff0000");
     static public Color slope = Color.web("#008080");
@@ -68,7 +71,9 @@ public class Theme {
         unfocusedBG = Color.gray(0.1);
         focusedBG = Color.gray(0.2);
         veryfocusedBG = Color.gray(0.25);
+        extremelyfocusedBG = Color.gray(0.3);
         fg = Color.gray(0.6);
+        labelfg = Color.gray(1);
         grass = Color.web("#014130");
         obstacle = Color.web("#e3b7b5");
         slope = Color.web("#ecfdec");
@@ -89,6 +94,7 @@ public class Theme {
         unfocusedBG = inverse(unfocusedBG);
         focusedBG = inverse(focusedBG);
         veryfocusedBG = inverse(veryfocusedBG);
+        extremelyfocusedBG = inverse(extremelyfocusedBG);
         fg = inverse(fg);
         grass = inverse(grass);
         obstacle = inverse(obstacle);
@@ -105,6 +111,11 @@ public class Theme {
         resa = inverse(resa);
         stripend = inverse(stripend);
         blastallowance = inverse(blastallowance);
+
+
+    }
+
+    public static void retheme(Scene scene) {
 
     }
 }

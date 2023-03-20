@@ -11,6 +11,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.AmbientLight;
@@ -25,6 +26,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -359,24 +362,72 @@ public class RunwayScene extends SceneAbstract {
     addTopView();
     makeRunway();
     makeCGA(false);
+    buildLabels();
+
+    makeScale();
+    group.translateXProperty().set(0);
+    makeRunwayOverlay();
     try {
       renderObstacle();
     } catch (Exception e){
       logger.error(e);
     }
-    buildLabels();
+  }
+
+  public void makeRunwayOverlay(){
+
+    //LeftDispThreshold
+    addCuboid(
+            appWindow.runway.runwayLengthProperty().divide(-2).add(appWindow.runway.dispThresholdLeftProperty()),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(4).divide(scaleFactor),
+            appWindow.runway.runwayWidthProperty().multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            Color.WHITE);
+    //RightDispThreshold
+    addCuboid(
+            appWindow.runway.runwayLengthProperty().divide(2).subtract(appWindow.runway.dispThresholdRightProperty()),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(4).divide(scaleFactor),
+            appWindow.runway.runwayWidthProperty().multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            Color.WHITE);
+    TextFlow leftDesignator = makeRwyID(appWindow.runway.runwayDesignatorLeftProperty());
+    leftDesignator.getTransforms().addAll(new Rotate(90, Rotate.Z_AXIS));
+    leftDesignator.translateYProperty().bind(leftDesignator.widthProperty().divide(-2));
+    leftDesignator.translateXProperty().bind(appWindow.runway.runwayLengthProperty().divide(-2).add(appWindow.runway.dispThresholdLeftProperty()).multiply(scaleFactor).add(leftDesignator.heightProperty().add(10)));
+    group.getChildren().add(leftDesignator);
+    TextFlow rightDesignator = makeRwyID(appWindow.runway.runwayDesignatorRightProperty());
+    rightDesignator.getTransforms().addAll(new Rotate(-90, Rotate.Z_AXIS));
+    rightDesignator.translateYProperty().bind(rightDesignator.widthProperty().divide(2));
+    rightDesignator.translateXProperty().bind(appWindow.runway.runwayLengthProperty().divide(2).subtract(appWindow.runway.dispThresholdRightProperty()).multiply(scaleFactor).subtract(rightDesignator.heightProperty().add(10)));
+    group.getChildren().add(rightDesignator);
+
 
     //CentreLine
     addCuboid(
+            appWindow.runway.dispThresholdLeftProperty().add(leftDesignator.heightProperty().add(10)).subtract(appWindow.runway.dispThresholdRightProperty()).subtract(rightDesignator.heightProperty().add(10)).divide(2),
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
-            new SimpleDoubleProperty(0).multiply(1),
-            (DoubleBinding) Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(scaleFactor).multiply(1),
-            new SimpleDoubleProperty(1).multiply(1),
+            appWindow.runway.runwayLengthProperty().subtract(appWindow.runway.dispThresholdLeftProperty()).subtract(appWindow.runway.dispThresholdRightProperty()).subtract(leftDesignator.heightProperty().add(rightDesignator.heightProperty()).add(30).divide(scaleFactor)),
+            new SimpleDoubleProperty(2).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             Color.WHITE);
-    makeScale();
-    group.translateXProperty().set(0);
+
+  }
+  public TextFlow makeRwyID(SimpleStringProperty designator){
+    Group id = new Group();
+    Text text = new Text(designator.getValue());
+    text.textProperty().bind(designator);
+    Text bars = new Text("\n||||| |||||");
+    text.setFont(Theme.font);
+    text.setFill(Theme.labelfg);
+    bars.setFill(Theme.labelfg);
+    TextFlow data = new TextFlow(text,bars);
+    data.setTextAlignment(TextAlignment.CENTER);
+    return data;
   }
 
   /**

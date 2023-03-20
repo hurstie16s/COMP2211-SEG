@@ -2,6 +2,7 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
+import comp2211.seg.Controller.Stage.Settings;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.Controller.Stage.Theme;
@@ -95,7 +96,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //left menu
         //top
         ComboBox airportsCombo = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
-        airportsCombo.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+        airportsCombo.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
         airportsCombo.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
@@ -116,7 +117,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //bottom
 
         ComboBox runwaysCombo = new ComboBox(FXCollections.observableArrayList(appWindow.airport.getRunways())); //FXCollections.observableArrayList(appWindow.airport.getRunways()));
-        runwaysCombo.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+        runwaysCombo.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
         runwaysCombo.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
@@ -173,7 +174,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         darkButtons.add(importButton);
 
         for (Button button : darkButtons) {
-            button.getStyleClass().add("button-dark");
+            button.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+            button.setTextFill(Theme.fg);
         }
 
         HBox hBoxMenuButtons = new HBox();
@@ -556,6 +558,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().widthProperty()),1,3);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().distFromThresholdProperty()),1,4);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().distFromOtherThresholdProperty()),1,5);
+        obstacleData.add(makeButton(appWindow.runway.hasRunwayObstacleProperty(),"No","Yes"),1,6);
         obstacleData.getChildren().forEach(new Consumer<Node>() {
             @Override
             public void accept(Node node) {
@@ -606,23 +609,23 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorLeftProperty(),new SimpleBooleanProperty(true)),1,1);
         distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftToraProperty(),new SimpleBooleanProperty(true)),2,1);
         distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftTodaProperty(),new SimpleBooleanProperty(true)),3,1);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftLdaProperty(),new SimpleBooleanProperty(true)),4,1);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftAsdaProperty(),new SimpleBooleanProperty(true)),5,1);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorLeftProperty(),new SimpleBooleanProperty(true)),1,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftAsdaProperty(),new SimpleBooleanProperty(true)),4,1);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftLdaProperty(),new SimpleBooleanProperty(true)),5,1);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorRightProperty(),new SimpleBooleanProperty(true)),1,2);
         distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightToraProperty(),new SimpleBooleanProperty(true)),2,2);
         distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightTodaProperty(),new SimpleBooleanProperty(true)),3,2);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightLdaProperty(),new SimpleBooleanProperty(true)),4,2);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightAsdaProperty(),new SimpleBooleanProperty(true)),5,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightAsdaProperty(),new SimpleBooleanProperty(true)),4,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightLdaProperty(),new SimpleBooleanProperty(true)),5,2);
         distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorLeftProperty(),new SimpleBooleanProperty(true)),1,3);
         distancesGrid.add(makeOutputLabel(appWindow.runway.leftToraProperty(),new SimpleBooleanProperty(true)),2,3);
         distancesGrid.add(makeOutputLabel(appWindow.runway.leftTodaProperty(),new SimpleBooleanProperty(true)),3,3);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.leftLdaProperty(),new SimpleBooleanProperty(true)),4,3);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.leftAsdaProperty(),new SimpleBooleanProperty(true)),5,3);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorLeftProperty(),new SimpleBooleanProperty(true)),1,4);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.leftAsdaProperty(),new SimpleBooleanProperty(true)),4,3);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.leftLdaProperty(),new SimpleBooleanProperty(true)),5,3);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorRightProperty(),new SimpleBooleanProperty(true)),1,4);
         distancesGrid.add(makeOutputLabel(appWindow.runway.rightToraProperty(),new SimpleBooleanProperty(true)),2,4);
         distancesGrid.add(makeOutputLabel(appWindow.runway.rightTodaProperty(),new SimpleBooleanProperty(true)),3,4);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.rightLdaProperty(),new SimpleBooleanProperty(true)),4,4);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.rightAsdaProperty(),new SimpleBooleanProperty(true)),5,4);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.rightAsdaProperty(),new SimpleBooleanProperty(true)),4,4);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.rightLdaProperty(),new SimpleBooleanProperty(true)),5,4);
 
         ArrayList<Pair<String, Pane>> declaredDistances = new ArrayList<>();
         declaredDistances.add(new Pair<>("Declared Distances", distancesGrid));
@@ -665,10 +668,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Pane makeBreakDownPane() {
         ArrayList<Pair<String, Pane>> breakDown = new ArrayList<>();
-        breakDown.add(new Pair<>("TORA", new VBox()));
-        breakDown.add(new Pair<>("TODA", new VBox()));
-        breakDown.add(new Pair<>("ASDA", new VBox()));
-        breakDown.add(new Pair<>("LDA", new VBox()));
+        breakDown.add(new Pair<>("TORA Maths", new VBox()));
+        breakDown.add(new Pair<>("TODA Maths", new VBox()));
+        breakDown.add(new Pair<>("ASDA Maths", new VBox()));
+        breakDown.add(new Pair<>("LDA Maths", new VBox()));
         Pane breakDownPane = new TabLayout(breakDown,Theme.focusedBG,Theme.veryfocusedBG);
         return breakDownPane;
     }
@@ -738,11 +741,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         RunwayScene runwayScene3 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
         runwayScene3.build();
-        runwayScene3.angleXProperty().set(180);
-        runwayScene3.angleYProperty().set(0);
-        runwayScene3.angleZProperty().set(-90);
+        if (Settings.portrait.get()) {
+            runwayScene3.angleXProperty().set(180);
+            runwayScene3.angleYProperty().set(0);
+            runwayScene3.angleZProperty().set(-90);
+            runwayScene3.portrait.set(true);
+        }
         VBox topView = new VBox(runwayScene3.getRoot());
-        runwayScene3.portrait.set(true);
 
         runwayScene3.root.maxWidthProperty().bind(topView.widthProperty());
         runwayScene3.root.minWidthProperty().bind(topView.widthProperty());
@@ -751,10 +756,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         RunwayScene runwayScene4 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
         runwayScene4.build();
-        runwayScene4.angleYProperty().set(90);
-        runwayScene4.angleXProperty().set(90);
+        if (Settings.portrait.get()) {
+            runwayScene4.angleYProperty().set(90);
+            runwayScene4.angleXProperty().set(90);
+            runwayScene4.portrait.set(true);
+        }else {
+            runwayScene4.toggleView();
+        }
         VBox sideView = new VBox(runwayScene4.getRoot());
-        runwayScene4.portrait.set(true);
 
         runwayScene4.root.maxWidthProperty().bind(sideView.widthProperty());
         runwayScene4.root.minWidthProperty().bind(sideView.widthProperty());
@@ -817,6 +826,82 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    /**
+     * Creates a new Button with the specified label and adds it to the given parent Pane.
+     *
+     * @param label1  the label to use for the first Button.
+     * @param label2  the label to use for the second Button.
+     * @return the created Button Node.
+     */
+    public Node makeButton(SimpleBooleanProperty property, String label1, String label2) {
+        HBox segment = new HBox();
+        ToggleButton button = new ToggleButton(label1);
+        ToggleButton button2 = new ToggleButton(label2);
+        button.setFont(Theme.font);
+        button.setTextFill(Theme.fg);
+        button .setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+        button2.setFont(Theme.font);
+        button2.setTextFill(Theme.fg);
+        button2.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+        segment.getChildren().addAll(button,button2);
+        button.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (button2.selectedProperty().get() == t1){
+                    button2.selectedProperty().set(!t1);
+                }
+                if (t1) {
+                    property.set(true);
+                    button2.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
+                    button2.setTextFill(Theme.fg);
+                    button.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+                    button.setTextFill(Theme.unfocusedBG);
+                }
+            }
+        });
+        button2.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (button.selectedProperty().get() == t1){
+                    button.selectedProperty().set(!t1);
+                }
+                if (t1) {
+                    property.set(false);
+                    button2.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+                    button2.setTextFill(Theme.unfocusedBG);
+                    button.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
+                    button.setTextFill(Theme.fg);
+                }
+            }
+        });
+        segment.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                button.setMinWidth(0);
+                button2.setMinWidth(0);
+                button.setMinWidth(t1.doubleValue() /2-10);
+                button2.setMinWidth(t1.doubleValue() /2-10);
+                button.setMaxWidth(t1.doubleValue() /2);
+                button2.setMaxWidth(t1.doubleValue() /2);
+            }
+        });
+        segment.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                button.setMinHeight(0);
+                button2.setMinHeight(0);
+                button.setMinHeight(t1.doubleValue()-10);
+                button2.setMinHeight(t1.doubleValue()-10);
+                button.setMaxHeight(t1.doubleValue());
+                button2.setMaxHeight(t1.doubleValue());
+            }
+        });
+
+        button.selectedProperty().set(property.get());
+        button2.selectedProperty().set(!property.get());
+        segment.setPadding(new Insets(0,0,0,10));
+        return segment;
     }
 
 }

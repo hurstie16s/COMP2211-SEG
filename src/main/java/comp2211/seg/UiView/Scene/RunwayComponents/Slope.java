@@ -85,8 +85,8 @@ public class Slope extends MeshView {
                 logger.info(t1);
             }
         });
-        bottom.bind(z.multiply(scaleFactorDepth).multiply(-1));
-        top.bind(h.add(z).multiply(scaleFactorDepth).multiply(-1));
+        bottom.bind(z.multiply(scaleFactorDepth).multiply(-1).subtract(0.1));
+        top.bind(h.add(z).multiply(scaleFactorDepth).multiply(-1).subtract(0.1));
         for (Property prop: new Property[] {
                 front,
                 back,
@@ -111,6 +111,10 @@ public class Slope extends MeshView {
     public void makePrism(float [] coords, int[] faces){
         TriangleMesh mesh = new TriangleMesh();
         mesh.getPoints().addAll(coords);
+        int faceSmoothingGroups[] = {
+                0, 0, 0, 0, 0, 0, 0, 0
+        };
+        mesh.getFaceSmoothingGroups().addAll(faceSmoothingGroups);
         mesh.getFaces().addAll(faces);
         mesh.getTexCoords().setAll(1,1,
                 1,1,
@@ -135,14 +139,14 @@ public class Slope extends MeshView {
                 end.get(), back.get(), bottom.get(),
                 start.get(), back.get(), top.get()
         }, new int[]{
-                0, 0, 2, 0, 1, 0,
-                3, 0, 4, 0, 5, 0,
-                0, 0, 4, 0, 3, 0,
-                0, 0, 1, 0, 4, 0,
-                0, 0, 3, 0, 5, 0,
-                0, 0, 5, 0, 2, 0,
-                1, 0, 5, 0, 4, 0,
-                1, 0, 2, 0, 5, 0,
+                2, 0, 0, 0, 1, 0,
+                4, 0, 3, 0, 5, 0,
+                4, 0, 0, 0, 3, 0,
+                1, 0, 0, 0, 4, 0,
+                3, 0, 0, 0, 5, 0,
+                5, 0, 0, 0, 2, 0,
+                5, 0, 1, 0, 4, 0,
+                2, 0, 1, 0, 5, 0,
         });
     }
 }

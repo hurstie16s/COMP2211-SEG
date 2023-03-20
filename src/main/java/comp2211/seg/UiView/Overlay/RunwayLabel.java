@@ -57,14 +57,14 @@ public class RunwayLabel extends Group {
         Group labelRotateGroup = new Group();
         label = new Text(name);
         label.textProperty().bind((new SimpleStringProperty(name)).concat(" (").concat(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(length.asString()).otherwise(length.multiply(-1).asString())).concat(scene.appWindow.runway.unitsProperty()).concat(")"));
-        label.setFill(color);
+        label.setFill(Theme.labelfg);
         label.setFont(Theme.font);
         if (direction) {
             label.yProperty().set(label.getBoundsInLocal().getHeight() / 2 + 8);
-            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 + 5);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2);
         } else {
             label.yProperty().set(-5);
-            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 - 5);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 - 10);
         }
 
         labelRotateGroup.getTransforms().addAll(
@@ -98,14 +98,14 @@ public class RunwayLabel extends Group {
                 xOffset,
                 (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
-                color
+                Color.WHITE
         );
 
         Group rightVertical = makeLineVertical(
                 xOffset.subtract(length),
                 (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
-                color
+                Color.WHITE
         );
 
         leftHorizontal.getTransforms().add(xRotate);
