@@ -44,8 +44,8 @@ public class Runway {
     if the azimuth of the centre-line is 153 then the runway designator will be 15
     followed by either L C or R to differentiate between parallel runways
      */
-    private final SimpleStringProperty runwayDesignatorLeft = new SimpleStringProperty("VOID");
-    private final SimpleStringProperty runwayDesignatorRight = new SimpleStringProperty("VOID");
+    private final SimpleStringProperty runwayDesignatorLeft = new SimpleStringProperty("00L");
+    private final SimpleStringProperty runwayDesignatorRight = new SimpleStringProperty("18R");
     private final SimpleDoubleProperty inputRightTora = new SimpleDoubleProperty(1000);
     private final SimpleDoubleProperty inputRightToda = new SimpleDoubleProperty(1500);
     private final SimpleDoubleProperty inputRightAsda = new SimpleDoubleProperty(1150);

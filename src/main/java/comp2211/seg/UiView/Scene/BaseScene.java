@@ -218,6 +218,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     }
 
     public void importButtonEvent() {
+        logger.info("importButtonEvent");
         String tempInputProtocol = "Airport,RD:09L,RWY:l1/w1,RS:l2/w2,SWY:l3/w3,CWY:l4/w4,RESA:l5/w5,TD:n1,SE:n2,BP:n3";
         String betterTempInputProtocol = "Airport:09L,l1,w1,l2,w2,l3,w3,l4,w4,l5,w5,n1,n2,n3";
         String[] extractAirportAndColumns = betterTempInputProtocol.split(":");
@@ -254,6 +255,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
     // Initialize the RunwayData object using the columnsEntries elements
+        /* NEED TO CHANGE TO TEXT FIELDS
         RunwayData runwayData = new RunwayData(
             columnsEntries[0], // column1
             columnsEntries[1], // column21
@@ -269,10 +271,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             columnsEntries[11], // column7
             columnsEntries[12], // column8
             columnsEntries[13] // column9
-        );
+        ); */
 
 // Use the runwayData object
-        System.out.println(runwayData);
+        logger.info("endOfImportbuttonEvent");
     }
 
     public TableView<RunwayData> buildTableView(VBox container) {
@@ -350,7 +352,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         columns.add(col9);
         // create an ObservableList of RunwayData objects
         ObservableList<RunwayData> data = FXCollections.observableArrayList();
-        RunwayData baseData = new RunwayData();
+        RunwayData baseData = new RunwayData(
+            makeTableCell(appWindow.runway.runwayDesignatorLeftProperty())
+        );
         /*RunwayData data1 = new RunwayData(
             "09L",
             "xxxxm", "xxxxm",
@@ -643,6 +647,30 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                     } else {
                         try {
                             property.set(Double.parseDouble(t1));
+                        } catch (Exception e) {
+                            displayErrorMessage("Invalid Entry", t1 + " must be a number");
+                            textField.setText(s);
+                        }
+                    }
+                }
+            }
+        });
+        return textField;
+    }
+
+    private TextField makeTableCell(SimpleStringProperty property){
+        TextField textField = new TextField();
+        textField.textProperty().bind(property);
+        textField.editableProperty().set(false);
+        textField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if (!s.equals(t1)){
+                    if (Objects.equals(t1, "")) {
+                        property.set("");
+                    } else {
+                        try {
+                            property.set(t1);
                         } catch (Exception e) {
                             displayErrorMessage("Invalid Entry", t1 + " must be a number");
                             textField.setText(s);
