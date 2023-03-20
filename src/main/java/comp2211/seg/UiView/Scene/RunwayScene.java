@@ -11,6 +11,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.AmbientLight;
@@ -401,9 +402,11 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.runwayWidthProperty().multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             Color.WHITE);
+    makeRwyID(appWindow.runway.runwayDesignatorLeftProperty());
   }
-  public Group makeRwyID(){
-    return new Group();
+  public Group makeRwyID(SimpleStringProperty designator){
+    Group id = new Group();
+    return id;
   }
 
   /**
