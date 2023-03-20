@@ -133,6 +133,7 @@ public class AppWindow {
         currentScene = newScene;
         stage.setScene(currentScene);
         Theme.retheme(currentScene);
+        currentScene.makeHelp(false);
 
         // Initialise the scene when ready
         Platform.runLater(() -> currentScene.initialise());

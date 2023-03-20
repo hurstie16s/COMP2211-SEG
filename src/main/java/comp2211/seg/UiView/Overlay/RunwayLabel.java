@@ -98,14 +98,14 @@ public class RunwayLabel extends Group {
                 xOffset,
                 (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
-                Color.WHITE
+                Theme.labelfg
         );
 
         Group rightVertical = makeLineVertical(
                 xOffset.subtract(length),
                 (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
-                Color.WHITE
+                Theme.labelfg
         );
 
         leftHorizontal.getTransforms().add(xRotate);

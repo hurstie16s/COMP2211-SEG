@@ -159,6 +159,9 @@ public class RunwayScene extends SceneAbstract {
         case T:
           toggleView();
           break;
+        case H:
+          help.toggleHelp(this.getClass().getCanonicalName());
+          break;
       }
     }));
     setOnMousePressed(event -> {

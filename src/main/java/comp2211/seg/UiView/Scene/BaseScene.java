@@ -61,6 +61,15 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     @Override
     public void initialise() {
 
+        setOnKeyPressed((keyEvent -> {
+            switch (keyEvent.getCode()){
+                case H:
+                    help.toggleHelp(this.getClass().getCanonicalName());
+                    break;
+                case ESCAPE:
+                    Platform.runLater(appWindow::startHomeScene);
+            }
+        }));
     }
 
     public void build()  {
