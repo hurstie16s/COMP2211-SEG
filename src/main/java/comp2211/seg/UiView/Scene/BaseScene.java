@@ -29,6 +29,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -564,14 +565,18 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         posSlider.minProperty().bind(appWindow.runway.runwayObstacle.widthProperty().divide(-2));
         posSlider.maxProperty().bind(appWindow.runway.runwayLengthProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)));
         posSlider.valueProperty().bindBidirectional(appWindow.runway.runwayObstacle.distFromThresholdProperty());
-        VBox posLeft = new VBox(makeOutputLabel(new SimpleStringProperty("Left"),new SimpleBooleanProperty(true)),makeOutputLabel(appWindow.runway.runwayObstacle.distFromThresholdProperty(),new SimpleBooleanProperty(true),5));
-        VBox posRight = new VBox(makeOutputLabel(new SimpleStringProperty("Right"),new SimpleBooleanProperty(true)),makeOutputLabel(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty(),new SimpleBooleanProperty(true),5));
+        VBox posLeft = new VBox(makeOutputLabel(new SimpleStringProperty("Left"),new SimpleBooleanProperty(true),18),makeOutputLabel(appWindow.runway.runwayObstacle.distFromThresholdProperty(),new SimpleBooleanProperty(true),5));
+        VBox posRight = new VBox(makeOutputLabel(new SimpleStringProperty("Right"),new SimpleBooleanProperty(true),18),makeOutputLabel(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty(),new SimpleBooleanProperty(true),5));
         posRight.setAlignment(Pos.CENTER_RIGHT);
 
-        HBox posvals = new HBox(posLeft,posRight);
+        BorderPane posvals = new BorderPane();
+        posvals.setLeft(posLeft);
+        posvals.setRight(posRight);
         VBox position = new VBox(posSlider,posvals);
-        posvals.maxWidthProperty().bind(position.widthProperty());
-        posvals.minWidthProperty().bind(position.widthProperty());
+        position.setAlignment(Pos.CENTER);
+        posvals.maxWidthProperty().bind(position.widthProperty().subtract(10));
+        posvals.minWidthProperty().bind(position.widthProperty().subtract(10));
+        posvals.setPadding(new Insets(5));
         obstacleData.add(position,1,5);
         obstacleData.getChildren().forEach(new Consumer<Node>() {
             @Override
@@ -586,9 +591,19 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return obstacleOptionsPane;
     }
 
+    private Node makeOutputLabel(SimpleStringProperty string, SimpleBooleanProperty visibility, int i) {
+        Label data = new Label();
+        data.setFont(new Font(Theme.font.getName(),i));
+        data.setTextFill(Theme.fg);
+        data.setText(String.valueOf(string.getValue()));
+        data.textProperty().bind(Bindings.when(visibility).then(string).otherwise(new
+                SimpleStringProperty("Error")));
+        return data;
+    }
+
     private Node makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility, int i) {
         Label data = new Label();
-        data.setFont(Theme.font);
+        data.setFont(Theme.fontsmall);
         data.setTextFill(Theme.fg);
         data.setText(String.valueOf(property.getValue()));
         property.addListener(new ChangeListener<Number>() {

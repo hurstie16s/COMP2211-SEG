@@ -56,7 +56,13 @@ public class RunwayLabel extends Group {
 
         Group labelRotateGroup = new Group();
         label = new Text(name);
-        label.textProperty().bind((new SimpleStringProperty(name)).concat(" (").concat(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(length.asString()).otherwise(length.multiply(-1).asString())).concat(scene.appWindow.runway.unitsProperty()).concat(")"));
+        length.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                label.textProperty().bind((new SimpleStringProperty(name)).concat(" (").concat(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(Long.toString(Math.round(length.get()))).otherwise(Long.toString(Math.round(length.get()*-1)))).concat(scene.appWindow.runway.unitsProperty()).concat(")"));
+            }
+        });
+        label.textProperty().bind((new SimpleStringProperty(name)).concat(" (").concat(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(Long.toString(Math.round(length.get()))).otherwise(Long.toString(Math.round(length.get()*-1)))).concat(scene.appWindow.runway.unitsProperty()).concat(")"));
         label.setFill(Theme.labelfg);
         label.setFont(Theme.font);
         if (direction) {
