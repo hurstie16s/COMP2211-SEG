@@ -512,6 +512,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().widthProperty()),1,3);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().distFromThresholdProperty()),1,4);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().distFromOtherThresholdProperty()),1,5);
+        obstacleData.add(makeButton(appWindow.runway.hasRunwayObstacleProperty(),"No","Yes"),1,6);
         obstacleData.getChildren().forEach(new Consumer<Node>() {
             @Override
             public void accept(Node node) {
@@ -749,6 +750,82 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    /**
+     * Creates a new Button with the specified label and adds it to the given parent Pane.
+     *
+     * @param label1  the label to use for the first Button.
+     * @param label2  the label to use for the second Button.
+     * @return the created Button Node.
+     */
+    public Node makeButton(SimpleBooleanProperty property, String label1, String label2) {
+        HBox segment = new HBox();
+        ToggleButton button = new ToggleButton(label1);
+        ToggleButton button2 = new ToggleButton(label2);
+        button.setFont(Theme.font);
+        button.setTextFill(Theme.fg);
+        button .setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+        button2.setFont(Theme.font);
+        button2.setTextFill(Theme.fg);
+        button2.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+        segment.getChildren().addAll(button,button2);
+        button.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (button2.selectedProperty().get() == t1){
+                    button2.selectedProperty().set(!t1);
+                }
+                if (t1) {
+                    property.set(true);
+                    button2.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
+                    button2.setTextFill(Theme.fg);
+                    button.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+                    button.setTextFill(Theme.unfocusedBG);
+                }
+            }
+        });
+        button2.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (button.selectedProperty().get() == t1){
+                    button.selectedProperty().set(!t1);
+                }
+                if (t1) {
+                    property.set(false);
+                    button2.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+                    button2.setTextFill(Theme.unfocusedBG);
+                    button.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
+                    button.setTextFill(Theme.fg);
+                }
+            }
+        });
+        segment.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                button.setMinWidth(0);
+                button2.setMinWidth(0);
+                button.setMinWidth(t1.doubleValue() /2-10);
+                button2.setMinWidth(t1.doubleValue() /2-10);
+                button.setMaxWidth(t1.doubleValue() /2);
+                button2.setMaxWidth(t1.doubleValue() /2);
+            }
+        });
+        segment.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                button.setMinHeight(0);
+                button2.setMinHeight(0);
+                button.setMinHeight(t1.doubleValue()-10);
+                button2.setMinHeight(t1.doubleValue()-10);
+                button.setMaxHeight(t1.doubleValue());
+                button2.setMaxHeight(t1.doubleValue());
+            }
+        });
+
+        button.selectedProperty().set(property.get());
+        button2.selectedProperty().set(!property.get());
+        segment.setPadding(new Insets(0,0,0,10));
+        return segment;
     }
 
 }

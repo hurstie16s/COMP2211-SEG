@@ -9,6 +9,7 @@ public class Theme {
     static public Color unfocusedBG = Color.gray(0.9);
     static public Color focusedBG = Color.gray(0.8);
     static public Color veryfocusedBG = Color.gray(0.75);
+    static public Color extremelyfocusedBG = Color.gray(0.7);
     static public Color fg = Color.gray(0.4);
     static public Color grass = Color.web("#93cd81");
     static public Color obstacle = Color.web("#ff0000");
@@ -68,6 +69,7 @@ public class Theme {
         unfocusedBG = Color.gray(0.1);
         focusedBG = Color.gray(0.2);
         veryfocusedBG = Color.gray(0.25);
+        extremelyfocusedBG = Color.gray(0.3);
         fg = Color.gray(0.6);
         grass = Color.web("#014130");
         obstacle = Color.web("#e3b7b5");
@@ -89,6 +91,7 @@ public class Theme {
         unfocusedBG = inverse(unfocusedBG);
         focusedBG = inverse(focusedBG);
         veryfocusedBG = inverse(veryfocusedBG);
+        extremelyfocusedBG = inverse(extremelyfocusedBG);
         fg = inverse(fg);
         grass = inverse(grass);
         obstacle = inverse(obstacle);
