@@ -20,6 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -543,21 +544,35 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         obstacleData.getColumnConstraints().addAll(cc1,cc2);
 
         ArrayList<RowConstraints> rc = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 5; i++) {
 
             RowConstraints rcx = new RowConstraints();
             rcx.setPercentHeight(100/7);
             rc.add(rcx);
         }
+        RowConstraints rcx = new RowConstraints();
+        rcx.setPercentHeight(200/7);
+        rc.add(rcx);
         obstacleData.getRowConstraints().addAll(rc);
 
-        obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height"),makeLabel("Length"),makeLabel("Width"),makeLabel("Left Displacement"),makeLabel("Right Displacement"),makeLabel("Currently Active?"));
+        obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height"),makeLabel("Length"),makeLabel("Width"),makeLabel("Currently Active?"),makeLabel("Position"));
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().heightProperty()),1,1);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().lengthProperty()),1,2);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().widthProperty()),1,3);
-        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().distFromThresholdProperty()),1,4);
-        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().distFromOtherThresholdProperty()),1,5);
-        obstacleData.add(makeButton(appWindow.runway.hasRunwayObstacleProperty(),"No","Yes"),1,6);
+        obstacleData.add(makeButton(appWindow.runway.hasRunwayObstacleProperty(),"No","Yes"),1,4);
+        Slider posSlider = new Slider();
+        posSlider.minProperty().bind(appWindow.runway.runwayObstacle.widthProperty().divide(-2));
+        posSlider.maxProperty().bind(appWindow.runway.runwayLengthProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)));
+        posSlider.valueProperty().bindBidirectional(appWindow.runway.runwayObstacle.distFromThresholdProperty());
+        VBox posLeft = new VBox(makeOutputLabel(new SimpleStringProperty("Left"),new SimpleBooleanProperty(true)),makeOutputLabel(appWindow.runway.runwayObstacle.distFromThresholdProperty(),new SimpleBooleanProperty(true),5));
+        VBox posRight = new VBox(makeOutputLabel(new SimpleStringProperty("Right"),new SimpleBooleanProperty(true)),makeOutputLabel(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty(),new SimpleBooleanProperty(true),5));
+        posRight.setAlignment(Pos.CENTER_RIGHT);
+
+        HBox posvals = new HBox(posLeft,posRight);
+        VBox position = new VBox(posSlider,posvals);
+        posvals.maxWidthProperty().bind(position.widthProperty());
+        posvals.minWidthProperty().bind(position.widthProperty());
+        obstacleData.add(position,1,5);
         obstacleData.getChildren().forEach(new Consumer<Node>() {
             @Override
             public void accept(Node node) {
@@ -570,6 +585,27 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         Pane obstacleOptionsPane = new TabLayout(obstacleOptions,Theme.focusedBG,Theme.veryfocusedBG);
         return obstacleOptionsPane;
     }
+
+    private Node makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility, int i) {
+        Label data = new Label();
+        data.setFont(Theme.font);
+        data.setTextFill(Theme.fg);
+        data.setText(String.valueOf(property.getValue()));
+        property.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if (!t1.equals(number)){
+                    data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(property.asString().get().substring(0,i)).concat(appWindow.runway.unitsProperty())).otherwise(new
+                            SimpleStringProperty("Error")));
+                }
+            }
+        });
+        data.textProperty().bind(Bindings.when(visibility).then(property.asString().concat(appWindow.runway.unitsProperty())).otherwise(new
+                SimpleStringProperty("Error")));
+        return data;
+
+    }
+
     private Pane makeDistancesPane() {
         GridPane distancesGrid = new GridPane();
         distancesGrid.add(makeLabel("Designator"),1,0);
