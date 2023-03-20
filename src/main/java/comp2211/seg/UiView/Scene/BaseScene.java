@@ -595,12 +595,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 if (!t1.equals(number)){
-                    data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(property.asString().get().substring(0,i)).concat(appWindow.runway.unitsProperty())).otherwise(new
+                    data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
                             SimpleStringProperty("Error")));
                 }
             }
         });
-        data.textProperty().bind(Bindings.when(visibility).then(property.asString().concat(appWindow.runway.unitsProperty())).otherwise(new
+        data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
                 SimpleStringProperty("Error")));
         return data;
 
