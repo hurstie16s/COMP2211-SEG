@@ -1,5 +1,6 @@
 package comp2211.seg.Controller.Stage;
 
+import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -108,6 +109,11 @@ public class Theme {
         resa = inverse(resa);
         stripend = inverse(stripend);
         blastallowance = inverse(blastallowance);
+
+
+    }
+
+    public static void retheme(Scene scene) {
 
     }
 }

@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * The AppWindow class is responsible for managing the application's window and scenes.
@@ -131,6 +132,7 @@ public class AppWindow {
         newScene.build();
         currentScene = newScene;
         stage.setScene(currentScene);
+        Theme.retheme(currentScene);
 
         // Initialise the scene when ready
         Platform.runLater(() -> currentScene.initialise());

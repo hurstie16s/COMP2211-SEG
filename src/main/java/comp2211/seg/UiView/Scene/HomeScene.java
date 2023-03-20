@@ -6,13 +6,16 @@ import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Airport;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -24,6 +27,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * A concrete implementation of the SceneAbstract class representing the home scene of the application.
@@ -142,6 +148,9 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
       }
     });
     airports.valueProperty().set(appWindow.airport);
+
+
+
     Button startApplication = new Button("Start Application");
     startApplication.setOnMousePressed(this::startApplication);
     Button importAirport = new Button("Import Airport");

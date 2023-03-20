@@ -95,7 +95,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //left menu
         //top
         ComboBox airportsCombo = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
-        airportsCombo.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+        airportsCombo.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
         airportsCombo.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
@@ -116,7 +116,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //bottom
 
         ComboBox runwaysCombo = new ComboBox(FXCollections.observableArrayList(appWindow.airport.getRunways())); //FXCollections.observableArrayList(appWindow.airport.getRunways()));
-        runwaysCombo.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+        runwaysCombo.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
         runwaysCombo.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
@@ -173,7 +173,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         darkButtons.add(importButton);
 
         for (Button button : darkButtons) {
-            button.getStyleClass().add("button-dark");
+            button.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+            button.setTextFill(Theme.fg);
         }
 
         HBox hBoxMenuButtons = new HBox();
