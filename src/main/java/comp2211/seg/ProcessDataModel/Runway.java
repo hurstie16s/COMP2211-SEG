@@ -63,10 +63,7 @@ public class Runway {
     private final SimpleDoubleProperty leftLda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty dispThresholdLeft = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(60);
-    /**
-     * The Changes history.
-     */
-    public TextFlow changesHistory = new TextFlow();
+
 
     public Obstacle runwayObstacle = new Obstacle("One", 10,0,0);
 
@@ -1187,10 +1184,6 @@ public class Runway {
         return rightLand;
     }
 
-    public TextFlow getChangesHistory() {
-        return changesHistory;
-    }
-
     public double getMINRESA() {
         return MINRESA.get();
     }
@@ -1346,13 +1339,8 @@ public class Runway {
     public void setDispThresholdLeft(double dispThresholdLeft) {
         this.dispThresholdLeft.set(dispThresholdLeft);
     }
-
     public void setDispThresholdRight(double dispThresholdRight) {
         this.dispThresholdRight.set(dispThresholdRight);
-    }
-
-    public void setChangesHistory(TextFlow changesHistory) {
-        this.changesHistory = changesHistory;
     }
 
     public void setRunwayObstacle(Obstacle runwayObstacle) {

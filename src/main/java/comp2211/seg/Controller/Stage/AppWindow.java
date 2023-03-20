@@ -9,6 +9,7 @@ import comp2211.seg.UiView.Scene.*;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,6 +35,11 @@ public class AppWindow {
 
     public Runway runway;
     public Airport airport;
+
+    /**
+     * The Changes history.
+     */
+    public TextFlow changesHistory  = new TextFlow();
 
     /**
      * Constructs an AppWindow object with the specified stage, width, and height.

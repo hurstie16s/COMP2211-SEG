@@ -29,6 +29,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -45,6 +46,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     //logger for BaseScene
     private static final Logger logger = LogManager.getLogger(BaseScene.class);
+
+
 
     /**
      * Constructor to create a SceneAbstract object.
@@ -515,7 +518,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Pane makeChangeHistoryPane() {
         ArrayList<Pair<String, Pane>> changeHistory = new ArrayList<>();
-        ScrollPane history = new ScrollPane(appWindow.runway.changesHistory);
+        ScrollPane history = new ScrollPane(appWindow.changesHistory);
         history.setFitToWidth(true);
         history.setPadding(new Insets(16));
         changeHistory.add(new Pair<>("Change History", new BorderPane(history)));
