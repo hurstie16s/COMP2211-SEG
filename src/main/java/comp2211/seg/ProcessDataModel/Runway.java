@@ -1,6 +1,5 @@
 package comp2211.seg.ProcessDataModel;
 
-import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
@@ -489,12 +488,6 @@ public class Runway {
 
         // Calculate left take-off values, taking off away from the obstacle
         leftTora.bind(inputLeftTora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).subtract(dispThresholdLeft));
-
-        // Ensure Declared distance isn't more than original value
-        if (leftTora.get() > inputLeftTora.get()) {
-            leftTora.bind(inputLeftTora);
-        }
-
         leftAsda.bind(leftTora.add(stopwayRight));
         leftToda.bind(leftTora.add(clearwayRight));
     }
@@ -786,7 +779,7 @@ public class Runway {
      * @return The value of stopwayRight.
      */
     public double getRightTora() {
-        return (rightTora.get());
+        return rightTora.get();
     }
 
     /**
