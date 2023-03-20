@@ -519,6 +519,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private Pane makeChangeHistoryPane() {
         ArrayList<Pair<String, Pane>> changeHistory = new ArrayList<>();
         ScrollPane history = new ScrollPane(appWindow.changesHistory);
+        appWindow.receiveHistoryMsg("Hello Runway tool");
         history.setFitToWidth(true);
         history.setPadding(new Insets(16));
         changeHistory.add(new Pair<>("Change History", new BorderPane(history)));

@@ -9,6 +9,7 @@ import comp2211.seg.UiView.Scene.*;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -181,6 +182,11 @@ public class AppWindow {
 
     public ArrayList<Airport> getAirports() {
         return airports;
+    }
+
+    public void receiveHistoryMsg (String history) {
+        Text msg = new Text(history);
+        changesHistory.getChildren().add(msg);
     }
 
 }
