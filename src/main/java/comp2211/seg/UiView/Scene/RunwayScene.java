@@ -366,17 +366,17 @@ public class RunwayScene extends SceneAbstract {
     }
     buildLabels();
 
+    makeScale();
+    group.translateXProperty().set(0);
     //CentreLine
     addCuboid(
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(0).multiply(1),
             (DoubleBinding) Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(scaleFactor).multiply(1),
-            new SimpleDoubleProperty(1).multiply(1),
+            new SimpleDoubleProperty(1).multiply(scaleFactorHeight),
             new SimpleDoubleProperty(0).multiply(1),
             Color.WHITE);
-    makeScale();
-    group.translateXProperty().set(0);
   }
 
   /**
