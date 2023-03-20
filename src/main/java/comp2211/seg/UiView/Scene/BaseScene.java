@@ -700,11 +700,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         RunwayScene runwayScene3 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
         runwayScene3.build();
-        runwayScene3.angleXProperty().set(180);
-        runwayScene3.angleYProperty().set(0);
-        runwayScene3.angleZProperty().set(-90);
+        //runwayScene3.angleXProperty().set(180);
+        //runwayScene3.angleYProperty().set(0);
+        //runwayScene3.angleZProperty().set(-90);
+        //runwayScene3.portrait.set(true);
         VBox topView = new VBox(runwayScene3.getRoot());
-        runwayScene3.portrait.set(true);
 
         runwayScene3.root.maxWidthProperty().bind(topView.widthProperty());
         runwayScene3.root.minWidthProperty().bind(topView.widthProperty());
@@ -713,10 +713,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         RunwayScene runwayScene4 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
         runwayScene4.build();
-        runwayScene4.angleYProperty().set(90);
-        runwayScene4.angleXProperty().set(90);
+        //runwayScene4.angleYProperty().set(90);
+        //runwayScene4.angleXProperty().set(90);
+        //runwayScene4.portrait.set(true);
+        runwayScene4.toggleView();
         VBox sideView = new VBox(runwayScene4.getRoot());
-        runwayScene4.portrait.set(true);
 
         runwayScene4.root.maxWidthProperty().bind(sideView.widthProperty());
         runwayScene4.root.minWidthProperty().bind(sideView.widthProperty());
