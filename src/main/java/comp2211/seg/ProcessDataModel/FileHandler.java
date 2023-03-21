@@ -69,7 +69,7 @@ public class FileHandler {
                 Element rightElement = document.createElement("Right_Properties");
                 runwayElement.appendChild(rightElement);
                 appendElementWithNewline(rightElement, "Designator", runway.getRunwayDesignatorRight(), document);
-                appendElementWithNewline(rightElement, "TORA", Double.toString(runway.getRightTora()), document);
+                appendElementWithNewline(rightElement, "TORA", Double.toString(runway.getInputRightTora()), document);
                 appendElementWithNewline(rightElement, "TODA", Double.toString(runway.getRightToda()), document);
                 appendElementWithNewline(rightElement, "ASDA", Double.toString(runway.getRightAsda()), document);
                 appendElementWithNewline(rightElement, "LDA", Double.toString(runway.getRightLda()), document);

@@ -119,6 +119,10 @@ public class HelpScene extends Scene {
                 case "comp2211.seg.UiView.Scene.RunwayScene":
                     makeKey("Esc", "Navigate back to home screen");
                     makeKey("T", "Toggle between top and side views");
+                    makeKey("W", "Pan view up");
+                    makeKey("S", "Pan view down");
+                    makeKey("A", "Pan view left");
+                    makeKey("D", "Pan view right");
                     runwayLabels();
                     break;
                 case "comp2211.seg.UiView.Scene.RunwaySceneLoader":
@@ -128,12 +132,10 @@ public class HelpScene extends Scene {
                     break;
                 case "comp2211.seg.UiView.Scene.MainScene":
                     makeKey("Esc", "Exit application");
-                    makeText("The square in the top left corner shows the scale of the runway (10x100".concat(appWindow.runway.getUnits()).concat(")"));
                     runwayLabels();
                     break;
                 case "comp2211.seg.UiView.Scene.BaseScene":
                     makeKey("Esc", "Exit application");
-                    makeText("The square in the top left corner shows the scale of the runway (10x100".concat(appWindow.runway.getUnits()).concat(")"));
                     runwayLabels();
                     break;
 

@@ -52,8 +52,13 @@ public class AppWindow {
         addAirport(new Airport("Heathrow"));
         addAirport(new Airport("Gatwick"));
         addAirport(new Airport("Southampton"));
+        for (Airport a: airports) {
+            a.makeRunway();
+        }
         airport = airports.get(0);
         airport.makeRunway();
+
+        runway = airport.getRunways().get(0);
         // Setup appWindow
         setupStage();
         startHomeScene();
@@ -62,8 +67,6 @@ public class AppWindow {
     }
     public void addAirport(Airport airport){
         airports.add(airport);
-        runway = airport.getRunways().get(0);
-        runway.addObstacle(new Obstacle("VOID", 0, 0));
     }
     public void setAirport(Airport airport){
         if (airport.name.equals("")){

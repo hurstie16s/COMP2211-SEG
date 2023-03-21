@@ -39,7 +39,6 @@ public class Airport {
     public Airport(String name) {
         runways = new ArrayList<>();
         this.name = name;
-        makeRunway();
     }
     public String toString(){
         return name;
