@@ -134,4 +134,9 @@ public class Obstacle {
     public SimpleDoubleProperty distFromOtherThresholdProperty() {
         return distFromOtherThreshold;
     }
+
+    @Override
+    public String toString() {
+        return obstacleDesignator.get();
+    }
 }
