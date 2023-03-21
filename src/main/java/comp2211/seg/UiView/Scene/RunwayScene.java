@@ -439,13 +439,25 @@ public class RunwayScene extends SceneAbstract {
   }
   public TextFlow makeRwyID(SimpleStringProperty designator){
     Group id = new Group();
-    Text text = new Text(designator.getValue());
-    text.textProperty().bind(designator);
+    Text rwyDir = new Text(designator.getValue());
+    Text rwyLabel = new Text(designator.getValue());
+
+    designator.addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+        rwyDir.textProperty().set(t1.substring(0,2));
+        rwyLabel.textProperty().set(t1.substring(2));
+      }
+    });
+    rwyDir.textProperty().set(designator.getValue().substring(0,2));
+    rwyLabel.textProperty().set(designator.getValue().substring(2));
+    rwyDir.setFont(Theme.font);
+    rwyDir.setFill(Theme.labelfg);
+    rwyLabel.setFont(Theme.font);
+    rwyLabel.setFill(Theme.labelfg);
     Text bars = new Text("\n||||| |||||");
-    text.setFont(Theme.font);
-    text.setFill(Theme.labelfg);
     bars.setFill(Theme.labelfg);
-    TextFlow data = new TextFlow(text,bars);
+    TextFlow data = new TextFlow(rwyDir,new Text("\n"),rwyLabel,bars);
     data.setTextAlignment(TextAlignment.CENTER);
     return data;
   }
