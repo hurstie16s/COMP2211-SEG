@@ -66,7 +66,10 @@ public class FileHandler {
                     appendElementWithNewline(ObstacleElement,"Obstacle_Height", Double.toString(runway.getRunwayObstacle().getHeight()), document);
                     appendElementWithNewline(ObstacleElement, "Obstacle_Width", Double.toString(runway.getRunwayObstacle().getWidth()), document);
                     appendElementWithNewline(ObstacleElement, "Obstacle_Length", Double.toString(runway.getRunwayObstacle().getLength()), document);
+                    logger.info("Runway has Obstacles");
 
+                } else {
+                    logger.info("Runway has no Obstacles");
                 }
 
                 Element rightElement = document.createElement("Right_Properties");
@@ -132,21 +135,10 @@ public class FileHandler {
             Element rootElement = document.createElement("Obstacle");
             document.appendChild(rootElement);
 
-            Element obstacleDesignator = document.createElement("Obstacle_Designator");
-            obstacleDesignator.appendChild(document.createTextNode(obstacle.getObstacleDesignator()));
-            rootElement.appendChild(obstacleDesignator);
+            appendElementWithNewline(rootElement,"Height", Double.toString(obstacle.getHeight()), document);
+            appendElementWithNewline(rootElement,"Width", Double.toString(obstacle.getWidth()), document);
+            appendElementWithNewline(rootElement,"Width", Double.toString(obstacle.getLength()), document);
 
-            Element height = document.createElement("Height");
-            height.appendChild(document.createTextNode(Double.toString(obstacle.getHeight())));
-            rootElement.appendChild(height);
-
-            Element width = document.createElement("Width");
-            width.appendChild(document.createTextNode(Double.toString(obstacle.getWidth())));
-            rootElement.appendChild(width);
-
-            Element length = document.createElement("Length");
-            length.appendChild(document.createTextNode(Double.toString(obstacle.getLength())));
-            rootElement.appendChild(length);
 
             DOMSource domSource = new DOMSource(document);
             StreamResult res = new StreamResult(file);

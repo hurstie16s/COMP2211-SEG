@@ -173,6 +173,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         exportAirObsButton.setOnAction(e -> {
             exportAirportButtonEvent();
         });
+
+        exportObstacle.setOnAction(e -> {
+            exportObstacleButtonEvent();
+        });
 //        importButton.setOnAction(e -> {
 //            importButtonEvent();
 //        });
@@ -247,6 +251,36 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             logger.info("No airport initiated, hence: " +
                 "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
                 "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
+        }
+    }
+
+    public void exportObstacleButtonEvent() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose file to export");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml"));
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        try {
+            if (file == null) {
+                return;
+            }
+
+            if (!file.getName().contains(".xml")) {
+                logger.info("reached");
+                file = new File(file.getAbsolutePath() + ".xml");
+                logger.info(file.getAbsolutePath());
+            }
+
+            if (FileHandler.exportObstacle(file, appWindow.runway.runwayObstacle)) {
+                FileHandler.exportObstacle(file, appWindow.runway.runwayObstacle);
+                logger.info("Exporting Successful");
+            } else {
+                logger.info("Exporting Obstacle failed");
+            }
+        } catch (NullPointerException nullPointerException) {
+            logger.info("No Obstacle initiated, hence: " +
+                    "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
+                    "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
         }
     }
 
