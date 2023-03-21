@@ -183,7 +183,6 @@ public class Runway {
      * Removing the obstacle from the runway
      */
     public void removeObstacle() {
-        runwayObstacle = null;
         hasRunwayObstacle.set(false);
         logger.info("Removed Obstacle from runway " + runwayDesignatorLeft.get());
         logger.info("Return runway to original state");
