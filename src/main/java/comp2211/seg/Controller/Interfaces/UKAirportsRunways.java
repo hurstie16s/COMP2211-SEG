@@ -4,6 +4,28 @@ package comp2211.seg.Controller.Interfaces;
  * UK Airport Runways data 2021
  */
 public interface UKAirportsRunways {
+  String[] AIRPORT_NAMES = {
+      "Heathrow (LHR)",
+      "Gatwick (LGW)",
+      "Manchester (MAN)",
+      "Stansted (STN)",
+      "Luton (LTN)",
+      "Edinburgh (EDI)",
+      "Birmingham (BHX)",
+      "Glasgow (GLA)",
+      "Bristol (BRS)",
+      "Newcastle (NCL)",
+      "East Midlands (EMA)",
+      "Liverpool John Lennon (LPL)",
+      "London City (LCY)",
+      "Leeds Bradford (LBA)",
+      "Belfast International (BFS)",
+      "Aberdeen International (ABZ)",
+      "Southampton (SOU)",
+      "Cardiff (CWL)",
+      "Glasgow Prestwick (PIK)",
+      "London Southend (SEN)"
+  };
   // London Heathrow Airport
   String LHR_RUNWAY_09L_27R = "09L/27R";
   int LHR_TORA_09L = 3902; // meters
