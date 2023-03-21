@@ -172,15 +172,15 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         Button exportObstacle = new Button("Export Obstacle", exportIcon2);
         Button importObstacle = new Button("Import Obstacle", importIcon2);
 
-        /*
+
         //Button events
-        exportButton.setOnAction(e -> {
+        exportAirObsButton.setOnAction(e -> {
             exportButtonEvent();
         });
-        importButton.setOnAction(e -> {
-            importButtonEvent();
-        });
-         */
+//        importButton.setOnAction(e -> {
+//            importButtonEvent();
+//        });
+//
 
         // Set the size of the icon
         exportIcon1.setFitHeight(16);
