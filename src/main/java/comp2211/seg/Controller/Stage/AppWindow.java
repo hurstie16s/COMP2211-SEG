@@ -121,6 +121,14 @@ public class AppWindow {
     }
 
     /**
+     * Starts the runway scene.
+     */
+    public void startRunwaySceneRotated() {
+        startRunwayScene();
+        ((RunwayScene) currentScene).toggleView();
+    }
+
+    /**
      * Loads a new scene.
      *
      * @param newScene the scene to load
@@ -178,4 +186,8 @@ public class AppWindow {
         return airports;
     }
 
+    public void startBaseSceneObstacle() {
+        loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
+        ((BaseScene) currentScene).selectObstacleMenu();
+    }
 }

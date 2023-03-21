@@ -143,7 +143,7 @@ public class RunwayScene extends SceneAbstract {
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
-          appWindow.startBaseScene();
+          appWindow.startBaseSceneObstacle();
           break;
         case W:
           group.translateYProperty().set(group.getTranslateY()-10);

@@ -47,6 +47,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     //logger for BaseScene
     private static final Logger logger = LogManager.getLogger(BaseScene.class);
+    private TabLayout tabLayout;
+
 
     /**
      * Constructor to create a SceneAbstract object.
@@ -73,6 +75,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             }
         }));
     }
+    public void selectObstacleMenu(){
+        tabLayout.tabButtons.get(1).fire();
+    }
 
     public void build()  {
         super.build();
@@ -84,7 +89,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
         tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
-        TabLayout tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
+        tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
         mainPane.maxHeightProperty().bind(root.heightProperty());
         mainPane.minHeightProperty().bind(root.heightProperty());
         mainPane.maxWidthProperty().bind(root.widthProperty());
@@ -829,9 +834,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         runwayScene4.root.maxHeightProperty().bind(sideView.heightProperty());
         runwayScene4.root.minHeightProperty().bind(sideView.heightProperty());
 
-        dualView.setOnMousePressed((e) -> appWindow.startRunwayScene());
+        runwayScene1.getRoot().setOnMousePressed((e) -> appWindow.startRunwayScene());
+        runwayScene2.getRoot().setOnMousePressed((e) -> appWindow.startRunwaySceneRotated());
         topView.setOnMousePressed((e) -> appWindow.startRunwayScene());
-        sideView.setOnMousePressed((e) -> appWindow.startRunwayScene());
+        sideView.setOnMousePressed((e) -> appWindow.startRunwaySceneRotated());
 
 
 
