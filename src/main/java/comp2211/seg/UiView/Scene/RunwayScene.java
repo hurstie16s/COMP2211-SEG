@@ -55,6 +55,7 @@ public class RunwayScene extends SceneAbstract {
    * The camera used to view the runway scene.
    */
   protected PerspectiveCamera camera;
+  protected Box background ;
 
   /**
    * A boolean flag indicating whether the scene is in "view" mode.
@@ -320,7 +321,7 @@ public class RunwayScene extends SceneAbstract {
    * Creates a background box, adds a phong material and sets it to the group.
    */
   public void makeBackground() {
-    Box background = new Box(width,height,0);
+    background = new Box(width,height,0);
     PhongMaterial material = new PhongMaterial();
 //material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
     material.setDiffuseColor(Theme.grass);
@@ -554,9 +555,11 @@ public class RunwayScene extends SceneAbstract {
   public void refresh(){
     refresh.set(refresh.not().get());
     if (refresh.get()){
-      appWindow.currentScene.getWindow().setWidth(getWidth()-0.0001);
+      //appWindow.currentScene.getWindow().setWidth(getWidth()-0.0001);
+      background.translateZProperty().set(background.translateZProperty().get()+0.0001);
     }else {
-      appWindow.currentScene.getWindow().setWidth(getWidth()+0.0001);
+      //appWindow.currentScene.getWindow().setWidth(getWidth()+0.0001);
+      background.translateZProperty().set(background.translateZProperty().get()-0.0001);
 
     }
   }
