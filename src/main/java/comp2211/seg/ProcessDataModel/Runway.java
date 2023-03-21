@@ -107,7 +107,7 @@ public class Runway {
                 runwayDesignatorLeft,
                 runwayLength,
                 hasRunwayObstacle,
-                direction
+                direction,
         }) {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
@@ -196,6 +196,7 @@ public class Runway {
     public void recalculate(){
 
         logger.info("Recalculating runway values");
+        System.out.println("test");
         rightTora.bind(inputRightTora);
         rightToda.bind(inputRightToda);
         rightAsda.bind(inputRightAsda);
@@ -207,7 +208,7 @@ public class Runway {
 
         if (hasRunwayObstacle.get()) {
             logger.info("Runway has obstacle: calculation methods will be called");
-            if (runwayObstacle.getDistFromThreshold() *  2 > runwayLength.get()) {
+            if (direction.get()) {
                 logger.info("Calculate take-off towards for left");
                 logger.info("Calculate land towards for right");
                 calculateTakeOffToward();
