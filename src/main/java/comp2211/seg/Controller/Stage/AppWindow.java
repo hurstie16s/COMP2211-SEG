@@ -56,7 +56,6 @@ public class AppWindow {
             a.makeRunway();
         }
         airport = airports.get(0);
-        airport.makeRunway();
 
         runway = airport.getRunways().get(0);
         // Setup appWindow
@@ -119,8 +118,8 @@ public class AppWindow {
      * Starts the runway scene.
      */
     public void startRunwayScene() {
-        loadScene(new RunwayScene(new Pane(),this,getWidth(),getHeight(),true));
-        //loadScene(new RunwaySceneLoader(new Pane(),this,getWidth(),getHeight()));
+        //loadScene(new RunwayScene(new Pane(),this,getWidth(),getHeight(),true));
+        loadScene(new RunwaySceneLoader(new Pane(),this,getWidth(),getHeight()));
     }
 
     /**
@@ -128,7 +127,13 @@ public class AppWindow {
      */
     public void startRunwaySceneRotated() {
         startRunwayScene();
-        ((RunwayScene) currentScene).toggleView();
+        try {
+
+            ((RunwayScene) currentScene).toggleView();
+        }catch (Exception e){
+
+            ((RunwaySceneLoader) currentScene).scene.toggleView();
+        }
     }
 
     /**

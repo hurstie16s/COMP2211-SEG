@@ -50,10 +50,12 @@ public class RunwayScene extends SceneAbstract {
    */
   public AppWindow appWindow;
 
+  public SimpleBooleanProperty sideProperty = new SimpleBooleanProperty(false);
+
   /**
    * The camera used to view the runway scene.
    */
-  protected PerspectiveCamera camera;
+  public PerspectiveCamera camera;
   protected Box background ;
 
   /**
@@ -65,22 +67,22 @@ public class RunwayScene extends SceneAbstract {
   /**
    * The x-coordinate of the mouse when it is clicked.
    */
-  private double x;
+  public double x;
 
   /**
    * The y-coordinate of the mouse when it is clicked.
    */
-  private double y;
+  public double y;
 
   /**
    * The x angle of rotation of the runway scene.
    */
-  private double anglex = 0;
+  public double anglex = 0;
 
   /**
    * The y angle of rotation of the runway scene.
    */
-  private double angley = 0;
+  public double angley = 0;
 
   protected SimpleDoubleProperty scaleFactor = new SimpleDoubleProperty(0.5);
   protected SimpleDoubleProperty scaleFactorHeight = new SimpleDoubleProperty(2);
@@ -91,17 +93,17 @@ public class RunwayScene extends SceneAbstract {
   /**
    * A DoubleProperty object representing the x angle of rotation of the runway scene.
    */
-  private final DoubleProperty angleXProperty = new SimpleDoubleProperty();
+  public final DoubleProperty angleXProperty = new SimpleDoubleProperty();
 
   /**
    * A DoubleProperty object representing the y angle of rotation of the runway scene.
    */
-  private final DoubleProperty angleYProperty = new SimpleDoubleProperty();
+  public final DoubleProperty angleYProperty = new SimpleDoubleProperty();
 
   /**
    * A DoubleProperty object representing the z angle of rotation of the runway scene.
    */
-  private final DoubleProperty angleZProperty = new SimpleDoubleProperty();
+  public final DoubleProperty angleZProperty = new SimpleDoubleProperty();
   /**
    * A DoubleProperty object representing the x angle of rotation of the runway scene.
    */
@@ -172,8 +174,10 @@ public class RunwayScene extends SceneAbstract {
       angley = angleZProperty.get();
     });
     setOnMouseDragged(event ->{
-      angleXProperty.set(Math.min(Math.max(anglex + y - event.getSceneY(),-90),0));
-      angleZProperty.set(angley - x + event.getSceneX());
+      if (!sideProperty.get()) {
+        //angleXProperty.set(Math.min(Math.max(anglex + y - event.getSceneY(), -90), 0));
+        angleZProperty.set(angley - x + event.getSceneX());
+      }
     });
     setOnScroll(event -> camera.translateZProperty().set(camera.getTranslateZ()+event.getDeltaY()));
   }
@@ -211,6 +215,7 @@ public class RunwayScene extends SceneAbstract {
     view = !view;
     if (view){
       angleXProperty.set(-90);
+      sideProperty.set(true);
     }
     else{
       angleXProperty.set(0);
