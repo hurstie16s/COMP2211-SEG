@@ -85,6 +85,7 @@ public class RunwayScene extends SceneAbstract {
   protected SimpleDoubleProperty scaleFactor = new SimpleDoubleProperty(0.5);
   protected SimpleDoubleProperty scaleFactorHeight = new SimpleDoubleProperty(2);
   protected SimpleDoubleProperty scaleFactorDepth = new SimpleDoubleProperty(4);
+  protected SimpleBooleanProperty refresh = new SimpleBooleanProperty(true);
 
 
   /**
@@ -353,7 +354,21 @@ public class RunwayScene extends SceneAbstract {
     scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));
     mainPane.getChildren().add(group);
 
+    addListeners();
 
+
+  }
+  public void addListeners(){
+    ChangeListener refresh = new ChangeListener<>() {
+      @Override
+      public void changed(ObservableValue<?> observableValue, Object o, Object t1) {
+        refresh();
+      }
+    };
+    appWindow.runway.runwayObstacle.widthProperty().addListener(refresh);
+    appWindow.runway.runwayObstacle.lengthProperty().addListener(refresh);
+    appWindow.runway.runwayObstacle.heightProperty().addListener(refresh);
+    appWindow.runway.runwayObstacle.distFromThresholdProperty().addListener(refresh);
   }
   public void render(){
     group.getChildren().removeAll(group.getChildren());
@@ -533,6 +548,16 @@ public class RunwayScene extends SceneAbstract {
             new SimpleDoubleProperty(5).multiply(1),
             Theme.stopway);
 
+  }
+
+  public void refresh(){
+    refresh.set(refresh.not().get());
+    if (refresh.get()){
+      appWindow.currentScene.getWindow().setWidth(getWidth()-0.0001);
+    }else {
+      appWindow.currentScene.getWindow().setWidth(getWidth()+0.0001);
+
+    }
   }
   /**
    * Creates the Cleared and Graded Area (CGA) and adds it to the 3D group.

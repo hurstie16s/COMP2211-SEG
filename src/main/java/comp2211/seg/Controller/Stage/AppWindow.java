@@ -26,7 +26,7 @@ public class AppWindow {
     private final Stage stage;
     private final int width;
     private final int height;
-    private SceneAbstract currentScene;
+    public SceneAbstract currentScene;
     private ArrayList<Airport> airports;
     private Scene scene;
 

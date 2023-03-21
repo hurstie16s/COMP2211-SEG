@@ -32,7 +32,7 @@ public class RunwaySceneLoader extends SceneAbstract{
                     break;
                 case H:
                     help.toggleHelp(this.getClass().getName());
-                    scene.render();
+                    scene.refresh();
                     break;
             }
         }));
