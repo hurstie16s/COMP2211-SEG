@@ -18,6 +18,28 @@
 .scroll-pane{
    -fx-background-color: transparent;
 }
+.text-field {
+    -fx-background-color: rgba(65, 65, 65, 255);
+    -fx-background-insets: 0;
+    -fx-padding: 0 0 0 0;
+    -fx-text-fill: rgba(180, 180, 180, 255);
+}
+.text-field:focused {
+    -fx-background-color: rgba(65, 65, 65, 255);
+    -fx-text-fill: rgba(255, 255, 255, 255);
+}
+.table-cell:filled {
+    -fx-background-color: rgba(65, 65, 65, 255);
+    -fx-text-fill: rgba(180, 180, 180, 255);
+}
+
+.table-view:row-selection .table-row-cell:selected .table-cell {
+    -fx-background-color: rgba(65, 65, 65, 255);
+}
+
+.table-view:cell-selection .table-cell:selected {
+    -fx-background-color: rgba(65, 65, 65, 255);
+}
 .combo-box {
     -fx-background-color: rgba(39, 39, 39, 255);
 }.combo-box .list-cell {
