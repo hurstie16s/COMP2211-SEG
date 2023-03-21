@@ -26,6 +26,48 @@ public interface UKAirportsRunways {
       "Glasgow Prestwick (PIK)",
       "London Southend (SEN)"
   };
+  String[][] AIRPORT_RUNWAYS = {
+      // Heathrow Airport
+      {"09L/27R", "09R/27L"},
+      // Gatwick Airport
+      {"08L/26R", "08R/26L"},
+      // Manchester Airport
+      {"05L/23R", "05R/23L"},
+      // Stansted Airport
+      {"04/22"},
+      // Luton Airport
+      {"08/26"},
+      // Edinburgh Airport
+      {"06/24"},
+      // Birmingham Airport
+      {"15/33"},
+      // Glasgow Airport
+      {"05/23"},
+      // Bristol Airport
+      {"09/27"},
+      // Newcastle Airport
+      {"07/25"},
+      // East Midlands Airport
+      {"09/27"},
+      // Liverpool John Lennon Airport
+      {"09/27"},
+      // London City Airport
+      {"09/27"},
+      // Leeds Bradford Airport
+      {"14/32"},
+      // Belfast International Airport
+      {"07/25"},
+      // Aberdeen International Airport
+      {"16/34"},
+      // Southampton Airport
+      {"02/20"},
+      // Cardiff Airport
+      {"12/30"},
+      // Glasgow Prestwick Airport
+      {"03/21"},
+      // London Southend Airport
+      {"06/24"}
+  };
   // London Heathrow Airport
   String LHR_RUNWAY_09L_27R = "09L/27R";
   int LHR_TORA_09L = 3902; // meters
