@@ -711,7 +711,16 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         data.setFont(Theme.font);
         data.setTextFill(Theme.fg);
         data.setText(String.valueOf(property.getValue()));
-        data.textProperty().bind(Bindings.when(visibility).then(property.asString().concat(appWindow.runway.unitsProperty())).otherwise(new
+        property.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if (!t1.equals(number)){
+                    data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
+                            SimpleStringProperty("Error")));
+                }
+            }
+        });
+        data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
                 SimpleStringProperty("Error")));
         return data;
     }
