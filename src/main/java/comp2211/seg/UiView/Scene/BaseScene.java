@@ -637,7 +637,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         rc.add(rcx);
         obstacleData.getRowConstraints().addAll(rc);
 
-        obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height"),makeLabel("Width"),makeLabel("Length"),makeLabel("Currently Active?"),makeLabel("Position"));
+        obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height (m)"),makeLabel("Width (m)"),makeLabel("Length (m)"),makeLabel("Currently Active?"),makeLabel("Position"));
 
         // Obstacle preset dropdown selector
         obstacleData.add(obstacleComboBox,1,0);
