@@ -368,19 +368,23 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         columns.add(col8);
         columns.add(col9);
         // create an ObservableList of RunwayData objects
-        ObservableList<RunwayData> data = FXCollections.observableArrayList();
+        ObservableList<RunwayData> runway1Data = FXCollections.observableArrayList();
         RunwayData leftData = new RunwayData(
             makeTableCell(appWindow.runway.runwayDesignatorLeftProperty()),
+            //runway
             makeTableCell(appWindow.runway.runwayLengthProperty()),
             makeTableCell(appWindow.runway.runwayWidthProperty()),
+            //strip
             new TextField("?"),
             new TextField("?"),
+            //stopway
+            makeTableCell(appWindow.runway.stopwayLeftProperty()),
             new TextField("?"),
-            new TextField("?"),
-            new TextField("?"),
-            new TextField("?"),
+            //clearway
+            makeTableCell(appWindow.runway.clearwayLeftProperty()),
             new TextField("?"),
             makeTableCell(appWindow.runway.RESAWidthProperty()),
+            makeTableCell(appWindow.runway.RESAHeightProperty()),
             makeTableCell(appWindow.runway.dispThresholdLeftProperty()),
             makeTableCell(appWindow.runway.stripEndProperty()),
             new TextField("500m")
@@ -388,16 +392,20 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         RunwayData rightData = new RunwayData(
             makeTableCell(appWindow.runway.runwayDesignatorRightProperty()),
+            //runway
             makeTableCell(appWindow.runway.runwayLengthProperty()),
             makeTableCell(appWindow.runway.runwayWidthProperty()),
+            //strip
             new TextField("?"),
             new TextField("?"),
+            //stopway
+            makeTableCell(appWindow.runway.stopwayRightProperty()),
             new TextField("?"),
-            new TextField("?"),
-            new TextField("?"),
-            new TextField("?"),
+            //clearway
+            makeTableCell(appWindow.runway.clearwayRightProperty()),
             new TextField("?"),
             makeTableCell(appWindow.runway.RESAWidthProperty()),
+            makeTableCell(appWindow.runway.RESAHeightProperty()),
             makeTableCell(appWindow.runway.dispThresholdRightProperty()),
             makeTableCell(appWindow.runway.stripEndProperty()),
             new TextField("500m")
@@ -422,11 +430,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             "xxxxm",
             "60m",
             "300m");*/
-        data.add(leftData);
-        data.add(rightData);
+        runway1Data.add(leftData);
+        runway1Data.add(rightData);
 
 
-        table.setItems(data);
+        table.setItems(runway1Data);
 
         table.fixedCellSizeProperty().bind(container.heightProperty()
             .subtract(55).divide(2));//table.getItems().size()));
@@ -450,20 +458,20 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     }
     private <T> TableColumn<RunwayData, T> createColumn(String columnName) {
         TableColumn<RunwayData, T> tableColumn = new TableColumn<>(columnName);
-        tableColumn.setCellFactory(column -> {
-            TableCell<RunwayData, T> cell = new TableCell<RunwayData, T>() {
-                @Override
-                protected void updateItem(T item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        setText(item.toString());
-                    }
-                }
-            };
-            return cell;
-        });
+        //tableColumn.setCellFactory(column -> {
+        //    TableCell<RunwayData, T> cell = new TableCell<RunwayData, T>() {
+        //        @Override
+        //        protected void updateItem(T item, boolean empty) {
+        //            super.updateItem(item, empty);
+        //            if (empty || item == null) {
+        //                setText(null);
+        //            } else {
+        //                setText(item.toString());
+        //            }
+        //        }
+        //    };
+        //    return cell;
+        //});
         return tableColumn;
     }
 
@@ -743,23 +751,23 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         TextField textField = new TextField();
         textField.textProperty().bind(property.asString());
         textField.editableProperty().set(false);
-        textField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                if (!s.equals(t1)){
-                    if (Objects.equals(t1, "")) {
-                        property.set(0);
-                    } else {
-                        try {
-                            property.set(Double.parseDouble(t1));
-                        } catch (Exception e) {
-                            displayErrorMessage("Invalid Entry", t1 + " must be a number");
-                            textField.setText(s);
-                        }
-                    }
-                }
-            }
-        });
+        //textField.textProperty().addListener(new ChangeListener<String>() {
+        //    @Override
+        //    public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+        //        if (!s.equals(t1)){
+        //            if (Objects.equals(t1, "")) {
+        //                property.set(0);
+        //            } else {
+        //                try {
+        //                    property.set(Double.parseDouble(t1));
+        //                } catch (Exception e) {
+        //                    displayErrorMessage("Invalid Entry", t1 + " must be a number");
+        //                    textField.setText(s);
+        //                }
+        //            }
+        //        }
+        //    }
+        //});
         return textField;
     }
 
@@ -770,6 +778,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         textField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                System.out.println(t1);
                 if (!s.equals(t1)){
                     if (Objects.equals(t1, "")) {
                         property.set("");
