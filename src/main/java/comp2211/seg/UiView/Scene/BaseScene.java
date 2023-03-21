@@ -6,6 +6,7 @@ import comp2211.seg.Controller.Stage.Settings;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.Controller.Stage.Theme;
+import comp2211.seg.ProcessDataModel.Obstacle;
 import comp2211.seg.ProcessDataModel.Runway;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -569,6 +570,19 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     }
 
     private Pane makeObstacleOptionsPane() {
+        // Obstacle preset ComboBox
+        ArrayList<Obstacle> obstaclePresets = new ArrayList<>();
+        obstaclePresetSetup(obstaclePresets);
+        ComboBox obstacleComboBox = new ComboBox(FXCollections.observableArrayList(obstaclePresets));
+        obstacleComboBox.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+
+        obstacleComboBox.setOnAction(event -> {
+            Object selectedObstacle = obstacleComboBox.getSelectionModel().getSelectedItem();
+            appWindow.runway.addObstacle((Obstacle) selectedObstacle);
+        });
+
+        obstacleComboBox.valueProperty().set("None");
+
         ArrayList<Pair<String, Pane>> obstacleOptions = new ArrayList<>();
         GridPane obstacleData = new GridPane();
 
@@ -591,6 +605,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         obstacleData.getRowConstraints().addAll(rc);
 
         obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height"),makeLabel("Length"),makeLabel("Width"),makeLabel("Currently Active?"),makeLabel("Position"));
+
+        // Obstacle preset dropdown selector
+        obstacleData.add(obstacleComboBox,1,0);
+
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().heightProperty()),1,1);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().lengthProperty()),1,2);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().widthProperty()),1,3);
@@ -633,6 +651,30 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         data.textProperty().bind(Bindings.when(visibility).then(string).otherwise(new
                 SimpleStringProperty("Error")));
         return data;
+    }
+
+    private void obstaclePresetSetup(ArrayList<Obstacle> obstaclePresets) {
+        obstaclePresets.add(new Obstacle("Airbus A320-200", 11.76, 0));
+        obstaclePresets.get(0).widthProperty().set(37.57);
+        obstaclePresets.get(0).lengthProperty().set(35.8);
+        obstaclePresets.add(new Obstacle("Boeing 737-800", 12.6, 0));
+        obstaclePresets.get(1).widthProperty().set(34.32);
+        obstaclePresets.get(1).lengthProperty().set(39.5);
+        obstaclePresets.add(new Obstacle("Boeing 777-9", 19.68, 0));
+        obstaclePresets.get(2).widthProperty().set(76.72);
+        obstaclePresets.get(2).lengthProperty().set(64.84);
+        obstaclePresets.add(new Obstacle("Piper M350", 3.4, 0));
+        obstaclePresets.get(3).widthProperty().set(8.8);
+        obstaclePresets.get(3).lengthProperty().set(13.1);
+        obstaclePresets.add(new Obstacle("Pothole", 0, 0));
+        obstaclePresets.get(4).widthProperty().set(0);
+        obstaclePresets.get(4).lengthProperty().set(0);
+        obstaclePresets.add(new Obstacle("Pushback tug", 2.5, 0));
+        obstaclePresets.get(5).widthProperty().set(5);
+        obstaclePresets.get(5).lengthProperty().set(2);
+        obstaclePresets.add(new Obstacle("Maintenance truck", 3, 0));
+        obstaclePresets.get(6).widthProperty().set(6);
+        obstaclePresets.get(6).lengthProperty().set(2.5);
     }
 
     private Node makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility, int i) {
