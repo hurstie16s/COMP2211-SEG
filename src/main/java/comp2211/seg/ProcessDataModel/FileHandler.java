@@ -130,7 +130,7 @@ public class FileHandler {
             document.appendChild(rootElement);
 
             appendElementWithNewline(rootElement,"Height", Double.toString(obstacle.getHeight()), document);
-            appendElementWithNewline(rootElement,"Width", Double.toString(obstacle.getLength()), document);
+            appendElementWithNewline(rootElement,"Length", Double.toString(obstacle.getLength()), document);
             appendElementWithNewline(rootElement,"Width", Double.toString(obstacle.getWidth()), document);
 
 
