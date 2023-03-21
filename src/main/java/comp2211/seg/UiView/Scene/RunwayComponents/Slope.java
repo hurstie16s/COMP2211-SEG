@@ -2,8 +2,6 @@ package comp2211.seg.UiView.Scene.RunwayComponents;
 
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.ProcessDataModel.Obstacle;
-import comp2211.seg.UiView.Scene.InputScene;
-import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.NumberBinding;
@@ -75,8 +73,8 @@ public class Slope extends MeshView {
 
         front.bind(y.multiply(scaleFactorHeight).add(w.multiply(scaleFactorHeight).divide(2)));
         back.bind(y.multiply(scaleFactorHeight).subtract(w.multiply(scaleFactorHeight).divide(2)));
-        start.bind((Bindings.when(direction).then(x.add(obstacle.distFromThresholdProperty()).subtract(obstacle.widthProperty().divide(2))).otherwise(x.add(obstacle.distFromThresholdProperty()).add(obstacle.widthProperty().divide(2))).multiply(scaleFactor)));
-        NumberBinding difference = Bindings.when(direction).then(obstacle.heightProperty().multiply(-50).add(obstacle.widthProperty().divide(2))).otherwise(obstacle.heightProperty().multiply(50).subtract(obstacle.widthProperty().divide(2)));
+        start.bind((Bindings.when(direction).then(x.add(obstacle.distFromThresholdProperty()).subtract(obstacle.lengthProperty().divide(2))).otherwise(x.add(obstacle.distFromThresholdProperty()).add(obstacle.lengthProperty().divide(2))).multiply(scaleFactor)));
+        NumberBinding difference = Bindings.when(direction).then(obstacle.heightProperty().multiply(-50).add(obstacle.lengthProperty().divide(2))).otherwise(obstacle.heightProperty().multiply(50).subtract(obstacle.lengthProperty().divide(2)));
         NumberBinding change = start.add(Bindings.when(direction.not()).then(Bindings.when(Bindings.lessThan(240, difference)).then(difference).otherwise(240)).otherwise(Bindings.when(Bindings.greaterThan(-240, difference)).then(difference).otherwise(-240)).multiply(scaleFactor));
         end.bind(Bindings.when(Bindings.lessThan(appWindow.runway.runwayLengthProperty().divide(2).multiply(scaleFactor),change)).then(start).otherwise(Bindings.when(Bindings.greaterThan(appWindow.runway.runwayLengthProperty().divide(-2).multiply(scaleFactor),change)).then(start).otherwise(change)));
         difference.addListener(new ChangeListener<Number>() {

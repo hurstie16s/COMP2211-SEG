@@ -65,7 +65,7 @@ public class Runway {
     private final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(60);
 
 
-    public Obstacle runwayObstacle = new Obstacle("One", 10,0,0);
+    public Obstacle runwayObstacle = new Obstacle("One", 10,0);
 
     private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
 
@@ -94,6 +94,7 @@ public class Runway {
     private final SimpleBooleanProperty hasRunwayObstacle = new SimpleBooleanProperty(false);
     private final SimpleStringProperty units = new SimpleStringProperty("m");
 
+
     /**
      * Creates a new runway object and sets up change listeners on all input properties so that takeoff and landing
      * distances are automatically recalculated whenever any input value is changed.
@@ -103,14 +104,14 @@ public class Runway {
                 runwayDesignatorLeft,
                 runwayLength,
                 hasRunwayObstacle,
-                direction
+                direction,
         }) {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
         logger.info("Created Runway object");
 
         logger.info("Created initial VOID runway obstacle");
-        runwayObstacle = new Obstacle("VOID", 0,0, 0);
+        runwayObstacle = new Obstacle("VOID", 0,0);
 
         runwayLength.bind(Bindings.when(Bindings.greaterThan(inputLeftTora,inputRightTora)).then(inputLeftTora).otherwise(inputRightTora));
         clearwayLeft.bind(inputRightToda.subtract(inputRightTora));
@@ -119,9 +120,10 @@ public class Runway {
         clearwayRight.bind(inputLeftToda.subtract(inputLeftTora));
         stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
-        direction.bind(runwayObstacle.distFromThresholdProperty().lessThan(runwayObstacle.distFromOtherThresholdProperty()));
-        slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.widthProperty().divide(2)).greaterThan(runwayObstacle.widthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.widthProperty().divide(2))).otherwise(runwayObstacle.widthProperty().divide(2).add(240)));
-
+        direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
+        slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2)).greaterThan(runwayObstacle.lengthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2))).otherwise(runwayObstacle.lengthProperty().divide(2).add(240)));
+        //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
+        runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
 
 
         recalculate();
@@ -167,11 +169,11 @@ public class Runway {
      * Adds an obstacle to the list of obstacles on the runway.
      */
     public void addObstacle(Obstacle obstacleToAdd) {
+        runwayObstacle.obstacleDesignatorProperty().set(obstacleToAdd.getObstacleDesignator());
         runwayObstacle.heightProperty().set(obstacleToAdd.heightProperty().get());
-        runwayObstacle.widthProperty().set(obstacleToAdd.widthProperty().get());
         runwayObstacle.lengthProperty().set(obstacleToAdd.lengthProperty().get());
+        runwayObstacle.widthProperty().set(obstacleToAdd.widthProperty().get());
         runwayObstacle.distFromThresholdProperty().set(obstacleToAdd.distFromThresholdProperty().get());
-        runwayObstacle.distFromOtherThresholdProperty().set(obstacleToAdd.distFromOtherThresholdProperty().get());
         hasRunwayObstacle.set(true); // Listener will call recalculate
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
 
@@ -181,7 +183,6 @@ public class Runway {
      * Removing the obstacle from the runway
      */
     public void removeObstacle() {
-        runwayObstacle = null;
         hasRunwayObstacle.set(false);
         logger.info("Removed Obstacle from runway " + runwayDesignatorLeft.get());
         logger.info("Return runway to original state");
@@ -193,6 +194,7 @@ public class Runway {
     public void recalculate(){
 
         logger.info("Recalculating runway values");
+        System.out.println("test");
         rightTora.bind(inputRightTora);
         rightToda.bind(inputRightToda);
         rightAsda.bind(inputRightAsda);
@@ -204,7 +206,7 @@ public class Runway {
 
         if (hasRunwayObstacle.get()) {
             logger.info("Runway has obstacle: calculation methods will be called");
-            if (runwayObstacle.getDistFromThreshold() *  2 > runwayLength.get()) {
+            if (direction.get()) {
                 logger.info("Calculate take-off towards for left");
                 logger.info("Calculate land towards for right");
                 calculateTakeOffToward();
@@ -411,14 +413,14 @@ public class Runway {
                         .when(Bindings
                                 .greaterThan(runwayObstacle.heightProperty()
                                         .multiply(SLOPE),MINRESA
-                                        .add(runwayObstacle.widthProperty()
+                                        .add(runwayObstacle.lengthProperty()
                                                 .divide(2))))
                         .then(runwayObstacle
                                 .heightProperty()
                                 .multiply(SLOPE))
                         .otherwise(MINRESA
                                 .add(runwayObstacle
-                                        .widthProperty()
+                                        .lengthProperty()
                                         .divide(2))));
 
         logger.info("Obstacle Slop Calculation: "+obstacleSlopeCalculation.get());
@@ -432,7 +434,7 @@ public class Runway {
     public void calculateTakeOffToward() {
 
         // Calculate right take-off values, taking off away from the obstacle
-        rightTora.bind(runwayObstacle.distFromThresholdProperty().subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).add(dispThresholdLeft));
+        rightTora.bind(runwayObstacle.distFromThresholdProperty().subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).add(dispThresholdLeft).subtract(runwayObstacle.lengthProperty().divide(2)));
 
         // Ensure Declared distance isn't more than original value
         if (rightTora.get() > inputRightTora.get()) {
@@ -443,7 +445,7 @@ public class Runway {
         rightToda.bind(rightTora.add(clearwayLeft));
 
         // Calculate left take-off values, taking off towards the obstacle
-        leftTora.bind(runwayObstacle.distFromThresholdProperty().add(dispThresholdLeft).subtract(Bindings.max(runwayObstacle.heightProperty().multiply(SLOPE), MINRESA.add(runwayObstacle.widthProperty().divide(2)))).subtract(STRIPEND));
+        leftTora.bind(runwayObstacle.distFromThresholdProperty().add(dispThresholdLeft).subtract(Bindings.max(runwayObstacle.heightProperty().multiply(SLOPE), MINRESA.add(runwayObstacle.lengthProperty().divide(2)))).subtract(STRIPEND));
 
         // Ensure Declared distance isn't more than original value
         if (leftTora.get() > inputLeftTora.get()) {
@@ -467,7 +469,7 @@ public class Runway {
     public void calculateTakeOffAway() {
 
         // Calculate right take-off values, taking off towards the obstacle
-        rightTora.bind(runwayObstacle.distFromOtherThresholdProperty().add(dispThresholdRightProperty()).subtract(Bindings.max(runwayObstacle.heightProperty().multiply(SLOPE), MINRESA.add(runwayObstacle.widthProperty().divide(2)))).subtract(STRIPEND));
+        rightTora.bind(runwayObstacle.distFromOtherThresholdProperty().add(dispThresholdRightProperty()).subtract(Bindings.max(runwayObstacle.heightProperty().multiply(SLOPE), MINRESA.add(runwayObstacle.lengthProperty().divide(2)))).subtract(STRIPEND));
 
         // Ensure Declared distance isn't more than original value
         if (rightTora.get() > inputRightTora.get()) {
@@ -484,7 +486,7 @@ public class Runway {
         }
 
         // Calculate left take-off values, taking off away from the obstacle
-        leftTora.bind(inputLeftTora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).subtract(dispThresholdLeft));
+        leftTora.bind(inputLeftTora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).subtract(dispThresholdLeft).subtract(runwayObstacle.lengthProperty().divide(2)));
         leftAsda.bind(leftTora.add(stopwayRight));
         leftToda.bind(leftTora.add(clearwayRight));
     }
@@ -1410,4 +1412,5 @@ public class Runway {
     public void setUnits(String units) {
         this.units.set(units);
     }
+
 }

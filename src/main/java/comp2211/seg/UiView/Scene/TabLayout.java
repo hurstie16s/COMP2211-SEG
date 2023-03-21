@@ -26,7 +26,7 @@ public class TabLayout extends VBox {
     private final Color fg;
     private SimpleDoubleProperty width;
     private SimpleDoubleProperty height;
-    private ArrayList<Button> tabButtons = new ArrayList<Button>();
+    public ArrayList<Button> tabButtons = new ArrayList<Button>();
     private HBox topbar;
     private VBox layout;
     private StackPane contents;

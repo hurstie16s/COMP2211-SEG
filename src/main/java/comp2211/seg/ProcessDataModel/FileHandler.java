@@ -1,33 +1,25 @@
 package comp2211.seg.ProcessDataModel;
 
 
-import javafx.event.ActionEvent;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.io.OutputStream;
 
 public class FileHandler {
     private static final Logger logger = LogManager.getLogger(FileHandler.class);
-//    private final String airportTag = "airport";
 
-
-    public static boolean exportAirport(File file, Airport airport) {
+    public static boolean exportAirport(File file, Airport airport, Obstacle obstacle) {
 
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -41,10 +33,6 @@ public class FileHandler {
             Element name = document.createElement("name");
             name.appendChild(document.createTextNode(airport.toString()));
             rootElement.appendChild(name);
-
-//            Element city = document.createElement("city");
-//            city.appendChild(document.createTextNode(airport.getCity()));
-//            rootElement.appendChild(city);
 
             Element lat = document.createElement("Latitude");
             lat.appendChild(document.createTextNode(Double.toString(airport.getLatitude())));
@@ -63,7 +51,20 @@ public class FileHandler {
 
                 appendElementWithNewline(runwayElement, "Resa_Height", Double.toString(runway.getRESAHeight()), document);
                 appendElementWithNewline(runwayElement, "Resa_Width", Double.toString(runway.getRESAWidth()), document);
-                appendElementWithNewline(runwayElement, "Obstacle", Boolean.toString(runway.isHasRunwayObstacle()), document);
+
+                if (runway.isHasRunwayObstacle() == true) {
+
+                    Element ObstacleElement = document.createElement("Runway_Obstacle");
+                    runways.appendChild(ObstacleElement);
+
+                    appendElementWithNewline(ObstacleElement,"Obstacle_Height", Double.toString(runway.getRunwayObstacle().getHeight()), document);
+                    appendElementWithNewline(ObstacleElement, "Obstacle_Width", Double.toString(runway.getRunwayObstacle().getLength()), document);
+                    appendElementWithNewline(ObstacleElement, "Obstacle_Length", Double.toString(runway.getRunwayObstacle().getWidth()), document);
+                    logger.info("Runway has Obstacles");
+
+                } else {
+                    logger.info("Runway has no Obstacles");
+                }
 
                 Element rightElement = document.createElement("Right_Properties");
                 runwayElement.appendChild(rightElement);
@@ -90,6 +91,48 @@ public class FileHandler {
                 runwayElement.appendChild(document.createTextNode("\n"));
             }
 
+            DOMSource domSource = new DOMSource(document);
+            StreamResult res = new StreamResult(file);
+
+            try {
+                TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                Transformer transformer = transformerFactory.newTransformer();
+                transformer.transform(domSource, res);
+                return true;
+            }
+            catch (TransformerException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    private static void appendElementWithNewline(Element parent, String elementName, String textContent, Document document) {
+        Element element = document.createElement(elementName);
+        element.appendChild(document.createTextNode(textContent));
+        parent.appendChild(element);
+        parent.appendChild(document.createTextNode("\n"));
+    }
+
+    public static boolean exportObstacle(File file, Obstacle obstacle) {
+
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = docFactory.newDocumentBuilder();
+
+            // These are the root elements
+            Document document = documentBuilder.newDocument();
+            Element rootElement = document.createElement("Obstacle");
+            document.appendChild(rootElement);
+
+            appendElementWithNewline(rootElement,"Height", Double.toString(obstacle.getHeight()), document);
+            appendElementWithNewline(rootElement,"Length", Double.toString(obstacle.getLength()), document);
+            appendElementWithNewline(rootElement,"Width", Double.toString(obstacle.getWidth()), document);
+
 
             DOMSource domSource = new DOMSource(document);
             StreamResult res = new StreamResult(file);
@@ -111,24 +154,5 @@ public class FileHandler {
         }
 
     }
-
-    public static void writeXML (Document doc, OutputStream output)
-        throws TransformerException {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-
-//        transformer.setOutputProperties(OutputKeys.INDENT, "yes");
-
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(output);
-    }
-
-    private static void appendElementWithNewline(Element parent, String elementName, String textContent, Document document) {
-        Element element = document.createElement(elementName);
-        element.appendChild(document.createTextNode(textContent));
-        parent.appendChild(element);
-        parent.appendChild(document.createTextNode("\n"));
-    }
-
 
 }

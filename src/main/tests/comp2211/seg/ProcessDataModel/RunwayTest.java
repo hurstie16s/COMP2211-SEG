@@ -3,10 +3,9 @@ package comp2211.seg.ProcessDataModel;
 import javafx.beans.property.SimpleDoubleProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Test;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -121,6 +120,7 @@ class RunwayTest {
     }
     void addObstacle(Runway runway, Obstacle obstacle){
         runway.removeObstacle();
+        obstacle.lengthProperty().set(0);
         runway.addObstacle(obstacle);
     }
 
@@ -175,15 +175,15 @@ class RunwayTest {
     // Test Data Generation
 
     // Obstacles defined in given scenario's
-    static Obstacle obstacle1 = new Obstacle("ob1", 12, -50, 3645);
-    static Obstacle obstacle2 = new Obstacle("ob2", 25, 2853, 500);
-    static Obstacle obstacle3 = new Obstacle("ob3", 15, 150, 3203);
-    static Obstacle obstacle4 = new Obstacle("ob4", 20, 3546, 50);
-    static Obstacle obstacle5 = new Obstacle("ob5", 14, 80, 2082);
-    static Obstacle obstacle6 = new Obstacle("ob6", 11, 2285, -123);
-    static Obstacle obstacle7 = new Obstacle("ob7", 13, 976, 977);
-    static Obstacle obstacle8 = new Obstacle("ob8", 17, 0, 1953);
-    static Obstacle obstacle9 = new Obstacle("ob9", 8, 484, 484);
+    static Obstacle obstacle1 = new Obstacle("ob1", 12, -50);
+    static Obstacle obstacle2 = new Obstacle("ob2", 25, 2853);
+    static Obstacle obstacle3 = new Obstacle("ob3", 15, 150);
+    static Obstacle obstacle4 = new Obstacle("ob4", 20, 3546);
+    static Obstacle obstacle5 = new Obstacle("ob5", 14, 80);
+    static Obstacle obstacle6 = new Obstacle("ob6", 11, 2285);
+    static Obstacle obstacle7 = new Obstacle("ob7", 13, 976);
+    static Obstacle obstacle8 = new Obstacle("ob8", 17, 0);
+    static Obstacle obstacle9 = new Obstacle("ob9", 8, 484);
 
     //TODO: Change generation to fit new tests
     private static Stream<Arguments> generateCheckDesignatorTestData() {
@@ -247,7 +247,7 @@ class RunwayTest {
                         3353,
                         3353,
                         3431,
-                        2774,
+                        2775,
                         "Test: Given Scenario 4"
                 ),
                 Arguments.of(

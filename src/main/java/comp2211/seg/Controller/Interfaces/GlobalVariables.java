@@ -10,7 +10,7 @@ public interface GlobalVariables {
   /**
    * A constant string that holds the information about the software engineering group project.
    */
-  public static final String SEG_INFO = "COMP2211\n" +
+  String SEG_INFO = "COMP2211\n" +
       "Software Engineering Group Project\n" +
       "Increment1 - version 0.1\n" +
       "Josh Douglas\n" +
@@ -30,7 +30,7 @@ public interface GlobalVariables {
   /**
    * A constant string that holds the information about the home scene of the project.
    */
-  public static final String HOME_SCENE_INFO = "To start, enter name of a new airport followed by ENTER\n" +
+  String HOME_SCENE_INFO = "To start, enter name of a new airport followed by ENTER\n" +
       "or just press ENTER to accept default settings\n" +
       "Press ESC to exit application.";
 

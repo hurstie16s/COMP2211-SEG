@@ -1,6 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
+import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -95,35 +96,43 @@ public class HelpScene extends Scene {
         root.getChildren().add(box);
         root.setMaxHeight(24*root.getChildren().size());
     }
+    public void runwayLabels(){
+
+        makeColour(Theme.lda,"LDA");
+        makeColour(Theme.tora,"TORA");
+        makeColour(Theme.asda,"ASDA");
+        makeColour(Theme.toda,"TODA");
+        makeColour(Theme.obstacle,"Obstacle");
+        makeColour(Theme.resa,"RESA");
+        makeColour(Theme.stripend,"Strip End");
+        makeColour(Theme.blastallowance,"Blast Allowance");
+        makeColour(Theme.runway,"Runway");
+        makeColour(Theme.cga,"Cleared & Graded Area");
+        makeColour(Theme.stopway,"Stopway");
+        makeColour(Theme.clearway,"Clearway");
+        makeColour(Theme.physicalResa,"Physical Resa");
+    }
     public void toggleHelp(String className){
         //logger.info(className);
         if (!visible) {
             switch (className) {
                 case "comp2211.seg.UiView.Scene.RunwayScene":
-                    makeKey("Esc", "Navigate back to home screen");
-                    makeKey("T", "Toggle between top and side views");
-                    break;
                 case "comp2211.seg.UiView.Scene.RunwaySceneLoader":
                     makeKey("Esc", "Navigate back to home screen");
                     makeKey("T", "Toggle between top and side views");
-                    makeColour(Color.DARKRED,"Obstacle");
-                    makeColour(Color.DARKCYAN,"Approach/Take off Slope");
-                    makeColour(Color.BLUE,"Cleared and graded area");
-                    makeColour(Color.DARKGOLDENROD,"Clearway");
-                    makeColour(Color.VIOLET,"Stopway");
-                    makeColour(Color.SADDLEBROWN,"RESA");
-                    makeColour(Color.GREY,"Runway");
+                    makeKey("W", "Pan view up");
+                    makeKey("S", "Pan view down");
+                    makeKey("A", "Pan view left");
+                    makeKey("D", "Pan view right");
+                    runwayLabels();
                     break;
                 case "comp2211.seg.UiView.Scene.MainScene":
                     makeKey("Esc", "Exit application");
-                    makeColour(Color.DARKRED,"Obstacle");
-                    makeColour(Color.BLUE,"Cleared and graded area");
-                    makeColour(Color.DARKCYAN,"Approach/Take off Slope");
-                    makeColour(Color.DARKGOLDENROD,"Clearway");
-                    makeColour(Color.VIOLET,"Stopway");
-                    makeColour(Color.SADDLEBROWN,"RESA");
-                    makeColour(Color.GREY,"Runway");
-                    makeText("The square in the top left corner shows the scale of the runway (10x100".concat(appWindow.runway.getUnits()).concat(")"));
+                    runwayLabels();
+                    break;
+                case "comp2211.seg.UiView.Scene.BaseScene":
+                    makeKey("Esc", "Exit application");
+                    runwayLabels();
                     break;
 
             }

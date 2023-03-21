@@ -7,7 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
 
 public class RunwaySceneLoader extends SceneAbstract{
-    private RunwayScene scene;
+    public RunwayScene scene;
     /**
      * Constructor to create a SceneAbstract object.
      *
@@ -25,17 +25,43 @@ public class RunwaySceneLoader extends SceneAbstract{
         setOnKeyPressed((keyEvent -> {
             switch (keyEvent.getCode()){
                 case ESCAPE:
-                    appWindow.startBaseScene();
+                    appWindow.startBaseSceneObstacle();
+                    break;
+                case W:
+                    scene.group.translateYProperty().set(scene.group.getTranslateY()-10);
+                    break;
+                case A:
+                    scene.group.translateXProperty().set(scene.group.getTranslateX()-10);
+                    break;
+                case S:
+                    scene.group.translateYProperty().set(scene.group.getTranslateY()+10);
+                    break;
+                case D:
+                    scene.group.translateXProperty().set(scene.group.getTranslateX()+10);
                     break;
                 case T:
                     scene.toggleView();
                     break;
                 case H:
-                    help.toggleHelp(this.getClass().getName());
-                    scene.render();
+                    help.toggleHelp(this.getClass().getCanonicalName());
+                    scene.refresh();
                     break;
             }
         }));
+        setOnMousePressed(event -> {
+            scene.x = event.getSceneX();
+            scene.y = event.getSceneY();
+            scene.anglex = scene.angleXProperty.get();
+            scene.angley = scene.angleZProperty.get();
+        });
+        setOnMouseDragged(event ->{
+            if (!scene.sideProperty.get()) {
+                //angleXProperty.set(Math.min(Math.max(anglex + y - event.getSceneY(), -90), 0));
+                scene.angleZProperty.set(scene.angley - scene.x + event.getSceneX());
+            }
+        });
+        setOnScroll(event -> scene.camera.translateZProperty().set(scene.camera.getTranslateZ()+event.getDeltaY()));
+
 
     }
     public void build(){

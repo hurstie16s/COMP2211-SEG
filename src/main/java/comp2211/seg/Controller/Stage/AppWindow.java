@@ -9,8 +9,6 @@ import comp2211.seg.UiView.Scene.*;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +26,7 @@ public class AppWindow {
     private final Stage stage;
     private final int width;
     private final int height;
-    private SceneAbstract currentScene;
+    public SceneAbstract currentScene;
     private ArrayList<Airport> airports;
     private Scene scene;
 
@@ -36,11 +34,6 @@ public class AppWindow {
 
     public Runway runway;
     public Airport airport;
-
-    /**
-     * The Changes history.
-     */
-    public TextFlow changesHistory  = new TextFlow();
 
     /**
      * Constructs an AppWindow object with the specified stage, width, and height.
@@ -59,8 +52,12 @@ public class AppWindow {
         addAirport(new Airport("Heathrow"));
         addAirport(new Airport("Gatwick"));
         addAirport(new Airport("Southampton"));
+        for (Airport a: airports) {
+            a.makeRunway();
+        }
         airport = airports.get(0);
-        airport.makeRunway();
+
+        runway = airport.getRunways().get(0);
         // Setup appWindow
         setupStage();
         startHomeScene();
@@ -69,8 +66,6 @@ public class AppWindow {
     }
     public void addAirport(Airport airport){
         airports.add(airport);
-        runway = airport.getRunways().get(0);
-        runway.addObstacle(new Obstacle("VOID", 0, 0, 0));
     }
     public void setAirport(Airport airport){
         if (airport.name.equals("")){
@@ -123,8 +118,22 @@ public class AppWindow {
      * Starts the runway scene.
      */
     public void startRunwayScene() {
-        loadScene(new RunwayScene(new Pane(),this,getWidth(),getHeight(),true));
-        //loadScene(new RunwaySceneLoader(new Pane(),this,getWidth(),getHeight()));
+        //loadScene(new RunwayScene(new Pane(),this,getWidth(),getHeight(),true));
+        loadScene(new RunwaySceneLoader(new Pane(),this,getWidth(),getHeight()));
+    }
+
+    /**
+     * Starts the runway scene.
+     */
+    public void startRunwaySceneRotated() {
+        startRunwayScene();
+        try {
+
+            ((RunwayScene) currentScene).toggleView();
+        }catch (Exception e){
+
+            ((RunwaySceneLoader) currentScene).scene.toggleView();
+        }
     }
 
     /**
@@ -140,6 +149,7 @@ public class AppWindow {
         currentScene = newScene;
         stage.setScene(currentScene);
         Theme.retheme(currentScene);
+        currentScene.makeHelp(false);
 
         // Initialise the scene when ready
         Platform.runLater(() -> currentScene.initialise());
@@ -184,9 +194,8 @@ public class AppWindow {
         return airports;
     }
 
-    public void receiveHistoryMsg (String history) {
-        Text msg = new Text(history);
-        changesHistory.getChildren().add(msg);
+    public void startBaseSceneObstacle() {
+        loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
+        ((BaseScene) currentScene).selectObstacleMenu();
     }
-
 }
