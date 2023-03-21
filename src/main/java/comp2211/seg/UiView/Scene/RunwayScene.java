@@ -246,12 +246,13 @@ public class RunwayScene extends SceneAbstract {
     return box;
   }
   public void makeScale(){
-    addCuboid(appWindow.runway.runwayLengthProperty().divide(-2).subtract(appWindow.runway.clearwayLeftProperty()).add(new SimpleDoubleProperty(120).divide(2)),
-            new SimpleDoubleProperty(-200).add(5),
-            (DoubleBinding) Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).subtract(20).divide(2).divide(scaleFactorDepth),
-            new SimpleDoubleProperty(100).add(0),
-            new SimpleDoubleProperty(10).add(0),
-            new SimpleDoubleProperty(10).add(0),
+    double length = 200;
+    addCuboid(appWindow.runway.runwayLengthProperty().divide(2).add(appWindow.runway.clearwayLeftProperty()).subtract(new SimpleDoubleProperty(length+20).divide(2)),
+            new SimpleDoubleProperty(100).add(5),
+            (DoubleBinding) Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).subtract(20).divide(-2).divide(scaleFactorDepth),
+            new SimpleDoubleProperty(length).add(0),
+            new SimpleDoubleProperty(2).divide(scaleFactorHeight),
+            new SimpleDoubleProperty(2).divide(scaleFactorDepth),
             Color.WHITE
     );
 
