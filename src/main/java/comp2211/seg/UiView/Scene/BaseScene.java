@@ -228,7 +228,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     public void exportAirportButtonEvent() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose file to export");
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml"));
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName("Airport");
         File file = fileChooser.showSaveDialog(new Stage());
 
         try {
@@ -258,7 +260,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     public void exportObstacleButtonEvent() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose file to export");
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml"));
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName("Obstacle");
         File file = fileChooser.showSaveDialog(new Stage());
 
         try {
