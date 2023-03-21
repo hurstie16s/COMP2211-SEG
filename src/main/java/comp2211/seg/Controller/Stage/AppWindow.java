@@ -26,7 +26,7 @@ public class AppWindow {
     private final Stage stage;
     private final int width;
     private final int height;
-    private SceneAbstract currentScene;
+    public SceneAbstract currentScene;
     private ArrayList<Airport> airports;
     private Scene scene;
 
@@ -121,6 +121,14 @@ public class AppWindow {
     }
 
     /**
+     * Starts the runway scene.
+     */
+    public void startRunwaySceneRotated() {
+        startRunwayScene();
+        ((RunwayScene) currentScene).toggleView();
+    }
+
+    /**
      * Loads a new scene.
      *
      * @param newScene the scene to load
@@ -133,6 +141,7 @@ public class AppWindow {
         currentScene = newScene;
         stage.setScene(currentScene);
         Theme.retheme(currentScene);
+        currentScene.makeHelp(false);
 
         // Initialise the scene when ready
         Platform.runLater(() -> currentScene.initialise());
@@ -177,4 +186,8 @@ public class AppWindow {
         return airports;
     }
 
+    public void startBaseSceneObstacle() {
+        loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
+        ((BaseScene) currentScene).selectObstacleMenu();
+    }
 }

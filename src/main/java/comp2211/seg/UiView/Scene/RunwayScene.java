@@ -85,6 +85,7 @@ public class RunwayScene extends SceneAbstract {
   protected SimpleDoubleProperty scaleFactor = new SimpleDoubleProperty(0.5);
   protected SimpleDoubleProperty scaleFactorHeight = new SimpleDoubleProperty(2);
   protected SimpleDoubleProperty scaleFactorDepth = new SimpleDoubleProperty(4);
+  protected SimpleBooleanProperty refresh = new SimpleBooleanProperty(true);
 
 
   /**
@@ -142,7 +143,7 @@ public class RunwayScene extends SceneAbstract {
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
-          appWindow.startBaseScene();
+          appWindow.startBaseSceneObstacle();
           break;
         case W:
           group.translateYProperty().set(group.getTranslateY()-10);
@@ -158,6 +159,9 @@ public class RunwayScene extends SceneAbstract {
           break;
         case T:
           toggleView();
+          break;
+        case H:
+          help.toggleHelp(this.getClass().getCanonicalName());
           break;
       }
     }));
@@ -350,7 +354,21 @@ public class RunwayScene extends SceneAbstract {
     scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));
     mainPane.getChildren().add(group);
 
+    addListeners();
 
+
+  }
+  public void addListeners(){
+    ChangeListener refresh = new ChangeListener<>() {
+      @Override
+      public void changed(ObservableValue<?> observableValue, Object o, Object t1) {
+        refresh();
+      }
+    };
+    appWindow.runway.runwayObstacle.widthProperty().addListener(refresh);
+    appWindow.runway.runwayObstacle.lengthProperty().addListener(refresh);
+    appWindow.runway.runwayObstacle.heightProperty().addListener(refresh);
+    appWindow.runway.runwayObstacle.distFromThresholdProperty().addListener(refresh);
   }
   public void render(){
     group.getChildren().removeAll(group.getChildren());
@@ -531,6 +549,16 @@ public class RunwayScene extends SceneAbstract {
             Theme.stopway);
 
   }
+
+  public void refresh(){
+    refresh.set(refresh.not().get());
+    if (refresh.get()){
+      appWindow.currentScene.getWindow().setWidth(getWidth()-0.0001);
+    }else {
+      appWindow.currentScene.getWindow().setWidth(getWidth()+0.0001);
+
+    }
+  }
   /**
    * Creates the Cleared and Graded Area (CGA) and adds it to the 3D group.
    * The CGA is constructed using a {@link ClearedGradedArea} object.
@@ -577,7 +605,7 @@ public class RunwayScene extends SceneAbstract {
     //Lengths and xOffsets need binding to back-end variables, work hasn't been done yet so constants used
     DoubleBinding leftDisplacementT = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(Bindings.when(appWindow.runway.directionProperty().not().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)).add(appWindow.runway.getBLASTZONE())).otherwise(0));
     DoubleBinding leftDisplacementL = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()).add(Bindings.when(appWindow.runway.directionProperty().not().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)).add(appWindow.runway.slopeLengthProperty())).otherwise(0));
-    DoubleBinding rightDisplacementT = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(Bindings.when(appWindow.runway.directionProperty().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)).add(appWindow.runway.getBLASTZONE())).otherwise(0));
+    DoubleBinding rightDisplacementT = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(Bindings.when(appWindow.runway.directionProperty().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)).add(appWindow.runway.getBLASTZONE())).otherwise(0));
     DoubleBinding rightDisplacementL = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()).subtract(Bindings.when(appWindow.runway.directionProperty().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)).add(appWindow.runway.slopeLengthProperty())).otherwise(0));
 
     //RunwayArrow TODARightLabel = new RunwayArrowRight("TODA", Color.RED, scaleFactor, 100, 25, 3000);

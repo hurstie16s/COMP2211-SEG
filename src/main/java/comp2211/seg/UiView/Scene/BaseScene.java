@@ -20,6 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -28,6 +29,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -45,6 +47,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     //logger for BaseScene
     private static final Logger logger = LogManager.getLogger(BaseScene.class);
+    private TabLayout tabLayout;
+
 
     /**
      * Constructor to create a SceneAbstract object.
@@ -61,6 +65,18 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     @Override
     public void initialise() {
 
+        setOnKeyPressed((keyEvent -> {
+            switch (keyEvent.getCode()){
+                case H:
+                    help.toggleHelp(this.getClass().getCanonicalName());
+                    break;
+                case ESCAPE:
+                    Platform.runLater(appWindow::startHomeScene);
+            }
+        }));
+    }
+    public void selectObstacleMenu(){
+        tabLayout.tabButtons.get(1).fire();
     }
 
     public void build()  {
@@ -73,7 +89,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
         tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
-        TabLayout tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
+        tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
         mainPane.maxHeightProperty().bind(root.heightProperty());
         mainPane.minHeightProperty().bind(root.heightProperty());
         mainPane.maxWidthProperty().bind(root.widthProperty());
@@ -544,21 +560,39 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         obstacleData.getColumnConstraints().addAll(cc1,cc2);
 
         ArrayList<RowConstraints> rc = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 5; i++) {
 
             RowConstraints rcx = new RowConstraints();
             rcx.setPercentHeight(100/7);
             rc.add(rcx);
         }
+        RowConstraints rcx = new RowConstraints();
+        rcx.setPercentHeight(200/7);
+        rc.add(rcx);
         obstacleData.getRowConstraints().addAll(rc);
 
-        obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height"),makeLabel("Length"),makeLabel("Width"),makeLabel("Left Displacement"),makeLabel("Right Displacement"),makeLabel("Currently Active?"));
+        obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height"),makeLabel("Length"),makeLabel("Width"),makeLabel("Currently Active?"),makeLabel("Position"));
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().heightProperty()),1,1);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().lengthProperty()),1,2);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().widthProperty()),1,3);
-        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().distFromThresholdProperty()),1,4);
-        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().distFromOtherThresholdProperty()),1,5);
-        obstacleData.add(makeButton(appWindow.runway.hasRunwayObstacleProperty(),"No","Yes"),1,6);
+        obstacleData.add(makeButton(appWindow.runway.hasRunwayObstacleProperty(),"No","Yes"),1,4);
+        Slider posSlider = new Slider();
+        posSlider.minProperty().bind(appWindow.runway.runwayObstacle.widthProperty().divide(-2));
+        posSlider.maxProperty().bind(appWindow.runway.runwayLengthProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)));
+        posSlider.valueProperty().bindBidirectional(appWindow.runway.runwayObstacle.distFromThresholdProperty());
+        VBox posLeft = new VBox(makeOutputLabel(new SimpleStringProperty("Left"),new SimpleBooleanProperty(true),18),makeOutputLabel(appWindow.runway.runwayObstacle.distFromThresholdProperty(),new SimpleBooleanProperty(true),5));
+        VBox posRight = new VBox(makeOutputLabel(new SimpleStringProperty("Right"),new SimpleBooleanProperty(true),18),makeOutputLabel(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty(),new SimpleBooleanProperty(true),5));
+        posRight.setAlignment(Pos.CENTER_RIGHT);
+
+        BorderPane posvals = new BorderPane();
+        posvals.setLeft(posLeft);
+        posvals.setRight(posRight);
+        VBox position = new VBox(posSlider,posvals);
+        position.setAlignment(Pos.CENTER);
+        posvals.maxWidthProperty().bind(position.widthProperty().subtract(10));
+        posvals.minWidthProperty().bind(position.widthProperty().subtract(10));
+        posvals.setPadding(new Insets(5));
+        obstacleData.add(position,1,5);
         obstacleData.getChildren().forEach(new Consumer<Node>() {
             @Override
             public void accept(Node node) {
@@ -571,6 +605,37 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         Pane obstacleOptionsPane = new TabLayout(obstacleOptions,Theme.focusedBG,Theme.veryfocusedBG);
         return obstacleOptionsPane;
     }
+
+    private Node makeOutputLabel(SimpleStringProperty string, SimpleBooleanProperty visibility, int i) {
+        Label data = new Label();
+        data.setFont(new Font(Theme.font.getName(),i));
+        data.setTextFill(Theme.fg);
+        data.setText(String.valueOf(string.getValue()));
+        data.textProperty().bind(Bindings.when(visibility).then(string).otherwise(new
+                SimpleStringProperty("Error")));
+        return data;
+    }
+
+    private Node makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility, int i) {
+        Label data = new Label();
+        data.setFont(Theme.fontsmall);
+        data.setTextFill(Theme.fg);
+        data.setText(String.valueOf(property.getValue()));
+        property.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if (!t1.equals(number)){
+                    data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
+                            SimpleStringProperty("Error")));
+                }
+            }
+        });
+        data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
+                SimpleStringProperty("Error")));
+        return data;
+
+    }
+
     private Pane makeDistancesPane() {
         GridPane distancesGrid = new GridPane();
         distancesGrid.add(makeLabel("Designator"),1,0);
@@ -661,7 +726,16 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         data.setFont(Theme.font);
         data.setTextFill(Theme.fg);
         data.setText(String.valueOf(property.getValue()));
-        data.textProperty().bind(Bindings.when(visibility).then(property.asString().concat(appWindow.runway.unitsProperty())).otherwise(new
+        property.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if (!t1.equals(number)){
+                    data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
+                            SimpleStringProperty("Error")));
+                }
+            }
+        });
+        data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
                 SimpleStringProperty("Error")));
         return data;
     }
@@ -770,9 +844,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         runwayScene4.root.maxHeightProperty().bind(sideView.heightProperty());
         runwayScene4.root.minHeightProperty().bind(sideView.heightProperty());
 
-        dualView.setOnMousePressed((e) -> appWindow.startRunwayScene());
+        runwayScene1.getRoot().setOnMousePressed((e) -> appWindow.startRunwayScene());
+        runwayScene2.getRoot().setOnMousePressed((e) -> appWindow.startRunwaySceneRotated());
         topView.setOnMousePressed((e) -> appWindow.startRunwayScene());
-        sideView.setOnMousePressed((e) -> appWindow.startRunwayScene());
+        sideView.setOnMousePressed((e) -> appWindow.startRunwaySceneRotated());
 
 
 

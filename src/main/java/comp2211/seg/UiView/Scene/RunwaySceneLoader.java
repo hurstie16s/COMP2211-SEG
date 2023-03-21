@@ -25,14 +25,14 @@ public class RunwaySceneLoader extends SceneAbstract{
         setOnKeyPressed((keyEvent -> {
             switch (keyEvent.getCode()){
                 case ESCAPE:
-                    appWindow.startBaseScene();
+                    appWindow.startBaseSceneObstacle();
                     break;
                 case T:
                     scene.toggleView();
                     break;
                 case H:
                     help.toggleHelp(this.getClass().getName());
-                    scene.render();
+                    scene.refresh();
                     break;
             }
         }));

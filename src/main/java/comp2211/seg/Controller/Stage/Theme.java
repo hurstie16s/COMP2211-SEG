@@ -29,6 +29,7 @@ public class Theme {
     static public Color stripend = Color.web("#00ff00");
     static public Color blastallowance = Color.web("#cccc00");
     static public Font font =Font.font("Calibri", 20);
+    static public Font fontsmall =Font.font("Calibri", 16);
 
     public static Color reverse(Color color){
         double r = color.getRed();
