@@ -9,8 +9,6 @@ import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Runway;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -28,9 +26,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -175,7 +171,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         //Button events
         exportAirObsButton.setOnAction(e -> {
-            exportButtonEvent();
+            exportAirportButtonEvent();
         });
 //        importButton.setOnAction(e -> {
 //            importButtonEvent();
@@ -223,7 +219,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return vBoxAirportLayout;
     }
 
-    public void exportButtonEvent() {
+    //exporting the Airport with runways and objects
+    public void exportAirportButtonEvent() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose file to export");
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml"));
@@ -240,8 +237,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 logger.info(file.getAbsolutePath());
             }
 
-            if (FileHandler.exportAirport(file, appWindow.airport)) {
-                FileHandler.exportAirport(file, appWindow.airport);
+            if (FileHandler.exportAirport(file, appWindow.airport, appWindow.runway.runwayObstacle)) {
+                FileHandler.exportAirport(file, appWindow.airport,appWindow.runway.runwayObstacle);
                 logger.info("Exporting Successful");
             } else {
                 logger.info("Exporting Airport failed");
@@ -252,6 +249,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
         }
     }
+
+
 
     public void importButtonEvent() {
         logger.info("importButtonEvent");

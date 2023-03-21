@@ -25,7 +25,7 @@ import java.io.OutputStream;
 public class FileHandler {
     private static final Logger logger = LogManager.getLogger(FileHandler.class);
 
-    public static boolean exportAirport(File file, Airport airport) {
+    public static boolean exportAirport(File file, Airport airport, Obstacle obstacle) {
 
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -57,7 +57,17 @@ public class FileHandler {
 
                 appendElementWithNewline(runwayElement, "Resa_Height", Double.toString(runway.getRESAHeight()), document);
                 appendElementWithNewline(runwayElement, "Resa_Width", Double.toString(runway.getRESAWidth()), document);
-                appendElementWithNewline(runwayElement, "Obstacle", Boolean.toString(runway.isHasRunwayObstacle()), document);
+
+                if (runway.isHasRunwayObstacle() == true) {
+
+                    Element ObstacleElement = document.createElement("Runway_Obstacle");
+                    runways.appendChild(ObstacleElement);
+
+                    appendElementWithNewline(ObstacleElement,"Obstacle_Height", Double.toString(runway.getRunwayObstacle().getHeight()), document);
+                    appendElementWithNewline(ObstacleElement, "Obstacle_Width", Double.toString(runway.getRunwayObstacle().getWidth()), document);
+                    appendElementWithNewline(ObstacleElement, "Obstacle_Length", Double.toString(runway.getRunwayObstacle().getLength()), document);
+
+                }
 
                 Element rightElement = document.createElement("Right_Properties");
                 runwayElement.appendChild(rightElement);
