@@ -396,14 +396,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             makeTableCell(appWindow.runway.runwayLengthProperty()),
             makeTableCell(appWindow.runway.runwayWidthProperty()),
             //strip
-            new TextField("?"),
-            new TextField("?"),
+            new TextField("-"),
+            new TextField("-"),
             //stopway
             makeTableCell(appWindow.runway.stopwayLeftProperty()),
-            new TextField("?"),
+            new TextField("-"),
             //clearway
             makeTableCell(appWindow.runway.clearwayLeftProperty()),
-            new TextField("?"),
+            new TextField("-"),
             makeTableCell(appWindow.runway.RESAWidthProperty()),
             makeTableCell(appWindow.runway.RESAHeightProperty()),
             makeTableCell(appWindow.runway.dispThresholdLeftProperty()),
@@ -417,14 +417,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             makeTableCell(appWindow.runway.runwayLengthProperty()),
             makeTableCell(appWindow.runway.runwayWidthProperty()),
             //strip
-            new TextField("?"),
-            new TextField("?"),
+            new TextField("-"),
+            new TextField("-"),
             //stopway
             makeTableCell(appWindow.runway.stopwayRightProperty()),
-            new TextField("?"),
+            new TextField("-"),
             //clearway
             makeTableCell(appWindow.runway.clearwayRightProperty()),
-            new TextField("?"),
+            new TextField("-"),
             makeTableCell(appWindow.runway.RESAWidthProperty()),
             makeTableCell(appWindow.runway.RESAHeightProperty()),
             makeTableCell(appWindow.runway.dispThresholdRightProperty()),
