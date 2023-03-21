@@ -117,17 +117,13 @@ public class HelpScene extends Scene {
         if (!visible) {
             switch (className) {
                 case "comp2211.seg.UiView.Scene.RunwayScene":
+                case "comp2211.seg.UiView.Scene.RunwaySceneLoader":
                     makeKey("Esc", "Navigate back to home screen");
                     makeKey("T", "Toggle between top and side views");
                     makeKey("W", "Pan view up");
                     makeKey("S", "Pan view down");
                     makeKey("A", "Pan view left");
                     makeKey("D", "Pan view right");
-                    runwayLabels();
-                    break;
-                case "comp2211.seg.UiView.Scene.RunwaySceneLoader":
-                    makeKey("Esc", "Navigate back to home screen");
-                    makeKey("T", "Toggle between top and side views");
                     runwayLabels();
                     break;
                 case "comp2211.seg.UiView.Scene.MainScene":

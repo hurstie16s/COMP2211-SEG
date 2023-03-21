@@ -215,10 +215,15 @@ public class RunwayScene extends SceneAbstract {
     view = !view;
     if (view){
       angleXProperty.set(-90);
+      angleYProperty.set(0);
+      angleZProperty.set(0);
       sideProperty.set(true);
     }
     else{
       angleXProperty.set(0);
+      angleYProperty.set(0);
+      angleZProperty.set(0);
+      sideProperty.set(false);
 
     }
   }

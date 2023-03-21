@@ -44,6 +44,7 @@ public class RunwaySceneLoader extends SceneAbstract{
                     break;
                 case H:
                     help.toggleHelp(this.getClass().getCanonicalName());
+                    scene.refresh();
                     break;
             }
         }));
