@@ -97,6 +97,7 @@ public class Runway {
     private final SimpleBooleanProperty hasRunwayObstacle = new SimpleBooleanProperty(false);
     private final SimpleStringProperty units = new SimpleStringProperty("m");
 
+
     /**
      * Creates a new runway object and sets up change listeners on all input properties so that takeoff and landing
      * distances are automatically recalculated whenever any input value is changed.
