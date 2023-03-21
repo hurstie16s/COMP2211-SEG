@@ -157,15 +157,22 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         //right menu
         // Create image views for the icons
-        ImageView exportIcon = new ImageView(new Image(Objects.requireNonNull(getClass()
+        ImageView exportIcon1 = new ImageView(new Image(Objects.requireNonNull(getClass()
             .getResource("/images/export.png")).toExternalForm()));
-        ImageView importIcon = new ImageView(new Image(Objects.requireNonNull(getClass()
+        ImageView importIcon1 = new ImageView(new Image(Objects.requireNonNull(getClass()
+            .getResource("/images/import.png")).toExternalForm()));
+        ImageView exportIcon2 = new ImageView(new Image(Objects.requireNonNull(getClass()
+            .getResource("/images/export.png")).toExternalForm()));
+        ImageView importIcon2 = new ImageView(new Image(Objects.requireNonNull(getClass()
             .getResource("/images/import.png")).toExternalForm()));
 
         // Create the buttons and set their graphics
-        Button exportButton = new Button("Export Airport", exportIcon);
-        Button importButton = new Button("Import Airport", importIcon);
+        Button exportAirObsButton = new Button("Export Airport & Obstacle", exportIcon1);
+        Button importAirObsButton = new Button("Import Airport & Obstacle", importIcon1);
+        Button exportObstacle = new Button("Export Obstacle", exportIcon2);
+        Button importObstacle = new Button("Import Obstacle", importIcon2);
 
+        /*
         //Button events
         exportButton.setOnAction(e -> {
             exportButtonEvent();
@@ -173,21 +180,33 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         importButton.setOnAction(e -> {
             importButtonEvent();
         });
+         */
 
         // Set the size of the icon
-        exportIcon.setFitHeight(16);
-        exportIcon.setFitWidth(16);
-        importIcon.setFitHeight(16);
-        importIcon.setFitWidth(16);
+        exportIcon1.setFitHeight(16);
+        exportIcon1.setFitWidth(16);
+        importIcon1.setFitHeight(16);
+        importIcon1.setFitWidth(16);
+        exportIcon2.setFitHeight(16);
+        exportIcon2.setFitWidth(16);
+        importIcon2.setFitHeight(16);
+        importIcon2.setFitWidth(16);
 
 
-        VBox rightMenu = new VBox(exportButton, importButton);
-        VBox.setMargin(exportButton,new Insets(30,20,20,20));
-        VBox.setMargin(importButton,new Insets(10,20,20,20));
+        VBox rightMenuTop = new VBox(exportObstacle, importObstacle);
+        VBox.setMargin(exportObstacle,new Insets(30,20,20,20));
+        VBox.setMargin(importObstacle,new Insets(10,20,20,20));
+      VBox rightMenuBottom = new VBox(exportAirObsButton, importAirObsButton);
+      VBox.setMargin(exportAirObsButton,new Insets(30,20,20,20));
+      VBox.setMargin(importAirObsButton,new Insets(10,20,20,20));
+      HBox rightMenu = new HBox(rightMenuTop,rightMenuBottom);
         //Dark buttons style from css, can be done globally
         List<Button> darkButtons = new ArrayList<>();
-        darkButtons.add(exportButton);
-        darkButtons.add(importButton);
+        darkButtons.add(exportObstacle);
+        darkButtons.add(importObstacle);
+      darkButtons.add(exportAirObsButton);
+      darkButtons.add(importAirObsButton);
+
 
         for (Button button : darkButtons) {
             button.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
@@ -236,11 +255,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     public void importButtonEvent() {
         logger.info("importButtonEvent");
+        /*
         String tempInputProtocol = "Airport,RD:09L,RWY:l1/w1,RS:l2/w2,SWY:l3/w3,CWY:l4/w4,RESA:l5/w5,TD:n1,SE:n2,BP:n3";
         String betterTempInputProtocol = "Airport:09L,l1,w1,l2,w2,l3,w3,l4,w4,l5,w5,n1,n2,n3";
         String[] extractAirportAndColumns = betterTempInputProtocol.split(":");
         String airportName = extractAirportAndColumns[0];
         String[] columnsEntries = extractAirportAndColumns[1].split(",");
+         */
         Airport airport = new Airport("TempName");
         airport.setLatitude(0.0);
         airport.setLongitude(0.0);
