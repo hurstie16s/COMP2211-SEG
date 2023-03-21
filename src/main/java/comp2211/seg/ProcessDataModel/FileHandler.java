@@ -1,26 +1,20 @@
 package comp2211.seg.ProcessDataModel;
 
 
-import javafx.event.ActionEvent;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.io.OutputStream;
 
 public class FileHandler {
     private static final Logger logger = LogManager.getLogger(FileHandler.class);
@@ -64,8 +58,8 @@ public class FileHandler {
                     runways.appendChild(ObstacleElement);
 
                     appendElementWithNewline(ObstacleElement,"Obstacle_Height", Double.toString(runway.getRunwayObstacle().getHeight()), document);
-                    appendElementWithNewline(ObstacleElement, "Obstacle_Width", Double.toString(runway.getRunwayObstacle().getWidth()), document);
-                    appendElementWithNewline(ObstacleElement, "Obstacle_Length", Double.toString(runway.getRunwayObstacle().getLength()), document);
+                    appendElementWithNewline(ObstacleElement, "Obstacle_Width", Double.toString(runway.getRunwayObstacle().getLength()), document);
+                    appendElementWithNewline(ObstacleElement, "Obstacle_Length", Double.toString(runway.getRunwayObstacle().getWidth()), document);
                     logger.info("Runway has Obstacles");
 
                 } else {
@@ -136,8 +130,8 @@ public class FileHandler {
             document.appendChild(rootElement);
 
             appendElementWithNewline(rootElement,"Height", Double.toString(obstacle.getHeight()), document);
-            appendElementWithNewline(rootElement,"Width", Double.toString(obstacle.getWidth()), document);
             appendElementWithNewline(rootElement,"Width", Double.toString(obstacle.getLength()), document);
+            appendElementWithNewline(rootElement,"Width", Double.toString(obstacle.getWidth()), document);
 
 
             DOMSource domSource = new DOMSource(document);

@@ -120,7 +120,7 @@ class RunwayTest {
     }
     void addObstacle(Runway runway, Obstacle obstacle){
         runway.removeObstacle();
-        obstacle.widthProperty().set(0);
+        obstacle.lengthProperty().set(0);
         runway.addObstacle(obstacle);
     }
 

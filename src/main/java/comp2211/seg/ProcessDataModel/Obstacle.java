@@ -15,10 +15,10 @@ public class Obstacle {
     private final SimpleDoubleProperty height = new SimpleDoubleProperty(10);
 
     /** The width of the obstacle. */
-    private final SimpleDoubleProperty width = new SimpleDoubleProperty(100);
+    private final SimpleDoubleProperty length = new SimpleDoubleProperty(100);
 
     /** The length of the obstacle. */
-    private final SimpleDoubleProperty length = new SimpleDoubleProperty(60);
+    private final SimpleDoubleProperty width = new SimpleDoubleProperty(60);
 
     /** The distance of the obstacle from the runway threshold. */
     private final SimpleDoubleProperty distFromThreshold = new SimpleDoubleProperty();
@@ -78,8 +78,8 @@ public class Obstacle {
      *
      * @return the width of the obstacle
      */
-    public double getWidth() {
-        return width.get();
+    public double getLength() {
+        return length.get();
     }
 
     /**
@@ -87,8 +87,8 @@ public class Obstacle {
      *
      * @return the SimpleDoubleProperty representing the width of the obstacle
      */
-    public SimpleDoubleProperty widthProperty() {
-        return width;
+    public SimpleDoubleProperty lengthProperty() {
+        return length;
     }
 
     /**
@@ -96,8 +96,8 @@ public class Obstacle {
      *
      * @return the length of the obstacle
      */
-    public double getLength() {
-        return length.get();
+    public double getWidth() {
+        return width.get();
     }
 
     /**
@@ -105,8 +105,8 @@ public class Obstacle {
      *
      * @return the SimpleDoubleProperty representing the length of the obstacle
      */
-    public SimpleDoubleProperty lengthProperty() {
-        return length;
+    public SimpleDoubleProperty widthProperty() {
+        return width;
     }
 
     /**

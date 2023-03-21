@@ -643,12 +643,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         obstacleData.add(obstacleComboBox,1,0);
 
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().heightProperty()),1,1);
-        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().lengthProperty()),1,2);
-        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().widthProperty()),1,3);
+        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().widthProperty()),1,2);
+        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().lengthProperty()),1,3);
         obstacleData.add(makeButton(appWindow.runway.hasRunwayObstacleProperty(),"No","Yes"),1,4);
         Slider posSlider = new Slider();
-        posSlider.minProperty().bind(appWindow.runway.runwayObstacle.widthProperty().divide(-2));
-        posSlider.maxProperty().bind(appWindow.runway.runwayLengthProperty().add(appWindow.runway.runwayObstacle.widthProperty().divide(2)));
+        posSlider.minProperty().bind(appWindow.runway.runwayObstacle.lengthProperty().divide(-2));
+        posSlider.maxProperty().bind(appWindow.runway.runwayLengthProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)));
         posSlider.valueProperty().bindBidirectional(appWindow.runway.runwayObstacle.distFromThresholdProperty());
         VBox posLeft = new VBox(makeOutputLabel(new SimpleStringProperty("Left"),new SimpleBooleanProperty(true),18),makeOutputLabel(appWindow.runway.runwayObstacle.distFromThresholdProperty(),new SimpleBooleanProperty(true),5));
         VBox posRight = new VBox(makeOutputLabel(new SimpleStringProperty("Right"),new SimpleBooleanProperty(true),18),makeOutputLabel(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty(),new SimpleBooleanProperty(true),5));
@@ -688,26 +688,26 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private void obstaclePresetSetup(ArrayList<Obstacle> obstaclePresets) {
         obstaclePresets.add(new Obstacle("Airbus A320-200", 11.76, 0));
-        obstaclePresets.get(0).widthProperty().set(37.57);
-        obstaclePresets.get(0).lengthProperty().set(35.8);
+        obstaclePresets.get(0).lengthProperty().set(37.57);
+        obstaclePresets.get(0).widthProperty().set(35.8);
         obstaclePresets.add(new Obstacle("Boeing 737-800", 12.6, 0));
-        obstaclePresets.get(1).widthProperty().set(34.32);
-        obstaclePresets.get(1).lengthProperty().set(39.5);
+        obstaclePresets.get(1).lengthProperty().set(34.32);
+        obstaclePresets.get(1).widthProperty().set(39.5);
         obstaclePresets.add(new Obstacle("Boeing 777-9", 19.68, 0));
-        obstaclePresets.get(2).widthProperty().set(76.72);
-        obstaclePresets.get(2).lengthProperty().set(64.84);
+        obstaclePresets.get(2).lengthProperty().set(76.72);
+        obstaclePresets.get(2).widthProperty().set(64.84);
         obstaclePresets.add(new Obstacle("Piper M350", 3.4, 0));
-        obstaclePresets.get(3).widthProperty().set(8.8);
-        obstaclePresets.get(3).lengthProperty().set(13.1);
+        obstaclePresets.get(3).lengthProperty().set(8.8);
+        obstaclePresets.get(3).widthProperty().set(13.1);
         obstaclePresets.add(new Obstacle("Pothole", 0, 0));
-        obstaclePresets.get(4).widthProperty().set(0);
         obstaclePresets.get(4).lengthProperty().set(0);
+        obstaclePresets.get(4).widthProperty().set(0);
         obstaclePresets.add(new Obstacle("Pushback tug", 2.5, 0));
-        obstaclePresets.get(5).widthProperty().set(5);
-        obstaclePresets.get(5).lengthProperty().set(2);
+        obstaclePresets.get(5).lengthProperty().set(5);
+        obstaclePresets.get(5).widthProperty().set(2);
         obstaclePresets.add(new Obstacle("Maintenance truck", 3, 0));
-        obstaclePresets.get(6).widthProperty().set(6);
-        obstaclePresets.get(6).lengthProperty().set(2.5);
+        obstaclePresets.get(6).lengthProperty().set(6);
+        obstaclePresets.get(6).widthProperty().set(2.5);
     }
 
     private Node makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility, int i) {

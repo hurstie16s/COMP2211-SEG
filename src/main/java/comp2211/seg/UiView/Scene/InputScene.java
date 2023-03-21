@@ -1,7 +1,6 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.App;
-import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
@@ -108,8 +107,8 @@ public class InputScene extends SceneAbstract {
     makeTextField(inputs, new SimpleStringProperty("ASDA (").concat(units).concat(")"), appWindow.runway.inputLeftAsdaProperty(), appWindow.runway.inputRightAsdaProperty());
     makeTextField(inputs, new SimpleStringProperty("LDA (").concat(units).concat(")"), appWindow.runway.inputLeftLdaProperty(), appWindow.runway.inputRightLdaProperty());
     makeTextField(inputs, new SimpleStringProperty("Runway Designator").concat(""), appWindow.runway.runwayDesignatorLeftProperty(), "([0-9]|0[1-9]|[1-2][0-9]|3[0-6])[lrcLRC]?");
-    makeTextField(inputs, new SimpleStringProperty("Obstacle width (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().widthProperty());
-    makeTextField(inputs, new SimpleStringProperty("Obstacle length (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().lengthProperty());
+    makeTextField(inputs, new SimpleStringProperty("Obstacle width (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().lengthProperty());
+    makeTextField(inputs, new SimpleStringProperty("Obstacle length (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().widthProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle height (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().heightProperty());
     makeTextField(inputs, new SimpleStringProperty("Obstacle displacement (").concat(units).concat(")"), appWindow.runway.getRunwayObstacle().distFromThresholdProperty());
 
