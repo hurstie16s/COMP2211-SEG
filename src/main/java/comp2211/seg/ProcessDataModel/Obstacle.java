@@ -31,11 +31,10 @@ public class Obstacle {
      * @param height             the height of the obstacle
      * @param distFromThreshold  the distance of the obstacle from the runway threshold
      */
-    public Obstacle(String obstacleDesignator, double height, double distFromThreshold, double distFromOtherThreshold) {
+    public Obstacle(String obstacleDesignator, double height, double distFromThreshold) {
         this.obstacleDesignator.set(obstacleDesignator);
         this.height.set(height);
         this.distFromThreshold.set(distFromThreshold);
-        this.distFromOtherThreshold.set(distFromOtherThreshold);
     }
 
     /**

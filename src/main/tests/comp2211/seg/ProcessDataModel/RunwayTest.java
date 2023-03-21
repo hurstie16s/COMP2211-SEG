@@ -174,15 +174,15 @@ class RunwayTest {
     // Test Data Generation
 
     // Obstacles defined in given scenario's
-    static Obstacle obstacle1 = new Obstacle("ob1", 12, -50, 3645);
-    static Obstacle obstacle2 = new Obstacle("ob2", 25, 2853, 500);
-    static Obstacle obstacle3 = new Obstacle("ob3", 15, 150, 3203);
-    static Obstacle obstacle4 = new Obstacle("ob4", 20, 3546, 50);
-    static Obstacle obstacle5 = new Obstacle("ob5", 14, 80, 2082);
-    static Obstacle obstacle6 = new Obstacle("ob6", 11, 2285, -123);
-    static Obstacle obstacle7 = new Obstacle("ob7", 13, 976, 977);
-    static Obstacle obstacle8 = new Obstacle("ob8", 17, 0, 1953);
-    static Obstacle obstacle9 = new Obstacle("ob9", 8, 484, 484);
+    static Obstacle obstacle1 = new Obstacle("ob1", 12, -50);
+    static Obstacle obstacle2 = new Obstacle("ob2", 25, 2853);
+    static Obstacle obstacle3 = new Obstacle("ob3", 15, 150);
+    static Obstacle obstacle4 = new Obstacle("ob4", 20, 3546);
+    static Obstacle obstacle5 = new Obstacle("ob5", 14, 80);
+    static Obstacle obstacle6 = new Obstacle("ob6", 11, 2285);
+    static Obstacle obstacle7 = new Obstacle("ob7", 13, 976);
+    static Obstacle obstacle8 = new Obstacle("ob8", 17, 0);
+    static Obstacle obstacle9 = new Obstacle("ob9", 8, 484);
 
     //TODO: Change generation to fit new tests
     private static Stream<Arguments> generateCheckDesignatorTestData() {
