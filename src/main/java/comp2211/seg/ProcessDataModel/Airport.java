@@ -10,25 +10,19 @@ public class Airport {
     private ArrayList<Runway> runways;
     /** The name of the airport. */
     public String name;
-
     public Double getLatitude() {
         return latitude;
     }
-
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
-
     public Double latitude = 0.0;
-
     public Double getLongitude() {
         return longitude;
     }
-
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
-
     public Double longitude = 0.0;
 
     /**
