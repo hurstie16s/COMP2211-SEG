@@ -568,10 +568,11 @@ public class RunwayScene extends SceneAbstract {
     refresh.set(refresh.not().get());
     if (refresh.get()){
       //appWindow.currentScene.getWindow().setWidth(getWidth()-0.0001);
-      background.translateZProperty().set(background.translateZProperty().get()+0.0001);
+      scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).add(0.00001).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
     }else {
       //appWindow.currentScene.getWindow().setWidth(getWidth()+0.0001);
-      background.translateZProperty().set(background.translateZProperty().get()-0.0001);
+      scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).subtract(0.00001).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+
 
     }
   }
