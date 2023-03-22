@@ -23,6 +23,9 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Objects;
 
 public class FileHandler {
@@ -176,7 +179,7 @@ public class FileHandler {
 
     public static void importObstacle(){}
     public static void importAirport(){}
-    private static void checkFileFormat() {
+    private static void checkFileFormat() throws URISyntaxException {
         /*
         Possibly use XML schema to auto check format
         https://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/validation/Validator.html
@@ -185,6 +188,8 @@ public class FileHandler {
          */
         // Create Schema
         // File paths are only hard coded for now to make ease of testing
+        //InputStream airportSchemaFilePath = Objects.requireNonNull(FileHandler.class.getResourceAsStream("XML/airport.xsd")); // is coming back null
+        //logger.info(airportSchemaFilePath);
         File testFile = new File("src/main/resources/XML/airport.xml");
         File schemaFile = new File("src/main/resources/XML/airport.xsd");
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -201,7 +206,12 @@ public class FileHandler {
     }
 
     public static void main(String[] args) {
-        checkFileFormat();
+        try {
+            checkFileFormat();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
     }
 
 }
