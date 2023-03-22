@@ -1,6 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
+import comp2211.seg.Controller.Interfaces.UKAirportsRunways;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Settings;
 import comp2211.seg.ProcessDataModel.Airport;
@@ -27,6 +28,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -102,7 +104,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         VBox vBoxTable = new VBox();
         VBox.setMargin(vBoxTable,new Insets(150,20,100,20));//Top/Right/Bottom/Left
         //vBoxTable.getChildren().add(makeRunwayGridTable());
-        vBoxTable.getChildren().add(buildTableView(vBoxTable));
+        vBoxTable.getChildren().add(buildTableView());
         vBoxTable.maxWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
         vBoxTable.minWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
 
@@ -353,7 +355,109 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         logger.info("endOfImportbuttonEvent");
     }
 
-    public TableView<RunwayData> buildTableView(VBox container) {
+    public GridPane buildTableView() {
+
+        GridPane airportData = new GridPane();
+
+        for (int i = 0; i < 11; i++) {
+            ColumnConstraints ccx = new ColumnConstraints();
+            ccx.setPercentWidth(100/17);
+            airportData.getColumnConstraints().add(ccx);
+        }
+        for (int i = 0; i < 3; i++) {
+
+            ColumnConstraints ccx = new ColumnConstraints();
+            ccx.setPercentWidth(200/17);
+            airportData.getColumnConstraints().add(ccx);
+        }
+
+        ArrayList<RowConstraints> rc = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+
+            RowConstraints rcx = new RowConstraints();
+            rcx.setPercentHeight(100/4);
+            rc.add(rcx);
+        }
+        String[] titles = new String[] {"Runway(RWY)","Runway Strip","Stopway(SWY)","Clearway(CWY)","RESA","Threshold\nDisplacement","Strip End","Blast\nProtection"};
+        for (int i = 0; i < 8; i++) {
+
+            Label data = makeLabel(titles[i]);
+            data.setAlignment(Pos.CENTER);
+            if (i>=5){
+                GridPane.setRowSpan(data,2);
+                airportData.add(data,6+i,0);
+            }else{
+                GridPane.setColumnSpan(data,2);
+                data.setFont(new Font("Calibri",17));
+                airportData.add(data,1+i*2,0);
+            }
+
+        }
+        for (int i = 0; i < 5; i++) {
+
+            airportData.add(makeLabel("Length"),1+i*2,1);
+            airportData.add(makeLabel("Width"),2+i*2,1);
+        }
+        Label desl = makeLabel(appWindow.runway.getRunwayDesignatorLeft());
+        desl.setAlignment(Pos.CENTER);
+        airportData.add(desl,0,2);
+        airportData.add(makeTableCell(appWindow.runway.runwayLengthProperty()),1,2);
+        airportData.add(makeTableCell(appWindow.runway.runwayWidthProperty()),2,2);
+        airportData.add(new TextField("-"),3,2);
+        airportData.add(new TextField("-"),4,2);
+        airportData.add(makeTableCell(appWindow.runway.stopwayLeftProperty()),5,2);
+        airportData.add(new TextField("-"),6,2);
+        airportData.add(makeTableCell(appWindow.runway.clearwayLeftProperty()),7,2);
+        airportData.add(new TextField("-"),8,2);
+        airportData.add(makeTableCell(appWindow.runway.RESAWidthProperty()),9,2);
+        airportData.add(makeTableCell(appWindow.runway.RESAHeightProperty()),10,2);
+        airportData.add(makeTableCell(appWindow.runway.dispThresholdLeftProperty()),11,2);
+        airportData.add(makeTableCell(appWindow.runway.stripEndProperty()),12,2);
+        airportData.add(new TextField("500m"),13,2);
+
+        Label desr = makeLabel(appWindow.runway.getRunwayDesignatorRight());
+        desr.setAlignment(Pos.CENTER);
+        airportData.add(desr,0,3);
+        airportData.add(makeTableCell(appWindow.runway.runwayLengthProperty()),1,3);
+        airportData.add(makeTableCell(appWindow.runway.runwayWidthProperty()),2,3);
+        airportData.add(new TextField("-"),3,3);
+        airportData.add(new TextField("-"),4,3);
+        airportData.add(makeTableCell(appWindow.runway.stopwayRightProperty()),5,3);
+        airportData.add(new TextField("-"),6,3);
+        airportData.add(makeTableCell(appWindow.runway.clearwayRightProperty()),7,3);
+        airportData.add(new TextField("-"),8,3);
+        airportData.add(makeTableCell(appWindow.runway.RESAWidthProperty()),9,3);
+        airportData.add(makeTableCell(appWindow.runway.RESAHeightProperty()),10,3);
+        airportData.add(makeTableCell(appWindow.runway.dispThresholdRightProperty()),11,3);
+        airportData.add(makeTableCell(appWindow.runway.stripEndProperty()),12,3);
+        airportData.add(new TextField("500m"),13,3);
+        for (Node node:airportData.getChildren()) {
+            if (node instanceof Control) {
+                Control control = (Control) node;
+                control.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                control.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+            }
+            if (node instanceof Pane) {
+                Pane pane = (Pane) node;
+                pane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                pane.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+            }
+            if (node instanceof TextField){
+                ((TextField) node).setAlignment(Pos.CENTER);
+            }
+            if (node instanceof Label){
+                ((Label) node).setAlignment(Pos.CENTER);
+            }
+        }
+
+        airportData.setAlignment(Pos.CENTER);
+        airportData.setSnapToPixel(false);
+
+
+
+        return airportData;
+    }
+    public TableView<RunwayData> buildTableView2(VBox container) {
         TableView<RunwayData> table = new TableView<>();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -430,44 +534,36 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         ObservableList<RunwayData> runway1Data = FXCollections.observableArrayList();
         RunwayData leftData = new RunwayData(
             makeTableCell(appWindow.runway.runwayDesignatorLeftProperty()),
-            //runway
             makeTableCell(appWindow.runway.runwayLengthProperty()),
             makeTableCell(appWindow.runway.runwayWidthProperty()),
-            //strip
-            new TextField("-"),
-            new TextField("-"),
-            //stopway
+            new TextField(""),
+            new TextField(""),
             makeTableCell(appWindow.runway.stopwayLeftProperty()),
-            new TextField("-"),
-            //clearway
+            new TextField(""),
             makeTableCell(appWindow.runway.clearwayLeftProperty()),
-            new TextField("-"),
+            new TextField(""),
             makeTableCell(appWindow.runway.RESAWidthProperty()),
             makeTableCell(appWindow.runway.RESAHeightProperty()),
             makeTableCell(appWindow.runway.dispThresholdLeftProperty()),
             makeTableCell(appWindow.runway.stripEndProperty()),
-            new TextField("500m")
+            new TextField("500")
         );
 
         RunwayData rightData = new RunwayData(
             makeTableCell(appWindow.runway.runwayDesignatorRightProperty()),
-            //runway
             makeTableCell(appWindow.runway.runwayLengthProperty()),
             makeTableCell(appWindow.runway.runwayWidthProperty()),
-            //strip
-            new TextField("-"),
-            new TextField("-"),
-            //stopway
+            new TextField(""),
+            new TextField(""),
             makeTableCell(appWindow.runway.stopwayRightProperty()),
-            new TextField("-"),
-            //clearway
+            new TextField(""),
             makeTableCell(appWindow.runway.clearwayRightProperty()),
-            new TextField("-"),
+            new TextField(""),
             makeTableCell(appWindow.runway.RESAWidthProperty()),
             makeTableCell(appWindow.runway.RESAHeightProperty()),
             makeTableCell(appWindow.runway.dispThresholdRightProperty()),
             makeTableCell(appWindow.runway.stripEndProperty()),
-            new TextField("500m")
+            new TextField("500")
         );
         /*RunwayData data1 = new RunwayData(
             "09L",
@@ -849,36 +945,39 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     }
     private TextField makeTableCell(SimpleDoubleProperty property){
         TextField textField = new TextField();
-        textField.textProperty().bind(property.asString());
+        textField.setAlignment(Pos.CENTER);
+        textField.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+        textField.textProperty().set(property.asString().get());
         textField.editableProperty().set(false);
-        //textField.textProperty().addListener(new ChangeListener<String>() {
-        //    @Override
-        //    public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-        //        if (!s.equals(t1)){
-        //            if (Objects.equals(t1, "")) {
-        //                property.set(0);
-        //            } else {
-        //                try {
-        //                    property.set(Double.parseDouble(t1));
-        //                } catch (Exception e) {
-        //                    displayErrorMessage("Invalid Entry", t1 + " must be a number");
-        //                    textField.setText(s);
-        //                }
-        //            }
-        //        }
-        //    }
-        //});
+        textField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if (!s.equals(t1)){
+                    if (Objects.equals(t1, "")) {
+                        property.set(0);
+                    } else {
+                        try {
+                            property.set(Double.parseDouble(t1));
+                        } catch (Exception e) {
+                            displayErrorMessage("Invalid Entry", t1 + " must be a number");
+                            textField.setText(s);
+                        }
+                    }
+                }
+            }
+        });
         return textField;
     }
 
     private TextField makeTableCell(SimpleStringProperty property){
         TextField textField = new TextField();
-        textField.textProperty().bind(property);
+        textField.setAlignment(Pos.CENTER);
+        textField.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+        textField.textProperty().set(property.get());
         textField.editableProperty().set(false);
         textField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                System.out.println(t1);
                 if (!s.equals(t1)){
                     if (Objects.equals(t1, "")) {
                         property.set("");
