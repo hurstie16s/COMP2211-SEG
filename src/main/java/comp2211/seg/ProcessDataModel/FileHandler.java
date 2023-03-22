@@ -14,10 +14,14 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.validation.Validator;
 import java.io.File;
 
 public class FileHandler {
     private static final Logger logger = LogManager.getLogger(FileHandler.class);
+
+    private static final Validator AIRPORTVALIDATOR = null;// Auto generate when app starts, grab schema from resources
+    private static final Validator OBSTACLEVALIDATOR = null;
 
     public static boolean exportAirport(File file, Airport airport, Obstacle obstacle) {
 
@@ -162,6 +166,7 @@ public class FileHandler {
     Plan:
     -Take file
     -Check file in correct format - else throw exception - custom exception?
+        - also provide front-end error messages
      */
 
     public static void importObstacle(){}
@@ -169,6 +174,9 @@ public class FileHandler {
     private static void checkFileFormat(){
         /*
         Possibly use XML schema to auto check format
+        https://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/validation/Validator.html
+        https://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/validation/Schema.html
+        Keep XSD files in resources file
          */
     }
 
