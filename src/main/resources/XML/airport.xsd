@@ -29,7 +29,7 @@
       <xs:element type="xs:string" name="Designator"/>
       <xs:element type="xs:double" name="Resa_Height"/>
       <xs:element type="xs:double" name="Resa_Width"/>
-      <xs:element type="xs:ObstacleType" name="Obstacle">
+      <xs:element type="xs:ObstacleType" name="Obstacle"/>
       <xs:element type="Right_PropertiesType" name="Right_Properties"/>
       <xs:element type="Left_PropertiesType" name="Left_Properties"/>
     </xs:sequence>
@@ -49,6 +49,6 @@
       <xs:element type="xs:string" name="Height"/>
       <xs:element type="xs:string" name="Length"/>
       <xs:element type="xs:string" name="Position"/>
-    <xs:sequence>
+    </xs:sequence>
   </xs:complexType>
 </xs:schema>

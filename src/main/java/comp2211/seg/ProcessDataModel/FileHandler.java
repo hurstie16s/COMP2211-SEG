@@ -184,9 +184,10 @@ public class FileHandler {
         Keep XSD files in resources file
          */
         // Create Schema
-        File testFile = new File("F:\\University Work\\2nd Year\\Semester 2\\Software Engineering Group Project\\COMP2211-SEG\\src\\main\\resources\\XML\\airport.xml");
+        // File paths are only hard coded for now to make ease of testing
+        File testFile = new File("src/main/resources/XML/airport.xml");
         String path = "/XML/airport.xsd";
-        File schemaFile = new File("F:\\University Work\\2nd Year\\Semester 2\\Software Engineering Group Project\\COMP2211-SEG\\src\\main\\resources\\XML\\airport.xsd");
+        File schemaFile = new File("src/main/resources/XML/airport.xsd");
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try {
             Schema schema = schemaFactory.newSchema(schemaFile);
@@ -194,6 +195,7 @@ public class FileHandler {
             Source testFileSource = new StreamSource(testFile);
             validator.validate(testFileSource);
         } catch (SAXException | IOException e) {
+            e.printStackTrace();
             logger.error(e.getMessage());
             logger.warn("Handle Error");
         }
