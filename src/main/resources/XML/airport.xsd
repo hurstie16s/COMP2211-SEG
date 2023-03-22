@@ -3,44 +3,47 @@
   <xs:element name="airport" type="airportType"/>
   <xs:complexType name="Right_PropertiesType">
     <xs:sequence>
-      <xs:element type="xs:double" name="TORA"/>
-      <xs:element type="xs:double" name="TODA"/>
-      <xs:element type="xs:double" name="ASDA"/>
-      <xs:element type="xs:double" name="LDA"/>
-      <xs:element type="xs:double" name="Clearway"/>
-      <xs:element type="xs:double" name="Stopway"/>
-      <xs:element type="xs:double" name="Displacement_Threshold"/>
+      <xs:element type="xs:string" name="Designator"/>
+      <xs:element type="xs:string" name="TORA"/>
+      <xs:element type="xs:string" name="TODA"/>
+      <xs:element type="xs:string" name="ASDA"/>
+      <xs:element type="xs:string" name="LDA"/>
+      <xs:element type="xs:string" name="Clearway"/>
+      <xs:element type="xs:string" name="Stopway"/>
+      <xs:element type="xs:string" name="Displacement_Threshold"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="Left_PropertiesType">
     <xs:sequence>
-      <xs:element type="xs:double" name="TORA"/>
-      <xs:element type="xs:double" name="TODA"/>
-      <xs:element type="xs:double" name="ASDA"/>
-      <xs:element type="xs:double" name="LDA"/>
-      <xs:element type="xs:double" name="Clearway"/>
-      <xs:element type="xs:double" name="Stopway"/>
-      <xs:element type="xs:double" name="Displacement_Threshold"/>
+      <xs:element type="xs:string" name="Designator"/>
+      <xs:element type="xs:string" name="TORA"/>
+      <xs:element type="xs:string" name="TODA"/>
+      <xs:element type="xs:string" name="ASDA"/>
+      <xs:element type="xs:string" name="LDA"/>
+      <xs:element type="xs:string" name="Clearway"/>
+      <xs:element type="xs:string" name="Stopway"/>
+      <xs:element type="xs:string" name="Displacement_Threshold"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="ObstacleType">
+  <xs:complexType name="RunwayType">
     <xs:sequence>
-      <xs:element type="xs:string" name="name"/>
-      <xs:element type="xs:string" name="Width"/>
-      <xs:element type="xs:string" name="Height"/>
-      <xs:element type="xs:string" name="Length"/>
-      <xs:element type="xs:string" name="Position"/>
+      <xs:element type="xs:string" name="Resa_Height"/>
+      <xs:element type="xs:string" name="Resa_Width"/>
+      <xs:element type="Right_PropertiesType" name="Right_Properties"/>
+      <xs:element type="Left_PropertiesType" name="Left_Properties"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Runway_ObstacleType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="Obstacle_Height"/>
+      <xs:element type="xs:string" name="Obstacle_Width"/>
+      <xs:element type="xs:string" name="Obstacle_Length"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="RunwaysType">
     <xs:sequence>
-      <xs:element type="xs:string" name="Runway"/>
-      <xs:element type="xs:string" name="Designator"/>
-      <xs:element type="xs:double" name="Resa_Height"/>
-      <xs:element type="xs:double" name="Resa_Width"/>
-      <xs:element type="xs:ObstacleType" name="Obstacle"/>
-      <xs:element type="Right_PropertiesType" name="Right_Properties"/>
-      <xs:element type="Left_PropertiesType" name="Left_Properties"/>
+      <xs:element type="RunwayType" name="Runway"/>
+      <xs:element type="Runway_ObstacleType" name="Runway_Obstacle"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="airportType">
