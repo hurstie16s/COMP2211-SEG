@@ -23,6 +23,15 @@
       <xs:element type="xs:double" name="Displacement_Threshold"/>
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="ObstacleType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="name"/>
+      <xs:element type="xs:string" name="Width"/>
+      <xs:element type="xs:string" name="Height"/>
+      <xs:element type="xs:string" name="Length"/>
+      <xs:element type="xs:string" name="Position"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="RunwaysType">
     <xs:sequence>
       <xs:element type="xs:string" name="Runway"/>
@@ -40,15 +49,6 @@
       <xs:element type="xs:string" name="Latitude"/>
       <xs:element type="xs:string" name="Longitude"/>
       <xs:element type="RunwaysType" name="Runways"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ObstacleType">
-    <xs:sequence>
-      <xs:element type="xs:string" name="name"/>
-      <xs:element type="xs:string" name="Width"/>
-      <xs:element type="xs:string" name="Height"/>
-      <xs:element type="xs:string" name="Length"/>
-      <xs:element type="xs:string" name="Position"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

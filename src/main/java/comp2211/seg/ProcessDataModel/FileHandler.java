@@ -186,7 +186,6 @@ public class FileHandler {
         // Create Schema
         // File paths are only hard coded for now to make ease of testing
         File testFile = new File("src/main/resources/XML/airport.xml");
-        String path = "/XML/airport.xsd";
         File schemaFile = new File("src/main/resources/XML/airport.xsd");
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try {
