@@ -7,6 +7,10 @@ import comp2211.seg.Controller.Stage.Theme;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
@@ -90,6 +94,29 @@ public SceneAbstract(Pane root, AppWindow appWindow, double width,double height,
     root.setMaxHeight(height);
     root.setMinWidth(width);
     root.setMinHeight(height);
+
+    Menu fileMenu = new Menu("File");
+    Menu OptionsMenu = new Menu("Options");
+    Menu helpMenu = new Menu("Help");
+
+    MenuItem menu4 = new MenuItem("Import from XML");
+    Menu menu5 = new Menu("Export to XML");
+
+    MenuItem menu6 = new MenuItem("Export Obstacle");
+    MenuItem menu7 = new MenuItem("Export Airport & Obstacle");
+
+    fileMenu.getItems().addAll(menu4, menu5);
+    menu5.getItems().addAll(menu6, menu7);
+
+    MenuBar menuBar = new MenuBar();
+    menuBar.getMenus().addAll(fileMenu, OptionsMenu, helpMenu);
+
+    VBox topMenu = new VBox(menuBar);
+    topMenu.setAlignment(Pos.TOP_CENTER);
+    mainPane.getChildren().add(topMenu);
+
+    Button exportAirObsButton = new Button("Export Airport & Obstacle");
+    Button importAirObsButton = new Button("Import Airport & Obstacle");
 
   }
   public void makeHelp(boolean left){
