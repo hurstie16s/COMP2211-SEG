@@ -342,6 +342,24 @@ public class RunwayScene extends SceneAbstract {
     background.setTranslateZ(2.1);
     group.getChildren().add(background);
   }
+  public void buildmenuless(){
+    super.buildmenuless();
+    setFill(Theme.bgRunway);
+    logger.info("building");
+    configureCamera();
+    render();
+    mainPane.maxWidthProperty().bind(root.widthProperty());
+    mainPane.minWidthProperty().bind(root.widthProperty());
+    mainPane.maxHeightProperty().bind(root.heightProperty());
+    mainPane.minHeightProperty().bind(root.heightProperty());
+    root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+    mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+    scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+    scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));
+    mainPane.getChildren().add(group);
+
+    addListeners();
+  }
 
 
   /**

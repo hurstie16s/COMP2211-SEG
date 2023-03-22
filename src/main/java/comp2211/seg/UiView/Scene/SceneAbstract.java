@@ -139,7 +139,36 @@ public abstract class SceneAbstract extends Scene {
     menu6.setOnAction(e -> {
       exportObstacleButtonEvent();
     });
-}
+  }
+
+  /**
+   * Generic build method to create the basic requirements for a JavaFX Scene
+   * This is used to define a generic structure used by all the children
+   */
+  public void buildmenuless() {
+    try {
+      getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/stylesheet.css")).toExternalForm());
+
+    } catch (Exception e) {
+      logger.error(e);
+    }
+    mainPane = new StackPane();
+    mainPane.setMaxWidth(width);
+    mainPane.setMaxHeight(height);
+
+    mainPane.setMinWidth(width);
+    mainPane.setMinHeight(height);
+    mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+    mainPane.setPickOnBounds(false);
+    root.setPickOnBounds(false);
+    root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG, null, null)));
+
+    root.setMaxWidth(width);
+    root.setMaxHeight(height);
+    root.setMinWidth(width);
+    root.setMinHeight(height);
+    root.getChildren().add(mainPane);
+  }
 
   public void makeHelp(boolean left){
     if (!left) {
