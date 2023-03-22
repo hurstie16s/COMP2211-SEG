@@ -102,7 +102,6 @@ public abstract class SceneAbstract extends Scene {
     mainPane.setPickOnBounds(false);
     root.setPickOnBounds(false);
     root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG, null, null)));
-    root.getChildren().add(mainPane);
 
     root.setMaxWidth(width);
     root.setMaxHeight(height);
@@ -128,7 +127,9 @@ public abstract class SceneAbstract extends Scene {
 
     VBox topMenu = new VBox(menuBar);
     topMenu.setAlignment(Pos.TOP_CENTER);
-    mainPane.getChildren().add(topMenu);
+    VBox layoutPane = new VBox(topMenu,mainPane);
+
+    root.getChildren().add(layoutPane);
 
     //
     menu7.setOnAction(e -> {
