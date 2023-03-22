@@ -4,14 +4,22 @@ import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.Controller.Stage.Theme;
+import comp2211.seg.ProcessDataModel.FileHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -19,39 +27,49 @@ import java.util.Objects;
  * It extends the JavaFX Scene class
  * and contains common functionality shared by all scenes.
  */
-public abstract class SceneAbstract extends Scene{
+public abstract class SceneAbstract extends Scene {
 
   private static final Logger logger = LogManager.getLogger(SceneAbstract.class);
   protected final AppWindow appWindow;
 
-  /** The root node of the scene.*/
+  /**
+   * The root node of the scene.
+   */
   public Pane root;
 
-  /**The main pane of the scene.*/
+  /**
+   * The main pane of the scene.
+   */
   public StackPane mainPane;
 
-  /** The width of the scene.*/
+  /**
+   * The width of the scene.
+   */
   protected double width;
 
-  /** The height of the scene.*/
+  /**
+   * The height of the scene.
+   */
   protected double height;
   protected HelpScene help;
 
   /**
    * Constructor to create a SceneAbstract object.
-   * @param root the root pane of the scene
+   *
+   * @param root      the root pane of the scene
    * @param appWindow the application window of the scene
    */
 
-  public SceneAbstract(Pane root, AppWindow appWindow, double width,double height) {
-    super(root, appWindow.getWidth(), appWindow.getHeight(),Color.BLACK);
+  public SceneAbstract(Pane root, AppWindow appWindow, double width, double height) {
+    super(root, appWindow.getWidth(), appWindow.getHeight(), Color.BLACK);
     this.root = root;
     this.width = width;
     this.height = height;
     this.appWindow = appWindow;
   }
-public SceneAbstract(Pane root, AppWindow appWindow, double width,double height, boolean depthBuffer) {
-    super(root, appWindow.getWidth(), appWindow.getHeight(),depthBuffer, SceneAntialiasing.BALANCED);
+
+  public SceneAbstract(Pane root, AppWindow appWindow, double width, double height, boolean depthBuffer) {
+    super(root, appWindow.getWidth(), appWindow.getHeight(), depthBuffer, SceneAntialiasing.BALANCED);
     this.root = root;
     this.width = width;
     this.height = height;
@@ -71,7 +89,7 @@ public SceneAbstract(Pane root, AppWindow appWindow, double width,double height,
     try {
       getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/stylesheet.css")).toExternalForm());
 
-    }catch (Exception e){
+    } catch (Exception e) {
       logger.error(e);
     }
     mainPane = new StackPane();
@@ -80,18 +98,78 @@ public SceneAbstract(Pane root, AppWindow appWindow, double width,double height,
 
     mainPane.setMinWidth(width);
     mainPane.setMinHeight(height);
-    mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+    mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
     mainPane.setPickOnBounds(false);
     root.setPickOnBounds(false);
-    root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
-    root.getChildren().add(mainPane);
+    root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG, null, null)));
 
     root.setMaxWidth(width);
     root.setMaxHeight(height);
     root.setMinWidth(width);
     root.setMinHeight(height);
 
+    //Top menu
+    Menu fileMenu = new Menu("File");
+    Menu OptionsMenu = new Menu("Options");
+    Menu helpMenu = new Menu("Help");
+
+    MenuItem menu4 = new MenuItem("Import from XML");
+    Menu menu5 = new Menu("Export to XML");
+
+    MenuItem menu6 = new MenuItem("Export Obstacle");
+    MenuItem menu7 = new MenuItem("Export Airport & Obstacle");
+
+    fileMenu.getItems().addAll(menu4, menu5);
+    menu5.getItems().addAll(menu6, menu7);
+
+    MenuBar menuBar = new MenuBar();
+    menuBar.getMenus().addAll(fileMenu, OptionsMenu, helpMenu);
+
+    VBox topMenu = new VBox(menuBar);
+    topMenu.setAlignment(Pos.TOP_CENTER);
+    VBox layoutPane = new VBox(topMenu,mainPane);
+
+    root.getChildren().add(layoutPane);
+
+    //
+    menu7.setOnAction(e -> {
+      exportAirportButtonEvent();
+    });
+
+    menu6.setOnAction(e -> {
+      exportObstacleButtonEvent();
+    });
   }
+
+  /**
+   * Generic build method to create the basic requirements for a JavaFX Scene
+   * This is used to define a generic structure used by all the children
+   */
+  public void buildmenuless() {
+    try {
+      getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/stylesheet.css")).toExternalForm());
+
+    } catch (Exception e) {
+      logger.error(e);
+    }
+    mainPane = new StackPane();
+    mainPane.setMaxWidth(width);
+    mainPane.setMaxHeight(height);
+
+    mainPane.setMinWidth(width);
+    mainPane.setMinHeight(height);
+    mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+    mainPane.setPickOnBounds(false);
+    root.setPickOnBounds(false);
+    root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG, null, null)));
+
+    root.setMaxWidth(width);
+    root.setMaxHeight(height);
+    root.setMinWidth(width);
+    root.setMinHeight(height);
+    root.getChildren().add(mainPane);
+  }
+
   public void makeHelp(boolean left){
     if (!left) {
 
@@ -116,5 +194,72 @@ public SceneAbstract(Pane root, AppWindow appWindow, double width,double height,
 
     }
   }
+
+  // repeated method to export button (remove in base scene when done)
+  public void exportAirportButtonEvent() {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Choose file to export");
+    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
+    fileChooser.getExtensionFilters().add(extFilter);
+    fileChooser.setInitialFileName("Airport");
+    File file = fileChooser.showSaveDialog(new Stage());
+
+    try {
+      if (file == null) {
+        return;
+      }
+
+      if (!file.getName().contains(".xml")) {
+        logger.info("reached");
+        file = new File(file.getAbsolutePath() + ".xml");
+        logger.info(file.getAbsolutePath());
+      }
+
+      if (FileHandler.exportAirport(file, appWindow.airport, appWindow.runway.runwayObstacle)) {
+        FileHandler.exportAirport(file, appWindow.airport,appWindow.runway.runwayObstacle);
+        logger.info("Exporting Successful");
+      } else {
+        logger.info("Exporting Airport failed");
+      }
+    } catch (NullPointerException nullPointerException) {
+      logger.info("No airport initiated, hence: " +
+              "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
+              "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
+    }
+  }
+
+  // Repeated method for exporting obstacle event, remove this from base scene when done
+  public void exportObstacleButtonEvent() {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Choose file to export");
+    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
+    fileChooser.getExtensionFilters().add(extFilter);
+    fileChooser.setInitialFileName("Obstacle");
+    File file = fileChooser.showSaveDialog(new Stage());
+
+    try {
+      if (file == null) {
+        return;
+      }
+
+      if (!file.getName().contains(".xml")) {
+        logger.info("reached");
+        file = new File(file.getAbsolutePath() + ".xml");
+        logger.info(file.getAbsolutePath());
+      }
+
+      if (FileHandler.exportObstacle(file, appWindow.runway.runwayObstacle)) {
+        FileHandler.exportObstacle(file, appWindow.runway.runwayObstacle);
+        logger.info("Exporting Successful");
+      } else {
+        logger.info("Exporting Obstacle failed");
+      }
+    } catch (NullPointerException nullPointerException) {
+      logger.info("No Obstacle initiated, hence: " +
+              "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
+              "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
+    }
+  }
+
 
 }
