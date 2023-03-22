@@ -5,23 +5,28 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 
 public class FileHandler {
     private static final Logger logger = LogManager.getLogger(FileHandler.class);
-
-    private static final Validator AIRPORTVALIDATOR = null;// Auto generate when app starts, grab schema from resources
-    private static final Validator OBSTACLEVALIDATOR = null;
 
     public static boolean exportAirport(File file, Airport airport, Obstacle obstacle) {
 
@@ -171,13 +176,31 @@ public class FileHandler {
 
     public static void importObstacle(){}
     public static void importAirport(){}
-    private static void checkFileFormat(){
+    private static void checkFileFormat() {
         /*
         Possibly use XML schema to auto check format
         https://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/validation/Validator.html
         https://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/validation/Schema.html
         Keep XSD files in resources file
          */
+        // Create Schema
+        File testFile = new File("F:\\University Work\\2nd Year\\Semester 2\\Software Engineering Group Project\\COMP2211-SEG\\src\\main\\resources\\XML\\airport.xml");
+        String path = "/XML/airport.xsd";
+        File schemaFile = new File("F:\\University Work\\2nd Year\\Semester 2\\Software Engineering Group Project\\COMP2211-SEG\\src\\main\\resources\\XML\\airport.xsd");
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        try {
+            Schema schema = schemaFactory.newSchema(schemaFile);
+            Validator validator = schema.newValidator();
+            Source testFileSource = new StreamSource(testFile);
+            validator.validate(testFileSource);
+        } catch (SAXException | IOException e) {
+            logger.error(e.getMessage());
+            logger.warn("Handle Error");
+        }
+    }
+
+    public static void main(String[] args) {
+        checkFileFormat();
     }
 
 }
