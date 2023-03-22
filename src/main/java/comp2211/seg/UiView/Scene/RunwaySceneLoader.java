@@ -68,7 +68,30 @@ public class RunwaySceneLoader extends SceneAbstract{
         super.build();
         makeHelp(false);
         scene = new RunwayScene(new Pane(),appWindow, width, height,false);
-        scene.build();
+        scene.buildmenuless();
+        scene.initialise();
+        mainPane.getChildren().add(scene.getRoot());
+        root.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                scene.mainPane.setMinWidth((Double) t1);
+                scene.mainPane.setMaxWidth((Double) t1);
+            }
+        });
+        root.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                scene.mainPane.setMinHeight((Double) t1);
+                scene.mainPane.setMaxHeight((Double) t1);
+
+            }
+        });
+    }
+    public void buildmenuless(){
+        super.buildmenuless();
+        makeHelp(false);
+        scene = new RunwayScene(new Pane(),appWindow, width, height,false);
+        scene.buildmenuless();
         scene.initialise();
         mainPane.getChildren().add(scene.getRoot());
         root.widthProperty().addListener(new ChangeListener<Number>() {
