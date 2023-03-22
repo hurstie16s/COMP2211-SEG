@@ -12,7 +12,7 @@ public interface GlobalVariables {
    */
   String SEG_INFO = "COMP2211\n" +
       "Software Engineering Group Project\n" +
-      "Increment1 - version 0.1\n" +
+      "Increment2 - version 0.2\n" +
       "Josh Douglas\n" +
       "jod1n21\n" +
       "Lam Giang\n" +
