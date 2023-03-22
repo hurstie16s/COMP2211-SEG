@@ -5,23 +5,31 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Objects;
 
 public class FileHandler {
     private static final Logger logger = LogManager.getLogger(FileHandler.class);
-
-    private static final Validator AIRPORTVALIDATOR = null;// Auto generate when app starts, grab schema from resources
-    private static final Validator OBSTACLEVALIDATOR = null;
 
     public static boolean exportAirport(File file, Airport airport, Obstacle obstacle) {
 
@@ -174,13 +182,39 @@ public class FileHandler {
 
     public static void importObstacle(){}
     public static void importAirport(){}
-    private static void checkFileFormat(){
+    private static void checkFileFormat() throws URISyntaxException {
         /*
         Possibly use XML schema to auto check format
         https://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/validation/Validator.html
         https://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/validation/Schema.html
         Keep XSD files in resources file
          */
+        // Create Schema
+        // File paths are only hard coded for now to make ease of testing
+        //InputStream airportSchemaFilePath = Objects.requireNonNull(FileHandler.class.getResourceAsStream("XML/airport.xsd")); // is coming back null
+        //logger.info(airportSchemaFilePath);
+        File testFile = new File("src/main/resources/XML/airport.xml");
+        File schemaFile = new File("src/main/resources/XML/airport.xsd");
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        try {
+            Schema schema = schemaFactory.newSchema(schemaFile);
+            Validator validator = schema.newValidator();
+            Source testFileSource = new StreamSource(testFile);
+            validator.validate(testFileSource);
+        } catch (SAXException | IOException e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+            logger.warn("Handle Error - file does not fit schema");
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            checkFileFormat();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
     }
 
 }
