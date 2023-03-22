@@ -52,7 +52,7 @@ public class FileHandler {
                 appendElementWithNewline(runwayElement, "Resa_Height", Double.toString(runway.getRESAHeight()), document);
                 appendElementWithNewline(runwayElement, "Resa_Width", Double.toString(runway.getRESAWidth()), document);
 
-                if (runway.isHasRunwayObstacle() == true) {
+                if (runway.isHasRunwayObstacle()) {
 
                     Element ObstacleElement = document.createElement("Runway_Obstacle");
                     runways.appendChild(ObstacleElement);
@@ -153,6 +153,23 @@ public class FileHandler {
             return false;
         }
 
+    }
+
+    // TODO: Error handling - incorrect XML format - build schema to run a format check?
+    // TODO: Airport + Obstacle Import
+    // TODO: Obstacle Import
+    /*
+    Plan:
+    -Take file
+    -Check file in correct format - else throw exception - custom exception?
+     */
+
+    public static void importObstacle(){}
+    public static void importAirport(){}
+    private static void checkFileFormat(){
+        /*
+        Possibly use XML schema to auto check format
+         */
     }
 
 }
