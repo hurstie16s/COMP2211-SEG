@@ -1,5 +1,7 @@
 package comp2211.seg.Controller.Interfaces;
 
+import comp2211.seg.ProcessDataModel.Airport;
+
 /**
  * UK Airport Runways data 2021
  */
@@ -68,6 +70,7 @@ public interface UKAirportsRunways {
       // London Southend Airport
       {"06/24"}
   };
+
   // London Heathrow Airport
   String LHR_RUNWAY_09L_27R = "09L/27R";
   int LHR_TORA_09L = 3902; // meters

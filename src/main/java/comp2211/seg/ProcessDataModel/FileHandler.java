@@ -14,10 +14,14 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.validation.Validator;
 import java.io.File;
 
 public class FileHandler {
     private static final Logger logger = LogManager.getLogger(FileHandler.class);
+
+    private static final Validator AIRPORTVALIDATOR = null;// Auto generate when app starts, grab schema from resources
+    private static final Validator OBSTACLEVALIDATOR = null;
 
     public static boolean exportAirport(File file, Airport airport, Obstacle obstacle) {
 
@@ -52,14 +56,17 @@ public class FileHandler {
                 appendElementWithNewline(runwayElement, "Resa_Height", Double.toString(runway.getRESAHeight()), document);
                 appendElementWithNewline(runwayElement, "Resa_Width", Double.toString(runway.getRESAWidth()), document);
 
-                if (runway.isHasRunwayObstacle() == true) {
+                if (runway.isHasRunwayObstacle()) {
 
                     Element ObstacleElement = document.createElement("Runway_Obstacle");
                     runways.appendChild(ObstacleElement);
 
+                    appendElementWithNewline(ObstacleElement,"Obstacle_Designator", runway.getRunwayObstacle().toString(), document);
                     appendElementWithNewline(ObstacleElement,"Obstacle_Height", Double.toString(runway.getRunwayObstacle().getHeight()), document);
                     appendElementWithNewline(ObstacleElement, "Obstacle_Width", Double.toString(runway.getRunwayObstacle().getLength()), document);
                     appendElementWithNewline(ObstacleElement, "Obstacle_Length", Double.toString(runway.getRunwayObstacle().getWidth()), document);
+                    appendElementWithNewline(ObstacleElement, "Distance_From_Threshold", Double.toString(runway.getRunwayObstacle().getDistFromThreshold()), document);
+                    appendElementWithNewline(ObstacleElement, "Distance_From_Other_Threshold", Double.toString(runway.getRunwayObstacle().getDistFromOtherThreshold()), document);
                     logger.info("Runway has Obstacles");
 
                 } else {
@@ -153,6 +160,27 @@ public class FileHandler {
             return false;
         }
 
+    }
+
+    // TODO: Error handling - incorrect XML format - build schema to run a format check?
+    // TODO: Airport + Obstacle Import
+    // TODO: Obstacle Import
+    /*
+    Plan:
+    -Take file
+    -Check file in correct format - else throw exception - custom exception?
+        - also provide front-end error messages
+     */
+
+    public static void importObstacle(){}
+    public static void importAirport(){}
+    private static void checkFileFormat(){
+        /*
+        Possibly use XML schema to auto check format
+        https://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/validation/Validator.html
+        https://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/validation/Schema.html
+        Keep XSD files in resources file
+         */
     }
 
 }
