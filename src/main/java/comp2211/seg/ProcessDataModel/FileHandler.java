@@ -196,7 +196,7 @@ public class FileHandler {
         } catch (SAXException | IOException e) {
             e.printStackTrace();
             logger.error(e.getMessage());
-            logger.warn("Handle Error");
+            logger.warn("Handle Error - file does not fit schema");
         }
     }
 
