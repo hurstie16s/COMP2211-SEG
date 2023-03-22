@@ -7,13 +7,17 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
 
 /**
  * Represents a runway object, containing various properties such as length, width, and designator, as well as methods
@@ -23,6 +27,10 @@ public class Runway {
 
     // logger
     private static final Logger logger = LogManager.getLogger(Runway.class);
+
+    // changes history pane
+    public Pane changesHistory = new Pane();
+    private ArrayList<String> changeHistory = new ArrayList<>();
 
     // Runway dimensions and properties
     private final SimpleDoubleProperty clearwayLeft = new SimpleDoubleProperty(500);
@@ -63,10 +71,7 @@ public class Runway {
     private final SimpleDoubleProperty leftLda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty dispThresholdLeft = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(60);
-    /**
-     * The Changes history.
-     */
-    public TextFlow changesHistory = new TextFlow();
+
 
     public Obstacle runwayObstacle = new Obstacle("One", 10,0);
 
@@ -179,6 +184,7 @@ public class Runway {
         runwayObstacle.distFromThresholdProperty().set(obstacleToAdd.distFromThresholdProperty().get());
         hasRunwayObstacle.set(true); // Listener will call recalculate
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
+        logChange("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
 
     }
 
@@ -189,6 +195,7 @@ public class Runway {
         hasRunwayObstacle.set(false);
         logger.info("Removed Obstacle from runway " + runwayDesignatorLeft.get());
         logger.info("Return runway to original state");
+        logChange("Removed Obstacle from runway " + runwayDesignatorLeft.get());
     }
 
     /**
@@ -493,6 +500,27 @@ public class Runway {
         leftAsda.bind(leftTora.add(stopwayRight));
         leftToda.bind(leftTora.add(clearwayRight));
     }
+
+    /**
+     * Adds a change to changes history pane
+     * @param change text to be displayed in change history tab
+     */
+    public void logChange(String change) {
+        changeHistory.add(change);
+        Label changeLabel = new Label(change);
+        changeLabel.setMaxWidth(changesHistory.getWidth());
+        changeLabel.setMaxHeight(40);
+        changeLabel.setWrapText(true);
+        double newLabelHeight = changeLabel.getHeight();
+        ObservableList<Node> children = changesHistory.getChildren();
+        for (Node child : children) {
+            double currentY = child.getLayoutY();
+            child.setLayoutY(currentY + 40);
+        }
+        changeLabel.setLayoutY(0);
+        children.add(0, changeLabel);
+    }
+
 
 
 
@@ -1189,10 +1217,6 @@ public class Runway {
         return rightLand;
     }
 
-    public TextFlow getChangesHistory() {
-        return changesHistory;
-    }
-
     public double getMINRESA() {
         return MINRESA.get();
     }
@@ -1348,13 +1372,8 @@ public class Runway {
     public void setDispThresholdLeft(double dispThresholdLeft) {
         this.dispThresholdLeft.set(dispThresholdLeft);
     }
-
     public void setDispThresholdRight(double dispThresholdRight) {
         this.dispThresholdRight.set(dispThresholdRight);
-    }
-
-    public void setChangesHistory(TextFlow changesHistory) {
-        this.changesHistory = changesHistory;
     }
 
     public void setRunwayObstacle(Obstacle runwayObstacle) {
