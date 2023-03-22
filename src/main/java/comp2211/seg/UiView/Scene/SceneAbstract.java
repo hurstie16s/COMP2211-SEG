@@ -116,8 +116,8 @@ public abstract class SceneAbstract extends Scene {
     MenuItem menu4 = new MenuItem("Import from XML");
     Menu menu5 = new Menu("Export to XML");
 
-    MenuItem menu6 = new MenuItem("Export Obstacle");
-    MenuItem menu7 = new MenuItem("Export Airport & Obstacle");
+    MenuItem menu6 = new MenuItem("Export Obstacle...");
+    MenuItem menu7 = new MenuItem("Export Airport & Obstacle...");
 
     fileMenu.getItems().addAll(menu4, menu5);
     menu5.getItems().addAll(menu6, menu7);
