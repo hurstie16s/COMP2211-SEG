@@ -1129,7 +1129,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                     button2.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
                     button2.setTextFill(Theme.fg);
                     button.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
-                    button.setTextFill(Theme.unfocusedBG);
+                    button.setTextFill(Theme.extremelyfocusedBG);
                 }
             }
         });
@@ -1142,7 +1142,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 if (t1) {
                     property.set(false);
                     button2.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
-                    button2.setTextFill(Theme.unfocusedBG);
+                    button2.setTextFill(Theme.extremelyfocusedBG);
                     button.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
                     button.setTextFill(Theme.fg);
                 }

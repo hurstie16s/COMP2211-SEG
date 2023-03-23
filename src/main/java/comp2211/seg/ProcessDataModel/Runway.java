@@ -157,12 +157,12 @@ public class Runway {
 
         var newCharacter = "";
         switch (character) {
-            case "R" -> newCharacter = "L";
-            case "L" -> newCharacter = "R";
-            case "C" -> newCharacter = "C";
-            default -> {
+            case "R":  newCharacter = "L"; break;
+            case "L": newCharacter = "R"; break;
+            case "C": newCharacter = "C"; break;
+            default: {
                 newCharacter = "ERROR";
-                logger.error("Incorrect initial character");
+                logger.error("Incorrect initial character"); break;
             }
         }
 
