@@ -348,6 +348,38 @@ public class RunwayScene extends SceneAbstract {
     logger.info("building");
     configureCamera();
     render();
+    root.widthProperty().addListener(new ChangeListener<Number>() {
+      @Override
+      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+        mainPane.setMinWidth((Double) t1);
+        mainPane.setMaxWidth((Double) t1);
+        group.translateXProperty().set(group.translateXProperty().get()+((double) t1 - (double) number)/2);
+      }
+    });
+    root.heightProperty().addListener(new ChangeListener<Number>() {
+      @Override
+      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+        mainPane.setMinHeight((Double) t1);
+        mainPane.setMaxHeight((Double) t1);
+        group.translateYProperty().set(group.translateYProperty().get()+((double) t1 - (double) number)/2);
+
+      }
+    });
+    root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+    mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+    scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+    scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));
+    mainPane.getChildren().add(group);
+
+    addListeners();
+  }
+  public void buildmenulessalt(){
+    super.buildmenuless();
+    setFill(Theme.bgRunway);
+    logger.info("building");
+    configureCamera();
+    render();
+
     mainPane.maxWidthProperty().bind(root.widthProperty());
     mainPane.minWidthProperty().bind(root.widthProperty());
     mainPane.maxHeightProperty().bind(root.heightProperty());

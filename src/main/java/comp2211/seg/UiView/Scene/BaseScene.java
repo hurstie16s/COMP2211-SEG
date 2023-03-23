@@ -999,8 +999,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         ArrayList<Pair<String, Pane>> viewTabs = new ArrayList<>();
         RunwayScene runwayScene1 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
         RunwayScene runwayScene2 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
-        runwayScene1.buildmenuless();
-        runwayScene2.buildmenuless();
+        runwayScene1.buildmenulessalt();
+        runwayScene2.buildmenulessalt();
         runwayScene2.toggleView();
         VBox dualView = new VBox(runwayScene1.getRoot(),runwayScene2.getRoot());
         for (RunwayScene scene: new RunwayScene[] {runwayScene1,runwayScene2}) {
@@ -1012,7 +1012,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         }
 
         RunwayScene runwayScene3 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
-        runwayScene3.buildmenuless();
+        runwayScene3.buildmenulessalt();
         if (Settings.portrait.get()) {
             runwayScene3.angleXProperty().set(180);
             runwayScene3.angleYProperty().set(0);
@@ -1027,7 +1027,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         runwayScene3.root.minHeightProperty().bind(topView.heightProperty());
 
         RunwayScene runwayScene4 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
-        runwayScene4.buildmenuless();
+        runwayScene4.buildmenulessalt();
         if (Settings.portrait.get()) {
             runwayScene4.angleYProperty().set(90);
             runwayScene4.angleXProperty().set(90);
