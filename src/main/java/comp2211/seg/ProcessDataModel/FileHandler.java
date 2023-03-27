@@ -183,12 +183,6 @@ public class FileHandler {
     public static void importObstacle(){}
     public static void importAirport(){}
     private static void checkFileFormat() throws URISyntaxException {
-        /*
-        Possibly use XML schema to auto check format
-        https://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/validation/Validator.html
-        https://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/validation/Schema.html
-        Keep XSD files in resources file
-         */
         // Create Schema
         // File paths are only hard coded for now to make ease of testing
         //InputStream airportSchemaFilePath = Objects.requireNonNull(FileHandler.class.getResourceAsStream("XML/airport.xsd")); // is coming back null
