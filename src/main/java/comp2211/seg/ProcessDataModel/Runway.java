@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -511,6 +512,8 @@ public class Runway {
         changeLabel.setMaxWidth(changesHistory.getWidth());
         changeLabel.setMaxHeight(40);
         changeLabel.setWrapText(true);
+        changeLabel.setTextFill(Theme.unfocusedBG);
+        changeLabel.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG, new CornerRadii(3), Insets.EMPTY)));
         double newLabelHeight = changeLabel.getHeight();
         ObservableList<Node> children = changesHistory.getChildren();
         for (Node child : children) {
