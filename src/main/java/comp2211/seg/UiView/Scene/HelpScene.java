@@ -3,6 +3,7 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,8 +21,8 @@ public class HelpScene extends Scene {
 
     private static final Logger logger = LogManager.getLogger(HelpScene.class);
     private final AppWindow appWindow;
+    public static SimpleBooleanProperty visible = new SimpleBooleanProperty(false);
     private final VBox root;
-    private boolean visible = true;
 
     /**
      * Constructor to create a SceneAbstract object.
@@ -114,10 +115,11 @@ public class HelpScene extends Scene {
     }
     public void toggleHelp(String className){
         //logger.info(className);
-        if (!visible) {
+        if (!visible.get()) {
             switch (className) {
                 case "comp2211.seg.UiView.Scene.RunwayScene":
                 case "comp2211.seg.UiView.Scene.RunwaySceneLoader":
+                    makeKey("H", "Toggle the help menu");
                     makeKey("Esc", "Navigate back to home screen");
                     makeKey("T", "Toggle between top and side views");
                     makeKey("W", "Pan view up");
@@ -127,19 +129,23 @@ public class HelpScene extends Scene {
                     runwayLabels();
                     break;
                 case "comp2211.seg.UiView.Scene.MainScene":
+                    makeKey("H", "Toggle the help menu");
                     makeKey("Esc", "Exit application");
                     runwayLabels();
                     break;
                 case "comp2211.seg.UiView.Scene.BaseScene":
-                    makeKey("Esc", "Exit application");
+                    makeKey("H", "Toggle the help menu");
+                    makeKey("Esc", "Navigate back to entry screen");
                     runwayLabels();
+                    break;
+                case "comp2211.seg.UiView.Scene.HomeScene":
+                    makeKey("Esc", "Exit application");
                     break;
 
             }
         }else {
             root.getChildren().removeAll(root.getChildren());
-            makeKey("H", "Toggle the help menu");
         }
-        visible = !visible;
+        visible.set(visible.not().get());
     }
 }

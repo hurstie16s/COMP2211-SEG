@@ -80,7 +80,6 @@ public class MainScene extends SceneAbstract{
      */
     public void build() {
         super.build();
-        makeHelp(false);
         logger.info("building main scene");
         scene1.build();
         scene2.build();

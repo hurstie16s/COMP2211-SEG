@@ -19,17 +19,17 @@
    -fx-background-color: transparent;
 }
 .text-field {
-    -fx-background-color: rgba(65, 65, 65, 255);
+    -fx-background-color: rgba(52, 52, 52, 255);
     -fx-background-insets: 0;
     -fx-padding: 0 0 0 0;
     -fx-text-fill: rgba(180, 180, 180, 255);
 }
 .text-field:focused {
-    -fx-background-color: rgba(65, 65, 65, 255);
+    -fx-background-color: rgba(52, 52, 52, 255);
     -fx-text-fill: rgba(255, 255, 255, 255);
 }
 .table-cell:filled {
-    -fx-background-color: rgba(65, 65, 65, 255);
+    -fx-background-color: rgba(52, 52, 52, 255);
     -fx-text-fill: rgba(180, 180, 180, 255);
 }
 

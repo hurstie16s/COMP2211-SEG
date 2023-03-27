@@ -113,11 +113,14 @@ public abstract class SceneAbstract extends Scene {
     Menu OptionsMenu = new Menu("Options");
     Menu helpMenu = new Menu("Help");
 
+    MenuItem menu8 = new MenuItem("Help menu");
+    helpMenu.getItems().add(menu8);
+
     MenuItem menu4 = new MenuItem("Import from XML");
     Menu menu5 = new Menu("Export to XML");
 
-    MenuItem menu6 = new MenuItem("Export Obstacle");
-    MenuItem menu7 = new MenuItem("Export Airport & Obstacle");
+    MenuItem menu6 = new MenuItem("Export Obstacle...");
+    MenuItem menu7 = new MenuItem("Export Airport & Obstacle...");
 
     fileMenu.getItems().addAll(menu4, menu5);
     menu5.getItems().addAll(menu6, menu7);
@@ -138,6 +141,10 @@ public abstract class SceneAbstract extends Scene {
 
     menu6.setOnAction(e -> {
       exportObstacleButtonEvent();
+    });
+
+    menu8.setOnAction(e -> {
+      help.toggleHelp(this.getClass().getCanonicalName());
     });
   }
 
@@ -183,6 +190,7 @@ public abstract class SceneAbstract extends Scene {
       root.getChildren().add(alignPane);
       help.getRoot().setPickOnBounds(false);
       alignPane.setPickOnBounds(false);
+      help.toggleHelp(this.getClass().getName());
       help.toggleHelp(this.getClass().getName());
       alignPane.maxWidthProperty().bind(root.widthProperty());
       alignPane.minWidthProperty().bind(root.widthProperty());
