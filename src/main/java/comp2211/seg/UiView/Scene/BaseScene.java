@@ -935,13 +935,16 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     }
 
     private Pane makeBreakDownPane() {
+        /*
+        Add bindings to string properties in runway class for breakdown calculations here
+         */
+        // TODO: Breakdown calculation - front-end
         ArrayList<Pair<String, Pane>> breakDown = new ArrayList<>();
         breakDown.add(new Pair<>("TORA Maths", new VBox()));
         breakDown.add(new Pair<>("TODA Maths", new VBox()));
         breakDown.add(new Pair<>("ASDA Maths", new VBox()));
         breakDown.add(new Pair<>("LDA Maths", new VBox()));
-        Pane breakDownPane = new TabLayout(breakDown,Theme.focusedBG,Theme.veryfocusedBG);
-        return breakDownPane;
+        return new TabLayout(breakDown, Theme.focusedBG,Theme.veryfocusedBG);
     }
     private TextField makeTableCell(SimpleDoubleProperty property){
         TextField textField = new TextField();

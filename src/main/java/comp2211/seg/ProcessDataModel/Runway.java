@@ -102,6 +102,22 @@ public class Runway {
     private final SimpleBooleanProperty hasRunwayObstacle = new SimpleBooleanProperty(false);
     private final SimpleStringProperty units = new SimpleStringProperty("m");
 
+    // Calculation Breakdowns
+    // TODO: Add getters for breakdown properties
+    private final SimpleStringProperty leftToraBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty rightToraBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty leftTodaBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty rightTodaBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty leftAsdaBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty rightAsdaBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty leftLdaBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty rightLdaBreakdown = new SimpleStringProperty("N/A");
+
+    // TODO: Calculation breakdown - backend
+    /*
+    String builders bound to String properties?
+    how to handle conditions in the obstacle slope calculation and lda calculation?
+     */
 
     /**
      * Creates a new runway object and sets up change listeners on all input properties so that takeoff and landing
