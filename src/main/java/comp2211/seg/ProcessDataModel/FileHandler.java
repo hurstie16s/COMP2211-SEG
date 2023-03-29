@@ -5,6 +5,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
@@ -30,6 +32,10 @@ import java.util.Objects;
 
 public class FileHandler {
     private static final Logger logger = LogManager.getLogger(FileHandler.class);
+
+    private static final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    private static Validator airportValidator = null;
+    private static Validator obstacleValidator = null;
 
     public static boolean exportAirport(File file, Airport airport, Obstacle obstacle) {
 
@@ -180,41 +186,106 @@ public class FileHandler {
         - also provide front-end error messages
      */
 
-    public static void importObstacle(){}
-    public static void importAirport(){}
-    private static void checkFileFormat() throws URISyntaxException {
-        /*
-        Possibly use XML schema to auto check format
-        https://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/validation/Validator.html
-        https://docs.oracle.com/javase/1.5.0/docs/api/javax/xml/validation/Schema.html
-        Keep XSD files in resources file
-         */
-        // Create Schema
+    public static Obstacle importObstacle(File inputFile){
+
+        // Check given file conforms to the appropriate schema
+        checkFileFormat(inputFile, false);
+
+        return null;
+    }
+    public static Airport importAirport(File inputFile){
+
+        Airport airport;
+
+        // Check given file conforms to the appropriate schema
+        checkFileFormat(inputFile, true);
+
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+
+        try {
+
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+
+            Document document = builder.parse(inputFile);
+
+            document.getDocumentElement().normalize();
+
+            // Get Airport Name
+            String airportName = document.getElementsByTagName("name").item(0).getTextContent();
+
+            // Create Airport Object
+            airport = new Airport(airportName);
+
+            // Get Latitude
+            Double latitude = Double.parseDouble(document.getElementsByTagName("Latitude").item(0).getTextContent());
+            airport.setLatitude(latitude);
+
+            // Get Longitude
+            Double longitude = Double.parseDouble(document.getElementsByTagName("Longitude").item(0).getTextContent());
+            airport.setLongitude(longitude);
+
+            // Get Runways
+            NodeList runways = document.getElementsByTagName("Runway");
+            for (int i = 0; i < runways.getLength(); i++) {
+                Runway runway = new Runway();
+
+                Node runwayToParse = runways.item(i);
+            }
+
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            logger.error(e.getMessage());
+            logger.warn("Handle Error");
+            // TODO: Handle Error
+        }
+
+        return null;
+    }
+    private static boolean checkFileFormat(File file, boolean validateAirport) {
+        if (validateAirport && airportValidator == null) {
+            airportValidator = createSchemaValidator("src/main/resources/XML/Airport.xsd");
+        } else if (!validateAirport && obstacleValidator == null) {
+            obstacleValidator = createSchemaValidator("src/main/resources/XML/Obstacle.xsd");
+        }
         // File paths are only hard coded for now to make ease of testing
         //InputStream airportSchemaFilePath = Objects.requireNonNull(FileHandler.class.getResourceAsStream("XML/airport.xsd")); // is coming back null
         //logger.info(airportSchemaFilePath);
-        File testFile = new File("src/main/resources/XML/airport.xml");
-        File schemaFile = new File("src/main/resources/XML/airport.xsd");
-        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try {
-            Schema schema = schemaFactory.newSchema(schemaFile);
-            Validator validator = schema.newValidator();
-            Source testFileSource = new StreamSource(testFile);
-            validator.validate(testFileSource);
+            Source testFileSource = new StreamSource(file);
+            if (validateAirport) {
+                airportValidator.validate(testFileSource);
+            } else {
+                obstacleValidator.validate(testFileSource);
+            }
         } catch (SAXException | IOException e) {
-            e.printStackTrace();
             logger.error(e.getMessage());
             logger.warn("Handle Error - file does not fit schema");
+            // TODO: Handle Error
+            return false;
         }
+        return true;
     }
 
-    public static void main(String[] args) {
+    public static Validator createSchemaValidator(String schemaFilePathFromResources) {
+        Validator validator;
+        //File schemaFile = new File(Objects.requireNonNull(FileHandler.class.getResource("XML/Airport.xsd")).toURI()); - is null??
+        File schemaFile = new File(schemaFilePathFromResources);
         try {
-            checkFileFormat();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+            Schema schema = schemaFactory.newSchema(schemaFile);
+            validator = schema.newValidator();
+        } catch (SAXException e) {
             logger.error(e.getMessage());
+            logger.warn("Handle Error - issue with schema file");
+            // TODO: Handle Error
+            throw new RuntimeException(e.getMessage());
         }
+        return validator;
+    }
+
+    // For testing as go
+    public static void main(String[] args) {
+        File testFile = new File("src/main/resources/XML/AirportTest.xml");
+        var fileOK = checkFileFormat(testFile, true);
+        logger.info(fileOK);
     }
 
 }
