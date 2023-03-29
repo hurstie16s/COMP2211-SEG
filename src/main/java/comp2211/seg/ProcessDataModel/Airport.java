@@ -24,6 +24,7 @@ public class Airport {
     }
     public Airport(String name, Runway[] runways) {
         this.name = name;
+
     }
     public String toString(){
         return name;

@@ -30,6 +30,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
+/**
+ * The type File handler.
+ */
 public class FileHandler {
     private static final Logger logger = LogManager.getLogger(FileHandler.class);
 
@@ -37,6 +40,24 @@ public class FileHandler {
     private static Validator airportValidator = null;
     private static Validator obstacleValidator = null;
 
+    // Holding Variables
+    private static String designator;
+    private static double TORA;
+    private static double TODA;
+    private static double ASDA;
+    private static double LDA;
+    private static double clearway;
+    private static double stopway;
+    private static double dispThreshold;
+
+    /**
+     * Export airport boolean.
+     *
+     * @param file     the file
+     * @param airport  the airport
+     * @param obstacle the obstacle
+     * @return the boolean
+     */
     public static boolean exportAirport(File file, Airport airport, Obstacle obstacle) {
 
         try {
@@ -139,6 +160,13 @@ public class FileHandler {
         parent.appendChild(document.createTextNode("\n"));
     }
 
+    /**
+     * Export obstacle boolean.
+     *
+     * @param file     the file
+     * @param obstacle the obstacle
+     * @return the boolean
+     */
     public static boolean exportObstacle(File file, Obstacle obstacle) {
 
         try {
@@ -186,19 +214,32 @@ public class FileHandler {
         - also provide front-end error messages
      */
 
-    public static Obstacle importObstacle(File inputFile){
+    /**
+     * Import obstacle.
+     *
+     * @param inputFile the file containing data to be imported
+     * @return the imported obstacle
+     */
+    public static Obstacle importObstacle(File inputFile) {
 
         // Check given file conforms to the appropriate schema
         checkFileFormat(inputFile, false);
 
         return null;
     }
+
+    /**
+     * Import airport.
+     *
+     * @param inputFile the file containing data to be imported
+     * @return the airport
+     */
     public static Airport importAirport(File inputFile){
 
-        Airport airport;
+        Airport airport = null;
 
         // Check given file conforms to the appropriate schema
-        checkFileFormat(inputFile, true);
+        if (!checkFileFormat(inputFile, true)) return null;
 
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
@@ -215,34 +256,145 @@ public class FileHandler {
 
             // Create Airport Object
             airport = new Airport(airportName);
+            logger.info("Created new airport "+airportName);
 
             // Get Latitude
-            Double latitude = Double.parseDouble(document.getElementsByTagName("Latitude").item(0).getTextContent());
+            double latitude = Double.parseDouble(document.getElementsByTagName("Latitude").item(0).getTextContent());
             airport.setLatitude(latitude);
+            logger.info("Set latitude of "+airportName+" to "+latitude);
 
             // Get Longitude
-            Double longitude = Double.parseDouble(document.getElementsByTagName("Longitude").item(0).getTextContent());
+            double longitude = Double.parseDouble(document.getElementsByTagName("Longitude").item(0).getTextContent());
             airport.setLongitude(longitude);
+            logger.info("Set longitude of "+airportName+" to "+longitude);
 
             // Get Runways
-            NodeList runways = document.getElementsByTagName("Runway");
-            for (int i = 0; i < runways.getLength(); i++) {
+            NodeList runways = document.getElementsByTagName("Runways");
+            // Jumps 2 at a time to ensure that the software takes the runway child and runway obstacle child
+            for (int i = 0; i < runways.getLength(); i+=2) {
                 Runway runway = new Runway();
 
-                Node runwayToParse = runways.item(i);
+                Element runwayToParse = (Element) runways.item(i);
+
+                // Get general Runway properties
+                double resaHeight = Double.parseDouble(runwayToParse.getElementsByTagName("Resa_Height").item(0).getTextContent());
+                runway.setRESAHeight(resaHeight);
+                logger.info("Set RESA Height to "+resaHeight+"m");
+                double resaWidth = Double.parseDouble(runwayToParse.getElementsByTagName("Resa_Width").item(0).getTextContent());
+                runway.setRESAWidth(resaWidth);
+                logger.info("Set RESA width to "+resaWidth+"m");
+
+                // Get Right-hand runway properties
+                // TODO: Change to set Input properties - bound values cannot be set
+                // TODO: Determine if Clearway and Stopway are required for import
+                logger.info("Importing right-hand runway properties");
+                Element rightProperties = (Element) runwayToParse.getElementsByTagName("Right_Properties").item(0);
+
+                getProperties(rightProperties);
+
+                runway.setRunwayDesignatorRight(designator);
+                runway.setInputRightTora(TORA);
+                runway.setInputRightToda(TODA);
+                runway.setInputRightAsda(ASDA);
+                runway.setInputRightLda(LDA);
+                //runway.setClearwayRight(clearway);
+                //runway.setStopwayRight(stopway);
+                //runway.setDispThresholdRight(dispThreshold);
+
+                // Get Left-hand runway properties
+                logger.info("Importing left-hand runway properties");
+                Element leftProperties = (Element) runwayToParse.getElementsByTagName("Left_Properties").item(0);
+
+                getProperties(leftProperties);
+
+                runway.setRunwayDesignatorLeft(designator);
+                runway.setInputLeftTora(TORA);
+                runway.setInputLeftToda(TODA);
+                runway.setInputLeftAsda(ASDA);
+                runway.setInputLeftLda(LDA);
+
+                String obstacleDesignator = runwayToParse
+                        .getElementsByTagName("Obstacle_Designator")
+                        .item(0)
+                        .getTextContent();
+                runway.runwayObstacle.obstacleDesignatorProperty().set(obstacleDesignator);
+                logger.info("Obstacle designator = "+obstacleDesignator);
+
+                double obstacleHeight = Double.parseDouble(
+                        runwayToParse
+                                .getElementsByTagName("Obstacle_Height")
+                                .item(0)
+                                .getTextContent());
+                runway.runwayObstacle.heightProperty().set(obstacleHeight);
+                logger.info("Obstacle height = "+obstacleHeight);
+                double obstacleWidth = Double.parseDouble(
+                        runwayToParse
+                                .getElementsByTagName("Obstacle_Width")
+                                .item(0)
+                                .getTextContent());
+                runway.runwayObstacle.widthProperty().set(obstacleWidth);
+                logger.info("Obstacle width = "+obstacleWidth);
+
+                double obstacleLength = Double.parseDouble(
+                        runwayToParse
+                                .getElementsByTagName("Obstacle_Length")
+                                .item(0)
+                                .getTextContent());
+                runway.runwayObstacle.lengthProperty().set(obstacleLength);
+                logger.info("Obstacle length = "+obstacleLength);
+
+                double distFromThreshold = Double.parseDouble(
+                        runwayToParse
+                                .getElementsByTagName("Distance_From_Threshold")
+                                .item(0)
+                                .getTextContent());
+                runway.runwayObstacle.distFromThresholdProperty().set(distFromThreshold);
+                logger.info("Distance from threshold = "+distFromThreshold);
+
+                // Add runway to airport
+                airport.addRunway(runway);
             }
 
         } catch (ParserConfigurationException | IOException | SAXException e) {
+            // TODO: Split the errors so that they can be better handled
             logger.error(e.getMessage());
             logger.warn("Handle Error");
             // TODO: Handle Error
         }
 
-        return null;
+        return airport;
     }
+
+    private static void getProperties(Element element) {
+
+        designator = element.getElementsByTagName("Designator").item(0).getTextContent();
+        logger.info("Designator = "+designator);
+
+        TORA = Double.parseDouble(element.getElementsByTagName("TORA").item(0).getTextContent());
+        logger.info("TORA = "+TORA+"m");
+
+        TODA = Double.parseDouble(element.getElementsByTagName("TODA").item(0).getTextContent());
+        logger.info("TODA = "+TODA+"m");
+
+        ASDA = Double.parseDouble(element.getElementsByTagName("ASDA").item(0).getTextContent());
+        logger.info("ASDA = "+ASDA+"m");
+
+        LDA = Double.parseDouble(element.getElementsByTagName("LDA").item(0).getTextContent());
+        logger.info("LDA = "+LDA+"m");
+
+        clearway = Double.parseDouble(element.getElementsByTagName("Clearway").item(0).getTextContent());
+        //logger.info("Clearway = "+rightClearway+"m");
+
+        stopway = Double.parseDouble(element.getElementsByTagName("Stopway").item(0).getTextContent());
+        //logger.info("Stopway = "+rightStopway+"m");
+
+        dispThreshold = Double.parseDouble(element.getElementsByTagName("Displacement_Threshold").item(0).getTextContent());
+        //logger.info("Displaced threshold = "+dispThreshold);
+    }
+
     private static boolean checkFileFormat(File file, boolean validateAirport) {
         if (validateAirport && airportValidator == null) {
-            airportValidator = createSchemaValidator("src/main/resources/XML/Airport.xsd");
+            airportValidator = createSchemaValidator("src/main/resources/XML/AirportOb.xsd");
         } else if (!validateAirport && obstacleValidator == null) {
             obstacleValidator = createSchemaValidator("src/main/resources/XML/Obstacle.xsd");
         }
@@ -265,6 +417,12 @@ public class FileHandler {
         return true;
     }
 
+    /**
+     * Create schema validator validator.
+     *
+     * @param schemaFilePathFromResources the schema file path from resources
+     * @return the validator
+     */
     public static Validator createSchemaValidator(String schemaFilePathFromResources) {
         Validator validator;
         //File schemaFile = new File(Objects.requireNonNull(FileHandler.class.getResource("XML/Airport.xsd")).toURI()); - is null??
@@ -281,11 +439,17 @@ public class FileHandler {
         return validator;
     }
 
-    // For testing as go
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+// For testing as go
     public static void main(String[] args) {
         File testFile = new File("src/main/resources/XML/AirportTest.xml");
         var fileOK = checkFileFormat(testFile, true);
         logger.info(fileOK);
+        importAirport(new File("src/main/resources/XML/AirportTest.xml"));
     }
 
 }
