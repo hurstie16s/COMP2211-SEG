@@ -1,8 +1,6 @@
 package comp2211.seg.UiView.Scene;
 
-import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
@@ -10,7 +8,6 @@ import comp2211.seg.ProcessDataModel.Obstacle;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
-import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -141,18 +138,14 @@ public abstract class SceneAbstract extends Scene {
     root.getChildren().add(layoutPane);
 
     //
-    menu7.setOnAction(e -> {
-      exportAirportButtonEvent();
-    });
+    menu7.setOnAction(e -> exportAirportButtonEvent());
 
-    menu6.setOnAction(e -> {
-      exportObstacleButtonEvent();
-    });
+    menu6.setOnAction(e -> exportObstacleButtonEvent());
 
-    menu8.setOnAction(e -> {
-      help.toggleHelp(this.getClass().getCanonicalName());
-    });
-    //menu9
+    menu8.setOnAction(e -> help.toggleHelp(this.getClass().getCanonicalName()));
+
+    menu9.setOnAction(e -> importAirportButtonEvent());
+
     menu10.setOnAction(e -> importObstacleButtonEvent());
   }
 
