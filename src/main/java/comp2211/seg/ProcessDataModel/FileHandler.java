@@ -39,6 +39,8 @@ public class FileHandler {
     private static final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
     private static Validator airportValidator = null;
     private static Validator obstacleValidator = null;
+    private static final DocumentBuilderFactory BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
+    private static DocumentBuilder builder = null;
 
     // Holding Variables
     private static String designator;
@@ -222,12 +224,67 @@ public class FileHandler {
      */
     public static Obstacle importObstacle(File inputFile) {
 
-        // Check given file conforms to the appropriate schema
-        checkFileFormat(inputFile, false);
+        Obstacle obstacle = null;
 
-        return null;
+        // Check given file conforms to the appropriate schema
+        // Possibly throw custom exception?
+        if (!checkFileFormat(inputFile, false)) return null;
+        logger.info("File Accepted by schema");
+
+        if (builder == null) createBuilder();
+
+        try {
+
+            Document document = builder.parse(inputFile);
+            document.getDocumentElement().normalize();
+
+            logger.info("Importing Obstacle");
+            String obstacleDesignator = document
+                    .getElementsByTagName("Obstacle_Designator")
+                    .item(0)
+                    .getTextContent();
+            logger.info("Designator = "+obstacleDesignator);
+            double height = Double.parseDouble(
+                    document
+                            .getElementsByTagName("Height")
+                            .item(0)
+                            .getTextContent());
+            logger.info("Height = "+height);
+            double length = Double.parseDouble(
+                    document
+                            .getElementsByTagName("Length")
+                            .item(0)
+                            .getTextContent());
+            logger.info("Length = "+length);
+            double width = Double.parseDouble(
+                    document
+                            .getElementsByTagName("Width")
+                            .item(0)
+                            .getTextContent());
+            logger.info("Width = "+width);
+            double distFromThreshold = Double.parseDouble(
+                    document
+                            .getElementsByTagName("Distance_From_Threshold")
+                            .item(0)
+                            .getTextContent());
+            logger.info("Distance from threshold = "+distFromThreshold);
+
+            obstacle = new Obstacle(obstacleDesignator, height, distFromThreshold);
+            obstacle.lengthProperty().set(length);
+            obstacle.widthProperty().set(width);
+            logger.info("Obstacle Created");
+
+        } catch (NullPointerException | IOException | SAXException e) {
+            // TODO: Split the errors so that they can be better handled
+            logger.error(e.getMessage());
+            logger.warn("Handle Error");
+            // TODO: Handle Error
+        }
+
+        return obstacle;
     }
 
+    // TODO: Resolve Issues
     /**
      * Import airport.
      *
@@ -240,15 +297,14 @@ public class FileHandler {
 
         // Check given file conforms to the appropriate schema
         if (!checkFileFormat(inputFile, true)) return null;
+        logger.info("File Accepted by schema");
 
-        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        if (builder == null) createBuilder();
+
 
         try {
 
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-
             Document document = builder.parse(inputFile);
-
             document.getDocumentElement().normalize();
 
             // Get Airport Name
@@ -355,7 +411,7 @@ public class FileHandler {
                 airport.addRunway(runway);
             }
 
-        } catch (ParserConfigurationException | IOException | SAXException e) {
+        } catch (NullPointerException | IOException | SAXException e) {
             // TODO: Split the errors so that they can be better handled
             logger.error(e.getMessage());
             logger.warn("Handle Error");
@@ -434,9 +490,19 @@ public class FileHandler {
             logger.error(e.getMessage());
             logger.warn("Handle Error - issue with schema file");
             // TODO: Handle Error
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
         }
         return validator;
+    }
+
+    private static void createBuilder() {
+        try {
+            builder = BUILDER_FACTORY.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            logger.error("Failed to create parser: "+e.getMessage());
+            logger.warn("Handle Error - issue with parser config");
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -446,10 +512,10 @@ public class FileHandler {
      */
 // For testing as go
     public static void main(String[] args) {
-        File testFile = new File("src/main/resources/XML/AirportTest.xml");
-        var fileOK = checkFileFormat(testFile, true);
-        logger.info(fileOK);
-        importAirport(new File("src/main/resources/XML/AirportTest.xml"));
+        File testFileAirport = new File("src/main/resources/XML/AirportTest.xml");
+        File testFileObstacle = new File("src/main/resources/XML/Obstacle.xml");
+        //importAirport(testFileAirport);
+        importObstacle(testFileObstacle);
     }
 
 }
