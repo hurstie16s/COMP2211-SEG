@@ -5,6 +5,7 @@ import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.FileHandler;
+import comp2211.seg.ProcessDataModel.Obstacle;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
@@ -116,13 +117,17 @@ public abstract class SceneAbstract extends Scene {
     MenuItem menu8 = new MenuItem("Help menu");
     helpMenu.getItems().add(menu8);
 
-    MenuItem menu4 = new MenuItem("Import from XML");
-    Menu menu5 = new Menu("Export to XML");
+    Menu menu4 = new Menu("Import from XML");
 
+    MenuItem menu9 = new MenuItem("Import Airport & Obstacle");
+    MenuItem menu10 = new MenuItem("Import Obstacle");
+
+    Menu menu5 = new Menu("Export to XML");
     MenuItem menu6 = new MenuItem("Export Obstacle...");
     MenuItem menu7 = new MenuItem("Export Airport & Obstacle...");
 
     fileMenu.getItems().addAll(menu4, menu5);
+    menu4.getItems().addAll(menu9, menu10);
     menu5.getItems().addAll(menu6, menu7);
 
     MenuBar menuBar = new MenuBar();
@@ -146,6 +151,8 @@ public abstract class SceneAbstract extends Scene {
     menu8.setOnAction(e -> {
       help.toggleHelp(this.getClass().getCanonicalName());
     });
+    //menu9
+    menu10.setOnAction(e -> importObstacleButtonEvent());
   }
 
   /**
@@ -267,6 +274,29 @@ public abstract class SceneAbstract extends Scene {
               "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
               "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
     }
+  }
+
+  private void importAirportButtonEvent() {}
+
+  private void importObstacleButtonEvent() {
+    File file = generateImportFileChooser().showOpenDialog(new Stage());
+
+    if (file == null) return;
+
+    Obstacle obstacle = FileHandler.importObstacle(file);
+    if (obstacle == null) {
+      logger.warn("Import failed");
+    } else {
+      logger.info("Import successful");
+    }
+  }
+
+  private FileChooser generateImportFileChooser() {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Choose file to import");
+    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
+    fileChooser.getExtensionFilters().add(extFilter);
+    return fileChooser;
   }
 
 
