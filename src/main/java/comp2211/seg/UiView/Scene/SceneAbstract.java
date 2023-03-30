@@ -278,32 +278,27 @@ public abstract class SceneAbstract extends Scene {
   }
 
   private void importAirportButtonEvent() {
-    File file = generateImportFileChooser("airport").showOpenDialog(new Stage());
+    try {
+      File file = Objects.requireNonNull(generateImportFileChooser("airport").showOpenDialog(new Stage()));
 
-    if (file == null) return;
-
-    Airport airport = FileHandler.importAirport(file);
-
-    if (airport == null) {
-      logger.warn("Import failed");
-    } else {
-      logger.info("Import successful");
+      Airport airport = Objects.requireNonNull(FileHandler.importAirport(file));
+      // TODO: Put data in right place
+    } catch (NullPointerException e) {
+      logger.warn(e.getMessage());
     }
-    // TODO: Put data in right place
+
   }
 
   private void importObstacleButtonEvent() {
-    File file = generateImportFileChooser("obstacle").showOpenDialog(new Stage());
+    try {
+      File file = Objects.requireNonNull(generateImportFileChooser("obstacle").showOpenDialog(new Stage()));
 
-    if (file == null) return;
-
-    Obstacle obstacle = FileHandler.importObstacle(file);
-    if (obstacle == null) {
-      logger.warn("Import failed");
-    } else {
-      logger.info("Import successful");
+      Obstacle obstacle = Objects.requireNonNull(FileHandler.importObstacle(file));
+      // TODO: Put data in right place
+    } catch (NullPointerException e) {
+      logger.warn(e.getMessage());
     }
-    // TODO: Put data in right place
+
   }
 
   private FileChooser generateImportFileChooser(String item) {

@@ -24,6 +24,7 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * The type File handler.
@@ -31,7 +32,7 @@ import java.io.IOException;
 public class FileHandler {
     private static final Logger logger = LogManager.getLogger(FileHandler.class);
 
-    private static final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    private static final SchemaFactory SCHEMA_FACTORY = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
     private static Validator airportValidator = null;
     private static Validator obstacleValidator = null;
     private static final DocumentBuilderFactory BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
@@ -39,10 +40,11 @@ public class FileHandler {
 
     // Holding Variables
     private static String designator;
-    private static double TORA;
-    private static double TODA;
-    private static double ASDA;
-    private static double LDA;
+    private static double tora;
+    private static double toda;
+    private static double asda;
+    private static double lda;
+    // Check if clearway, stopway and dispThreshold even need to be brought in from XML file
     private static double clearway;
     private static double stopway;
     private static double dispThreshold;
@@ -330,10 +332,10 @@ public class FileHandler {
                 getProperties(rightProperties);
 
                 runway.setRunwayDesignatorRight(designator);
-                runway.setInputRightTora(TORA);
-                runway.setInputRightToda(TODA);
-                runway.setInputRightAsda(ASDA);
-                runway.setInputRightLda(LDA);
+                runway.setInputRightTora(tora);
+                runway.setInputRightToda(toda);
+                runway.setInputRightAsda(asda);
+                runway.setInputRightLda(lda);
                 //runway.setClearwayRight(clearway);
                 //runway.setStopwayRight(stopway);
                 //runway.setDispThresholdRight(dispThreshold);
@@ -345,10 +347,10 @@ public class FileHandler {
                 getProperties(leftProperties);
 
                 runway.setRunwayDesignatorLeft(designator);
-                runway.setInputLeftTora(TORA);
-                runway.setInputLeftToda(TODA);
-                runway.setInputLeftAsda(ASDA);
-                runway.setInputLeftLda(LDA);
+                runway.setInputLeftTora(tora);
+                runway.setInputLeftToda(toda);
+                runway.setInputLeftAsda(asda);
+                runway.setInputLeftLda(lda);
 
                 airport.addRunway(runway);
             }
@@ -420,17 +422,17 @@ public class FileHandler {
         designator = element.getElementsByTagName("Designator").item(0).getTextContent();
         logger.info("Designator = "+designator);
 
-        TORA = Double.parseDouble(element.getElementsByTagName("TORA").item(0).getTextContent());
-        logger.info("TORA = "+TORA+"m");
+        tora = Double.parseDouble(element.getElementsByTagName("TORA").item(0).getTextContent());
+        logger.info("TORA = "+ tora +"m");
 
-        TODA = Double.parseDouble(element.getElementsByTagName("TODA").item(0).getTextContent());
-        logger.info("TODA = "+TODA+"m");
+        toda = Double.parseDouble(element.getElementsByTagName("TODA").item(0).getTextContent());
+        logger.info("TODA = "+ toda +"m");
 
-        ASDA = Double.parseDouble(element.getElementsByTagName("ASDA").item(0).getTextContent());
-        logger.info("ASDA = "+ASDA+"m");
+        asda = Double.parseDouble(element.getElementsByTagName("ASDA").item(0).getTextContent());
+        logger.info("ASDA = "+ asda +"m");
 
-        LDA = Double.parseDouble(element.getElementsByTagName("LDA").item(0).getTextContent());
-        logger.info("LDA = "+LDA+"m");
+        lda = Double.parseDouble(element.getElementsByTagName("LDA").item(0).getTextContent());
+        logger.info("LDA = "+ lda +"m");
 
         // May not need importing
         clearway = Double.parseDouble(element.getElementsByTagName("Clearway").item(0).getTextContent());
@@ -446,8 +448,10 @@ public class FileHandler {
     private static boolean fileFormatFailed(File file, boolean validateAirport) {
         if (validateAirport && airportValidator == null) {
             airportValidator = createSchemaValidator("src/main/resources/XML/AirportOb.xsd");
+            logger.info("Schema validator created for airport");
         } else if (!validateAirport && obstacleValidator == null) {
             obstacleValidator = createSchemaValidator("src/main/resources/XML/Obstacle.xsd");
+            logger.info("Schema validator created for obstacle");
         }
         // File paths are only hard coded for now to make ease of testing
         try {
@@ -480,7 +484,7 @@ public class FileHandler {
         Validator validator;
         File schemaFile = new File(schemaFilePathFromResources);
         try {
-            Schema schema = schemaFactory.newSchema(schemaFile);
+            Schema schema = SCHEMA_FACTORY.newSchema(schemaFile);
             validator = schema.newValidator();
         } catch (SAXException e) {
             logger.error(e.getMessage());
