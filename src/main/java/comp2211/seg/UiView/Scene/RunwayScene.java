@@ -175,7 +175,7 @@ public class RunwayScene extends SceneAbstract {
     });
     setOnMouseDragged(event ->{
       if (!sideProperty.get()) {
-        //angleXProperty.set(Math.min(Math.max(anglex + y - event.getSceneY(), -90), 0));
+        angleXProperty.set(Math.min(Math.max(anglex + y - event.getSceneY(), -90), 0));
         angleZProperty.set(angley - x + event.getSceneX());
       }
     });
