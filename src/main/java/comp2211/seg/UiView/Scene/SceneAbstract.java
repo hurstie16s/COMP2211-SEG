@@ -4,6 +4,7 @@ import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.Controller.Stage.Theme;
+import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.ProcessDataModel.Obstacle;
 import javafx.geometry.Pos;
@@ -276,10 +277,23 @@ public abstract class SceneAbstract extends Scene {
     }
   }
 
-  private void importAirportButtonEvent() {}
+  private void importAirportButtonEvent() {
+    File file = generateImportFileChooser("airport").showOpenDialog(new Stage());
+
+    if (file == null) return;
+
+    Airport airport = FileHandler.importAirport(file);
+
+    if (airport == null) {
+      logger.warn("Import failed");
+    } else {
+      logger.info("Import successful");
+    }
+    // TODO: Put data in right place
+  }
 
   private void importObstacleButtonEvent() {
-    File file = generateImportFileChooser().showOpenDialog(new Stage());
+    File file = generateImportFileChooser("obstacle").showOpenDialog(new Stage());
 
     if (file == null) return;
 
@@ -289,11 +303,12 @@ public abstract class SceneAbstract extends Scene {
     } else {
       logger.info("Import successful");
     }
+    // TODO: Put data in right place
   }
 
-  private FileChooser generateImportFileChooser() {
+  private FileChooser generateImportFileChooser(String item) {
     FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Choose file to import");
+    fileChooser.setTitle("Choose file to import "+item);
     FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
     fileChooser.getExtensionFilters().add(extFilter);
     return fileChooser;
