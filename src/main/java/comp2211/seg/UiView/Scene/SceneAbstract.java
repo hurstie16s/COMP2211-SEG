@@ -1,14 +1,13 @@
 package comp2211.seg.UiView.Scene;
 
-import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.Controller.Stage.Theme;
+import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
+import comp2211.seg.ProcessDataModel.Obstacle;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
-import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -116,13 +115,17 @@ public abstract class SceneAbstract extends Scene {
     MenuItem menu8 = new MenuItem("Help menu");
     helpMenu.getItems().add(menu8);
 
-    MenuItem menu4 = new MenuItem("Import from XML");
-    Menu menu5 = new Menu("Export to XML");
+    Menu menu4 = new Menu("Import from XML");
 
+    MenuItem menu9 = new MenuItem("Import Airport & Obstacle");
+    MenuItem menu10 = new MenuItem("Import Obstacle");
+
+    Menu menu5 = new Menu("Export to XML");
     MenuItem menu6 = new MenuItem("Export Obstacle...");
     MenuItem menu7 = new MenuItem("Export Airport & Obstacle...");
 
     fileMenu.getItems().addAll(menu4, menu5);
+    menu4.getItems().addAll(menu9, menu10);
     menu5.getItems().addAll(menu6, menu7);
 
     MenuBar menuBar = new MenuBar();
@@ -135,17 +138,15 @@ public abstract class SceneAbstract extends Scene {
     root.getChildren().add(layoutPane);
 
     //
-    menu7.setOnAction(e -> {
-      exportAirportButtonEvent();
-    });
+    menu7.setOnAction(e -> exportAirportButtonEvent());
 
-    menu6.setOnAction(e -> {
-      exportObstacleButtonEvent();
-    });
+    menu6.setOnAction(e -> exportObstacleButtonEvent());
 
-    menu8.setOnAction(e -> {
-      help.toggleHelp(this.getClass().getCanonicalName());
-    });
+    menu8.setOnAction(e -> help.toggleHelp(this.getClass().getCanonicalName()));
+
+    menu9.setOnAction(e -> importAirportButtonEvent());
+
+    menu10.setOnAction(e -> importObstacleButtonEvent());
   }
 
   /**
@@ -267,6 +268,38 @@ public abstract class SceneAbstract extends Scene {
               "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
               "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
     }
+  }
+
+  private void importAirportButtonEvent() {
+    try {
+      File file = Objects.requireNonNull(generateImportFileChooser("airport").showOpenDialog(new Stage()));
+
+      Airport airport = Objects.requireNonNull(FileHandler.importAirport(file));
+      // TODO: Put data in right place
+    } catch (NullPointerException e) {
+      logger.warn(e.getMessage());
+    }
+
+  }
+
+  private void importObstacleButtonEvent() {
+    try {
+      File file = Objects.requireNonNull(generateImportFileChooser("obstacle").showOpenDialog(new Stage()));
+
+      Obstacle obstacle = Objects.requireNonNull(FileHandler.importObstacle(file));
+      // TODO: Put data in right place
+    } catch (NullPointerException e) {
+      logger.warn(e.getMessage());
+    }
+
+  }
+
+  private FileChooser generateImportFileChooser(String item) {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Choose file to import "+item);
+    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
+    fileChooser.getExtensionFilters().add(extFilter);
+    return fileChooser;
   }
 
 

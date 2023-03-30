@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<airport>
+    <name>Heathrow</name>
+    <Latitude>0.0</Latitude>
+    <Longitude>0.0</Longitude>
+    <Runways>
+        <Runway>
+            <Resa_Height>90.0</Resa_Height>
+            <Resa_Width>240.0</Resa_Width>
+            <Right_Properties>
+                <Designator>18R</Designator>
+                <TORA>1000.0</TORA>
+                <TODA>1500.0</TODA>
+                <ASDA>1150.0</ASDA>
+                <LDA>1000.0</LDA>
+                <Clearway>500.0</Clearway>
+                <Stopway>150.0</Stopway>
+                <Displacement_Threshold>0.0</Displacement_Threshold>
+            </Right_Properties>
+            <Left_Properties>
+                <Designator>00L</Designator>
+                <TORA>1000.0</TORA>
+                <TODA>1500.0</TODA>
+                <ASDA>1150.0</ASDA>
+                <LDA>900.0</LDA>
+                <Clearway>500.0</Clearway>
+                <Stopway>150.0</Stopway>
+                <Displacement_Threshold>100.0</Displacement_Threshold>
+            </Left_Properties>
+        </Runway>
+    </Runways>
+    <Runway_Obstacles>
+        <Runway_Obstacle>
+            <Obstacle_Designator>VOID</Obstacle_Designator>
+            <Obstacle_Height>0.0</Obstacle_Height>
+            <Obstacle_Width>100.0</Obstacle_Width>
+            <Obstacle_Length>60.0</Obstacle_Length>
+            <Distance_From_Threshold>0.0</Distance_From_Threshold>
+            <Distance_From_Other_Threshold>900.0</Distance_From_Other_Threshold>
+        </Runway_Obstacle>
+    </Runway_Obstacles>
+</airport>
