@@ -273,7 +273,7 @@ public class FileHandler {
         return obstacle;
     }
 
-    // TODO: Resolve Issues
+    // TODO: Issues resolved - finish airport import
     /**
      * Import airport.
      *
@@ -315,8 +315,7 @@ public class FileHandler {
 
             // Get Runways
             NodeList runways = document.getElementsByTagName("Runways");
-            // Jumps 2 at a time to ensure that the software takes the runway child and runway obstacle child
-            for (int i = 0; i < runways.getLength(); i+=2) {
+            for (int i = 0; i < runways.getLength(); i++) {
                 Runway runway = new Runway();
 
                 Element runwayToParse = (Element) runways.item(i);
@@ -356,46 +355,59 @@ public class FileHandler {
                 runway.setInputLeftAsda(ASDA);
                 runway.setInputLeftLda(LDA);
 
-                String obstacleDesignator = runwayToParse
+                airport.addRunway(runway);
+            }
+
+            // Get runway obstacles
+            logger.info("Importing runway obstacles");
+            NodeList obstacles = document.getElementsByTagName("Runway_Obstacles");
+            for (int i = 0; i < obstacles.getLength(); i++) {
+                logger.info("Importing obstacle for runway "
+                        +airport.getRunways().get(i).getRunwayDesignatorLeft()
+                        +"/ "
+                        +airport.getRunways().get(i).getRunwayDesignatorRight()
+                );
+                Element obstacleToParse = (Element) obstacles.item(0);
+
+                String obstacleDesignator = obstacleToParse
                         .getElementsByTagName("Obstacle_Designator")
                         .item(0)
                         .getTextContent();
-                runway.runwayObstacle.obstacleDesignatorProperty().set(obstacleDesignator);
                 logger.info("Obstacle designator = "+obstacleDesignator);
-
                 double obstacleHeight = Double.parseDouble(
-                        runwayToParse
+                        obstacleToParse
                                 .getElementsByTagName("Obstacle_Height")
                                 .item(0)
-                                .getTextContent());
-                runway.runwayObstacle.heightProperty().set(obstacleHeight);
+                                .getTextContent()
+                );
                 logger.info("Obstacle height = "+obstacleHeight);
                 double obstacleWidth = Double.parseDouble(
-                        runwayToParse
+                        obstacleToParse
                                 .getElementsByTagName("Obstacle_Width")
                                 .item(0)
-                                .getTextContent());
-                runway.runwayObstacle.widthProperty().set(obstacleWidth);
+                                .getTextContent()
+                );
                 logger.info("Obstacle width = "+obstacleWidth);
-
                 double obstacleLength = Double.parseDouble(
-                        runwayToParse
+                        obstacleToParse
                                 .getElementsByTagName("Obstacle_Length")
                                 .item(0)
-                                .getTextContent());
-                runway.runwayObstacle.lengthProperty().set(obstacleLength);
+                                .getTextContent()
+                );
                 logger.info("Obstacle length = "+obstacleLength);
-
                 double distFromThreshold = Double.parseDouble(
-                        runwayToParse
+                        obstacleToParse
                                 .getElementsByTagName("Distance_From_Threshold")
                                 .item(0)
-                                .getTextContent());
-                runway.runwayObstacle.distFromThresholdProperty().set(distFromThreshold);
-                logger.info("Distance from threshold = "+distFromThreshold);
-
-                // Add runway to airport
-                airport.addRunway(runway);
+                                .getTextContent()
+                );
+                logger.info("Obstacle distance from threshold = "+distFromThreshold);
+                airport.getRunways().get(i).runwayObstacle.obstacleDesignatorProperty().set(obstacleDesignator);
+                airport.getRunways().get(i).runwayObstacle.heightProperty().set(obstacleHeight);
+                airport.getRunways().get(i).runwayObstacle.widthProperty().set(obstacleWidth);
+                airport.getRunways().get(i).runwayObstacle.lengthProperty().set(obstacleLength);
+                airport.getRunways().get(i).runwayObstacle.distFromThresholdProperty().set(distFromThreshold);
+                logger.info("Obstacle added to runway");
             }
 
         } catch (NullPointerException | IOException | SAXException e) {
@@ -500,9 +512,8 @@ public class FileHandler {
     public static void main(String[] args) {
         File testFileAirport = new File("src/main/resources/XML/AirportTest.xml");
         File testFileObstacle = new File("src/main/resources/XML/Obstacle.xml");
-        //importAirport(testFileAirport);
-        //importObstacle(testFileObstacle);
-        logger.info(checkFileFormat(testFileAirport, true));
+        importAirport(testFileAirport);
+        importObstacle(testFileObstacle);
     }
 
 }
