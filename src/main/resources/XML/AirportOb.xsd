@@ -46,6 +46,10 @@
     <xs:complexType name="RunwaysType">
         <xs:sequence>
             <xs:element type="RunwayType" name="Runway"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Runway_ObstaclesType">
+        <xs:sequence>
             <xs:element type="Runway_ObstacleType" name="Runway_Obstacle"/>
         </xs:sequence>
     </xs:complexType>
@@ -55,6 +59,7 @@
             <xs:element type="xs:string" name="Latitude"/>
             <xs:element type="xs:string" name="Longitude"/>
             <xs:element type="RunwaysType" name="Runways"/>
+            <xs:element type="Runway_ObstaclesType" name="Runway_Obstacles"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

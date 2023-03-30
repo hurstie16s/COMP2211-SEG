@@ -205,17 +205,6 @@ public class FileHandler {
         }
 
     }
-
-    // TODO: Error handling - incorrect XML format - build schema to run a format check?
-    // TODO: Airport + Obstacle Import
-    // TODO: Obstacle Import
-    /*
-    Plan:
-    -Take file
-    -Check file in correct format - else throw exception - custom exception?
-        - also provide front-end error messages
-     */
-
     /**
      * Import obstacle.
      *
@@ -341,8 +330,6 @@ public class FileHandler {
                 logger.info("Set RESA width to "+resaWidth+"m");
 
                 // Get Right-hand runway properties
-                // TODO: Change to set Input properties - bound values cannot be set
-                // TODO: Determine if Clearway and Stopway are required for import
                 logger.info("Importing right-hand runway properties");
                 Element rightProperties = (Element) runwayToParse.getElementsByTagName("Right_Properties").item(0);
 
@@ -481,7 +468,6 @@ public class FileHandler {
      */
     public static Validator createSchemaValidator(String schemaFilePathFromResources) {
         Validator validator;
-        //File schemaFile = new File(Objects.requireNonNull(FileHandler.class.getResource("XML/Airport.xsd")).toURI()); - is null??
         File schemaFile = new File(schemaFilePathFromResources);
         try {
             Schema schema = schemaFactory.newSchema(schemaFile);
@@ -515,7 +501,8 @@ public class FileHandler {
         File testFileAirport = new File("src/main/resources/XML/AirportTest.xml");
         File testFileObstacle = new File("src/main/resources/XML/Obstacle.xml");
         //importAirport(testFileAirport);
-        importObstacle(testFileObstacle);
+        //importObstacle(testFileObstacle);
+        logger.info(checkFileFormat(testFileAirport, true));
     }
 
 }
