@@ -5,7 +5,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -25,10 +24,6 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Objects;
 
 /**
  * The type File handler.
@@ -217,7 +212,7 @@ public class FileHandler {
 
         // Check given file conforms to the appropriate schema
         // Possibly throw custom exception?
-        if (!checkFileFormat(inputFile, false)) return null;
+        if (fileFormatFailed(inputFile, false)) return null;
         logger.info("File Accepted by schema");
 
         if (builder == null) createBuilder();
@@ -285,7 +280,7 @@ public class FileHandler {
         Airport airport = null;
 
         // Check given file conforms to the appropriate schema
-        if (!checkFileFormat(inputFile, true)) return null;
+        if (fileFormatFailed(inputFile, true)) return null;
         logger.info("File Accepted by schema");
 
         if (builder == null) createBuilder();
@@ -437,6 +432,7 @@ public class FileHandler {
         LDA = Double.parseDouble(element.getElementsByTagName("LDA").item(0).getTextContent());
         logger.info("LDA = "+LDA+"m");
 
+        // May not need importing
         clearway = Double.parseDouble(element.getElementsByTagName("Clearway").item(0).getTextContent());
         //logger.info("Clearway = "+rightClearway+"m");
 
@@ -447,15 +443,13 @@ public class FileHandler {
         //logger.info("Displaced threshold = "+dispThreshold);
     }
 
-    private static boolean checkFileFormat(File file, boolean validateAirport) {
+    private static boolean fileFormatFailed(File file, boolean validateAirport) {
         if (validateAirport && airportValidator == null) {
             airportValidator = createSchemaValidator("src/main/resources/XML/AirportOb.xsd");
         } else if (!validateAirport && obstacleValidator == null) {
             obstacleValidator = createSchemaValidator("src/main/resources/XML/Obstacle.xsd");
         }
         // File paths are only hard coded for now to make ease of testing
-        //InputStream airportSchemaFilePath = Objects.requireNonNull(FileHandler.class.getResourceAsStream("XML/airport.xsd")); // is coming back null
-        //logger.info(airportSchemaFilePath);
         try {
             Source testFileSource = new StreamSource(file);
             if (validateAirport) {
@@ -463,13 +457,17 @@ public class FileHandler {
             } else {
                 obstacleValidator.validate(testFileSource);
             }
-        } catch (SAXException | IOException e) {
+        } catch (IOException | SAXException e) {
             logger.error(e.getMessage());
-            logger.warn("Handle Error - file does not fit schema");
+            logger.warn("Handle Error - file does not fit schema or file could not be read");
             // TODO: Handle Error
-            return false;
+            return true;
         }
-        return true;
+        logger.info(
+                "File validated for "
+                        + (validateAirport ? "airport" : "obstacle")
+                        + " import");
+        return false;
     }
 
     /**
@@ -499,6 +497,7 @@ public class FileHandler {
         } catch (ParserConfigurationException e) {
             logger.error("Failed to create parser: "+e.getMessage());
             logger.warn("Handle Error - issue with parser config");
+            // TODO: Handle Error
             throw new RuntimeException(e);
         }
     }
@@ -508,7 +507,7 @@ public class FileHandler {
      *
      * @param args the input arguments
      */
-// For testing as go
+    // For testing as go
     public static void main(String[] args) {
         File testFileAirport = new File("src/main/resources/XML/AirportTest.xml");
         File testFileObstacle = new File("src/main/resources/XML/Obstacle.xml");
