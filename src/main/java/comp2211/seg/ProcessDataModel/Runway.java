@@ -28,7 +28,10 @@ public class Runway {
     // logger
     private static final Logger logger = LogManager.getLogger(Runway.class);
 
-    // changes history pane
+    /**
+     * The Changes history.
+     */
+// changes history pane
     public Pane changesHistory = new Pane();
     private ArrayList<String> changeHistory = new ArrayList<>();
 
@@ -73,6 +76,9 @@ public class Runway {
     private final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(60);
 
 
+    /**
+     * The Runway obstacle.
+     */
     public Obstacle runwayObstacle = new Obstacle("One", 10,0);
 
     private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
@@ -191,6 +197,8 @@ public class Runway {
 
     /**
      * Adds an obstacle to the list of obstacles on the runway.
+     *
+     * @param obstacleToAdd the obstacle to add
      */
     public void addObstacle(Obstacle obstacleToAdd) {
         runwayObstacle.obstacleDesignatorProperty().set(obstacleToAdd.getObstacleDesignator());
@@ -519,6 +527,7 @@ public class Runway {
 
     /**
      * Adds a change to changes history pane
+     *
      * @param change text to be displayed in change history tab
      */
     public void logChange(String change) {
@@ -742,6 +751,11 @@ public class Runway {
         return runwayDesignatorLeft;
     }
 
+    /**
+     * Runway designator right property simple string property.
+     *
+     * @return the simple string property
+     */
     public SimpleStringProperty runwayDesignatorRightProperty() {
         return runwayDesignatorRight;
     }
@@ -1233,229 +1247,543 @@ public class Runway {
         return rightLand;
     }
 
+    /**
+     * Gets minresa.
+     *
+     * @return the minresa
+     */
     public double getMINRESA() {
         return MINRESA.get();
     }
 
+    /**
+     * Minresa property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty MINRESAProperty() {
         return MINRESA;
     }
 
+    /**
+     * Gets stripend.
+     *
+     * @return the stripend
+     */
     public double getSTRIPEND() {
         return STRIPEND.get();
     }
 
+    /**
+     * Stripend property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty STRIPENDProperty() {
         return STRIPEND;
     }
 
+    /**
+     * Gets blastzone.
+     *
+     * @return the blastzone
+     */
     public double getBLASTZONE() {
         return BLASTZONE.get();
     }
 
+    /**
+     * Blastzone property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty BLASTZONEProperty() {
         return BLASTZONE;
     }
 
+    /**
+     * Gets slope.
+     *
+     * @return the slope
+     */
     public double getSLOPE() {
         return SLOPE.get();
     }
 
+    /**
+     * Slope property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty SLOPEProperty() {
         return SLOPE;
     }
 
+    /**
+     * Gets stopwaymin.
+     *
+     * @return the stopwaymin
+     */
     public double getSTOPWAYMIN() {
         return STOPWAYMIN.get();
     }
 
+    /**
+     * Stopwaymin property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty STOPWAYMINProperty() {
         return STOPWAYMIN;
     }
 
+    /**
+     * Gets slope length.
+     *
+     * @return the slope length
+     */
     public double getSlopeLength() {
         return slopeLength.get();
     }
 
+    /**
+     * Slope length property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty slopeLengthProperty() {
         return slopeLength;
     }
 
+    /**
+     * Left tora breakdown property simple string property.
+     *
+     * @return the simple string property
+     */
+// Breakdown properties
+    public SimpleStringProperty leftToraBreakdownProperty() {
+        return leftToraBreakdown;
+    }
+
+    /**
+     * Left toda breakdown property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty leftTodaBreakdownProperty() {
+        return leftTodaBreakdown;
+    }
+
+    /**
+     * Left asda breakdown property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty leftAsdaBreakdownProperty() {
+        return leftAsdaBreakdown;
+    }
+
+    /**
+     * Sets clearway left.
+     *
+     * @param clearwayLeft the clearway left
+     */
     public void setClearwayLeft(double clearwayLeft) {
         this.clearwayLeft.set(clearwayLeft);
     }
 
+    /**
+     * Sets clearway right.
+     *
+     * @param clearwayRight the clearway right
+     */
     public void setClearwayRight(double clearwayRight) {
         this.clearwayRight.set(clearwayRight);
     }
 
+    /**
+     * Sets clearway height.
+     *
+     * @param clearwayHeight the clearway height
+     */
     public void setClearwayHeight(double clearwayHeight) {
         this.clearwayHeight.set(clearwayHeight);
     }
 
+    /**
+     * Sets stopway left.
+     *
+     * @param stopwayLeft the stopway left
+     */
     public void setStopwayLeft(double stopwayLeft) {
         this.stopwayLeft.set(stopwayLeft);
     }
 
+    /**
+     * Sets stopway right.
+     *
+     * @param stopwayRight the stopway right
+     */
     public void setStopwayRight(double stopwayRight) {
         this.stopwayRight.set(stopwayRight);
     }
 
+    /**
+     * Sets strip end.
+     *
+     * @param stripEnd the strip end
+     */
     public void setStripEnd(double stripEnd) {
         this.stripEnd.set(stripEnd);
     }
 
+    /**
+     * Sets resa width.
+     *
+     * @param RESAWidth the resa width
+     */
     public void setRESAWidth(double RESAWidth) {
         this.RESAWidth.set(RESAWidth);
     }
 
+    /**
+     * Sets resa height.
+     *
+     * @param RESAHeight the resa height
+     */
     public void setRESAHeight(double RESAHeight) {
         this.RESAHeight.set(RESAHeight);
     }
 
+    /**
+     * Sets runway designator left.
+     *
+     * @param runwayDesignatorLeft the runway designator left
+     */
     public void setRunwayDesignatorLeft(String runwayDesignatorLeft) {
         this.runwayDesignatorLeft.set(runwayDesignatorLeft);
     }
 
+    /**
+     * Sets runway designator right.
+     *
+     * @param runwayDesignatorRight the runway designator right
+     */
     public void setRunwayDesignatorRight(String runwayDesignatorRight) {
         this.runwayDesignatorRight.set(runwayDesignatorRight);
     }
 
+    /**
+     * Sets input right tora.
+     *
+     * @param inputRightTora the input right tora
+     */
     public void setInputRightTora(double inputRightTora) {
         this.inputRightTora.set(inputRightTora);
     }
 
+    /**
+     * Sets input right toda.
+     *
+     * @param inputRightToda the input right toda
+     */
     public void setInputRightToda(double inputRightToda) {
         this.inputRightToda.set(inputRightToda);
     }
 
+    /**
+     * Sets input right asda.
+     *
+     * @param inputRightAsda the input right asda
+     */
     public void setInputRightAsda(double inputRightAsda) {
         this.inputRightAsda.set(inputRightAsda);
     }
 
+    /**
+     * Sets input right lda.
+     *
+     * @param inputRightLda the input right lda
+     */
     public void setInputRightLda(double inputRightLda) {
         this.inputRightLda.set(inputRightLda);
     }
 
+    /**
+     * Sets input left tora.
+     *
+     * @param inputLeftTora the input left tora
+     */
     public void setInputLeftTora(double inputLeftTora) {
         this.inputLeftTora.set(inputLeftTora);
     }
 
+    /**
+     * Sets input left toda.
+     *
+     * @param inputLeftToda the input left toda
+     */
     public void setInputLeftToda(double inputLeftToda) {
         this.inputLeftToda.set(inputLeftToda);
     }
 
+    /**
+     * Sets input left asda.
+     *
+     * @param inputLeftAsda the input left asda
+     */
     public void setInputLeftAsda(double inputLeftAsda) {
         this.inputLeftAsda.set(inputLeftAsda);
     }
 
+    /**
+     * Sets input left lda.
+     *
+     * @param inputLeftLda the input left lda
+     */
     public void setInputLeftLda(double inputLeftLda) {
         this.inputLeftLda.set(inputLeftLda);
     }
 
+    /**
+     * Sets right tora.
+     *
+     * @param rightTora the right tora
+     */
     public void setRightTora(double rightTora) {
         this.rightTora.set(rightTora);
     }
 
+    /**
+     * Sets right toda.
+     *
+     * @param rightToda the right toda
+     */
     public void setRightToda(double rightToda) {
         this.rightToda.set(rightToda);
     }
 
+    /**
+     * Sets right asda.
+     *
+     * @param rightAsda the right asda
+     */
     public void setRightAsda(double rightAsda) {
         this.rightAsda.set(rightAsda);
     }
 
+    /**
+     * Sets right lda.
+     *
+     * @param rightLda the right lda
+     */
     public void setRightLda(double rightLda) {
         this.rightLda.set(rightLda);
     }
 
+    /**
+     * Sets left tora.
+     *
+     * @param leftTora the left tora
+     */
     public void setLeftTora(double leftTora) {
         this.leftTora.set(leftTora);
     }
 
+    /**
+     * Sets left toda.
+     *
+     * @param leftToda the left toda
+     */
     public void setLeftToda(double leftToda) {
         this.leftToda.set(leftToda);
     }
 
+    /**
+     * Sets left asda.
+     *
+     * @param leftAsda the left asda
+     */
     public void setLeftAsda(double leftAsda) {
         this.leftAsda.set(leftAsda);
     }
 
+    /**
+     * Sets left lda.
+     *
+     * @param leftLda the left lda
+     */
     public void setLeftLda(double leftLda) {
         this.leftLda.set(leftLda);
     }
 
+    /**
+     * Sets disp threshold left.
+     *
+     * @param dispThresholdLeft the disp threshold left
+     */
     public void setDispThresholdLeft(double dispThresholdLeft) {
         this.dispThresholdLeft.set(dispThresholdLeft);
     }
+
+    /**
+     * Sets disp threshold right.
+     *
+     * @param dispThresholdRight the disp threshold right
+     */
     public void setDispThresholdRight(double dispThresholdRight) {
         this.dispThresholdRight.set(dispThresholdRight);
     }
 
+    /**
+     * Sets runway obstacle.
+     *
+     * @param runwayObstacle the runway obstacle
+     */
     public void setRunwayObstacle(Obstacle runwayObstacle) {
         this.runwayObstacle = runwayObstacle;
     }
 
+    /**
+     * Sets landing mode.
+     *
+     * @param landingMode the landing mode
+     */
     public void setLandingMode(boolean landingMode) {
         this.landingMode.set(landingMode);
     }
 
+    /**
+     * Sets direction.
+     *
+     * @param direction the direction
+     */
     public void setDirection(boolean direction) {
         this.direction.set(direction);
     }
 
+    /**
+     * Sets left take off.
+     *
+     * @param leftTakeOff the left take off
+     */
     public void setLeftTakeOff(boolean leftTakeOff) {
         this.leftTakeOff.set(leftTakeOff);
     }
 
+    /**
+     * Sets left land.
+     *
+     * @param leftLand the left land
+     */
     public void setLeftLand(boolean leftLand) {
         this.leftLand.set(leftLand);
     }
 
+    /**
+     * Sets right take off.
+     *
+     * @param rightTakeOff the right take off
+     */
     public void setRightTakeOff(boolean rightTakeOff) {
         this.rightTakeOff.set(rightTakeOff);
     }
 
+    /**
+     * Sets right land.
+     *
+     * @param rightLand the right land
+     */
     public void setRightLand(boolean rightLand) {
         this.rightLand.set(rightLand);
     }
 
+    /**
+     * Sets minresa.
+     *
+     * @param MINRESA the minresa
+     */
     public void setMINRESA(double MINRESA) {
         this.MINRESA.set(MINRESA);
     }
 
+    /**
+     * Sets stripend.
+     *
+     * @param STRIPEND the stripend
+     */
     public void setSTRIPEND(double STRIPEND) {
         this.STRIPEND.set(STRIPEND);
     }
 
+    /**
+     * Sets blastzone.
+     *
+     * @param BLASTZONE the blastzone
+     */
     public void setBLASTZONE(double BLASTZONE) {
         this.BLASTZONE.set(BLASTZONE);
     }
 
+    /**
+     * Sets slope.
+     *
+     * @param SLOPE the slope
+     */
     public void setSLOPE(double SLOPE) {
         this.SLOPE.set(SLOPE);
     }
 
+    /**
+     * Sets stopwaymin.
+     *
+     * @param STOPWAYMIN the stopwaymin
+     */
     public void setSTOPWAYMIN(double STOPWAYMIN) {
         this.STOPWAYMIN.set(STOPWAYMIN);
     }
 
+    /**
+     * Sets slope length.
+     *
+     * @param slopeLength the slope length
+     */
     public void setSlopeLength(double slopeLength) {
         this.slopeLength.set(slopeLength);
     }
 
+    /**
+     * Sets runway length.
+     *
+     * @param runwayLength the runway length
+     */
     public void setRunwayLength(double runwayLength) {
         this.runwayLength.set(runwayLength);
     }
 
+    /**
+     * Sets runway width.
+     *
+     * @param runwayWidth the runway width
+     */
     public void setRunwayWidth(double runwayWidth) {
         this.runwayWidth.set(runwayWidth);
     }
 
+    /**
+     * Sets has runway obstacle.
+     *
+     * @param hasRunwayObstacle the has runway obstacle
+     */
     public void setHasRunwayObstacle(boolean hasRunwayObstacle) {
         this.hasRunwayObstacle.set(hasRunwayObstacle);
     }
 
+    /**
+     * Sets units.
+     *
+     * @param units the units
+     */
     public void setUnits(String units) {
         this.units.set(units);
     }
