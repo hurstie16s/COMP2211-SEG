@@ -111,22 +111,42 @@ public class Runway {
     // Calculation Breakdowns
     // TODO: Calculation breakdown - backend
     // TODO: Create bindings for breakdown properties - frontend
+
+    // Left TORA
     private final SimpleStringProperty leftToraBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty leftToraBreakdownHeader = new SimpleStringProperty("N/A");
+    // Right TORA
     private final SimpleStringProperty rightToraBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty rightToraBreakdownHeader = new SimpleStringProperty("N/A");
+    // Left TODA
     private final SimpleStringProperty leftTodaBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty leftTodaBreakdownHeader = new SimpleStringProperty("N/A");
+    // Right TODA
     private final SimpleStringProperty rightTodaBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty rightTodaBreakdownHeader = new SimpleStringProperty("N/A");
+    // Left ASDA
     private final SimpleStringProperty leftAsdaBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty leftAsdaBreakdownHeader = new SimpleStringProperty("N/A");
+    // Right ASDA
     private final SimpleStringProperty rightAsdaBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty rightAsdaBreakdownHeader = new SimpleStringProperty("N/A");
+    // Left LDA
     private final SimpleStringProperty leftLdaBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty leftLdaBreakdownHeader = new SimpleStringProperty("N/A");
     // Temp holders
     private final SimpleStringProperty leftLdaObstacleSlopeCalcBreakdown = new SimpleStringProperty();
+    private final SimpleStringProperty leftLdaObstacleSlopeCalcBreakdownHeader = new SimpleStringProperty();
     private final SimpleStringProperty leftLdaSubBreakdown = new SimpleStringProperty();
+    private final SimpleStringProperty leftLdaSubBreakdownHeader = new SimpleStringProperty();
+    // Right LDA
     private final SimpleStringProperty rightLdaBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty rightLdaBreakdownHeader = new SimpleStringProperty("N/A");
     // Temp holders
     private final SimpleStringProperty rightLdaObstacleSlopeCalcBreakdown = new SimpleStringProperty();
+    private final SimpleStringProperty rightLdaObstacleSlopeCalcBreakdownHeader = new SimpleStringProperty();
     private final SimpleStringProperty rightLdaSubBreakdown = new SimpleStringProperty();
+    private final SimpleStringProperty rightLdaSubBreakdownHeader = new SimpleStringProperty();
 
-    // Calculation Breakdown Headers
     // TODO: Create header breakdowns to better explain what the numbers are
 
     /**
@@ -375,6 +395,7 @@ public class Runway {
                             "(Left) Calculated LDA greater than original LDA, original LDA taken as output"
                     )
             );
+            leftLdaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
         } else {
             leftLdaBreakdown.bind(
                     new SimpleStringProperty("Left LDA = ")
@@ -382,6 +403,10 @@ public class Runway {
                             .concat(" - ")
                             .concat(leftLdaSubBreakdown)
                             .concat(" = ").concat(leftLda));
+            leftLdaBreakdownHeader.bind(
+                    new SimpleStringProperty("Left LDA = Original left LDA - ")
+                            .concat(leftLdaSubBreakdownHeader)
+            );
         }
 
         logger.info("New LDA calculated for landing over an obstacle for runway "+runwayDesignatorLeft.get());
@@ -398,15 +423,20 @@ public class Runway {
                             "(Right) Calculated LDA greater than original LDA, original LDA taken as output"
                     )
             );
+            rightLdaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
         } else {
             rightLdaBreakdown.bind(
                     new SimpleStringProperty("Right LDA = ")
                             .concat(runwayObstacle.distFromOtherThresholdProperty())
                             .concat(" - ")
-                            .concat(MINRESA).concat(" - ")
+                            .concat(MINRESA)
+                            .concat(" - ")
                             .concat(STRIPEND)
                             .concat(" = ")
                             .concat(rightLda)
+            );
+            rightLdaBreakdownHeader.bind(
+                    new SimpleStringProperty("Right LDA = Obstacle dist from right threshold - Minimum RESA - Stripend")
             );
         }
 
@@ -430,6 +460,7 @@ public class Runway {
                             "(Left) Calculated LDA greater than original LDA, original LDA taken as output"
                     )
             );
+            leftLdaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
         } else {
             leftLdaBreakdown.bind(
                     new SimpleStringProperty("Left LDA = ")
@@ -439,6 +470,9 @@ public class Runway {
                             .concat(STRIPEND)
                             .concat(" = ")
                             .concat(leftLda)
+            );
+            leftLdaBreakdownHeader.bind(
+                    new SimpleStringProperty("Left LDA = Obstacle dist from left threshold - Minimum RESA - Stripend")
             );
         }
 
@@ -458,6 +492,7 @@ public class Runway {
                             "(Right) Calculated LDA greater than original LDA, original LDA taken as output"
                     )
             );
+            rightLdaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
         } else {
             rightLdaBreakdown.bind(
                     new SimpleStringProperty("Right LDA = ")
@@ -465,6 +500,10 @@ public class Runway {
                             .concat(" - ")
                             .concat(rightLdaSubBreakdown)
                             .concat(" = ").concat(rightLda));
+            rightLdaBreakdownHeader.bind(
+                    new SimpleStringProperty("Right LDA = Original right LDA - ")
+                            .concat(rightLdaSubBreakdownHeader)
+            );
         }
         logger.info("New LDA calculated for landing over an obstacle for runway "+runwayDesignatorRight.get());
 
@@ -489,17 +528,27 @@ public class Runway {
                         .add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE.add(distFromThreshold)));
 
         SimpleStringProperty ldaSubBreakdown = left ? leftLdaSubBreakdownProperty() : rightLdaSubBreakdownProperty();
+
+        SimpleStringProperty ldaSubBreakdownHeader =
+                left ?
+                        leftLdaSubBreakdownHeaderProperty()
+                        : rightLdaSubBreakdownHeaderProperty();
+
         SimpleStringProperty obstacleSlopCalcBreakdown =
                 left ?
                         leftLdaObstacleSlopeCalcBreakdownProperty()
                         : rightLdaObstacleSlopeCalcBreakdownProperty();
 
+        SimpleStringProperty obstacleSlopCalcBreakdownHeader =
+                left ?
+                        leftLdaObstacleSlopeCalcBreakdownHeaderProperty()
+                        : rightLdaObstacleSlopeCalcBreakdownHeaderProperty();
+
         ldaSubBreakdown.bind(
                 Bindings.when(
                         Bindings.greaterThan(
-                                distFromThreshold
-                                        .add(obstacleSlopeCalculation)
-                                        .add(STRIPEND),BLASTZONE.add(distFromThreshold)
+                                distFromThreshold.add(obstacleSlopeCalculation).add(STRIPEND),
+                                BLASTZONE.add(distFromThreshold)
                         )
                 ).then(
                         new SimpleStringProperty("(")
@@ -515,6 +564,22 @@ public class Runway {
                                 .concat(" + ")
                                 .concat(BLASTZONE)
                                 .concat(")")
+                )
+        );
+
+        ldaSubBreakdownHeader.bind(
+                Bindings.when(
+                        Bindings.greaterThan(
+                                distFromThreshold.add(obstacleSlopeCalculation.add(STRIPEND)),
+                                BLASTZONE.add(distFromThreshold)
+
+                        )
+                ).then(
+                        new SimpleStringProperty("(Distance from threshold + ")
+                                .concat(obstacleSlopCalcBreakdownHeader)
+                                .concat(" + Stripend)")
+                ).otherwise(
+                        new SimpleStringProperty("(Distance from threshold + Blastzone)")
                 )
         );
 
@@ -551,6 +616,11 @@ public class Runway {
                         leftLdaObstacleSlopeCalcBreakdownProperty()
                         : rightLdaObstacleSlopeCalcBreakdownProperty();
 
+        SimpleStringProperty obstacleSlopeCalcBreakdownHeader =
+                left ?
+                        leftLdaObstacleSlopeCalcBreakdownHeaderProperty()
+                        : rightLdaObstacleSlopeCalcBreakdownHeaderProperty();
+
         obstacleSlopeCalcBreakdown.bind(
                 Bindings.when(
                         Bindings.greaterThan(
@@ -576,6 +646,18 @@ public class Runway {
                         )
         );
 
+        obstacleSlopeCalcBreakdownHeader.bind(
+                Bindings.when(
+                        Bindings.greaterThan(
+                                runwayObstacle.heightProperty().multiply(SLOPE),
+                                MINRESA.add(runwayObstacle.lengthProperty().divide(2))
+                        )
+                ).then(
+                        new SimpleStringProperty("(Obstacle height x ALS slope)")
+                ).otherwise(
+                        new SimpleStringProperty("(Minimum RESA + (Obstacle length / 2))")
+                )
+        );
 
         return obstacleSlopeCalculation;
     }
@@ -605,6 +687,7 @@ public class Runway {
                             "(Right) Calculated TORA greater than original TORA, original TORA taken as output"
                     )
             );
+            rightTodaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
         } else {
             rightToraBreakdown.bind(
                     new SimpleStringProperty("Right TORA = ")
@@ -634,6 +717,21 @@ public class Runway {
                             .concat(") = ")
                             .concat(rightTora)
             );
+            rightTodaBreakdownHeader.bind(
+                    new SimpleStringProperty("Right TORA = Obstacle dist from left threshold - ")
+                            .concat(
+                                    Bindings.when(
+                                            Bindings.greaterThan(
+                                                    BLASTZONE, STRIPEND.add(MINRESA)
+                                            )
+                                    ).then(
+                                            new SimpleStringProperty("Blastzone")
+                                    ).otherwise(
+                                            new SimpleStringProperty("(Stripend + Minimum RESA)")
+                                    )
+                            )
+                            .concat(" + Left displaced threshold - (Runway length / 2)")
+            );
         }
 
         rightAsda.bind(rightTora.add(stopwayLeft));
@@ -645,6 +743,9 @@ public class Runway {
                         .concat(" = ")
                         .concat(rightAsda)
         );
+        rightAsdaBreakdownHeader.bind(
+                new SimpleStringProperty("Right ASDA = Right TORA + Left stopway")
+        );
 
         rightToda.bind(rightTora.add(clearwayLeft));
         rightTodaBreakdown.bind(
@@ -654,6 +755,9 @@ public class Runway {
                         .concat(clearwayLeft)
                         .concat(" = ")
                         .concat(rightToda)
+        );
+        rightTodaBreakdownHeader.bind(
+                new SimpleStringProperty("Right TODA = Right TORA + Left clearway")
         );
 
         // Calculate left take-off values, taking off towards the obstacle
@@ -678,6 +782,7 @@ public class Runway {
                             "(Left) Calculated  TORA greater than original TORA, original TORA taken as output"
                     )
             );
+            leftToraBreakdownHeader.bind(new SimpleStringProperty("N/A"));
 
             leftAsda.bind(Bindings.min(leftTora.add(distanceFromToraEnd), leftTora.add(stopwayRight)));
 
@@ -688,6 +793,16 @@ public class Runway {
                             .concat(Bindings.min(distanceFromToraEnd, stopwayRight))
                             .concat(" = ")
                             .concat(leftAsda)
+            );
+            leftAsdaBreakdownHeader.bind(
+                    new SimpleStringProperty("Left ASDA = Left TORA + ")
+                            .concat(Bindings.when(
+                                    Bindings.lessThan(
+                                            distanceFromToraEnd, stopwayRight
+                                    ))
+                                    .then(new SimpleStringProperty("Obstacle dist from TORA end"))
+                                    .otherwise(new SimpleStringProperty("Right stopway"))
+                            )
             );
 
             leftToda.bind(Bindings.min(leftTora.add(distanceFromToraEnd), leftTora.add(clearwayRight)));
@@ -700,11 +815,21 @@ public class Runway {
                             .concat(" = ")
                             .concat(leftToda)
             );
+            leftTodaBreakdownHeader.bind(
+                    new SimpleStringProperty("Left TODA = Left TORA + ")
+                            .concat(Bindings.when(
+                                    Bindings.lessThan(
+                                            distanceFromToraEnd, clearwayRight
+                                    ))
+                                    .then(new SimpleStringProperty("Obstacle dist from TORA end"))
+                                    .otherwise("Right clearway")
+                            )
+            );
 
         } else {
 
             leftToraBreakdown.bind(
-                    new SimpleStringProperty(" Left TORA = ")
+                    new SimpleStringProperty("Left TORA = ")
                             .concat(runwayObstacle.distFromThresholdProperty())
                             .concat(" + ")
                             .concat(dispThresholdLeft)
@@ -735,17 +860,32 @@ public class Runway {
                             .concat(leftTora)
             );
 
+            leftToraBreakdownHeader.bind(
+                    new SimpleStringProperty("Left TORA = Obstacle dist from left threshold + Left displaced threshold - ")
+                            .concat(Bindings.when(
+                                    Bindings.greaterThan(
+                                            runwayObstacle.heightProperty().multiply(SLOPE),
+                                            MINRESA.add(runwayObstacle.lengthProperty().divide(2))
+                                    ))
+                                    .then(new SimpleStringProperty("(Runway height x ALS slope"))
+                                    .otherwise(new SimpleStringProperty("Minimum RESA + (Runway length / 2"))
+                            )
+                            .concat(new SimpleStringProperty(") - Stripend"))
+            );
+
             leftAsda.bind(leftTora);
             leftAsdaBreakdown.bind(
                     new SimpleStringProperty("Left ASDA = ")
                             .concat(leftAsda)
             );
+            leftAsdaBreakdownHeader.bind(new SimpleStringProperty("Left ASDA = Left TORA"));
 
             leftToda.bind(leftTora);
             leftTodaBreakdown.bind(
                     new SimpleStringProperty("Left TODA = ")
                             .concat(leftToda)
             );
+            leftToraBreakdownHeader.bind(new SimpleStringProperty("Left TODA = Left TORA"));
         }
 
     }
@@ -776,6 +916,7 @@ public class Runway {
                             "(Right) Calculated  TORA greater than original TORA, original TORA taken as output"
                     )
             );
+            rightTodaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
 
             rightAsda.bind(Bindings.min(rightTora.add(distanceFromToraEnd), rightTora.add(stopwayLeft)));
 
@@ -787,6 +928,16 @@ public class Runway {
                             .concat(" = ")
                             .concat(rightAsda)
             );
+            rightAsdaBreakdownHeader.bind(
+                    new SimpleStringProperty("Right ASDA = Right TORA + ")
+                            .concat(Bindings.when(
+                                    Bindings.greaterThan(
+                                            distanceFromToraEnd, stopwayLeft
+                                    ))
+                                    .then(new SimpleStringProperty("Obstacle dist from TORA end"))
+                                    .otherwise(new SimpleStringProperty("Left stopway"))
+                            )
+            );
 
             rightToda.bind(Bindings.min(rightTora.add(distanceFromToraEnd), rightTora.add(clearwayLeft)));
 
@@ -797,6 +948,16 @@ public class Runway {
                             .concat(Bindings.min(distanceFromToraEnd, clearwayLeft))
                             .concat(" = ")
                             .concat(rightToda)
+            );
+            rightTodaBreakdownHeader.bind(
+                    new SimpleStringProperty("Right TODA = Right TORA + ")
+                            .concat(Bindings.when(
+                                    Bindings.greaterThan(
+                                            distanceFromToraEnd, clearwayLeft
+                                    ))
+                                    .then(new SimpleStringProperty("Obstacle dist from TORA end"))
+                                    .otherwise(new SimpleStringProperty("Left clearway"))
+                            )
             );
 
         } else {
@@ -832,17 +993,32 @@ public class Runway {
                             .concat(" = ")
                             .concat(rightTora)
             );
+            rightToraBreakdownHeader.bind(
+                    new SimpleStringProperty("Right TORA = Obstacle dist from right threshold + Right displaced threshold - ")
+                            .concat(Bindings.when(
+                                    Bindings.greaterThan(
+                                            runwayObstacle.heightProperty().multiply(SLOPE),
+                                            MINRESA.add(runwayObstacle.lengthProperty().divide(2))
+                                    ))
+                                    .then(new SimpleStringProperty("(Runway height x ALS slope"))
+                                    .otherwise(new SimpleStringProperty("Minimum RESA + (Runway length / 2"))
+                            )
+                            .concat(new SimpleStringProperty(") - Stripend"))
+            );
 
             rightAsda.bind(rightTora);
             rightAsdaBreakdown.bind(
-                    new SimpleStringProperty("Right ASDA")
+                    new SimpleStringProperty("Right ASDA = ")
                             .concat(rightAsda)
             );
+            rightAsdaBreakdownHeader.bind(new SimpleStringProperty("Right ASDA = Right TORA"));
+
             rightToda.bind(rightTora);
             rightTodaBreakdown.bind(
-                    new SimpleStringProperty("Right TODA")
+                    new SimpleStringProperty("Right TODA = ")
                             .concat(rightToda)
             );
+            rightTodaBreakdownHeader.bind(new SimpleStringProperty("Right TODA = Right TORA"));
         }
 
         // Calculate left take-off values, taking off away from the obstacle
@@ -880,12 +1056,25 @@ public class Runway {
                         )
                         .concat(" - ")
                         .concat(dispThresholdRight)
-                        .concat("(")
+                        .concat(" - (")
                         .concat(runwayObstacle.lengthProperty())
                         .concat(" / ")
                         .concat(2)
                         .concat(") = ")
                         .concat(leftTora)
+        );
+
+        leftToraBreakdownHeader.bind(
+                new SimpleStringProperty("Left TORA = Original left TORA - Obstacle dist from left threshold - ")
+                        .concat(
+                                Bindings.when(
+                                        Bindings.lessThan(
+                                                BLASTZONE, STRIPEND.add(MINRESA)
+                                        ))
+                                        .then(new SimpleStringProperty("Blastzone"))
+                                        .otherwise("(Stripend + Minimum RESA)")
+                        )
+                        .concat(new SimpleStringProperty(" - Right displaced threshold - (Runway length / 2)"))
         );
 
         leftAsda.bind(leftTora.add(stopwayRight));
@@ -897,6 +1086,8 @@ public class Runway {
                         .concat(" = ")
                         .concat(leftAsda)
         );
+        leftAsdaBreakdownHeader.bind(new SimpleStringProperty("Left ASDA = Left TORA - Right stopway"));
+
         leftToda.bind(leftTora.add(clearwayRight));
         leftTodaBreakdown.bind(
                 new SimpleStringProperty("Left TODA = ")
@@ -906,6 +1097,7 @@ public class Runway {
                         .concat(" = ")
                         .concat(leftToda)
         );
+        leftTodaBreakdownHeader.bind(new SimpleStringProperty("Left TODA = Left TORA + Right clearway"));
     }
 
     /**
@@ -1811,18 +2003,38 @@ public class Runway {
         return rightLdaBreakdown;
     }
 
+    /**
+     * Right lda sub breakdown property simple string property.
+     *
+     * @return the simple string property
+     */
     public SimpleStringProperty rightLdaSubBreakdownProperty() {
         return rightLdaSubBreakdown;
     }
 
+    /**
+     * Right lda obstacle slope calc breakdown property simple string property.
+     *
+     * @return the simple string property
+     */
     public SimpleStringProperty rightLdaObstacleSlopeCalcBreakdownProperty() {
         return rightLdaObstacleSlopeCalcBreakdown;
     }
 
+    /**
+     * Left lda sub breakdown property simple string property.
+     *
+     * @return the simple string property
+     */
     public SimpleStringProperty leftLdaSubBreakdownProperty() {
         return leftLdaSubBreakdown;
     }
 
+    /**
+     * Left lda obstacle slope calc breakdown property simple string property.
+     *
+     * @return the simple string property
+     */
     public SimpleStringProperty leftLdaObstacleSlopeCalcBreakdownProperty() {
         return leftLdaObstacleSlopeCalcBreakdown;
     }
@@ -1897,6 +2109,258 @@ public class Runway {
      */
     public String getRightLdaBreakdown() {
         return rightLdaBreakdown.get();
+    }
+
+    /**
+     * Gets left lda obstacle slope calc breakdown.
+     *
+     * @return the left lda obstacle slope calc breakdown
+     */
+    public String getLeftLdaObstacleSlopeCalcBreakdown() {
+        return leftLdaObstacleSlopeCalcBreakdown.get();
+    }
+
+    /**
+     * Gets right lda obstacle slope calc breakdown.
+     *
+     * @return the right lda obstacle slope calc breakdown
+     */
+    public String getRightLdaObstacleSlopeCalcBreakdown() {
+        return rightLdaObstacleSlopeCalcBreakdown.get();
+    }
+
+    /**
+     * Gets left lda sub breakdown.
+     *
+     * @return the left lda sub breakdown
+     */
+    public String getLeftLdaSubBreakdown() {
+        return leftLdaSubBreakdown.get();
+    }
+
+    /**
+     * Gets right lda sub breakdown.
+     *
+     * @return the right lda sub breakdown
+     */
+    public String getRightLdaSubBreakdown() {
+        return rightLdaSubBreakdown.get();
+    }
+
+    /**
+     * Left tora breakdown header property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty leftToraBreakdownHeaderProperty() {
+        return leftToraBreakdownHeader;
+    }
+
+    /**
+     * Right tora breakdown header property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty rightToraBreakdownHeaderProperty() {
+        return rightToraBreakdownHeader;
+    }
+
+    /**
+     * Left toda breakdown header property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty leftTodaBreakdownHeaderProperty() {
+        return leftToraBreakdownHeader;
+    }
+
+    /**
+     * Right toda breakdown header property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty rightTodaBreakdownHeaderProperty() {
+        return rightTodaBreakdownHeader;
+    }
+
+    /**
+     * Left asda breakdown header property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty leftAsdaBreakdownHeaderProperty() {
+        return leftAsdaBreakdownHeader;
+    }
+
+    /**
+     * Right asda breakdown header property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty rightAsdaBreakdownHeaderProperty() {
+        return rightAsdaBreakdownHeader;
+    }
+
+    /**
+     * Left lda breakdown header property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty leftLdaBreakdownHeaderProperty() {
+        return leftLdaBreakdownHeader;
+    }
+
+    /**
+     * Right lda breakdown header property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty rightLdaBreakdownHeaderProperty() {
+        return rightLdaBreakdownHeader;
+    }
+
+    /**
+     * Left lda obstacle slope calc breakdown header property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty leftLdaObstacleSlopeCalcBreakdownHeaderProperty() {
+        return leftLdaObstacleSlopeCalcBreakdownHeader;
+    }
+
+    /**
+     * Right lda obstacle slope calc breakdown header property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty rightLdaObstacleSlopeCalcBreakdownHeaderProperty() {
+        return rightLdaObstacleSlopeCalcBreakdownHeader;
+    }
+
+    /**
+     * Left lda sub breakdown header property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty leftLdaSubBreakdownHeaderProperty() {
+        return leftLdaSubBreakdownHeader;
+    }
+
+    /**
+     * Right lda sub breakdown header property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty rightLdaSubBreakdownHeaderProperty() {
+        return rightLdaSubBreakdownHeader;
+    }
+
+    /**
+     * Gets left tora breakdown header.
+     *
+     * @return the left tora breakdown header
+     */
+    public String getLeftToraBreakdownHeader() {
+        return leftToraBreakdownHeader.get();
+    }
+
+    /**
+     * Gets right tora breakdown header.
+     *
+     * @return the right tora breakdown header
+     */
+    public String getRightToraBreakdownHeader() {
+        return rightToraBreakdownHeader.get();
+    }
+
+    /**
+     * Gets left toda breakdown header.
+     *
+     * @return the left toda breakdown header
+     */
+    public String getLeftTodaBreakdownHeader() {
+        return leftTodaBreakdownHeader.get();
+    }
+
+    /**
+     * Gets right toda breakdown header.
+     *
+     * @return the right toda breakdown header
+     */
+    public String getRightTodaBreakdownHeader() {
+        return rightTodaBreakdownHeader.get();
+    }
+
+    /**
+     * Gets left asda breakdown header.
+     *
+     * @return the left asda breakdown header
+     */
+    public String getLeftAsdaBreakdownHeader() {
+        return leftAsdaBreakdownHeader.get();
+    }
+
+    /**
+     * Gets right asda breakdown header.
+     *
+     * @return the right asda breakdown header
+     */
+    public String getRightAsdaBreakdownHeader() {
+        return rightAsdaBreakdownHeader.get();
+    }
+
+    /**
+     * Gets left lda breakdown header.
+     *
+     * @return the left lda breakdown header
+     */
+    public String getLeftLdaBreakdownHeader() {
+        return leftLdaBreakdownHeader.get();
+    }
+
+    /**
+     * Gets right lda breakdown header.
+     *
+     * @return the right lda breakdown header
+     */
+    public String getRightLdaBreakdownHeader() {
+        return rightLdaBreakdownHeader.get();
+    }
+
+    /**
+     * Gets left lda obstacle slope calc breakdown header.
+     *
+     * @return the left lda obstacle slope calc breakdown header
+     */
+    public String getLeftLdaObstacleSlopeCalcBreakdownHeader() {
+        return leftLdaObstacleSlopeCalcBreakdownHeader.get();
+    }
+
+    /**
+     * Gets right lda obstacle slope calc breakdown header.
+     *
+     * @return the right lda obstacle slope calc breakdown header
+     */
+    public String getRightLdaObstacleSlopeCalcBreakdownHeader() {
+        return rightLdaObstacleSlopeCalcBreakdownHeader.get();
+    }
+
+    /**
+     * Gets left lda sub breakdown header.
+     *
+     * @return the left lda sub breakdown header
+     */
+    public String getLeftLdaSubBreakdownHeader() {
+        return leftLdaSubBreakdownHeader.get();
+    }
+
+    /**
+     * Gets right lda sub breakdown header.
+     *
+     * @return the right lda sub breakdown header
+     */
+    public String getRightLdaSubBreakdownHeader() {
+        return rightLdaSubBreakdownHeader.get();
     }
 
     /**
