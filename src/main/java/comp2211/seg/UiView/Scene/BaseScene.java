@@ -30,6 +30,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -948,6 +949,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         breakDown.add(new Pair<>("TODA Maths", new VBox()));
         breakDown.add(new Pair<>("ASDA Maths", new VBox()));
         breakDown.add(new Pair<>("LDA Maths", new VBox()));
+
         return new TabLayout(breakDown, Theme.focusedBG,Theme.veryfocusedBG);
     }
     private TextField makeTableCell(SimpleDoubleProperty property){

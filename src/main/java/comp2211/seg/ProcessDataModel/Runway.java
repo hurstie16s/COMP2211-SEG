@@ -33,7 +33,7 @@ public class Runway {
      */
 // changes history pane
     public Pane changesHistory = new Pane();
-    private ArrayList<String> changeHistory = new ArrayList<>();
+    private final ArrayList<String> changeHistory = new ArrayList<>();
 
     // Runway dimensions and properties
     private final SimpleDoubleProperty clearwayLeft = new SimpleDoubleProperty(500);
@@ -109,7 +109,7 @@ public class Runway {
     private final SimpleStringProperty units = new SimpleStringProperty("m");
 
     // Calculation Breakdowns
-    // TODO: Add getters for breakdown properties
+    // TODO: Create bindings for breakdown properties
     private final SimpleStringProperty leftToraBreakdown = new SimpleStringProperty("N/A");
     private final SimpleStringProperty rightToraBreakdown = new SimpleStringProperty("N/A");
     private final SimpleStringProperty leftTodaBreakdown = new SimpleStringProperty("N/A");
@@ -117,7 +117,11 @@ public class Runway {
     private final SimpleStringProperty leftAsdaBreakdown = new SimpleStringProperty("N/A");
     private final SimpleStringProperty rightAsdaBreakdown = new SimpleStringProperty("N/A");
     private final SimpleStringProperty leftLdaBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty leftLdaObstacleSlopeCalcBreakdown = new SimpleStringProperty();
+    private final SimpleStringProperty leftLdaSubBreakdown = new SimpleStringProperty();
     private final SimpleStringProperty rightLdaBreakdown = new SimpleStringProperty("N/A");
+    private final SimpleStringProperty rightLdaObstacleSlopeCalcBreakdown = new SimpleStringProperty();
+    private final SimpleStringProperty rightLdaSubBreakdown = new SimpleStringProperty();
 
     // TODO: Calculation breakdown - backend
     /*
@@ -359,14 +363,25 @@ public class Runway {
 
         // Calculate Land Over for Left
 
-        var ldaSubtraction = getLdaSubtraction(runwayObstacle.distFromThresholdProperty());
+        var ldaSubtraction = getLdaSubtraction(runwayObstacle.distFromThresholdProperty(), true);
 
         leftLda.bind(inputLeftLda.subtract(ldaSubtraction));
 
         // Ensure Declared distance isn't more than original value
         if (leftLda.get() > inputLeftLda.get()) {
             leftLda.bind(inputLeftLda);
+            leftLdaBreakdown.bind(
+                    new SimpleStringProperty(
+                            "Calculated LDA greater than original LDA, original LDA taken as output"
+                    )
+            );
         }
+        leftLdaBreakdown.bind(
+                new SimpleStringProperty("Left LDA = ")
+                        .concat(inputLeftLda)
+                        .concat(" - ")
+                        .concat(leftLdaSubBreakdown)
+                        .concat(" = ").concat(leftLda));
 
         logger.info("New LDA calculated for landing over an obstacle for runway "+runwayDesignatorLeft.get());
 
@@ -377,7 +392,22 @@ public class Runway {
         // Ensure Declared distance isn't more than original value
         if (rightLda.get() > inputRightLda.get()) {
             rightLda.bind(inputRightLda);
+            rightLdaBreakdown.bind(
+                    new SimpleStringProperty(
+                            "Calculated LDA greater than original LDA, original LDA taken as output"
+                    )
+            );
         }
+
+        rightLdaBreakdown.bind(
+                new SimpleStringProperty("Right LDA = ")
+                        .concat(runwayObstacle.distFromOtherThresholdProperty())
+                        .concat(" - ")
+                        .concat(MINRESA).concat(" - ")
+                        .concat(STRIPEND)
+                        .concat(" = ")
+                        .concat(rightLda)
+        );
 
         logger.info("New LDA calculated for landing towards and obstacle for runway "+runwayDesignatorRight.get());
     }
@@ -394,20 +424,47 @@ public class Runway {
         // Ensure Declared distance isn't more than original value
         if (leftLda.get() > inputLeftLda.get()) {
             leftLda.bind(inputLeftLda);
+            leftLdaBreakdown.bind(
+                    new SimpleStringProperty(
+                            "Calculated LDA greater than original LDA, original LDA taken as output"
+                    )
+            );
         }
+
+        leftLdaBreakdown.bind(
+                new SimpleStringProperty("Left LDA = ")
+                        .concat(runwayObstacle.distFromThresholdProperty())
+                        .concat(" - ")
+                        .concat(MINRESA).concat(" - ")
+                        .concat(STRIPEND)
+                        .concat(" = ")
+                        .concat(leftLda)
+        );
 
         logger.info("New LDA calculated for landing towards and obstacle for runway "+runwayDesignatorLeft.get());
 
         // Calculate Land Over for Right
 
-        var ldaSubtraction = getLdaSubtraction(runwayObstacle.distFromOtherThresholdProperty());
+        var ldaSubtraction = getLdaSubtraction(runwayObstacle.distFromOtherThresholdProperty(), false);
 
         rightLda.bind(inputRightLda.subtract(ldaSubtraction));
 
         // Ensure Declared distance isn't more than original value
         if (rightLda.get() > inputRightLda.get()) {
             rightLda.bind(inputRightLda);
+            rightLdaBreakdown.bind(
+                    new SimpleStringProperty(
+                            "Calculated LDA greater than original LDA, original LDA taken as output"
+                    )
+            );
         }
+
+        rightLdaBreakdown.bind(
+                new SimpleStringProperty("Right LDA = ")
+                        .concat(inputRightLda)
+                        .concat(" - ")
+                        .concat(rightLdaSubBreakdown)
+                        .concat(" = ").concat(rightLda));
 
         logger.info("New LDA calculated for landing over an obstacle for runway "+runwayDesignatorRight.get());
 
@@ -418,9 +475,9 @@ public class Runway {
      * @param distFromThreshold The correct distance from threshold for the obstacle for the direction
      * @return The calculated subtraction from the LDA
      */
-    private SimpleDoubleProperty getLdaSubtraction(SimpleDoubleProperty distFromThreshold) {
+    private SimpleDoubleProperty getLdaSubtraction(SimpleDoubleProperty distFromThreshold, boolean left) {
 
-        var obstacleSlopeCalculation = getObstacleSlopeCalculation();
+        var obstacleSlopeCalculation = getObstacleSlopeCalculation(left);
 
         var ldaSubtraction = new SimpleDoubleProperty();
         ldaSubtraction.bind(
@@ -431,6 +488,36 @@ public class Runway {
                                         .add(STRIPEND),BLASTZONE.add(distFromThreshold))).then(distFromThreshold
                         .add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE.add(distFromThreshold)));
 
+        SimpleStringProperty ldaSubBreakdown = left ? leftLdaSubBreakdownProperty() : rightLdaSubBreakdownProperty();
+        SimpleStringProperty obstacleSlopCalcBreakdown =
+                left ?
+                        leftLdaObstacleSlopeCalcBreakdownProperty()
+                        : rightLdaObstacleSlopeCalcBreakdownProperty();
+
+        ldaSubBreakdown.bind(
+                Bindings.when(
+                        Bindings.greaterThan(
+                                distFromThreshold
+                                        .add(obstacleSlopeCalculation)
+                                        .add(STRIPEND),BLASTZONE.add(distFromThreshold)
+                        )
+                ).then(
+                        new SimpleStringProperty("(")
+                                .concat(distFromThreshold)
+                                .concat(" + ")
+                                .concat(obstacleSlopCalcBreakdown)
+                                .concat(" + ")
+                                .concat(STRIPEND)
+                                .concat(")")
+                ).otherwise(
+                        new SimpleStringProperty("(")
+                                .concat(distFromThreshold)
+                                .concat(" + ")
+                                .concat(BLASTZONE)
+                                .concat(")")
+                )
+        );
+
         logger.info("LDA Subtraction: "+ldaSubtraction.get());
 
         return ldaSubtraction;
@@ -440,7 +527,7 @@ public class Runway {
      * Calculate the slope value for an obstacle
      * @return The appropriate slope over an obstacle
      */
-    private SimpleDoubleProperty getObstacleSlopeCalculation() {
+    private SimpleDoubleProperty getObstacleSlopeCalculation(boolean left) {
         var obstacleSlopeCalculation = new SimpleDoubleProperty();
         obstacleSlopeCalculation
                 .bind(Bindings
@@ -458,6 +545,37 @@ public class Runway {
                                         .divide(2))));
 
         logger.info("Obstacle Slop Calculation: "+obstacleSlopeCalculation.get());
+
+        SimpleStringProperty obstacleSlopeCalcBreakdown =
+                left ?
+                        leftLdaObstacleSlopeCalcBreakdownProperty()
+                        : rightLdaObstacleSlopeCalcBreakdownProperty();
+
+        obstacleSlopeCalcBreakdown.bind(
+                Bindings.when(
+                        Bindings.greaterThan(
+                                runwayObstacle.heightProperty().multiply(SLOPE),
+                                MINRESA.add(runwayObstacle.lengthProperty().divide(2))
+                        )
+                )
+                        .then(
+                                new SimpleStringProperty("(")
+                                        .concat(runwayObstacle.heightProperty())
+                                        .concat(" x ")
+                                        .concat(SLOPE)
+                                        .concat(")")
+                        )
+                        .otherwise(
+                                new SimpleStringProperty("(")
+                                        .concat(MINRESA)
+                                        .concat("+(")
+                                        .concat(runwayObstacle.lengthProperty())
+                                        .concat(" / ")
+                                        .concat(2)
+                                        .concat("))")
+                        )
+        );
+
 
         return obstacleSlopeCalculation;
     }
@@ -1428,6 +1546,22 @@ public class Runway {
         return rightLdaBreakdown;
     }
 
+    public SimpleStringProperty rightLdaSubBreakdownProperty() {
+        return rightLdaSubBreakdown;
+    }
+
+    public SimpleStringProperty rightLdaObstacleSlopeCalcBreakdownProperty() {
+        return rightLdaObstacleSlopeCalcBreakdown;
+    }
+
+    public SimpleStringProperty leftLdaSubBreakdownProperty() {
+        return leftLdaSubBreakdown;
+    }
+
+    public SimpleStringProperty leftLdaObstacleSlopeCalcBreakdownProperty() {
+        return leftLdaObstacleSlopeCalcBreakdown;
+    }
+
     /**
      * Gets left tora breakdown.
      *
@@ -1782,7 +1916,7 @@ public class Runway {
     /**
      * Sets left take off.
      *
-     * @param leftTakeOff the left take off
+     * @param leftTakeOff the left take-off
      */
     public void setLeftTakeOff(boolean leftTakeOff) {
         this.leftTakeOff.set(leftTakeOff);
@@ -1800,7 +1934,7 @@ public class Runway {
     /**
      * Sets right take off.
      *
-     * @param rightTakeOff the right take off
+     * @param rightTakeOff the right take-off
      */
     public void setRightTakeOff(boolean rightTakeOff) {
         this.rightTakeOff.set(rightTakeOff);
