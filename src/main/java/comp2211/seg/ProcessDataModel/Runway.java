@@ -834,13 +834,78 @@ public class Runway {
             );
 
             rightAsda.bind(rightTora);
+            rightAsdaBreakdown.bind(
+                    new SimpleStringProperty("Right ASDA")
+                            .concat(rightAsda)
+            );
             rightToda.bind(rightTora);
+            rightTodaBreakdown.bind(
+                    new SimpleStringProperty("Right TODA")
+                            .concat(rightToda)
+            );
         }
 
         // Calculate left take-off values, taking off away from the obstacle
-        leftTora.bind(inputLeftTora.subtract(runwayObstacle.distFromThresholdProperty()).subtract(Bindings.max(BLASTZONE, STRIPEND.add(MINRESA))).subtract(dispThresholdLeft).subtract(runwayObstacle.lengthProperty().divide(2)));
+        leftTora.bind(
+                inputLeftTora
+                        .subtract(runwayObstacle.distFromThresholdProperty())
+                        .subtract(Bindings.max(
+                                BLASTZONE, STRIPEND.add(MINRESA)
+                                )
+                        )
+                        .subtract(dispThresholdLeft)
+                        .subtract(
+                                runwayObstacle.lengthProperty().divide(2)
+                        )
+        );
+
+        leftToraBreakdown.bind(
+                new SimpleStringProperty("Left TORA = ")
+                        .concat(inputLeftTora)
+                        .concat(" - ")
+                        .concat(runwayObstacle.distFromThresholdProperty())
+                        .concat(" - ")
+                        .concat(Bindings.when(
+                                Bindings.lessThan(
+                                        BLASTZONE, STRIPEND.add(MINRESA)
+                                ))
+                                .then(new SimpleStringProperty().concat(BLASTZONE))
+                                .otherwise(
+                                        new SimpleStringProperty("(")
+                                                .concat(STRIPEND)
+                                                .concat(" + ")
+                                                .concat(MINRESA)
+                                                .concat(")")
+                                )
+                        )
+                        .concat(" - ")
+                        .concat(dispThresholdRight)
+                        .concat("(")
+                        .concat(runwayObstacle.lengthProperty())
+                        .concat(" / ")
+                        .concat(2)
+                        .concat(") = ")
+                        .concat(leftTora)
+        );
+
         leftAsda.bind(leftTora.add(stopwayRight));
+        leftAsdaBreakdown.bind(
+                new SimpleStringProperty("Left ASDA = ")
+                        .concat(leftTora)
+                        .concat(" + ")
+                        .concat(stopwayRight)
+                        .concat(" = ")
+                        .concat(leftAsda)
+        );
         leftToda.bind(leftTora.add(clearwayRight));
+        leftTodaBreakdown.bind(
+                new SimpleStringProperty("Left TODA = ")
+                        .concat(leftTora)
+                        .concat(" + ")
+                        .concat(clearwayRight)
+                        .concat(" = ")
+                        .concat(leftToda)
+        );
     }
 
     /**
