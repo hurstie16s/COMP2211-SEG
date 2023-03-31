@@ -293,7 +293,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
 
-    public void importButtonEvent() {
+    public void importAirportEvent() {
         logger.info("importButtonEvent");
         /*
         String tempInputProtocol = "Airport,RD:09L,RWY:l1/w1,RS:l2/w2,SWY:l3/w3,CWY:l4/w4,RESA:l5/w5,TD:n1,SE:n2,BP:n3";
@@ -353,6 +353,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 // Use the runwayData object
         logger.info("endOfImportbuttonEvent");
+    }
+
+    public void importObstacleEvent() {
+        logger.info("Import Obstacle Event");
     }
 
     public GridPane buildTableView() {

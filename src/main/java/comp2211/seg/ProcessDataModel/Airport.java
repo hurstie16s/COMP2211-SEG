@@ -10,19 +10,7 @@ public class Airport {
     private ArrayList<Runway> runways;
     /** The name of the airport. */
     public String name;
-    public Double getLatitude() {
-        return latitude;
-    }
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
     public Double latitude = 0.0;
-    public Double getLongitude() {
-        return longitude;
-    }
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
     public Double longitude = 0.0;
 
     /**
@@ -36,6 +24,7 @@ public class Airport {
     }
     public Airport(String name, Runway[] runways) {
         this.name = name;
+
     }
     public String toString(){
         return name;
@@ -47,8 +36,11 @@ public class Airport {
     public void makeRunway() {
         runways.add(new Runway());
     }
-    public void addRunway(Runway runway){runways.add(runway);}
+    public void addRunway(Runway runway) {
+        runways.add(runway);
+    }
 
+    // Getters
     /**
      * Returns the list of runways at the airport.
      *
@@ -56,6 +48,23 @@ public class Airport {
      */
     public ArrayList<Runway> getRunways() {
         return runways;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    // Setters
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
 
