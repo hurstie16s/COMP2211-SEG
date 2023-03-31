@@ -1384,6 +1384,123 @@ public class Runway {
     }
 
     /**
+     * Left lda breakdown property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty leftLdaBreakdownProperty() {
+        return leftLdaBreakdown;
+    }
+
+    /**
+     * Right tora breakdown property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty rightToraBreakdownProperty() {
+        return rightToraBreakdown;
+    }
+
+    /**
+     * Right toda breakdown property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty rightTodaBreakdownProperty() {
+        return rightTodaBreakdown;
+    }
+
+    /**
+     * Right asda breakdown property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty rightAsdaBreakdownProperty() {
+        return rightAsdaBreakdown;
+    }
+
+    /**
+     * Right lda breakdown property simple string property.
+     *
+     * @return the simple string property
+     */
+    public SimpleStringProperty rightLdaBreakdownProperty() {
+        return rightLdaBreakdown;
+    }
+
+    /**
+     * Gets left tora breakdown.
+     *
+     * @return the left tora breakdown
+     */
+    public String getLeftToraBreakdown() {
+        return leftToraBreakdown.get();
+    }
+
+    /**
+     * Gets left toda breakdown.
+     *
+     * @return the left toda breakdown
+     */
+    public String getLeftTodaBreakdown() {
+        return leftTodaBreakdown.get();
+    }
+
+    /**
+     * Gets left asda breakdown.
+     *
+     * @return the left asda breakdown
+     */
+    public String getLeftAsdaBreakdown() {
+        return leftAsdaBreakdown.get();
+    }
+
+    /**
+     * Gets left lda breakdown.
+     *
+     * @return the left lda breakdown
+     */
+    public String getLeftLdaBreakdown() {
+        return leftLdaBreakdown.get();
+    }
+
+    /**
+     * Gets right tora breakdown.
+     *
+     * @return the right tora breakdown
+     */
+    public String getRightToraBreakdown() {
+        return rightToraBreakdown.get();
+    }
+
+    /**
+     * Gets right toda breakdown.
+     *
+     * @return the right toda breakdown
+     */
+    public String getRightTodaBreakdown() {
+        return rightTodaBreakdown.get();
+    }
+
+    /**
+     * Gets right asda breakdown.
+     *
+     * @return the right asda breakdown
+     */
+    public String getRightAsdaBreakdown() {
+        return rightAsdaBreakdown.get();
+    }
+
+    /**
+     * Gets right lda breakdown.
+     *
+     * @return the right lda breakdown
+     */
+    public String getRightLdaBreakdown() {
+        return rightLdaBreakdown.get();
+    }
+
+    /**
      * Sets clearway left.
      *
      * @param clearwayLeft the clearway left
