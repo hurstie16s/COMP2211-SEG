@@ -914,22 +914,27 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     }
     private Pane makeOutputLabel(SimpleStringProperty prop1header,SimpleStringProperty prop1,SimpleStringProperty prop2header,SimpleStringProperty prop2) {
+
         Label dataheader = new Label();
         dataheader.setFont(Theme.font);
         dataheader.setTextFill(Theme.fg);
         dataheader.setText(String.valueOf(prop1header.getValue()));
+
         Label data = new Label();
         data.setFont(Theme.font);
         data.setTextFill(Theme.fg);
         data.setText(String.valueOf(prop1.getValue()));
+
         Label data2header = new Label();
         data2header.setFont(Theme.font);
         data2header.setTextFill(Theme.fg);
         data2header.setText(String.valueOf(prop2header.getValue()));
+
         Label data2 = new Label();
         data2.setFont(Theme.font);
         data2.setTextFill(Theme.fg);
         data2.setText(String.valueOf(prop2.getValue()));
+
         VBox box = new VBox(dataheader,data,data2header,data2);
         VBox.setVgrow(data, Priority.ALWAYS);
         box.setAlignment(Pos.CENTER);

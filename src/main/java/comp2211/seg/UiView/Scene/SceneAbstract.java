@@ -275,7 +275,8 @@ public abstract class SceneAbstract extends Scene {
       File file = Objects.requireNonNull(generateImportFileChooser("airport").showOpenDialog(new Stage()));
 
       Airport airport = Objects.requireNonNull(FileHandler.importAirport(file));
-      // TODO: Put data in right place
+      // Add Airport to AppWindow
+      appWindow.addAirport(airport);
     } catch (NullPointerException e) {
       logger.warn(e.getMessage());
     }

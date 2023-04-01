@@ -27,7 +27,7 @@ public class AppWindow {
     private final int width;
     private final int height;
     public SceneAbstract currentScene;
-    private ArrayList<Airport> airports;
+    private final ArrayList<Airport> airports;
     private Scene scene;
 
     public HandlerPane root;
