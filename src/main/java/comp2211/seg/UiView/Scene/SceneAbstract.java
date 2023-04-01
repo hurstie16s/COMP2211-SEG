@@ -270,8 +270,9 @@ public abstract class SceneAbstract extends Scene {
     }
   }
 
-  private void importAirportButtonEvent() {
+  protected void importAirportButtonEvent() {
     try {
+      logger.info("Import airport");
       File file = Objects.requireNonNull(generateImportFileChooser("airport").showOpenDialog(new Stage()));
 
       Airport airport = Objects.requireNonNull(FileHandler.importAirport(file));
@@ -284,8 +285,9 @@ public abstract class SceneAbstract extends Scene {
 
   }
 
-  private void importObstacleButtonEvent() {
+  protected void importObstacleButtonEvent() {
     try {
+      logger.info("Import obstacle");
       File file = Objects.requireNonNull(generateImportFileChooser("obstacle").showOpenDialog(new Stage()));
 
       Obstacle obstacle = Objects.requireNonNull(FileHandler.importObstacle(file));

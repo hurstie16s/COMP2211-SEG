@@ -174,17 +174,15 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
         //Button events
-        exportAirObsButton.setOnAction(e -> {
-            exportAirportButtonEvent();
-        });
+        exportAirObsButton.setOnAction(e -> exportAirportButtonEvent());
 
-        exportObstacle.setOnAction(e -> {
-            exportObstacleButtonEvent();
-        });
-//        importButton.setOnAction(e -> {
-//            importButtonEvent();
-//        });
-//
+        exportObstacle.setOnAction(e -> exportObstacleButtonEvent());
+
+        importAirObsButton.setOnAction(e -> importAirportButtonEvent());
+
+        importObstacle.setOnAction(e -> importObstacleButtonEvent());
+
+
 
         // Set the size of the icon
         exportIcon1.setFitHeight(16);
@@ -290,74 +288,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                     "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
                     "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
         }
-    }
-
-
-
-    public void importAirportEvent() {
-        logger.info("importButtonEvent");
-        /*
-        String tempInputProtocol = "Airport,RD:09L,RWY:l1/w1,RS:l2/w2,SWY:l3/w3,CWY:l4/w4,RESA:l5/w5,TD:n1,SE:n2,BP:n3";
-        String betterTempInputProtocol = "Airport:09L,l1,w1,l2,w2,l3,w3,l4,w4,l5,w5,n1,n2,n3";
-        String[] extractAirportAndColumns = betterTempInputProtocol.split(":");
-        String airportName = extractAirportAndColumns[0];
-        String[] columnsEntries = extractAirportAndColumns[1].split(",");
-         */
-        Airport airport = new Airport("TempName");
-        airport.setLatitude(0.0);
-        airport.setLongitude(0.0);
-        String[][] runways = new String[][] {new  String[] {""}};
-        for (String[] runway: runways) {
-            Runway r = new Runway();
-            r.setRESAHeight(90);
-            r.setRESAWidth(240);
-            r.setHasRunwayObstacle(true);
-            r.setRunwayDesignatorRight("18L");
-            r.setInputRightTora(1000);
-            r.setInputRightToda(1500);
-            r.setInputRightAsda(1150);
-            r.setInputRightLda(1000);
-            //r.setClearwayRight(500);
-            //r.setStopwayRight(150);
-            //r.setDispThresholdRight(0);
-            r.setRunwayDesignatorLeft("36R");
-            r.setInputLeftTora(1000);
-            r.setInputLeftToda(1500);
-            r.setInputLeftAsda(1150);
-            r.setInputLeftLda(1000);
-            //r.setClearwayLeft(500);
-            //r.setStopwayLeft(150);
-            //r.setDispThresholdLeft(0);
-            airport.addRunway(r);
-        }
-        appWindow.addAirport(airport);
-
-
-    // Initialize the RunwayData object using the columnsEntries elements
-        /* NEED TO CHANGE TO TEXT FIELDS
-        RunwayData runwayData = new RunwayData(
-            columnsEntries[0], // column1
-            columnsEntries[1], // column21
-            columnsEntries[2], // column22
-            columnsEntries[3], // column31
-            columnsEntries[4], // column32
-            columnsEntries[5], // column41
-            columnsEntries[6], // column42
-            columnsEntries[7], // column51
-            columnsEntries[8], // column52
-            columnsEntries[9], // column61
-            columnsEntries[10], // column62
-            columnsEntries[11], // column7
-            columnsEntries[12], // column8
-            columnsEntries[13] // column9
-        ); */
-
-// Use the runwayData object
-        logger.info("endOfImportbuttonEvent");
-    }
-
-    public void importObstacleEvent() {
-        logger.info("Import Obstacle Event");
     }
 
     public GridPane buildTableView() {
