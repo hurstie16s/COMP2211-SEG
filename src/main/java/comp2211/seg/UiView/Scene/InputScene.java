@@ -32,7 +32,7 @@ public class InputScene extends SceneAbstract {
    * Logger object used for logging messages.
    */
   private static final Logger logger = LogManager.getLogger(InputScene.class);
-  private static SimpleStringProperty units = new SimpleStringProperty();
+  private static final SimpleStringProperty units = new SimpleStringProperty();
   /**
    * The BorderPane object for the scene.
    */

@@ -141,12 +141,7 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
 
     airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
     airports.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
-    airports.valueProperty().addListener(new ChangeListener() {
-      @Override
-      public void changed(ObservableValue observableValue, Object o, Object t1) {
-        appWindow.setAirport((Airport) t1);
-      }
-    });
+    airports.valueProperty().addListener((observableValue, o, t1) -> appWindow.setAirport((Airport) t1));
     airports.valueProperty().set(appWindow.airport);
 
 
