@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <airport>
-    <name>Heathrow</name>
+    <name>Test</name>
     <Latitude>0.0</Latitude>
     <Longitude>0.0</Longitude>
     <Runways>

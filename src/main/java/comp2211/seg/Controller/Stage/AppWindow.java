@@ -66,6 +66,7 @@ public class AppWindow {
     }
     public void addAirport(Airport airport){
         airports.add(airport);
+        logger.info("Added airport: "+airport.getName()+" to list of airports");
     }
     public void setAirport(Airport airport){
         if (airport.name.equals("")){

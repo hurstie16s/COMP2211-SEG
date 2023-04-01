@@ -58,6 +58,10 @@ public class Airport {
         return latitude;
     }
 
+    public String getName() {
+        return name;
+    }
+
     // Setters
     public void setLatitude(Double latitude) {
         this.latitude = latitude;

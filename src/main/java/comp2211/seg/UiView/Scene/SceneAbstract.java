@@ -276,6 +276,7 @@ public abstract class SceneAbstract extends Scene {
 
       Airport airport = Objects.requireNonNull(FileHandler.importAirport(file));
       // Add Airport to AppWindow
+      logger.info("Sending Airport: "+airport.getName()+" to AppWindow");
       appWindow.addAirport(airport);
     } catch (NullPointerException e) {
       logger.warn(e.getMessage());
