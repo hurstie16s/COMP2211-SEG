@@ -24,12 +24,11 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * The type File handler.
  */
-public class FileHandler {
+public abstract class FileHandler {
     private static final Logger logger = LogManager.getLogger(FileHandler.class);
 
     private static final SchemaFactory SCHEMA_FACTORY = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
