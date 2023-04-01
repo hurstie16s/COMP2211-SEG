@@ -504,18 +504,4 @@ public abstract class FileHandler {
             throw new RuntimeException(e);
         }
     }
-
-    /**
-     * The entry point of application.
-     *
-     * @param args the input arguments
-     */
-    // For testing as go
-    public static void main(String[] args) {
-        File testFileAirport = new File("src/main/resources/XML/AirportTest.xml");
-        File testFileObstacle = new File("src/main/resources/XML/Obstacle.xml");
-        importAirport(testFileAirport);
-        importObstacle(testFileObstacle);
-    }
-
 }
