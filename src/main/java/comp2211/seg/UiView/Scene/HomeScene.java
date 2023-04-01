@@ -157,7 +157,10 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
     newAirport.setTextFill(Theme.fg);
     newAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
 
-    importAirport.setDisable(true);
+    //importAirport.setDisable(true);
+    // Import Airport
+    importAirport.setOnAction(e -> importAirportButtonEvent());
+
     newAirport.setDisable(true);
 
     TextFlow text = new TextFlow(title,desciption);
