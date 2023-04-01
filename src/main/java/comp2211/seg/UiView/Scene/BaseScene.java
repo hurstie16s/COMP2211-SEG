@@ -965,10 +965,50 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Pane makeBreakDownPane() {
         ArrayList<Pair<String, Pane>> breakDown = new ArrayList<>();
-        breakDown.add(new Pair<>("TORA Maths", makeOutputLabel(appWindow.runway.leftToraBreakdownHeaderProperty(),appWindow.runway.leftToraBreakdownProperty(),appWindow.runway.rightToraBreakdownHeaderProperty(),appWindow.runway.rightToraBreakdownProperty())));
-        breakDown.add(new Pair<>("TODA Maths", makeOutputLabel(appWindow.runway.leftTodaBreakdownHeaderProperty(),appWindow.runway.leftTodaBreakdownProperty(),appWindow.runway.rightTodaBreakdownHeaderProperty(),appWindow.runway.rightTodaBreakdownProperty())));
-        breakDown.add(new Pair<>("ASDA Maths", makeOutputLabel(appWindow.runway.leftAsdaBreakdownHeaderProperty(),appWindow.runway.leftAsdaBreakdownProperty(),appWindow.runway.rightAsdaBreakdownHeaderProperty(),appWindow.runway.rightAsdaBreakdownProperty())));
-        breakDown.add(new Pair<>("LDA Maths", makeOutputLabel(appWindow.runway.leftLdaBreakdownHeaderProperty(),appWindow.runway.leftLdaBreakdownProperty(),appWindow.runway.rightLdaBreakdownHeaderProperty(),appWindow.runway.rightLdaBreakdownProperty())));
+        breakDown.add(
+                new Pair<>(
+                        "TORA Maths",
+                        makeOutputLabel(
+                                appWindow.runway.leftToraBreakdownHeaderProperty(),
+                                appWindow.runway.leftToraBreakdownProperty(),
+                                appWindow.runway.rightToraBreakdownHeaderProperty(),
+                                appWindow.runway.rightToraBreakdownProperty()
+                        )
+                )
+        );
+        breakDown.add(
+                new Pair<>(
+                        "TODA Maths",
+                        makeOutputLabel(
+                                appWindow.runway.leftTodaBreakdownHeaderProperty(),
+                                appWindow.runway.leftTodaBreakdownProperty(),
+                                appWindow.runway.rightTodaBreakdownHeaderProperty(),
+                                appWindow.runway.rightTodaBreakdownProperty()
+                        )
+                )
+        );
+        breakDown.add(
+                new Pair<>(
+                        "ASDA Maths",
+                        makeOutputLabel(
+                                appWindow.runway.leftAsdaBreakdownHeaderProperty(),
+                                appWindow.runway.leftAsdaBreakdownProperty(),
+                                appWindow.runway.rightAsdaBreakdownHeaderProperty(),
+                                appWindow.runway.rightAsdaBreakdownProperty()
+                        )
+                )
+        );
+        breakDown.add(
+                new Pair<>(
+                        "LDA Maths",
+                        makeOutputLabel(
+                                appWindow.runway.leftLdaBreakdownHeaderProperty(),
+                                appWindow.runway.leftLdaBreakdownProperty(),
+                                appWindow.runway.rightLdaBreakdownHeaderProperty(),
+                                appWindow.runway.rightLdaBreakdownProperty()
+                        )
+                )
+        );
         Pane breakDownPane = new TabLayout(breakDown,Theme.focusedBG,Theme.veryfocusedBG);
         return breakDownPane;
     }
