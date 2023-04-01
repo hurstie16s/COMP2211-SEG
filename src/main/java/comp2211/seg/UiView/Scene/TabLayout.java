@@ -30,6 +30,7 @@ public class TabLayout extends VBox {
     private HBox topbar;
     private VBox layout;
     private StackPane contents;
+
     public TabLayout(ArrayList<Pair<String, Pane>> tabs, Color bg, Color fg){
         this.bg = bg;
         this.fg = fg;

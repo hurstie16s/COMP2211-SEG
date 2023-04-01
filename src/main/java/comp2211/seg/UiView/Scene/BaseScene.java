@@ -912,6 +912,18 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return data;
 
     }
+    private Pane makeOutputLabel(SimpleStringProperty runwayDesignatorProperty) {
+        Label data = new Label();
+        data.setFont(Theme.font);
+        data.setTextFill(Theme.fg);
+        data.setText(String.valueOf(runwayDesignatorProperty.getValue()));
+        VBox box = new VBox(data);
+        VBox.setVgrow(data, Priority.ALWAYS);
+        box.setAlignment(Pos.CENTER);
+
+        return box;
+
+    }
 
     public Label makeLabel(String string){
         Label label = new Label(string);
@@ -940,10 +952,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Pane makeBreakDownPane() {
         ArrayList<Pair<String, Pane>> breakDown = new ArrayList<>();
-        breakDown.add(new Pair<>("TORA Maths", new VBox()));
-        breakDown.add(new Pair<>("TODA Maths", new VBox()));
-        breakDown.add(new Pair<>("ASDA Maths", new VBox()));
-        breakDown.add(new Pair<>("LDA Maths", new VBox()));
+        breakDown.add(new Pair<>("TORA Maths", makeOutputLabel(new SimpleStringProperty("calc 1"))));
+        breakDown.add(new Pair<>("TODA Maths", makeOutputLabel(new SimpleStringProperty("calc 2"))));
+        breakDown.add(new Pair<>("ASDA Maths", makeOutputLabel(new SimpleStringProperty("calc 3"))));
+        breakDown.add(new Pair<>("LDA Maths", makeOutputLabel(new SimpleStringProperty("calc 4"))));
         Pane breakDownPane = new TabLayout(breakDown,Theme.focusedBG,Theme.veryfocusedBG);
         return breakDownPane;
     }
