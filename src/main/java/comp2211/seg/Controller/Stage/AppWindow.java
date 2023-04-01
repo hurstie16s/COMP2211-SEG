@@ -34,6 +34,7 @@ public class AppWindow {
 
     public Runway runway;
     public Airport airport;
+    public final ArrayList<Obstacle> obstaclePresets;
 
     /**
      * Constructs an AppWindow object with the specified stage, width, and height.
@@ -47,6 +48,8 @@ public class AppWindow {
         this.width = width;
         this.height = height;
         airports = new ArrayList<>();
+        obstaclePresets = new ArrayList<>();
+        obstaclePresetSetup();
         Theme.makeDark();
 
         addAirport(new Airport("Heathrow"));
@@ -68,6 +71,10 @@ public class AppWindow {
         airports.add(airport);
         logger.info("Added airport: "+airport.getName()+" to list of airports");
     }
+    public void addObstacle(Obstacle obstacle) {
+        obstaclePresets.add(obstacle);
+        logger.info("Added obstacle: "+obstacle.getObstacleDesignator()+ "to list of pre-defined obstacles");
+    }
     public void setAirport(Airport airport){
         if (airport.name.equals("")){
             stage.setTitle("Runway tool");
@@ -76,6 +83,30 @@ public class AppWindow {
         }
         this.airport = airport;
         runway = airport.getRunways().get(0);
+    }
+
+    private void obstaclePresetSetup() {
+        obstaclePresets.add(new Obstacle("Airbus A320-200", 11.76, 0));
+        obstaclePresets.get(0).lengthProperty().set(37.57);
+        obstaclePresets.get(0).widthProperty().set(35.8);
+        obstaclePresets.add(new Obstacle("Boeing 737-800", 12.6, 0));
+        obstaclePresets.get(1).lengthProperty().set(34.32);
+        obstaclePresets.get(1).widthProperty().set(39.5);
+        obstaclePresets.add(new Obstacle("Boeing 777-9", 19.68, 0));
+        obstaclePresets.get(2).lengthProperty().set(76.72);
+        obstaclePresets.get(2).widthProperty().set(64.84);
+        obstaclePresets.add(new Obstacle("Piper M350", 3.4, 0));
+        obstaclePresets.get(3).lengthProperty().set(8.8);
+        obstaclePresets.get(3).widthProperty().set(13.1);
+        obstaclePresets.add(new Obstacle("Pothole", 0, 0));
+        obstaclePresets.get(4).lengthProperty().set(0);
+        obstaclePresets.get(4).widthProperty().set(0);
+        obstaclePresets.add(new Obstacle("Pushback tug", 2.5, 0));
+        obstaclePresets.get(5).lengthProperty().set(5);
+        obstaclePresets.get(5).widthProperty().set(2);
+        obstaclePresets.add(new Obstacle("Maintenance truck", 3, 0));
+        obstaclePresets.get(6).lengthProperty().set(6);
+        obstaclePresets.get(6).widthProperty().set(2.5);
     }
     public void setRunway(Runway runway){
         this.runway = runway;

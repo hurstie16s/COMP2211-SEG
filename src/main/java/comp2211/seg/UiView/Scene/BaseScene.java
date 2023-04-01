@@ -709,9 +709,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Pane makeObstacleOptionsPane() {
         // Obstacle preset ComboBox
-        ArrayList<Obstacle> obstaclePresets = new ArrayList<>();
-        obstaclePresetSetup(obstaclePresets);
-        ComboBox obstacleComboBox = new ComboBox(FXCollections.observableArrayList(obstaclePresets));
+        ComboBox obstacleComboBox = new ComboBox(FXCollections.observableArrayList(appWindow.obstaclePresets));
         obstacleComboBox.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
 
         obstacleComboBox.setOnAction(event -> {
@@ -789,30 +787,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         data.textProperty().bind(Bindings.when(visibility).then(string).otherwise(new
                 SimpleStringProperty("Error")));
         return data;
-    }
-
-    private void obstaclePresetSetup(ArrayList<Obstacle> obstaclePresets) {
-        obstaclePresets.add(new Obstacle("Airbus A320-200", 11.76, 0));
-        obstaclePresets.get(0).lengthProperty().set(37.57);
-        obstaclePresets.get(0).widthProperty().set(35.8);
-        obstaclePresets.add(new Obstacle("Boeing 737-800", 12.6, 0));
-        obstaclePresets.get(1).lengthProperty().set(34.32);
-        obstaclePresets.get(1).widthProperty().set(39.5);
-        obstaclePresets.add(new Obstacle("Boeing 777-9", 19.68, 0));
-        obstaclePresets.get(2).lengthProperty().set(76.72);
-        obstaclePresets.get(2).widthProperty().set(64.84);
-        obstaclePresets.add(new Obstacle("Piper M350", 3.4, 0));
-        obstaclePresets.get(3).lengthProperty().set(8.8);
-        obstaclePresets.get(3).widthProperty().set(13.1);
-        obstaclePresets.add(new Obstacle("Pothole", 0, 0));
-        obstaclePresets.get(4).lengthProperty().set(0);
-        obstaclePresets.get(4).widthProperty().set(0);
-        obstaclePresets.add(new Obstacle("Pushback tug", 2.5, 0));
-        obstaclePresets.get(5).lengthProperty().set(5);
-        obstaclePresets.get(5).widthProperty().set(2);
-        obstaclePresets.add(new Obstacle("Maintenance truck", 3, 0));
-        obstaclePresets.get(6).lengthProperty().set(6);
-        obstaclePresets.get(6).widthProperty().set(2.5);
     }
 
     private Node makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility, int i) {

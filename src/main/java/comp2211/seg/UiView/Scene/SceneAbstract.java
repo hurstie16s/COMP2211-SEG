@@ -275,8 +275,8 @@ public abstract class SceneAbstract extends Scene {
       File file = Objects.requireNonNull(generateImportFileChooser("airport").showOpenDialog(new Stage()));
 
       Airport airport = Objects.requireNonNull(FileHandler.importAirport(file));
-      // Add Airport to AppWindow
-      logger.info("Sending Airport: "+airport.getName()+" to AppWindow");
+      // Add airport to AppWindow
+      logger.info("Sending airport: "+airport.getName()+" to AppWindow");
       appWindow.addAirport(airport);
     } catch (NullPointerException e) {
       logger.warn(e.getMessage());
@@ -289,7 +289,9 @@ public abstract class SceneAbstract extends Scene {
       File file = Objects.requireNonNull(generateImportFileChooser("obstacle").showOpenDialog(new Stage()));
 
       Obstacle obstacle = Objects.requireNonNull(FileHandler.importObstacle(file));
-      // TODO: Put data in right place
+      // Add obstacle to AppWindow
+      logger.info("Sending obstacle: "+obstacle.getObstacleDesignator()+" to AppWindow");
+      appWindow.addObstacle(obstacle);
     } catch (NullPointerException e) {
       logger.warn(e.getMessage());
     }
