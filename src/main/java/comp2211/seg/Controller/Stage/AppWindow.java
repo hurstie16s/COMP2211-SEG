@@ -26,21 +26,36 @@ public class AppWindow {
     private final Stage stage;
     private final int width;
     private final int height;
+    /**
+     * The Current scene.
+     */
     public SceneAbstract currentScene;
     private final ArrayList<Airport> airports;
     private Scene scene;
 
+    /**
+     * The Root.
+     */
     public HandlerPane root;
 
+    /**
+     * The Runway.
+     */
     public Runway runway;
+    /**
+     * The Airport.
+     */
     public Airport airport;
+    /**
+     * The Obstacle presets.
+     */
     public final ArrayList<Obstacle> obstaclePresets;
 
     /**
      * Constructs an AppWindow object with the specified stage, width, and height.
      *
-     * @param stage the primary stage of the application
-     * @param width the width of the application's window
+     * @param stage  the primary stage of the application
+     * @param width  the width of the application's window
      * @param height the height of the application's window
      */
     public AppWindow(Stage stage, int width, int height) {
@@ -67,14 +82,32 @@ public class AppWindow {
         //startMainScene();
         //startRunwayScene();
     }
+
+    /**
+     * Add airport.
+     *
+     * @param airport the airport
+     */
     public void addAirport(Airport airport){
         airports.add(airport);
         logger.info("Added airport: "+airport.getName()+" to list of airports");
     }
+
+    /**
+     * Add obstacle.
+     *
+     * @param obstacle the obstacle
+     */
     public void addObstacle(Obstacle obstacle) {
         obstaclePresets.add(obstacle);
         logger.info("Added obstacle: "+obstacle.getObstacleDesignator()+ "to list of pre-defined obstacles");
     }
+
+    /**
+     * Set airport.
+     *
+     * @param airport the airport
+     */
     public void setAirport(Airport airport){
         if (airport.name.equals("")){
             stage.setTitle("Runway tool");
@@ -108,6 +141,12 @@ public class AppWindow {
         obstaclePresets.get(6).lengthProperty().set(6);
         obstaclePresets.get(6).widthProperty().set(2.5);
     }
+
+    /**
+     * Set runway.
+     *
+     * @param runway the runway
+     */
     public void setRunway(Runway runway){
         this.runway = runway;
     }
@@ -142,6 +181,10 @@ public class AppWindow {
     public void startMainScene() {
         loadScene(new MainScene(new Pane(),this, getWidth(),getHeight()));
     }
+
+    /**
+     * Start base scene.
+     */
     public void startBaseScene() {
         loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
     }
@@ -222,10 +265,18 @@ public class AppWindow {
         //root.getChildren().removeAll(root.getChildren());
     }
 
+    /**
+     * Gets airports.
+     *
+     * @return the airports
+     */
     public ArrayList<Airport> getAirports() {
         return airports;
     }
 
+    /**
+     * Start base scene obstacle.
+     */
     public void startBaseSceneObstacle() {
         loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
         ((BaseScene) currentScene).selectObstacleMenu();

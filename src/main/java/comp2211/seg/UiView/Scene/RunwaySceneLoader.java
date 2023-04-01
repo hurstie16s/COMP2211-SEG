@@ -6,13 +6,22 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
 
+/**
+ * The type Runway scene loader.
+ */
 public class RunwaySceneLoader extends SceneAbstract{
+    /**
+     * The Scene.
+     */
     public RunwayScene scene;
+
     /**
      * Constructor to create a SceneAbstract object.
      *
      * @param root      the root pane of the scene
      * @param appWindow the application window of the scene
+     * @param width     the width
+     * @param height    the height
      */
     public RunwaySceneLoader(Pane root, AppWindow appWindow, double width, double height) {
         super(root, appWindow, width, height);

@@ -14,32 +14,77 @@ import javafx.scene.shape.Polygon;
  * The arrow consists of a line, a polygon for the arrowhead, and an optional label.
  */
 public class RunwayArrow extends Group {
+    /**
+     * The Arrow line.
+     */
     protected Line arrowLine;
+    /**
+     * The Arrow head.
+     */
     protected Polygon arrowHead;
+    /**
+     * The Arrow label.
+     */
     protected Label arrowLabel;
 
+    /**
+     * The Color.
+     */
     protected Color color = Color.RED;
+    /**
+     * The Label color.
+     */
     protected Color labelColor = Color.WHITE;
+    /**
+     * The Stroke width.
+     */
     protected double strokeWidth = 3;
+    /**
+     * The Head width.
+     */
     protected double headWidth = 4 * strokeWidth;
+    /**
+     * The Head height.
+     */
     protected double headHeight = 1.75 * strokeWidth;
+    /**
+     * The Scale factor.
+     */
     protected SimpleDoubleProperty scaleFactor;
+    /**
+     * The Direction.
+     */
     protected boolean direction;
+    /**
+     * The Length.
+     */
     protected DoubleBinding length;
+    /**
+     * The X offset.
+     */
     protected double xOffset;
+    /**
+     * The Y offset.
+     */
     protected double yOffset;
+    /**
+     * The Label text.
+     */
     public String labelText;
 
 
+    /**
+     * The Translation listener.
+     */
     protected ChangeListener<Number> translationListener;
 
     /**
      * Constructs a new RunwayArrow with the specified color, scale factor, length, and direction.
      *
-     * @param col        The color of the arrow.
-     * @param scale      The scale factor that determines the size of the arrow.
-     * @param length     The length of the arrow line.
-     * @param direction  The direction of the arrow.
+     * @param col       The color of the arrow.
+     * @param scale     The scale factor that determines the size of the arrow.
+     * @param length    The length of the arrow line.
+     * @param direction The direction of the arrow.
      */
     protected RunwayArrow(Color col, SimpleDoubleProperty scale, DoubleBinding length, boolean direction) {
         color = col;

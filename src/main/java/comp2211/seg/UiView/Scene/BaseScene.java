@@ -43,6 +43,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+/**
+ * The type Base scene.
+ */
 public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     //logger for BaseScene
@@ -55,8 +58,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
      *
      * @param root      the root pane of the scene
      * @param appWindow the application window of the scene
-     * @param width
-     * @param height
+     * @param width     the width
+     * @param height    the height
      */
     public BaseScene(Pane root, AppWindow appWindow, double width, double height) {
         super(root, appWindow, width, height);
@@ -75,6 +78,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             }
         }));
     }
+
+    /**
+     * Select obstacle menu.
+     */
     public void selectObstacleMenu(){
         tabLayout.tabButtons.get(1).fire();
     }
@@ -96,6 +103,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         mainPane.minWidthProperty().bind(root.widthProperty());
         mainPane.getChildren().add(tabLayout);
     }
+
+    /**
+     * Make airport config pane.
+     *
+     * @return the pane
+     */
     public Pane makeAirportConfig() {
         //Aleks do stuff here
 
@@ -290,6 +303,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         }
     }
 
+    /**
+     * Build table view grid pane.
+     *
+     * @return the grid pane
+     */
     public GridPane buildTableView() {
 
         GridPane airportData = new GridPane();
@@ -392,6 +410,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         return airportData;
     }
+
+    /**
+     * Build table view 2 table view.
+     *
+     * @param container the container
+     * @return the table view
+     */
     public TableView<RunwayData> buildTableView2(VBox container) {
         TableView<RunwayData> table = new TableView<>();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -565,6 +590,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return tableColumn;
     }
 
+    /**
+     * Make obstacle config pane.
+     *
+     * @return the pane
+     */
     public Pane makeObstacleConfig(){
         HBox obstacleLayout = new HBox();
         VBox leftPane = new VBox();
@@ -583,6 +613,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         obstacleLayout.getChildren().addAll(leftPane,rightPane);
         return obstacleLayout;
     }
+
+    /**
+     * Make obstacle pane.
+     *
+     * @param obstaclePane the obstacle pane
+     */
     public void makeObstaclePane(VBox obstaclePane){
         HBox topHalf = new HBox();
         topHalf.maxWidthProperty().bind(obstaclePane.widthProperty());
@@ -847,12 +883,26 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     }
 
+    /**
+     * Make label label.
+     *
+     * @param string the string
+     * @return the label
+     */
     public Label makeLabel(String string){
         Label label = new Label(string);
         label.setFont(Theme.font);
         label.setTextFill(Theme.fg);
         return label;
     }
+
+    /**
+     * Make output label label.
+     *
+     * @param property   the property
+     * @param visibility the visibility
+     * @return the label
+     */
     public Label makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility) {
         Label data = new Label();
         data.setFont(Theme.font);
@@ -973,6 +1023,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return textField;
     }
 
+    /**
+     * Make runway tabs pane.
+     *
+     * @return the pane
+     */
     public Pane makeRunwayTabs(){
         ArrayList<Pair<String, Pane>> viewTabs = new ArrayList<>();
         RunwayScene runwayScene1 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
@@ -1034,6 +1089,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return viewPane;
     }
 
+    /**
+     * Make spinner spinner.
+     *
+     * @param binding the binding
+     * @return the spinner
+     */
     public Spinner makeSpinner(SimpleDoubleProperty binding){
         Spinner spinner = new Spinner();
         SpinnerValueFactory<Double> svf = new SpinnerValueFactory.DoubleSpinnerValueFactory(0,999999999,binding.get());
@@ -1078,11 +1139,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     /**
      * Creates a new Button with the specified label and adds it to the given parent Pane.
      *
-     * @param label1  the label to use for the first Button.
-     * @param label2  the label to use for the second Button.
+     * @param property the property
+     * @param label1   the label to use for the first Button.
+     * @param label2   the label to use for the second Button.
      * @return the created Button Node.
      */
     public Node makeButton(SimpleBooleanProperty property, String label1, String label2) {

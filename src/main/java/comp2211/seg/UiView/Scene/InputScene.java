@@ -37,20 +37,25 @@ public class InputScene extends SceneAbstract {
    * The BorderPane object for the scene.
    */
   private static BorderPane borderPane;
-  /**
-   * The AppWindow object for the scene.
-   */
-  public AppWindow appWindow;
-  public SimpleDoubleProperty height = new SimpleDoubleProperty(0);
+    /**
+     * The AppWindow object for the scene.
+     */
+    public AppWindow appWindow;
+    /**
+     * The Height.
+     */
+    public SimpleDoubleProperty height = new SimpleDoubleProperty(0);
 
-  /**
-   * /**
-   * Constructor for the InputScene class.
-   *
-   * @param root      the root handler pane for the scene
-   * @param appWindow the application window for the scene
-   */
-  public InputScene(Pane root, AppWindow appWindow, double width, double height) {
+    /**
+     * /**
+     * Constructor for the InputScene class.
+     *
+     * @param root      the root handler pane for the scene
+     * @param appWindow the application window for the scene
+     * @param width     the width
+     * @param height    the height
+     */
+    public InputScene(Pane root, AppWindow appWindow, double width, double height) {
     super(root, appWindow, width, height);
     this.appWindow = appWindow;
   }
@@ -142,14 +147,16 @@ public class InputScene extends SceneAbstract {
     alert.showAndWait();
   }
 
-  /**
-   * Creates a new TextField with the specified label and adds it to the given parent Pane.
-   *
-   * @param parent the Pane to add the TextField to.
-   * @param label  the label to use for the TextField.
-   * @return the created TextField Node.
-   */
-  public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleStringProperty property, String regex) {
+    /**
+     * Creates a new TextField with the specified label and adds it to the given parent Pane.
+     *
+     * @param parent   the Pane to add the TextField to.
+     * @param label    the label to use for the TextField.
+     * @param property the property
+     * @param regex    the regex
+     * @return the created TextField Node.
+     */
+    public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleStringProperty property, String regex) {
     TextField entry = new TextField();
     //remove autofocus
     entry.setFocusTraversable(false);
@@ -182,14 +189,15 @@ public class InputScene extends SceneAbstract {
     return entry;
   }
 
-  /**
-   * Creates a new TextField with the specified label and adds it to the given parent Pane.
-   *
-   * @param parent the Pane to add the TextField to.
-   * @param label  the label to use for the TextField.
-   * @return the created TextField Node.
-   */
-  public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleDoubleProperty property) {
+    /**
+     * Creates a new TextField with the specified label and adds it to the given parent Pane.
+     *
+     * @param parent   the Pane to add the TextField to.
+     * @param label    the label to use for the TextField.
+     * @param property the property
+     * @return the created TextField Node.
+     */
+    public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleDoubleProperty property) {
     TextField entry = new TextField();
     entry.setFocusTraversable(false);
     entry.setFont(Theme.font);
@@ -219,14 +227,18 @@ public class InputScene extends SceneAbstract {
     });
     entry.setText(property.getValue().toString());
     return entry;
-  }/**
-   * Creates a new TextField with the specified label and adds it to the given parent Pane.
-   *
-   * @param parent the Pane to add the TextField to.
-   * @param label  the label to use for the TextField.
-   * @return the created TextField Node.
-   */
-  public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleDoubleProperty property, SimpleDoubleProperty property2) {
+  }
+
+    /**
+     * Creates a new TextField with the specified label and adds it to the given parent Pane.
+     *
+     * @param parent    the Pane to add the TextField to.
+     * @param label     the label to use for the TextField.
+     * @param property  the property
+     * @param property2 the property 2
+     * @return the created TextField Node.
+     */
+    public Node makeTextField(javafx.scene.layout.Pane parent, StringExpression label, SimpleDoubleProperty property, SimpleDoubleProperty property2) {
     TextField entry = new TextField();
     entry.setFocusTraversable(false);
     entry.setFont(Theme.font);
@@ -286,15 +298,16 @@ public class InputScene extends SceneAbstract {
     return entry;
   }
 
-  /**
-   * Creates a new Button with the specified label and adds it to the given parent Pane.
-   *
-   * @param parent the Pane to add the Button to.
-   * @param label1  the label to use for the first Button.
-   * @param label2  the label to use for the second Button.
-   * @return the created Button Node.
-   */
-  public Node makeButton(javafx.scene.layout.Pane parent, String label1, String label2, SimpleBooleanProperty property) {
+    /**
+     * Creates a new Button with the specified label and adds it to the given parent Pane.
+     *
+     * @param parent   the Pane to add the Button to.
+     * @param label1   the label to use for the first Button.
+     * @param label2   the label to use for the second Button.
+     * @param property the property
+     * @return the created Button Node.
+     */
+    public Node makeButton(javafx.scene.layout.Pane parent, String label1, String label2, SimpleBooleanProperty property) {
     DoubleBinding w = root.widthProperty().divide(5);
     HBox segment = new HBox();
     ToggleButton button = new ToggleButton(label1);
@@ -332,14 +345,17 @@ public class InputScene extends SceneAbstract {
     return segment;
   }
 
-  /**
-   * Creates a new Label and a Label for displaying data with the specified label and adds them to the given parent Pane.
-   *
-   * @param parent the Pane to add the Labels to.
-   * @param label  the label to use for the Labels.
-   * @return the created Label Node for displaying data.
-   */
-  public Label makeOutputLabel(javafx.scene.layout.Pane parent, String label, SimpleDoubleProperty property,SimpleDoubleProperty limit, SimpleBooleanProperty visibility) {
+    /**
+     * Creates a new Label and a Label for displaying data with the specified label and adds them to the given parent Pane.
+     *
+     * @param parent     the Pane to add the Labels to.
+     * @param label      the label to use for the Labels.
+     * @param property   the property
+     * @param limit      the limit
+     * @param visibility the visibility
+     * @return the created Label Node for displaying data.
+     */
+    public Label makeOutputLabel(javafx.scene.layout.Pane parent, String label, SimpleDoubleProperty property,SimpleDoubleProperty limit, SimpleBooleanProperty visibility) {
     Label data = new Label();
     data.setFont(Theme.font);
     data.setTextFill(Theme.fg);
@@ -352,7 +368,16 @@ public class InputScene extends SceneAbstract {
             SimpleStringProperty("Error")));
     return data;
   }
-  public HBox makeBoundingBox(StringExpression label, DoubleBinding width, Node node){
+
+    /**
+     * Make bounding box h box.
+     *
+     * @param label the label
+     * @param width the width
+     * @param node  the node
+     * @return the h box
+     */
+    public HBox makeBoundingBox(StringExpression label, DoubleBinding width, Node node){
 
     HBox segment = new HBox();
     Label title = new Label(label.getValue());
@@ -367,7 +392,16 @@ public class InputScene extends SceneAbstract {
     segment.getChildren().addAll(title,node);
     return segment;
   }
-  public HBox makeBoundingBoxAlt(StringExpression label, DoubleBinding width, Node node){
+
+    /**
+     * Make bounding box alt h box.
+     *
+     * @param label the label
+     * @param width the width
+     * @param node  the node
+     * @return the h box
+     */
+    public HBox makeBoundingBoxAlt(StringExpression label, DoubleBinding width, Node node){
 
     HBox segment = new HBox();
     Label title = new Label(label.getValue());

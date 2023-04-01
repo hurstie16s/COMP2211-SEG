@@ -30,16 +30,18 @@ public class RunwayLabel extends Group {
     private Rotate yRotate;
     private Rotate zRotate;
     private Text label;
+
     /**
      * Constructs a new RunwayLabel with the specified name, color, x-offset, y-offset, length, scene, and direction.
      *
-     * @param name      The name of the runway.
-     * @param color     The color of the label and line.
-     * @param xOffset   The x-offset of the label.
-     * @param yOffset   The y-offset of the label.
-     * @param length    The length of the line.
-     * @param scene     The RunwayScene to which the label belongs.
-     * @param direction The direction of the runway.
+     * @param name       The name of the runway.
+     * @param color      The color of the label and line.
+     * @param xOffset    The x-offset of the label.
+     * @param yOffset    The y-offset of the label.
+     * @param length     The length of the line.
+     * @param scene      The RunwayScene to which the label belongs.
+     * @param direction  The direction of the runway.
+     * @param visibility the visibility
      */
     public RunwayLabel(String name, Color color, DoubleBinding xOffset, double yOffset, DoubleBinding length, RunwayScene scene, boolean direction, SimpleBooleanProperty visibility) {
         this.scene = scene;
@@ -143,6 +145,10 @@ public class RunwayLabel extends Group {
         );
          */
     }
+
+    /**
+     * Set angle.
+     */
     public void setAngle(){
 
 
@@ -159,14 +165,15 @@ public class RunwayLabel extends Group {
 
         }
     }
+
     /**
      * Creates a horizontal line in a 3D space, represented by a Box object.
      *
-     * @param start The binding for the starting position of the line on the x-axis.
-     * @param length The binding for the length of the line on the x-axis.
-     * @param height The binding for the height of the line on the y and z-axis.
+     * @param start     The binding for the starting position of the line on the x-axis.
+     * @param length    The binding for the length of the line on the x-axis.
+     * @param height    The binding for the height of the line on the y and z-axis.
      * @param thickness The thickness of the line on the y and z-axis.
-     * @param color The color of the line.
+     * @param color     The color of the line.
      * @return A Box object representing the horizontal line.
      */
     public Node makeLineHorizontal(DoubleBinding start, DoubleBinding length, DoubleBinding height, double thickness, Color color){
@@ -183,10 +190,10 @@ public class RunwayLabel extends Group {
     /**
      * Creates a vertical line in a 3D space, represented by a Group object containing a rotated Box.
      *
-     * @param start The binding for the starting position of the line on the x-axis.
-     * @param height The binding for the height of the line on the y-axis.
+     * @param start     The binding for the starting position of the line on the x-axis.
+     * @param height    The binding for the height of the line on the y-axis.
      * @param thickness The thickness of the line on the x and y-axis.
-     * @param color The color of the line.
+     * @param color     The color of the line.
      * @return A Group object containing a rotated Box representing the vertical line.
      */
     public Group makeLineVertical(DoubleBinding start, DoubleBinding height, double thickness, Color color){

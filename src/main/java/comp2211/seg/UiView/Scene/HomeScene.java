@@ -46,6 +46,9 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
    * The main application window for the interface.
    */
   protected AppWindow appWindow;
+  /**
+   * The Name entry.
+   */
   protected TextField nameEntry;
   private ComboBox airports;
 
@@ -54,6 +57,8 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
    *
    * @param root      the root pane of the scene
    * @param appWindow the application window of the scene
+   * @param width     the width
+   * @param height    the height
    */
   public HomeScene(Pane root, AppWindow appWindow, double width, double height) {
     super(root, appWindow, width, height);

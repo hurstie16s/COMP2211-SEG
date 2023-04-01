@@ -40,6 +40,9 @@ public class MainScene extends SceneAbstract{
      * The main application window for the interface.
      */
     protected AppWindow appWindow;
+    /**
+     * The Root.
+     */
     protected Pane root;
 
     /**
@@ -47,6 +50,8 @@ public class MainScene extends SceneAbstract{
      *
      * @param root      the root handler pane for the scene
      * @param appWindow the main application window
+     * @param width     the width
+     * @param height    the height
      */
     public MainScene(Pane root, AppWindow appWindow, double width, double height) {
         super(root, appWindow, width, height);

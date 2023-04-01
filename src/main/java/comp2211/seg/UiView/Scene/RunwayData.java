@@ -2,6 +2,9 @@ package comp2211.seg.UiView.Scene;
 
 import javafx.scene.control.TextField;
 
+/**
+ * The type Runway data.
+ */
 public class RunwayData {
 
   private TextField column1;
@@ -72,6 +75,24 @@ public class RunwayData {
 
    */
 
+  /**
+   * Instantiates a new Runway data.
+   *
+   * @param column1  the column 1
+   * @param column21 the column 21
+   * @param column22 the column 22
+   * @param column31 the column 31
+   * @param column32 the column 32
+   * @param column41 the column 41
+   * @param column42 the column 42
+   * @param column51 the column 51
+   * @param column52 the column 52
+   * @param column61 the column 61
+   * @param column62 the column 62
+   * @param column7  the column 7
+   * @param column8  the column 8
+   * @param column9  the column 9
+   */
   public RunwayData(TextField column1,
                     TextField column21, TextField column22,
                     TextField column31, TextField column32,
@@ -98,7 +119,12 @@ public class RunwayData {
     this.column9 = column9;
   }
 
-  /*
+  /**
+   * Gets column 1.
+   *
+   * @return the column 1
+   */
+/*
   public String getColumn1() {
     return column1;
   }
@@ -257,164 +283,344 @@ public class RunwayData {
     return column1;
   }
 
+  /**
+   * Sets column 1.
+   *
+   * @param column1 the column 1
+   */
   public void setColumn1(TextField column1) {
     this.column1 = column1;
   }
 
-  // Getters and setters for column2
+  /**
+   * Gets column 2.
+   *
+   * @return the column 2
+   */
+// Getters and setters for column2
   public TextField getColumn2() {
     return column2;
   }
 
+  /**
+   * Sets column 2.
+   *
+   * @param column2 the column 2
+   */
   public void setColumn2(TextField column2) {
     this.column2 = column2;
   }
 
-  // Getters and setters for column21
+  /**
+   * Gets column 21.
+   *
+   * @return the column 21
+   */
+// Getters and setters for column21
   public TextField getColumn21() {
     return column21;
   }
 
+  /**
+   * Sets column 21.
+   *
+   * @param column21 the column 21
+   */
   public void setColumn21(TextField column21) {
     this.column21 = column21;
   }
 
-  // Getters and setters for column22
+  /**
+   * Gets column 22.
+   *
+   * @return the column 22
+   */
+// Getters and setters for column22
   public TextField getColumn22() {
     return column22;
   }
 
+  /**
+   * Sets column 22.
+   *
+   * @param column22 the column 22
+   */
   public void setColumn22(TextField column22) {
     this.column22 = column22;
   }
 
-  // Getters and setters for column3
+  /**
+   * Gets column 3.
+   *
+   * @return the column 3
+   */
+// Getters and setters for column3
   public TextField getColumn3() {
     return column3;
   }
 
+  /**
+   * Sets column 3.
+   *
+   * @param column3 the column 3
+   */
   public void setColumn3(TextField column3) {
     this.column3 = column3;
   }
 
-  // Getters and setters for column31
+  /**
+   * Gets column 31.
+   *
+   * @return the column 31
+   */
+// Getters and setters for column31
   public TextField getColumn31() {
     return column31;
   }
 
+  /**
+   * Sets column 31.
+   *
+   * @param column31 the column 31
+   */
   public void setColumn31(TextField column31) {
     this.column31 = column31;
   }
 
-  // Getters and setters for column32
+  /**
+   * Gets column 32.
+   *
+   * @return the column 32
+   */
+// Getters and setters for column32
   public TextField getColumn32() {
     return column32;
   }
 
+  /**
+   * Sets column 32.
+   *
+   * @param column32 the column 32
+   */
   public void setColumn32(TextField column32) {
     this.column32 = column32;
   }
 
-  // Getters and setters for column4
+  /**
+   * Gets column 4.
+   *
+   * @return the column 4
+   */
+// Getters and setters for column4
   public TextField getColumn4() {
     return column4;
   }
 
+  /**
+   * Sets column 4.
+   *
+   * @param column4 the column 4
+   */
   public void setColumn4(TextField column4) {
     this.column4 = column4;
   }
 
-  // Getters and setters for column41
+  /**
+   * Gets column 41.
+   *
+   * @return the column 41
+   */
+// Getters and setters for column41
   public TextField getColumn41() {
     return column41;
   }
 
+  /**
+   * Sets column 41.
+   *
+   * @param column41 the column 41
+   */
   public void setColumn41(TextField column41) {
     this.column41 = column41;
   }
 
-  // Getters and setters for column42
+  /**
+   * Gets column 42.
+   *
+   * @return the column 42
+   */
+// Getters and setters for column42
   public TextField getColumn42() {
     return column42;
   }
 
+  /**
+   * Sets column 42.
+   *
+   * @param column42 the column 42
+   */
   public void setColumn42(TextField column42) {
     this.column42 = column42;
   }
 
-  // Getters and setters for column5
+  /**
+   * Gets column 5.
+   *
+   * @return the column 5
+   */
+// Getters and setters for column5
   public TextField getColumn5() {
     return column5;
   }
 
+  /**
+   * Sets column 5.
+   *
+   * @param column5 the column 5
+   */
   public void setColumn5(TextField column5) {
     this.column5 = column5;
   }
 
-  // Getters and setters for column51
+  /**
+   * Gets column 51.
+   *
+   * @return the column 51
+   */
+// Getters and setters for column51
   public TextField getColumn51() {
     return column51;
   }
 
+  /**
+   * Sets column 51.
+   *
+   * @param column51 the column 51
+   */
   public void setColumn51(TextField column51) {
     this.column51 = column51;
   }
 
-  // Getters and setters for column52
+  /**
+   * Gets column 52.
+   *
+   * @return the column 52
+   */
+// Getters and setters for column52
   public TextField getColumn52() {
     return column52;
   }
 
+  /**
+   * Sets column 52.
+   *
+   * @param column52 the column 52
+   */
   public void setColumn52(TextField column52) {
     this.column52 = column52;
   }
 
-  // Getters and setters for column6
+  /**
+   * Gets column 6.
+   *
+   * @return the column 6
+   */
+// Getters and setters for column6
   public TextField getColumn6() {
     return column6;
   }
 
-  // Getters and setters for column61
+  /**
+   * Gets column 61.
+   *
+   * @return the column 61
+   */
+// Getters and setters for column61
   public TextField getColumn61() {
     return column61;
   }
 
+  /**
+   * Sets column 61.
+   *
+   * @param column61 the column 61
+   */
   public void setColumn61(TextField column61) {
     this.column61 = column61;
   }
 
-  // Getters and setters for column62
+  /**
+   * Gets column 62.
+   *
+   * @return the column 62
+   */
+// Getters and setters for column62
   public TextField getColumn62() {
     return column62;
   }
 
+  /**
+   * Sets column 62.
+   *
+   * @param column62 the column 62
+   */
   public void setColumn62(TextField column62) {
     this.column62 = column62;
   }
 
-  // Getters and setters for column7
+  /**
+   * Gets column 7.
+   *
+   * @return the column 7
+   */
+// Getters and setters for column7
   public TextField getColumn7() {
     return column7;
   }
 
+  /**
+   * Sets column 7.
+   *
+   * @param column7 the column 7
+   */
   public void setColumn7(TextField column7) {
     this.column7 = column7;
   }
 
-  // Getters and setters for column8
+  /**
+   * Gets column 8.
+   *
+   * @return the column 8
+   */
+// Getters and setters for column8
   public TextField getColumn8() {
     return column8;
   }
 
+  /**
+   * Sets column 8.
+   *
+   * @param column8 the column 8
+   */
   public void setColumn8(TextField column8) {
     this.column8 = column8;
   }
 
-  // Getters and setters for column9
+  /**
+   * Gets column 9.
+   *
+   * @return the column 9
+   */
+// Getters and setters for column9
   public TextField getColumn9() {
     return column9;
   }
 
+  /**
+   * Sets column 9.
+   *
+   * @param column9 the column 9
+   */
   public void setColumn9(TextField column9) {
     this.column9 = column9;
   }

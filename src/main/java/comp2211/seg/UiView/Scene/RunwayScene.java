@@ -40,93 +40,117 @@ public class RunwayScene extends SceneAbstract {
   private final SimpleDoubleProperty runwayOffset = new SimpleDoubleProperty(5);
   private static final Logger logger = LogManager.getLogger(RunwayScene.class);
 
-  /**
-   * The group object that holds the 3D models for the runway scene.
-   */
-  protected Group group;
+    /**
+     * The group object that holds the 3D models for the runway scene.
+     */
+    protected Group group;
 
-  /**
-   * The main application window for the interface.
-   */
-  public AppWindow appWindow;
+    /**
+     * The main application window for the interface.
+     */
+    public AppWindow appWindow;
 
-  public SimpleBooleanProperty sideProperty = new SimpleBooleanProperty(false);
+    /**
+     * The Side property.
+     */
+    public SimpleBooleanProperty sideProperty = new SimpleBooleanProperty(false);
 
-  /**
-   * The camera used to view the runway scene.
-   */
-  public PerspectiveCamera camera;
-  protected Box background ;
+    /**
+     * The camera used to view the runway scene.
+     */
+    public PerspectiveCamera camera;
+    /**
+     * The Background.
+     */
+    protected Box background ;
 
   /**
    * A boolean flag indicating whether the scene is in "view" mode.
    */
   private Boolean view = false;
-  public SimpleBooleanProperty portrait = new SimpleBooleanProperty(false);
+    /**
+     * The Portrait.
+     */
+    public SimpleBooleanProperty portrait = new SimpleBooleanProperty(false);
 
-  /**
-   * The x-coordinate of the mouse when it is clicked.
-   */
-  public double x;
+    /**
+     * The x-coordinate of the mouse when it is clicked.
+     */
+    public double x;
 
-  /**
-   * The y-coordinate of the mouse when it is clicked.
-   */
-  public double y;
+    /**
+     * The y-coordinate of the mouse when it is clicked.
+     */
+    public double y;
 
-  /**
-   * The x angle of rotation of the runway scene.
-   */
-  public double anglex = 0;
+    /**
+     * The x angle of rotation of the runway scene.
+     */
+    public double anglex = 0;
 
-  /**
-   * The y angle of rotation of the runway scene.
-   */
-  public double angley = 0;
+    /**
+     * The y angle of rotation of the runway scene.
+     */
+    public double angley = 0;
 
-  protected SimpleDoubleProperty scaleFactor = new SimpleDoubleProperty(0.5);
-  protected SimpleDoubleProperty scaleFactorHeight = new SimpleDoubleProperty(2);
-  protected SimpleDoubleProperty scaleFactorDepth = new SimpleDoubleProperty(4);
-  protected SimpleBooleanProperty refresh = new SimpleBooleanProperty(true);
-
-
-  /**
-   * A DoubleProperty object representing the x angle of rotation of the runway scene.
-   */
-  public final DoubleProperty angleXProperty = new SimpleDoubleProperty();
-
-  /**
-   * A DoubleProperty object representing the y angle of rotation of the runway scene.
-   */
-  public final DoubleProperty angleYProperty = new SimpleDoubleProperty();
-
-  /**
-   * A DoubleProperty object representing the z angle of rotation of the runway scene.
-   */
-  public final DoubleProperty angleZProperty = new SimpleDoubleProperty();
-  /**
-   * A DoubleProperty object representing the x angle of rotation of the runway scene.
-   */
-  public final DoubleProperty lableAngleXProperty = new SimpleDoubleProperty();
-
-  /**
-   * A DoubleProperty object representing the y angle of rotation of the runway scene.
-   */
-  public final DoubleProperty lableAngleYProperty = new SimpleDoubleProperty();
-
-  /**
-   * A DoubleProperty object representing the z angle of rotation of the runway scene.
-   */
-  public final DoubleProperty lableAngleZProperty = new SimpleDoubleProperty();
+    /**
+     * The Scale factor.
+     */
+    protected SimpleDoubleProperty scaleFactor = new SimpleDoubleProperty(0.5);
+    /**
+     * The Scale factor height.
+     */
+    protected SimpleDoubleProperty scaleFactorHeight = new SimpleDoubleProperty(2);
+    /**
+     * The Scale factor depth.
+     */
+    protected SimpleDoubleProperty scaleFactorDepth = new SimpleDoubleProperty(4);
+    /**
+     * The Refresh.
+     */
+    protected SimpleBooleanProperty refresh = new SimpleBooleanProperty(true);
 
 
-  /**
-   * Constructs a new RunwayScene object.
-   *
-   * @param root      the root handler pane for the scene
-   * @param appWindow the main application window
-   */
-  public RunwayScene(Pane root, AppWindow appWindow, double width, double height, boolean depthBuffer) {
+    /**
+     * A DoubleProperty object representing the x angle of rotation of the runway scene.
+     */
+    public final DoubleProperty angleXProperty = new SimpleDoubleProperty();
+
+    /**
+     * A DoubleProperty object representing the y angle of rotation of the runway scene.
+     */
+    public final DoubleProperty angleYProperty = new SimpleDoubleProperty();
+
+    /**
+     * A DoubleProperty object representing the z angle of rotation of the runway scene.
+     */
+    public final DoubleProperty angleZProperty = new SimpleDoubleProperty();
+    /**
+     * A DoubleProperty object representing the x angle of rotation of the runway scene.
+     */
+    public final DoubleProperty lableAngleXProperty = new SimpleDoubleProperty();
+
+    /**
+     * A DoubleProperty object representing the y angle of rotation of the runway scene.
+     */
+    public final DoubleProperty lableAngleYProperty = new SimpleDoubleProperty();
+
+    /**
+     * A DoubleProperty object representing the z angle of rotation of the runway scene.
+     */
+    public final DoubleProperty lableAngleZProperty = new SimpleDoubleProperty();
+
+
+    /**
+     * Constructs a new RunwayScene object.
+     *
+     * @param root        the root handler pane for the scene
+     * @param appWindow   the main application window
+     * @param width       the width
+     * @param height      the height
+     * @param depthBuffer the depth buffer
+     */
+    public RunwayScene(Pane root, AppWindow appWindow, double width, double height, boolean depthBuffer) {
     super(root, appWindow, width, height, depthBuffer);
     this.width = width;
     this.height = height;
@@ -137,11 +161,11 @@ public class RunwayScene extends SceneAbstract {
   }
 
 
-  /**
-   * Initializes the mouse and keyboard event listeners for
-   * the runway scene.
-   */
-  public void initControls(){
+    /**
+     * Initializes the mouse and keyboard event listeners for
+     * the runway scene.
+     */
+    public void initControls(){
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
@@ -181,10 +205,11 @@ public class RunwayScene extends SceneAbstract {
     });
     setOnScroll(event -> camera.translateZProperty().set(camera.getTranslateZ()+event.getDeltaY()));
   }
-  /**
-   * Initializes the base keyboard event listeners for the runway scene.
-   */
-  public void initBaseControls(){
+
+    /**
+     * Initializes the base keyboard event listeners for the runway scene.
+     */
+    public void initBaseControls(){
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
@@ -208,10 +233,10 @@ public class RunwayScene extends SceneAbstract {
     initControls();
   }
 
-  /**
-   * Toggles the "view" mode of the runway scene, which changes the camera angle to view the scene from above or from the side.
-   */
-  public void toggleView(){
+    /**
+     * Toggles the "view" mode of the runway scene, which changes the camera angle to view the scene from above or from the side.
+     */
+    public void toggleView(){
     view = !view;
     if (view){
       angleXProperty.set(-90);
@@ -228,18 +253,19 @@ public class RunwayScene extends SceneAbstract {
     }
   }
 
-  /**
-   * Adds a cuboid object to the runway scene.
-   *
-   * @param x     the distance from the start of the runway
-   * @param y     the distance from the centre of the runway
-   * @param z     the distance above the runway
-   * @param w     the width of the object (from side to side) - in the y axis
-   * @param l     the length of the object (from start to end) - in the x axis
-   * @param d     the height of the object
-   * @param color the colour of the bounding box
-   */
-  public Box addCuboid(DoubleBinding x, DoubleBinding y, DoubleBinding z, DoubleBinding w, DoubleBinding l, DoubleBinding d, Color color){
+    /**
+     * Adds a cuboid object to the runway scene.
+     *
+     * @param x     the distance from the start of the runway
+     * @param y     the distance from the centre of the runway
+     * @param z     the distance above the runway
+     * @param w     the width of the object (from side to side) - in the y axis
+     * @param l     the length of the object (from start to end) - in the x axis
+     * @param d     the height of the object
+     * @param color the colour of the bounding box
+     * @return the box
+     */
+    public Box addCuboid(DoubleBinding x, DoubleBinding y, DoubleBinding z, DoubleBinding w, DoubleBinding l, DoubleBinding d, Color color){
 
     PhongMaterial material = new PhongMaterial();
     material.setDiffuseColor(color);
@@ -255,7 +281,11 @@ public class RunwayScene extends SceneAbstract {
     group.getChildren().add(box);
     return box;
   }
-  public void makeScale(){
+
+    /**
+     * Make scale.
+     */
+    public void makeScale(){
     double length = 200;
     addCuboid(appWindow.runway.runwayLengthProperty().divide(2).add(appWindow.runway.clearwayLeftProperty()).subtract(new SimpleDoubleProperty(length+20).divide(2)),
             new SimpleDoubleProperty(100).add(5),
@@ -268,11 +298,11 @@ public class RunwayScene extends SceneAbstract {
 
   }
 
-  /**
-   * Creates a 3D box representing the runway, textured with
-   * an image of a runway.
-   */
-  public void makeRunway() {
+    /**
+     * Creates a 3D box representing the runway, textured with
+     * an image of a runway.
+     */
+    public void makeRunway() {
     PhongMaterial material = new PhongMaterial();
     material.setDiffuseColor(Theme.runway);
     //import these from runway somehow
@@ -303,12 +333,12 @@ public class RunwayScene extends SceneAbstract {
   }
 
 
-  /**
-   * Configures the camera by adding ambient light, creating a perspective camera,
-   * and setting up rotations for the group.
-   * Binds angle properties to corresponding rotate angles.
-   */
-  public void configureCamera() {
+    /**
+     * Configures the camera by adding ambient light, creating a perspective camera,
+     * and setting up rotations for the group.
+     * Binds angle properties to corresponding rotate angles.
+     */
+    public void configureCamera() {
     AmbientLight light = new AmbientLight();
     light.setLightOn(true);
     group.getChildren().add(light);
@@ -326,10 +356,11 @@ public class RunwayScene extends SceneAbstract {
     yRotate.angleProperty().bind(angleYProperty);
     zRotate.angleProperty().bind(angleZProperty);
   }
-  /**
-   * Creates a background box, adds a phong material and sets it to the group.
-   */
-  public void makeBackground() {
+
+    /**
+     * Creates a background box, adds a phong material and sets it to the group.
+     */
+    public void makeBackground() {
     background = new Box(width,height,0);
     PhongMaterial material = new PhongMaterial();
 //material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
@@ -373,7 +404,11 @@ public class RunwayScene extends SceneAbstract {
 
     addListeners();
   }
-  public void buildmenulessalt(){
+
+    /**
+     * Buildmenulessalt.
+     */
+    public void buildmenulessalt(){
     super.buildmenuless();
     setFill(Theme.bgRunway);
     logger.info("building");
@@ -419,7 +454,11 @@ public class RunwayScene extends SceneAbstract {
 
 
   }
-  public void addListeners(){
+
+    /**
+     * Add listeners.
+     */
+    public void addListeners(){
     ChangeListener refresh = new ChangeListener<>() {
       @Override
       public void changed(ObservableValue<?> observableValue, Object o, Object t1) {
@@ -431,7 +470,11 @@ public class RunwayScene extends SceneAbstract {
     appWindow.runway.runwayObstacle.heightProperty().addListener(refresh);
     appWindow.runway.runwayObstacle.distFromThresholdProperty().addListener(refresh);
   }
-  public void render(){
+
+    /**
+     * Render.
+     */
+    public void render(){
     group.getChildren().removeAll(group.getChildren());
 
     makeBackground();
@@ -453,7 +496,10 @@ public class RunwayScene extends SceneAbstract {
     }
   }
 
-  public void makeRunwayOverlay(){
+    /**
+     * Make runway overlay.
+     */
+    public void makeRunwayOverlay(){
 
     //LeftDispThreshold
     addCuboid(
@@ -496,7 +542,14 @@ public class RunwayScene extends SceneAbstract {
             Color.WHITE);
 
   }
-  public TextFlow makeRwyID(SimpleStringProperty designator){
+
+    /**
+     * Make rwy id text flow.
+     *
+     * @param designator the designator
+     * @return the text flow
+     */
+    public TextFlow makeRwyID(SimpleStringProperty designator){
     Group id = new Group();
     Text rwyDir = new Text(designator.getValue());
     Text rwyLabel = new Text(designator.getValue());
@@ -521,10 +574,10 @@ public class RunwayScene extends SceneAbstract {
     return data;
   }
 
-  /**
-   * Renders an obstacle as a cuboid and a slope, and adds them to the 3D scene.
-   */
-  public void renderObstacle(){
+    /**
+     * Renders an obstacle as a cuboid and a slope, and adds them to the 3D scene.
+     */
+    public void renderObstacle(){
 
     Box obstacleView = addCuboid(
             appWindow.runway.runwayLengthProperty().divide(-2).add(appWindow.runway.runwayObstacle.distFromThresholdProperty()),
@@ -553,10 +606,10 @@ public class RunwayScene extends SceneAbstract {
 
   }
 
-  /**
-   * Adds the top view of the runway to the 3D scene.
-   */
-  public void addTopView(){
+    /**
+     * Adds the top view of the runway to the 3D scene.
+     */
+    public void addTopView(){
 
 
     //Clearway Right
@@ -623,7 +676,10 @@ public class RunwayScene extends SceneAbstract {
 
   }
 
-  public void refresh(){
+    /**
+     * Refresh.
+     */
+    public void refresh(){
     refresh.set(refresh.not().get());
     if (refresh.get()){
       //appWindow.currentScene.getWindow().setWidth(getWidth()-0.0001);
@@ -635,14 +691,17 @@ public class RunwayScene extends SceneAbstract {
 
     }
   }
-  /**
-   * Creates the Cleared and Graded Area (CGA) and adds it to the 3D group.
-   * The CGA is constructed using a {@link ClearedGradedArea} object.
-   * The properties of the CGA are bound to the corresponding properties
-   * of the Runway object and the scaling factors.
-   * @see ClearedGradedArea
-   */
-  public void makeCGA(boolean filled){
+
+    /**
+     * Creates the Cleared and Graded Area (CGA) and adds it to the 3D group.
+     * The CGA is constructed using a {@link ClearedGradedArea} object.
+     * The properties of the CGA are bound to the corresponding properties
+     * of the Runway object and the scaling factors.
+     *
+     * @param filled the filled
+     * @see ClearedGradedArea
+     */
+    public void makeCGA(boolean filled){
 
     //Cleared and graded area
     ClearedGradedArea cga = new ClearedGradedArea(group,filled);
@@ -658,25 +717,23 @@ public class RunwayScene extends SceneAbstract {
     group.getChildren().add(cga);
   }
 
-  /**
-   * Adds labels to the 3D space represented by the Group object, by calling the addLabel() method with the
-   * appropriate parameters. The labels are added to a new Group object, which is then added to the main Group object.
-  public void addLabels(){
-    Group labels = new Group();
-    group.getChildren().add(labels);
-    addLabel(
-            new SimpleDoubleProperty(0).multiply(1),
-            new SimpleDoubleProperty(1000).multiply(1),
-            0.5,
-            labels,
-            Color.WHITE,
-            "Test"
-    );
-  }
-
-   */
-
-  public void buildLabels() {
+    /**
+     * Adds labels to the 3D space represented by the Group object, by calling the addLabel() method with the
+     * appropriate parameters. The labels are added to a new Group object, which is then added to the main Group object.
+     * public void addLabels(){
+     * Group labels = new Group();
+     * group.getChildren().add(labels);
+     * addLabel(
+     * new SimpleDoubleProperty(0).multiply(1),
+     * new SimpleDoubleProperty(1000).multiply(1),
+     * 0.5,
+     * labels,
+     * Color.WHITE,
+     * "Test"
+     * );
+     * }
+     */
+    public void buildLabels() {
     Pane labelPane = new Pane();
     //Lengths and xOffsets need binding to back-end variables, work hasn't been done yet so constants used
     DoubleBinding leftDisplacementT = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(Bindings.when(appWindow.runway.directionProperty().not().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(appWindow.runway.getBLASTZONE())).otherwise(0));
@@ -734,35 +791,75 @@ public class RunwayScene extends SceneAbstract {
 
   }
 
-  public double getAngleXProperty() {
+    /**
+     * Gets angle x property.
+     *
+     * @return the angle x property
+     */
+    public double getAngleXProperty() {
     return angleXProperty.get();
   }
 
-  public DoubleProperty angleXProperty() {
+    /**
+     * Angle x property double property.
+     *
+     * @return the double property
+     */
+    public DoubleProperty angleXProperty() {
     return angleXProperty;
   }
 
-  public double getAngleYProperty() {
+    /**
+     * Gets angle y property.
+     *
+     * @return the angle y property
+     */
+    public double getAngleYProperty() {
     return angleYProperty.get();
   }
 
-  public DoubleProperty angleYProperty() {
+    /**
+     * Angle y property double property.
+     *
+     * @return the double property
+     */
+    public DoubleProperty angleYProperty() {
     return angleYProperty;
   }
 
-  public double getAngleZProperty() {
+    /**
+     * Gets angle z property.
+     *
+     * @return the angle z property
+     */
+    public double getAngleZProperty() {
     return angleZProperty.get();
   }
 
-  public DoubleProperty angleZProperty() {
+    /**
+     * Angle z property double property.
+     *
+     * @return the double property
+     */
+    public DoubleProperty angleZProperty() {
     return angleZProperty;
   }
 
-  public double getScaleFactor() {
+    /**
+     * Gets scale factor.
+     *
+     * @return the scale factor
+     */
+    public double getScaleFactor() {
     return scaleFactor.get();
   }
 
-  public SimpleDoubleProperty scaleFactorProperty() {
+    /**
+     * Scale factor property simple double property.
+     *
+     * @return the simple double property
+     */
+    public SimpleDoubleProperty scaleFactorProperty() {
     return scaleFactor;
   }
 }

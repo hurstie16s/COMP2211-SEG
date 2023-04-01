@@ -29,6 +29,9 @@ import java.util.Objects;
 public abstract class SceneAbstract extends Scene {
 
   private static final Logger logger = LogManager.getLogger(SceneAbstract.class);
+  /**
+   * The App window.
+   */
   protected final AppWindow appWindow;
 
   /**
@@ -50,6 +53,9 @@ public abstract class SceneAbstract extends Scene {
    * The height of the scene.
    */
   protected double height;
+  /**
+   * The Help.
+   */
   protected HelpScene help;
 
   /**
@@ -57,8 +63,9 @@ public abstract class SceneAbstract extends Scene {
    *
    * @param root      the root pane of the scene
    * @param appWindow the application window of the scene
+   * @param width     the width
+   * @param height    the height
    */
-
   public SceneAbstract(Pane root, AppWindow appWindow, double width, double height) {
     super(root, appWindow.getWidth(), appWindow.getHeight(), Color.BLACK);
     this.root = root;
@@ -67,6 +74,15 @@ public abstract class SceneAbstract extends Scene {
     this.appWindow = appWindow;
   }
 
+  /**
+   * Instantiates a new Scene abstract.
+   *
+   * @param root        the root
+   * @param appWindow   the app window
+   * @param width       the width
+   * @param height      the height
+   * @param depthBuffer the depth buffer
+   */
   public SceneAbstract(Pane root, AppWindow appWindow, double width, double height, boolean depthBuffer) {
     super(root, appWindow.getWidth(), appWindow.getHeight(), depthBuffer, SceneAntialiasing.BALANCED);
     this.root = root;
@@ -178,6 +194,11 @@ public abstract class SceneAbstract extends Scene {
     root.getChildren().add(mainPane);
   }
 
+  /**
+   * Make help.
+   *
+   * @param left the left
+   */
   public void makeHelp(boolean left){
     if (!left) {
 
@@ -204,7 +225,10 @@ public abstract class SceneAbstract extends Scene {
     }
   }
 
-  // repeated method to export button (remove in base scene when done)
+  /**
+   * Export airport button event.
+   */
+// repeated method to export button (remove in base scene when done)
   public void exportAirportButtonEvent() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Choose file to export");
@@ -237,7 +261,10 @@ public abstract class SceneAbstract extends Scene {
     }
   }
 
-  // Repeated method for exporting obstacle event, remove this from base scene when done
+  /**
+   * Export obstacle button event.
+   */
+// Repeated method for exporting obstacle event, remove this from base scene when done
   public void exportObstacleButtonEvent() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Choose file to export");
@@ -270,6 +297,9 @@ public abstract class SceneAbstract extends Scene {
     }
   }
 
+  /**
+   * Import airport button event.
+   */
   protected void importAirportButtonEvent() {
     try {
       logger.info("Import airport");
@@ -285,6 +315,9 @@ public abstract class SceneAbstract extends Scene {
 
   }
 
+  /**
+   * Import obstacle button event.
+   */
   protected void importObstacleButtonEvent() {
     try {
       logger.info("Import obstacle");
