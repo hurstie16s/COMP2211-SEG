@@ -21,6 +21,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -28,6 +29,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -181,9 +183,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         // Create the buttons and set their graphics
         Button exportAirObsButton = new Button("Export Airport & Obstacle", exportIcon1);
+        exportAirObsButton.getStyleClass().add("button-transparent");
         Button importAirObsButton = new Button("Import Airport & Obstacle", importIcon1);
+        importAirObsButton.getStyleClass().add("button-transparent");
         Button exportObstacle = new Button("Export Obstacle", exportIcon2);
+        exportObstacle.getStyleClass().add("button-transparent");
         Button importObstacle = new Button("Import Obstacle", importIcon2);
+        importObstacle.getStyleClass().add("button-transparent");
 
 
         //Button events
