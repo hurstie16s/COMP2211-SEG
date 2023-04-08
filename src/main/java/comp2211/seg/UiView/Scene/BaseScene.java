@@ -183,13 +183,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         // Create the buttons and set their graphics
         Button exportAirObsButton = new Button("Export Airport & Obstacle", exportIcon1);
-        exportAirObsButton.getStyleClass().add("button-transparent");
         Button importAirObsButton = new Button("Import Airport & Obstacle", importIcon1);
-        importAirObsButton.getStyleClass().add("button-transparent");
         Button exportObstacle = new Button("Export Obstacle", exportIcon2);
-        exportObstacle.getStyleClass().add("button-transparent");
         Button importObstacle = new Button("Import Obstacle", importIcon2);
-        importObstacle.getStyleClass().add("button-transparent");
 
 
         //Button events
@@ -230,8 +226,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
         for (Button button : darkButtons) {
-            button.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+            button.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
             button.setTextFill(Theme.fg);
+            button.setCursor(Cursor.HAND);
         }
 
         HBox hBoxMenuButtons = new HBox();

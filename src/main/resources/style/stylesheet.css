@@ -110,10 +110,6 @@
     -fx-font-size: 14px;
     -fx-cursor: hand;
 }
-.button-transparent {
-    -fx-background-color: transparent;
-    -fx-cursor: hand;
-}
 /* useless but for a record */
 .table-row-cell:empty {
     -fx-background-color: rgba(26, 26, 26, 255);
