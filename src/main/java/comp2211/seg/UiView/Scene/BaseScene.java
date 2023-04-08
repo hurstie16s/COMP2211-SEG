@@ -33,6 +33,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -339,20 +340,28 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
             Label data = makeLabel(titles[i]);
             data.setAlignment(Pos.CENTER);
+            data.setTextAlignment(TextAlignment.CENTER);
+            data.setFont(Theme.fontsmall);
             if (i>=5){
                 GridPane.setRowSpan(data,2);
                 airportData.add(data,6+i,0);
             }else{
                 GridPane.setColumnSpan(data,2);
-                data.setFont(new Font("Calibri",17));
+                //data.setFont(new Font("Calibri",17));
                 airportData.add(data,1+i*2,0);
             }
 
         }
         for (int i = 0; i < 5; i++) {
 
-            airportData.add(makeLabel("Length"),1+i*2,1);
-            airportData.add(makeLabel("Width"),2+i*2,1);
+            var lengthLabel = makeLabel("Length");
+            var widthLabel = makeLabel("Width");
+
+            lengthLabel.setFont(Theme.fontsmall);
+            widthLabel.setFont(Theme.fontsmall);
+
+            airportData.add(lengthLabel,1+i*2,1);
+            airportData.add(widthLabel,2+i*2,1);
         }
         Label desl = makeLabel(appWindow.runway.getRunwayDesignatorLeft());
         desl.setAlignment(Pos.CENTER);
