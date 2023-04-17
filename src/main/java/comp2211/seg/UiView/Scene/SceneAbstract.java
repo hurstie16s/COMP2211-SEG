@@ -5,12 +5,15 @@ import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.ProcessDataModel.Obstacle;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -18,7 +21,9 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -169,6 +174,8 @@ public abstract class SceneAbstract extends Scene {
     menu9.setOnAction(e -> importAirportButtonEvent());
 
     menu10.setOnAction(e -> importObstacleButtonEvent());
+
+    menu12.setOnAction(e -> exportTopDownViewButtonEvent());
   }
 
   /**
@@ -335,6 +342,30 @@ public abstract class SceneAbstract extends Scene {
       appWindow.addObstacle(obstacle);
     } catch (NullPointerException e) {
       logger.warn(e.getMessage());
+    }
+
+  }
+
+  /**
+   * Export Top-down View button event
+   */
+  //Atm it works if current tab chosen is Top-View.
+  public abstract VBox getTopView();
+  protected void exportTopDownViewButtonEvent() {
+
+    WritableImage image = getTopView().snapshot(null,null);
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Export top-down view");
+    FileChooser.ExtensionFilter extFilterPng = new FileChooser.ExtensionFilter("PNG format(*.png)","*.png");
+    fileChooser.getExtensionFilters().add(extFilterPng);
+    fileChooser.setInitialFileName("Top_down_View");
+    File file = fileChooser.showSaveDialog(new Stage());
+
+    try {
+      ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+      logger.info("image exported");
+    } catch (IOException e) {
+      logger.error(e);
     }
 
   }

@@ -75,6 +75,7 @@ public class AppWindow {
         }
         airport = airports.get(0);
 
+        logger.info("gets runway object");
         runway = airport.getRunways().get(0);
         // Setup appWindow
         setupStage();
@@ -279,6 +280,6 @@ public class AppWindow {
      */
     public void startBaseSceneObstacle() {
         loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
-        ((BaseScene) currentScene).selectObstacleMenu();
+        ((BaseScene) currentScene).selectObstacleMenu(1);
     }
 }

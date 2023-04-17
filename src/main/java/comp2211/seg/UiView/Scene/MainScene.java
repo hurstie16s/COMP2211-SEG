@@ -151,5 +151,10 @@ public class MainScene extends SceneAbstract{
             }
         });
     }
+
+    @Override
+    public VBox getTopView() {
+        return null;
+    }
 }
 

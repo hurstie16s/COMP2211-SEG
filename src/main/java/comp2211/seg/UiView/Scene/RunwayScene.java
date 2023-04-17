@@ -160,7 +160,6 @@ public class RunwayScene extends SceneAbstract {
 
   }
 
-
     /**
      * Initializes the mouse and keyboard event listeners for
      * the runway scene.
@@ -405,7 +404,12 @@ public class RunwayScene extends SceneAbstract {
     addListeners();
   }
 
-    /**
+  @Override
+  public VBox getTopView() {
+    return null;
+  }
+
+  /**
      * Buildmenulessalt.
      */
     public void buildmenulessalt(){

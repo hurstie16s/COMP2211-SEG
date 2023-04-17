@@ -55,6 +55,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private static final Logger logger = LogManager.getLogger(BaseScene.class);
     private TabLayout tabLayout;
 
+    public VBox topView;
+
 
     /**
      * Constructor to create a SceneAbstract object.
@@ -85,8 +87,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     /**
      * Select obstacle menu.
      */
-    public void selectObstacleMenu(){
-        tabLayout.tabButtons.get(1).fire();
+    public void selectObstacleMenu(int n){
+        tabLayout.tabButtons.get(n).fire();
     }
 
     public void build()  {
@@ -305,6 +307,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                     "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
                     "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
         }
+    }
+
+    @Override
+    public VBox getTopView() {
+        return topView;
     }
 
     /**
@@ -1064,7 +1071,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             runwayScene3.angleZProperty().set(-90);
             runwayScene3.portrait.set(true);
         }
-        VBox topView = new VBox(runwayScene3.getRoot());
+        topView = new VBox(runwayScene3.getRoot());
 
         runwayScene3.root.maxWidthProperty().bind(topView.widthProperty());
         runwayScene3.root.minWidthProperty().bind(topView.widthProperty());

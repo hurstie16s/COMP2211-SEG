@@ -1,11 +1,17 @@
 package comp2211.seg.ProcessDataModel;
 
+import comp2211.seg.UiView.Scene.SceneAbstract;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 
 /**
  * An Airport object representing an airport with runways.
  */
 public class Airport {
+
+    private static final Logger logger = LogManager.getLogger(Airport.class);
     /** The list of runways at the airport. */
     private ArrayList<Runway> runways;
     /**
@@ -49,6 +55,7 @@ public class Airport {
      * Creates a new runway and adds it to the list of runways at the airport.
      */
     public void makeRunway() {
+        logger.info("creates Runway object");
         runways.add(new Runway());
     }
 

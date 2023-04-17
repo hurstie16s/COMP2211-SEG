@@ -5,6 +5,7 @@ import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 /**
  * The type Runway scene loader.
@@ -116,5 +117,10 @@ public class RunwaySceneLoader extends SceneAbstract{
 
             }
         });
+    }
+
+    @Override
+    public VBox getTopView() {
+        return null;
     }
 }
