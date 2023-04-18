@@ -37,16 +37,14 @@ public class Airport {
         this.name = name;
     }
 
-    /**
-     * Instantiates a new Airport.
-     *
-     * @param name    the name
-     * @param runways the runways
-     */
-    public Airport(String name, Runway[] runways) {
-        this.name = name;
 
+    public Airport(String name, String designators, double leftTora, double leftToda, double leftLDA, double leftASDA, double rightTora, double rightToda, double rightLDA, double rightASDA) {
+
+        runways = new ArrayList<>();
+        this.name = name;
+        addRunway(new Runway(designators, leftTora, leftToda, leftLDA, leftASDA, rightTora, rightToda, rightLDA, rightASDA));
     }
+
     public String toString(){
         return name;
     }

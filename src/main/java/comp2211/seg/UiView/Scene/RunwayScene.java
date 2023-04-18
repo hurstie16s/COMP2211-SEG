@@ -160,11 +160,11 @@ public class RunwayScene extends SceneAbstract {
 
   }
 
-    /**
-     * Initializes the mouse and keyboard event listeners for
-     * the runway scene.
-     */
-    public void initControls(){
+  /**
+   * Initializes the scene by setting up the keyboard and mouse event listeners.
+   */
+  @Override
+  public void initialise() {
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
@@ -202,34 +202,7 @@ public class RunwayScene extends SceneAbstract {
         angleZProperty.set(angley - x + event.getSceneX());
       }
     });
-    setOnScroll(event -> camera.translateZProperty().set(camera.getTranslateZ()+event.getDeltaY()));
-  }
-
-    /**
-     * Initializes the base keyboard event listeners for the runway scene.
-     */
-    public void initBaseControls(){
-    setOnKeyPressed((keyEvent -> {
-      switch (keyEvent.getCode()){
-        case ESCAPE:
-          appWindow.startBaseScene();
-          break;
-        case T:
-          toggleView();
-          break;
-        case H:
-          help.toggleHelp(this.getClass().getCanonicalName());
-          break;
-      }
-    }));
-  }
-
-  /**
-   * Initializes the scene by setting up the base keyboard event listeners.
-   */
-  @Override
-  public void initialise() {
-    initControls();
+    setOnScroll(event -> mainPane.translateZProperty().set(mainPane.getTranslateZ()-event.getDeltaY()));
   }
 
     /**

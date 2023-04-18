@@ -1,6 +1,7 @@
 package comp2211.seg.Controller.Stage;
 
 import comp2211.seg.App;
+import comp2211.seg.Controller.Interfaces.AirportsData;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.Obstacle;
@@ -62,17 +63,11 @@ public class AppWindow {
         this.stage = stage;
         this.width = width;
         this.height = height;
-        airports = new ArrayList<>();
+        airports = AirportsData.getAirports();
         obstaclePresets = new ArrayList<>();
         obstaclePresetSetup();
         Theme.makeDark();
 
-        addAirport(new Airport("Heathrow"));
-        addAirport(new Airport("Gatwick"));
-        addAirport(new Airport("Southampton"));
-        for (Airport a: airports) {
-            a.makeRunway();
-        }
         airport = airports.get(0);
 
         logger.info("gets runway object");
@@ -149,7 +144,39 @@ public class AppWindow {
      * @param runway the runway
      */
     public void setRunway(Runway runway){
-        this.runway = runway;
+        Runway temp = new Runway();
+        temp.setRunwayDesignatorLeft(this.runway.getRunwayDesignatorLeft());
+        temp.setRunwayDesignatorRight(this.runway.getRunwayDesignatorRight());
+        temp.setInputLeftTora(this.runway.getInputLeftTora());
+        temp.setInputLeftToda(this.runway.getInputLeftToda());
+        temp.setInputLeftLda(this.runway.getInputLeftLda());
+        temp.setInputLeftAsda(this.runway.getInputLeftAsda());
+        temp.setInputRightTora(this.runway.getInputRightTora());
+        temp.setInputRightToda(this.runway.getInputRightToda());
+        temp.setInputRightLda(this.runway.getInputRightLda());
+        temp.setInputRightAsda(this.runway.getInputRightAsda());
+
+        this.runway.setRunwayDesignatorLeft(runway.getRunwayDesignatorLeft());
+        this.runway.setRunwayDesignatorRight(runway.getRunwayDesignatorRight());
+        this.runway.setInputLeftTora(runway.getInputLeftTora());
+        this.runway.setInputLeftToda(runway.getInputLeftToda());
+        this.runway.setInputLeftLda(runway.getInputLeftLda());
+        this.runway.setInputLeftAsda(runway.getInputLeftAsda());
+        this.runway.setInputRightTora(runway.getInputRightTora());
+        this.runway.setInputRightToda(runway.getInputRightToda());
+        this.runway.setInputRightLda(runway.getInputRightLda());
+        this.runway.setInputRightAsda(runway.getInputRightAsda());
+
+        runway.setRunwayDesignatorLeft(temp.getRunwayDesignatorLeft());
+        runway.setRunwayDesignatorRight(temp.getRunwayDesignatorRight());
+        runway.setInputLeftTora(temp.getInputLeftTora());
+        runway.setInputLeftToda(temp.getInputLeftToda());
+        runway.setInputLeftLda(temp.getInputLeftLda());
+        runway.setInputLeftAsda(temp.getInputLeftAsda());
+        runway.setInputRightTora(temp.getInputRightTora());
+        runway.setInputRightToda(temp.getInputRightToda());
+        runway.setInputRightLda(temp.getInputRightLda());
+        runway.setInputRightAsda(temp.getInputRightAsda());
     }
 
     /**
@@ -179,9 +206,6 @@ public class AppWindow {
     /**
      * Starts the main scene.
      */
-    public void startMainScene() {
-        loadScene(new MainScene(new Pane(),this, getWidth(),getHeight()));
-    }
 
     /**
      * Start base scene.

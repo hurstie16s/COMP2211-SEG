@@ -149,6 +149,52 @@ public class Runway {
 
     // TODO: Create header breakdowns to better explain what the numbers are
 
+    public Runway(String designators, double leftTora, double leftToda, double leftLDA, double leftASDA, double rightTora, double rightToda, double rightLDA, double rightASDA){
+        runwayDesignatorLeft.set(designators.split("/")[0]);
+        runwayDesignatorRight.set(designators.split("/")[1]);
+        inputLeftTora.set(leftTora);
+        inputLeftToda.set(leftToda);
+        inputLeftLda.set(leftLDA);
+        inputLeftAsda.set(leftASDA);
+        inputRightTora.set(rightTora);
+        inputRightToda.set(rightToda);
+        inputRightLda.set(rightLDA);
+        inputRightAsda.set(rightASDA);
+
+
+        for (Property prop: new Property[] {
+                runwayDesignatorLeft,
+                runwayLength,
+                hasRunwayObstacle,
+                direction,
+        }) {
+            prop.addListener((observableValue, o, t1) -> recalculate());
+        }
+        logger.info("Created Runway object");
+
+        logger.info("Created initial VOID runway obstacle");
+        runwayObstacle = new Obstacle("VOID", 0,0);
+
+        runwayLength.bind(Bindings.when(Bindings.greaterThan(inputLeftTora,inputRightTora)).then(inputLeftTora).otherwise(inputRightTora));
+        clearwayLeft.bind(inputRightToda.subtract(inputRightTora));
+        stopwayLeft.bind(inputRightAsda.subtract(inputRightTora));
+        dispThresholdRight.bind(inputRightTora.subtract(inputRightLda));
+        clearwayRight.bind(inputLeftToda.subtract(inputLeftTora));
+        stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
+        dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
+        direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
+        slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2)).greaterThan(runwayObstacle.lengthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2))).otherwise(runwayObstacle.lengthProperty().divide(2).add(240)));
+        //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
+        runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
+
+
+        recalculate();
+        validityChecks();
+
+        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get())));
+        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get())));
+    }
+
     /**
      * Creates a new runway object and sets up change listeners on all input properties so that takeoff and landing
      * distances are automatically recalculated whenever any input value is changed.
@@ -2767,5 +2813,6 @@ public class Runway {
     public void setUnits(String units) {
         this.units.set(units);
     }
+
 
 }
