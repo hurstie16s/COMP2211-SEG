@@ -190,9 +190,5 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
     mainPane.minWidthProperty().bind(root.widthProperty());
   }
 
-  @Override
-  public VBox getTopView() {
-    return null;
-  }
 
 }

@@ -133,10 +133,6 @@ public class InputScene extends SceneAbstract {
     root.getChildren().add(layout);
   }
 
-  @Override
-  public VBox getTopView() {
-    return null;
-  }
 
   /**
    * Displays an error message dialog box with the specified title and message.

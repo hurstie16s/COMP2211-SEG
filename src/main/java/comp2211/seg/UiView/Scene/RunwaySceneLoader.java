@@ -118,9 +118,13 @@ public class RunwaySceneLoader extends SceneAbstract{
             }
         });
     }
+    public void buildmenulessalt(){
+        super.buildmenuless();
+        scene = new RunwayScene(new Pane(),appWindow, width, height,false);
+        scene.buildmenulessalt();
+        scene.initialise();
+        mainPane.getChildren().add(scene.getRoot());
 
-    @Override
-    public VBox getTopView() {
-        return null;
     }
+
 }

@@ -404,10 +404,6 @@ public class RunwayScene extends SceneAbstract {
     addListeners();
   }
 
-  @Override
-  public VBox getTopView() {
-    return null;
-  }
 
   /**
      * Buildmenulessalt.

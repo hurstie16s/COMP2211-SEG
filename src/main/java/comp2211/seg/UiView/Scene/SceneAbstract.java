@@ -1,6 +1,7 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
+import comp2211.seg.Controller.Stage.Settings;
 import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
@@ -176,6 +177,7 @@ public abstract class SceneAbstract extends Scene {
     menu10.setOnAction(e -> importObstacleButtonEvent());
 
     menu12.setOnAction(e -> exportTopDownViewButtonEvent());
+    menu13.setOnAction(e -> exportSideViewButtonEvent());
   }
 
   /**
@@ -349,16 +351,70 @@ public abstract class SceneAbstract extends Scene {
   /**
    * Export Top-down View button event
    */
-  //Atm it works if current tab chosen is Top-View.
-  public abstract VBox getTopView();
   protected void exportTopDownViewButtonEvent() {
 
-    WritableImage image = getTopView().snapshot(null,null);
+    double outputWidth = 1920;
+    double outputHeight = 1080;
+    RunwaySceneLoader runwayScene = new RunwaySceneLoader(new Pane(), appWindow,outputWidth,outputHeight);
+    runwayScene.buildmenulessalt();
+    if (Settings.portrait.get()) {
+      runwayScene.scene.angleXProperty().set(180);
+      runwayScene.scene.angleYProperty().set(0);
+      runwayScene.scene.angleZProperty().set(-90);
+      runwayScene.scene.portrait.set(true);
+    }
+
+    runwayScene.scene.root.maxWidthProperty().set(outputWidth);
+    runwayScene.scene.root.minWidthProperty().set(outputWidth);
+    runwayScene.scene.root.maxHeightProperty().set(outputHeight);
+    runwayScene.scene.root.minHeightProperty().set(outputHeight);
+
+
+    WritableImage image = runwayScene.scene.root.snapshot(null,null);
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Export top-down view");
     FileChooser.ExtensionFilter extFilterPng = new FileChooser.ExtensionFilter("PNG format(*.png)","*.png");
     fileChooser.getExtensionFilters().add(extFilterPng);
     fileChooser.setInitialFileName("Top_down_View");
+    File file = fileChooser.showSaveDialog(new Stage());
+
+    try {
+      ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+      logger.info("image exported");
+    } catch (IOException e) {
+      logger.error(e);
+    }
+
+  }
+  /**
+   * Export Top-down View button event
+   */
+  protected void exportSideViewButtonEvent() {
+
+    double outputWidth = 1920;
+    double outputHeight = 1080;
+    RunwaySceneLoader runwayScene = new RunwaySceneLoader(new Pane(), appWindow,outputWidth,outputHeight);
+    runwayScene.buildmenulessalt();
+    if (Settings.portrait.get()) {
+      runwayScene.scene.angleYProperty().set(90);
+      runwayScene.scene.angleXProperty().set(90);
+      runwayScene.scene.portrait.set(true);
+    }else {
+      runwayScene.scene.toggleView();
+    }
+
+    runwayScene.scene.root.maxWidthProperty().set(outputWidth);
+    runwayScene.scene.root.minWidthProperty().set(outputWidth);
+    runwayScene.scene.root.maxHeightProperty().set(outputHeight);
+    runwayScene.scene.root.minHeightProperty().set(outputHeight);
+
+
+    WritableImage image = runwayScene.scene.root.snapshot(null,null);
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Export side view");
+    FileChooser.ExtensionFilter extFilterPng = new FileChooser.ExtensionFilter("PNG format(*.png)","*.png");
+    fileChooser.getExtensionFilters().add(extFilterPng);
+    fileChooser.setInitialFileName("Side_View");
     File file = fileChooser.showSaveDialog(new Stage());
 
     try {

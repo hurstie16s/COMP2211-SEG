@@ -309,10 +309,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         }
     }
 
-    @Override
-    public VBox getTopView() {
-        return topView;
-    }
 
     /**
      * Build table view grid pane.
