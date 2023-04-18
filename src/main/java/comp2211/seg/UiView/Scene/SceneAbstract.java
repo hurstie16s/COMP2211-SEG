@@ -139,8 +139,8 @@ public abstract class SceneAbstract extends Scene {
 
     Menu menu4 = new Menu("Import from XML");
 
-    MenuItem menu9 = new MenuItem("Import Airport & Obstacle");
-    MenuItem menu10 = new MenuItem("Import Obstacle");
+    MenuItem menu9 = new MenuItem("Import Airport & Obstacle...");
+    MenuItem menu10 = new MenuItem("Import Obstacle...");
 
     Menu menu5 = new Menu("Export to XML");
     MenuItem menu6 = new MenuItem("Export Obstacle...");
@@ -148,8 +148,8 @@ public abstract class SceneAbstract extends Scene {
 
     //Aleks exporting image:
     Menu menu11 = new Menu("Export to Image");
-    MenuItem menu12 = new MenuItem("Export Top-down View");
-    MenuItem menu13 = new MenuItem("Export Side-on View");
+    MenuItem menu12 = new MenuItem("Export Top-down View...");
+    MenuItem menu13 = new MenuItem("Export Side-on View...");
 
     fileMenu.getItems().addAll(menu4, menu5, menu11); //Alex add menu11 to File menu
     menu4.getItems().addAll(menu9, menu10);
