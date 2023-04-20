@@ -127,10 +127,20 @@ public class Obstacle {
         return distFromThreshold;
     }
 
+    /**
+     * Gets dist from other threshold.
+     *
+     * @return the dist from other threshold
+     */
     public double getDistFromOtherThreshold() {
         return distFromOtherThreshold.get();
     }
 
+    /**
+     * Dist from other threshold property simple double property.
+     *
+     * @return the simple double property
+     */
     public SimpleDoubleProperty distFromOtherThresholdProperty() {
         return distFromOtherThreshold;
     }

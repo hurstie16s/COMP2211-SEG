@@ -5,14 +5,24 @@ import comp2211.seg.Controller.Stage.HandlerPane;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
+/**
+ * The type Runway scene loader.
+ */
 public class RunwaySceneLoader extends SceneAbstract{
+    /**
+     * The Scene.
+     */
     public RunwayScene scene;
+
     /**
      * Constructor to create a SceneAbstract object.
      *
      * @param root      the root pane of the scene
      * @param appWindow the application window of the scene
+     * @param width     the width
+     * @param height    the height
      */
     public RunwaySceneLoader(Pane root, AppWindow appWindow, double width, double height) {
         super(root, appWindow, width, height);
@@ -56,7 +66,7 @@ public class RunwaySceneLoader extends SceneAbstract{
         });
         setOnMouseDragged(event ->{
             if (!scene.sideProperty.get()) {
-                //angleXProperty.set(Math.min(Math.max(anglex + y - event.getSceneY(), -90), 0));
+                scene.angleXProperty.set(Math.min(Math.max(scene.anglex + scene.y - event.getSceneY(), -90), 0));
                 scene.angleZProperty.set(scene.angley - scene.x + event.getSceneX());
             }
         });
@@ -108,4 +118,13 @@ public class RunwaySceneLoader extends SceneAbstract{
             }
         });
     }
+    public void buildmenulessalt(){
+        super.buildmenuless();
+        scene = new RunwayScene(new Pane(),appWindow, width, height,false);
+        scene.buildmenulessalt();
+        scene.initialise();
+        mainPane.getChildren().add(scene.getRoot());
+
+    }
+
 }

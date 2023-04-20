@@ -17,15 +17,22 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
+/**
+ * The type Help scene.
+ */
 public class HelpScene extends Scene {
 
     private static final Logger logger = LogManager.getLogger(HelpScene.class);
     private final AppWindow appWindow;
+    /**
+     * The constant visible.
+     */
     public static SimpleBooleanProperty visible = new SimpleBooleanProperty(false);
     private final VBox root;
 
     /**
      * Constructor to create a SceneAbstract object.
+     *
      * @param root      the root pane of the scene
      * @param appWindow the application window of the scene
      */
@@ -37,6 +44,13 @@ public class HelpScene extends Scene {
         root.setBackground(new Background(new BackgroundFill(Color.rgb(21,21,21,0.8),null,null)));
 
     }
+
+    /**
+     * Make key.
+     *
+     * @param key  the key
+     * @param desc the desc
+     */
     public void makeKey(String key, String desc){
         HBox box = new HBox();
         StackPane imagePane = new StackPane();
@@ -62,6 +76,13 @@ public class HelpScene extends Scene {
         root.getChildren().add(box);
         root.setMaxHeight(24*root.getChildren().size());
     }
+
+    /**
+     * Make colour.
+     *
+     * @param colour the colour
+     * @param desc   the desc
+     */
     public void makeColour(Color colour, String desc){
 
         HBox box = new HBox();
@@ -84,6 +105,12 @@ public class HelpScene extends Scene {
         root.getChildren().add(box);
         root.setMaxHeight(24*root.getChildren().size());
     }
+
+    /**
+     * Make text.
+     *
+     * @param desc the desc
+     */
     public void makeText(String desc){
 
         TextFlow box = new TextFlow();
@@ -97,6 +124,10 @@ public class HelpScene extends Scene {
         root.getChildren().add(box);
         root.setMaxHeight(24*root.getChildren().size());
     }
+
+    /**
+     * Runway labels.
+     */
     public void runwayLabels(){
 
         makeColour(Theme.lda,"LDA");
@@ -113,6 +144,12 @@ public class HelpScene extends Scene {
         makeColour(Theme.clearway,"Clearway");
         makeColour(Theme.physicalResa,"Physical Resa");
     }
+
+    /**
+     * Toggle help.
+     *
+     * @param className the class name
+     */
     public void toggleHelp(String className){
         //logger.info(className);
         if (!visible.get()) {

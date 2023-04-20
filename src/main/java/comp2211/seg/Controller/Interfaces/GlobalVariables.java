@@ -7,10 +7,10 @@ import javafx.scene.text.Font;
  * An interface that contains constant strings for the project.
  */
 public interface GlobalVariables {
-  /**
-   * A constant string that holds the information about the software engineering group project.
-   */
-  String SEG_INFO = "COMP2211\n" +
+    /**
+     * A constant string that holds the information about the software engineering group project.
+     */
+    String SEG_INFO = "COMP2211\n" +
       "Software Engineering Group Project\n" +
       "Increment2 - version 0.2\n" +
       "Josh Douglas\n" +
@@ -27,10 +27,10 @@ public interface GlobalVariables {
       "jjrw1g21\n";
 
 
-  /**
-   * A constant string that holds the information about the home scene of the project.
-   */
-  String HOME_SCENE_INFO = "To start, enter name of a new airport followed by ENTER\n" +
+    /**
+     * A constant string that holds the information about the home scene of the project.
+     */
+    String HOME_SCENE_INFO = "To start, enter name of a new airport followed by ENTER\n" +
       "or just press ENTER to accept default settings\n" +
       "Press ESC to exit application.";
 

@@ -24,7 +24,7 @@ public class HandlerPane extends StackPane {
     /**
      * Constructor for the HandlerPane class. It sets the maximum height and width of the pane, as well as its alignment.
      *
-     * @param width The maximum width of the pane.
+     * @param width  The maximum width of the pane.
      * @param height The maximum height of the pane.
      */
     public HandlerPane(double width, double height) {

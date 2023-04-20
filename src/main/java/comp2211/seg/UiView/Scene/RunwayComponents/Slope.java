@@ -54,12 +54,17 @@ public class Slope extends MeshView {
     /**
      * Adds a triangular prism object to the runway scene.
      *
-     * @param appWindow  the application window
-     * @param y         the height above the runway
-     * @param w         the width of the runway
-     * @param h         the height of the object
-     * @param color     the colour of the object
-     * @param direction the direction the ramp is facing
+     * @param appWindow         the application window
+     * @param x                 the x
+     * @param y                 the height above the runway
+     * @param z                 the z
+     * @param w                 the width of the runway
+     * @param h                 the height of the object
+     * @param color             the colour of the object
+     * @param direction         the direction the ramp is facing
+     * @param scaleFactor       the scale factor
+     * @param scaleFactorHeight the scale factor height
+     * @param scaleFactorDepth  the scale factor depth
      */
     public Slope(AppWindow appWindow, DoubleBinding x, DoubleBinding y, DoubleBinding z, DoubleBinding w, DoubleBinding h, Color color, SimpleBooleanProperty direction, SimpleDoubleProperty scaleFactor, SimpleDoubleProperty scaleFactorHeight, SimpleDoubleProperty scaleFactorDepth){
         this.scaleFactor = scaleFactor;

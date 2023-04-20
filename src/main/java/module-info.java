@@ -4,6 +4,9 @@ module runwaytool {
     requires javafx.fxml;
     requires org.apache.logging.log4j;
     requires java.xml;
+    requires javafx.swing;
+    requires javafx.graphics;
+    requires java.desktop;
     exports comp2211.seg;
 
     opens comp2211.seg.UiView.Scene to javafx.base;

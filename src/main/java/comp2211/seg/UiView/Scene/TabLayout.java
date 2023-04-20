@@ -21,15 +21,29 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * The type Tab layout.
+ */
 public class TabLayout extends VBox {
     private final Color bg;
     private final Color fg;
     private SimpleDoubleProperty width;
     private SimpleDoubleProperty height;
+    /**
+     * The Tab buttons.
+     */
     public ArrayList<Button> tabButtons = new ArrayList<Button>();
     private HBox topbar;
     private VBox layout;
     private StackPane contents;
+
+    /**
+     * Instantiates a new Tab layout.
+     *
+     * @param tabs the tabs
+     * @param bg   the bg
+     * @param fg   the fg
+     */
     public TabLayout(ArrayList<Pair<String, Pane>> tabs, Color bg, Color fg){
         this.bg = bg;
         this.fg = fg;

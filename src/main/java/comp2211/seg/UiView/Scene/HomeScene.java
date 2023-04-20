@@ -46,6 +46,9 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
    * The main application window for the interface.
    */
   protected AppWindow appWindow;
+  /**
+   * The Name entry.
+   */
   protected TextField nameEntry;
   private ComboBox airports;
 
@@ -54,6 +57,8 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
    *
    * @param root      the root pane of the scene
    * @param appWindow the application window of the scene
+   * @param width     the width
+   * @param height    the height
    */
   public HomeScene(Pane root, AppWindow appWindow, double width, double height) {
     super(root, appWindow, width, height);
@@ -141,12 +146,7 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
 
     airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
     airports.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
-    airports.valueProperty().addListener(new ChangeListener() {
-      @Override
-      public void changed(ObservableValue observableValue, Object o, Object t1) {
-        appWindow.setAirport((Airport) t1);
-      }
-    });
+    airports.valueProperty().addListener((observableValue, o, t1) -> appWindow.setAirport((Airport) t1));
     airports.valueProperty().set(appWindow.airport);
 
 
@@ -162,7 +162,10 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
     newAirport.setTextFill(Theme.fg);
     newAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
 
-    importAirport.setDisable(true);
+    //importAirport.setDisable(true);
+    // Import Airport
+    importAirport.setOnAction(e -> importAirportButtonEvent());
+
     newAirport.setDisable(true);
 
     TextFlow text = new TextFlow(title,desciption);
@@ -186,5 +189,6 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
     mainPane.maxWidthProperty().bind(root.widthProperty());
     mainPane.minWidthProperty().bind(root.widthProperty());
   }
+
 
 }

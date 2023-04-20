@@ -21,6 +21,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -28,8 +29,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -42,11 +46,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+/**
+ * The type Base scene.
+ */
 public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     //logger for BaseScene
     private static final Logger logger = LogManager.getLogger(BaseScene.class);
     private TabLayout tabLayout;
+
+    public VBox topView;
 
 
     /**
@@ -54,8 +63,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
      *
      * @param root      the root pane of the scene
      * @param appWindow the application window of the scene
-     * @param width
-     * @param height
+     * @param width     the width
+     * @param height    the height
      */
     public BaseScene(Pane root, AppWindow appWindow, double width, double height) {
         super(root, appWindow, width, height);
@@ -74,8 +83,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             }
         }));
     }
-    public void selectObstacleMenu(){
-        tabLayout.tabButtons.get(1).fire();
+
+    /**
+     * Select obstacle menu.
+     */
+    public void selectObstacleMenu(int n){
+        tabLayout.tabButtons.get(n).fire();
     }
 
     public void build()  {
@@ -95,6 +108,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         mainPane.minWidthProperty().bind(root.widthProperty());
         mainPane.getChildren().add(tabLayout);
     }
+
+    /**
+     * Make airport config pane.
+     *
+     * @return the pane
+     */
     public Pane makeAirportConfig() {
         //Aleks do stuff here
 
@@ -157,13 +176,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //right menu
         // Create image views for the icons
         ImageView exportIcon1 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/export.png")).toExternalForm()));
+            .getResource("/images/exportT.png")).toExternalForm()));
         ImageView importIcon1 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/import.png")).toExternalForm()));
+            .getResource("/images/importT.png")).toExternalForm()));
         ImageView exportIcon2 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/export.png")).toExternalForm()));
+            .getResource("/images/exportT.png")).toExternalForm()));
         ImageView importIcon2 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/import.png")).toExternalForm()));
+            .getResource("/images/importT.png")).toExternalForm()));
 
         // Create the buttons and set their graphics
         Button exportAirObsButton = new Button("Export Airport & Obstacle", exportIcon1);
@@ -173,17 +192,15 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
         //Button events
-        exportAirObsButton.setOnAction(e -> {
-            exportAirportButtonEvent();
-        });
+        exportAirObsButton.setOnAction(e -> exportAirportButtonEvent());
 
-        exportObstacle.setOnAction(e -> {
-            exportObstacleButtonEvent();
-        });
-//        importButton.setOnAction(e -> {
-//            importButtonEvent();
-//        });
-//
+        exportObstacle.setOnAction(e -> exportObstacleButtonEvent());
+
+        importAirObsButton.setOnAction(e -> importAirportButtonEvent());
+
+        importObstacle.setOnAction(e -> importObstacleButtonEvent());
+
+
 
         // Set the size of the icon
         exportIcon1.setFitHeight(16);
@@ -212,8 +229,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
         for (Button button : darkButtons) {
-            button.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+            button.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
             button.setTextFill(Theme.fg);
+            button.setCursor(Cursor.HAND);
         }
 
         HBox hBoxMenuButtons = new HBox();
@@ -292,69 +310,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     }
 
 
-
-    public void importButtonEvent() {
-        logger.info("importButtonEvent");
-        /*
-        String tempInputProtocol = "Airport,RD:09L,RWY:l1/w1,RS:l2/w2,SWY:l3/w3,CWY:l4/w4,RESA:l5/w5,TD:n1,SE:n2,BP:n3";
-        String betterTempInputProtocol = "Airport:09L,l1,w1,l2,w2,l3,w3,l4,w4,l5,w5,n1,n2,n3";
-        String[] extractAirportAndColumns = betterTempInputProtocol.split(":");
-        String airportName = extractAirportAndColumns[0];
-        String[] columnsEntries = extractAirportAndColumns[1].split(",");
-         */
-        Airport airport = new Airport("TempName");
-        airport.setLatitude(0.0);
-        airport.setLongitude(0.0);
-        String[][] runways = new String[][] {new  String[] {""}};
-        for (String[] runway: runways) {
-            Runway r = new Runway();
-            r.setRESAHeight(90);
-            r.setRESAWidth(240);
-            r.setHasRunwayObstacle(true);
-            r.setRunwayDesignatorRight("18L");
-            r.setInputRightTora(1000);
-            r.setInputRightToda(1500);
-            r.setInputRightAsda(1150);
-            r.setInputRightLda(1000);
-            //r.setClearwayRight(500);
-            //r.setStopwayRight(150);
-            //r.setDispThresholdRight(0);
-            r.setRunwayDesignatorLeft("36R");
-            r.setInputLeftTora(1000);
-            r.setInputLeftToda(1500);
-            r.setInputLeftAsda(1150);
-            r.setInputLeftLda(1000);
-            //r.setClearwayLeft(500);
-            //r.setStopwayLeft(150);
-            //r.setDispThresholdLeft(0);
-            airport.addRunway(r);
-        }
-        appWindow.addAirport(airport);
-
-
-    // Initialize the RunwayData object using the columnsEntries elements
-        /* NEED TO CHANGE TO TEXT FIELDS
-        RunwayData runwayData = new RunwayData(
-            columnsEntries[0], // column1
-            columnsEntries[1], // column21
-            columnsEntries[2], // column22
-            columnsEntries[3], // column31
-            columnsEntries[4], // column32
-            columnsEntries[5], // column41
-            columnsEntries[6], // column42
-            columnsEntries[7], // column51
-            columnsEntries[8], // column52
-            columnsEntries[9], // column61
-            columnsEntries[10], // column62
-            columnsEntries[11], // column7
-            columnsEntries[12], // column8
-            columnsEntries[13] // column9
-        ); */
-
-// Use the runwayData object
-        logger.info("endOfImportbuttonEvent");
-    }
-
+    /**
+     * Build table view grid pane.
+     *
+     * @return the grid pane
+     */
     public GridPane buildTableView() {
 
         GridPane airportData = new GridPane();
@@ -383,20 +343,28 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
             Label data = makeLabel(titles[i]);
             data.setAlignment(Pos.CENTER);
+            data.setTextAlignment(TextAlignment.CENTER);
+            data.setFont(Theme.fontsmall);
             if (i>=5){
                 GridPane.setRowSpan(data,2);
                 airportData.add(data,6+i,0);
             }else{
                 GridPane.setColumnSpan(data,2);
-                data.setFont(new Font("Calibri",17));
+                //data.setFont(new Font("Calibri",17));
                 airportData.add(data,1+i*2,0);
             }
 
         }
         for (int i = 0; i < 5; i++) {
 
-            airportData.add(makeLabel("Length"),1+i*2,1);
-            airportData.add(makeLabel("Width"),2+i*2,1);
+            var lengthLabel = makeLabel("Length");
+            var widthLabel = makeLabel("Width");
+
+            lengthLabel.setFont(Theme.fontsmall);
+            widthLabel.setFont(Theme.fontsmall);
+
+            airportData.add(lengthLabel,1+i*2,1);
+            airportData.add(widthLabel,2+i*2,1);
         }
         Label desl = makeLabel(appWindow.runway.getRunwayDesignatorLeft());
         desl.setAlignment(Pos.CENTER);
@@ -457,6 +425,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         return airportData;
     }
+
+    /**
+     * Build table view 2 table view.
+     *
+     * @param container the container
+     * @return the table view
+     */
     public TableView<RunwayData> buildTableView2(VBox container) {
         TableView<RunwayData> table = new TableView<>();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -630,6 +605,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return tableColumn;
     }
 
+    /**
+     * Make obstacle config pane.
+     *
+     * @return the pane
+     */
     public Pane makeObstacleConfig(){
         HBox obstacleLayout = new HBox();
         VBox leftPane = new VBox();
@@ -648,6 +628,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         obstacleLayout.getChildren().addAll(leftPane,rightPane);
         return obstacleLayout;
     }
+
+    /**
+     * Make obstacle pane.
+     *
+     * @param obstaclePane the obstacle pane
+     */
     public void makeObstaclePane(VBox obstaclePane){
         HBox topHalf = new HBox();
         topHalf.maxWidthProperty().bind(obstaclePane.widthProperty());
@@ -704,9 +690,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Pane makeObstacleOptionsPane() {
         // Obstacle preset ComboBox
-        ArrayList<Obstacle> obstaclePresets = new ArrayList<>();
-        obstaclePresetSetup(obstaclePresets);
-        ComboBox obstacleComboBox = new ComboBox(FXCollections.observableArrayList(obstaclePresets));
+        ComboBox obstacleComboBox = new ComboBox(FXCollections.observableArrayList(appWindow.obstaclePresets));
         obstacleComboBox.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
 
         obstacleComboBox.setOnAction(event -> {
@@ -784,30 +768,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         data.textProperty().bind(Bindings.when(visibility).then(string).otherwise(new
                 SimpleStringProperty("Error")));
         return data;
-    }
-
-    private void obstaclePresetSetup(ArrayList<Obstacle> obstaclePresets) {
-        obstaclePresets.add(new Obstacle("Airbus A320-200", 11.76, 0));
-        obstaclePresets.get(0).lengthProperty().set(37.57);
-        obstaclePresets.get(0).widthProperty().set(35.8);
-        obstaclePresets.add(new Obstacle("Boeing 737-800", 12.6, 0));
-        obstaclePresets.get(1).lengthProperty().set(34.32);
-        obstaclePresets.get(1).widthProperty().set(39.5);
-        obstaclePresets.add(new Obstacle("Boeing 777-9", 19.68, 0));
-        obstaclePresets.get(2).lengthProperty().set(76.72);
-        obstaclePresets.get(2).widthProperty().set(64.84);
-        obstaclePresets.add(new Obstacle("Piper M350", 3.4, 0));
-        obstaclePresets.get(3).lengthProperty().set(8.8);
-        obstaclePresets.get(3).widthProperty().set(13.1);
-        obstaclePresets.add(new Obstacle("Pothole", 0, 0));
-        obstaclePresets.get(4).lengthProperty().set(0);
-        obstaclePresets.get(4).widthProperty().set(0);
-        obstaclePresets.add(new Obstacle("Pushback tug", 2.5, 0));
-        obstaclePresets.get(5).lengthProperty().set(5);
-        obstaclePresets.get(5).widthProperty().set(2);
-        obstaclePresets.add(new Obstacle("Maintenance truck", 3, 0));
-        obstaclePresets.get(6).lengthProperty().set(6);
-        obstaclePresets.get(6).widthProperty().set(2.5);
     }
 
     private Node makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility, int i) {
@@ -908,13 +868,56 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return data;
 
     }
+    private Pane makeOutputLabel(SimpleStringProperty prop1header,SimpleStringProperty prop1,SimpleStringProperty prop2header,SimpleStringProperty prop2) {
 
+        Label dataheader = new Label();
+        dataheader.setFont(Theme.font);
+        dataheader.setTextFill(Theme.fg);
+        dataheader.setText(String.valueOf(prop1header.getValue()));
+
+        Label data = new Label();
+        data.setFont(Theme.font);
+        data.setTextFill(Theme.fg);
+        data.setText(String.valueOf(prop1.getValue()));
+
+        Label data2header = new Label();
+        data2header.setFont(Theme.font);
+        data2header.setTextFill(Theme.fg);
+        data2header.setText(String.valueOf(prop2header.getValue()));
+
+        Label data2 = new Label();
+        data2.setFont(Theme.font);
+        data2.setTextFill(Theme.fg);
+        data2.setText(String.valueOf(prop2.getValue()));
+
+        VBox box = new VBox(dataheader,data,data2header,data2);
+        VBox.setVgrow(data, Priority.ALWAYS);
+        box.setAlignment(Pos.CENTER);
+
+        return box;
+
+    }
+
+    /**
+     * Make label label.
+     *
+     * @param string the string
+     * @return the label
+     */
     public Label makeLabel(String string){
         Label label = new Label(string);
         label.setFont(Theme.font);
         label.setTextFill(Theme.fg);
         return label;
     }
+
+    /**
+     * Make output label label.
+     *
+     * @param property   the property
+     * @param visibility the visibility
+     * @return the label
+     */
     public Label makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility) {
         Label data = new Label();
         data.setFont(Theme.font);
@@ -936,10 +939,50 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Pane makeBreakDownPane() {
         ArrayList<Pair<String, Pane>> breakDown = new ArrayList<>();
-        breakDown.add(new Pair<>("TORA Maths", new VBox()));
-        breakDown.add(new Pair<>("TODA Maths", new VBox()));
-        breakDown.add(new Pair<>("ASDA Maths", new VBox()));
-        breakDown.add(new Pair<>("LDA Maths", new VBox()));
+        breakDown.add(
+                new Pair<>(
+                        "TORA Maths",
+                        makeOutputLabel(
+                                appWindow.runway.leftToraBreakdownHeaderProperty(),
+                                appWindow.runway.leftToraBreakdownProperty(),
+                                appWindow.runway.rightToraBreakdownHeaderProperty(),
+                                appWindow.runway.rightToraBreakdownProperty()
+                        )
+                )
+        );
+        breakDown.add(
+                new Pair<>(
+                        "TODA Maths",
+                        makeOutputLabel(
+                                appWindow.runway.leftTodaBreakdownHeaderProperty(),
+                                appWindow.runway.leftTodaBreakdownProperty(),
+                                appWindow.runway.rightTodaBreakdownHeaderProperty(),
+                                appWindow.runway.rightTodaBreakdownProperty()
+                        )
+                )
+        );
+        breakDown.add(
+                new Pair<>(
+                        "ASDA Maths",
+                        makeOutputLabel(
+                                appWindow.runway.leftAsdaBreakdownHeaderProperty(),
+                                appWindow.runway.leftAsdaBreakdownProperty(),
+                                appWindow.runway.rightAsdaBreakdownHeaderProperty(),
+                                appWindow.runway.rightAsdaBreakdownProperty()
+                        )
+                )
+        );
+        breakDown.add(
+                new Pair<>(
+                        "LDA Maths",
+                        makeOutputLabel(
+                                appWindow.runway.leftLdaBreakdownHeaderProperty(),
+                                appWindow.runway.leftLdaBreakdownProperty(),
+                                appWindow.runway.rightLdaBreakdownHeaderProperty(),
+                                appWindow.runway.rightLdaBreakdownProperty()
+                        )
+                )
+        );
         Pane breakDownPane = new TabLayout(breakDown,Theme.focusedBG,Theme.veryfocusedBG);
         return breakDownPane;
     }
@@ -995,6 +1038,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return textField;
     }
 
+    /**
+     * Make runway tabs pane.
+     *
+     * @return the pane
+     */
     public Pane makeRunwayTabs(){
         ArrayList<Pair<String, Pane>> viewTabs = new ArrayList<>();
         RunwayScene runwayScene1 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
@@ -1019,7 +1067,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             runwayScene3.angleZProperty().set(-90);
             runwayScene3.portrait.set(true);
         }
-        VBox topView = new VBox(runwayScene3.getRoot());
+        topView = new VBox(runwayScene3.getRoot());
 
         runwayScene3.root.maxWidthProperty().bind(topView.widthProperty());
         runwayScene3.root.minWidthProperty().bind(topView.widthProperty());
@@ -1056,6 +1104,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return viewPane;
     }
 
+    /**
+     * Make spinner spinner.
+     *
+     * @param binding the binding
+     * @return the spinner
+     */
     public Spinner makeSpinner(SimpleDoubleProperty binding){
         Spinner spinner = new Spinner();
         SpinnerValueFactory<Double> svf = new SpinnerValueFactory.DoubleSpinnerValueFactory(0,999999999,binding.get());
@@ -1100,11 +1154,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     /**
      * Creates a new Button with the specified label and adds it to the given parent Pane.
      *
-     * @param label1  the label to use for the first Button.
-     * @param label2  the label to use for the second Button.
+     * @param property the property
+     * @param label1   the label to use for the first Button.
+     * @param label2   the label to use for the second Button.
      * @return the created Button Node.
      */
     public Node makeButton(SimpleBooleanProperty property, String label1, String label2) {

@@ -108,6 +108,7 @@
 .button-dark {
     -fx-background-color: rgba(26, 26, 26, 255);
     -fx-font-size: 14px;
+    -fx-cursor: hand;
 }
 /* useless but for a record */
 .table-row-cell:empty {

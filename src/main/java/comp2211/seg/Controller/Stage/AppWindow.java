@@ -1,6 +1,7 @@
 package comp2211.seg.Controller.Stage;
 
 import comp2211.seg.App;
+import comp2211.seg.Controller.Interfaces.AirportsData;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.Obstacle;
@@ -26,37 +27,50 @@ public class AppWindow {
     private final Stage stage;
     private final int width;
     private final int height;
+    /**
+     * The Current scene.
+     */
     public SceneAbstract currentScene;
-    private ArrayList<Airport> airports;
+    private final ArrayList<Airport> airports;
     private Scene scene;
 
+    /**
+     * The Root.
+     */
     public HandlerPane root;
 
+    /**
+     * The Runway.
+     */
     public Runway runway;
+    /**
+     * The Airport.
+     */
     public Airport airport;
+    /**
+     * The Obstacle presets.
+     */
+    public final ArrayList<Obstacle> obstaclePresets;
 
     /**
      * Constructs an AppWindow object with the specified stage, width, and height.
      *
-     * @param stage the primary stage of the application
-     * @param width the width of the application's window
+     * @param stage  the primary stage of the application
+     * @param width  the width of the application's window
      * @param height the height of the application's window
      */
     public AppWindow(Stage stage, int width, int height) {
         this.stage = stage;
         this.width = width;
         this.height = height;
-        airports = new ArrayList<>();
+        airports = AirportsData.getAirports();
+        obstaclePresets = new ArrayList<>();
+        obstaclePresetSetup();
         Theme.makeDark();
 
-        addAirport(new Airport("Heathrow"));
-        addAirport(new Airport("Gatwick"));
-        addAirport(new Airport("Southampton"));
-        for (Airport a: airports) {
-            a.makeRunway();
-        }
         airport = airports.get(0);
 
+        logger.info("gets runway object");
         runway = airport.getRunways().get(0);
         // Setup appWindow
         setupStage();
@@ -64,9 +78,32 @@ public class AppWindow {
         //startMainScene();
         //startRunwayScene();
     }
+
+    /**
+     * Add airport.
+     *
+     * @param airport the airport
+     */
     public void addAirport(Airport airport){
         airports.add(airport);
+        logger.info("Added airport: "+airport.getName()+" to list of airports");
     }
+
+    /**
+     * Add obstacle.
+     *
+     * @param obstacle the obstacle
+     */
+    public void addObstacle(Obstacle obstacle) {
+        obstaclePresets.add(obstacle);
+        logger.info("Added obstacle: "+obstacle.getObstacleDesignator()+ "to list of pre-defined obstacles");
+    }
+
+    /**
+     * Set airport.
+     *
+     * @param airport the airport
+     */
     public void setAirport(Airport airport){
         if (airport.name.equals("")){
             stage.setTitle("Runway tool");
@@ -76,8 +113,70 @@ public class AppWindow {
         this.airport = airport;
         runway = airport.getRunways().get(0);
     }
+
+    private void obstaclePresetSetup() {
+        obstaclePresets.add(new Obstacle("Airbus A320-200", 11.76, 0));
+        obstaclePresets.get(0).lengthProperty().set(37.57);
+        obstaclePresets.get(0).widthProperty().set(35.8);
+        obstaclePresets.add(new Obstacle("Boeing 737-800", 12.6, 0));
+        obstaclePresets.get(1).lengthProperty().set(34.32);
+        obstaclePresets.get(1).widthProperty().set(39.5);
+        obstaclePresets.add(new Obstacle("Boeing 777-9", 19.68, 0));
+        obstaclePresets.get(2).lengthProperty().set(76.72);
+        obstaclePresets.get(2).widthProperty().set(64.84);
+        obstaclePresets.add(new Obstacle("Piper M350", 3.4, 0));
+        obstaclePresets.get(3).lengthProperty().set(8.8);
+        obstaclePresets.get(3).widthProperty().set(13.1);
+        obstaclePresets.add(new Obstacle("Pothole", 0, 0));
+        obstaclePresets.get(4).lengthProperty().set(0);
+        obstaclePresets.get(4).widthProperty().set(0);
+        obstaclePresets.add(new Obstacle("Pushback tug", 2.5, 0));
+        obstaclePresets.get(5).lengthProperty().set(5);
+        obstaclePresets.get(5).widthProperty().set(2);
+        obstaclePresets.add(new Obstacle("Maintenance truck", 3, 0));
+        obstaclePresets.get(6).lengthProperty().set(6);
+        obstaclePresets.get(6).widthProperty().set(2.5);
+    }
+
+    /**
+     * Set runway.
+     *
+     * @param runway the runway
+     */
     public void setRunway(Runway runway){
-        this.runway = runway;
+        Runway temp = new Runway();
+        temp.setRunwayDesignatorLeft(this.runway.getRunwayDesignatorLeft());
+        temp.setRunwayDesignatorRight(this.runway.getRunwayDesignatorRight());
+        temp.setInputLeftTora(this.runway.getInputLeftTora());
+        temp.setInputLeftToda(this.runway.getInputLeftToda());
+        temp.setInputLeftLda(this.runway.getInputLeftLda());
+        temp.setInputLeftAsda(this.runway.getInputLeftAsda());
+        temp.setInputRightTora(this.runway.getInputRightTora());
+        temp.setInputRightToda(this.runway.getInputRightToda());
+        temp.setInputRightLda(this.runway.getInputRightLda());
+        temp.setInputRightAsda(this.runway.getInputRightAsda());
+
+        this.runway.setRunwayDesignatorLeft(runway.getRunwayDesignatorLeft());
+        this.runway.setRunwayDesignatorRight(runway.getRunwayDesignatorRight());
+        this.runway.setInputLeftTora(runway.getInputLeftTora());
+        this.runway.setInputLeftToda(runway.getInputLeftToda());
+        this.runway.setInputLeftLda(runway.getInputLeftLda());
+        this.runway.setInputLeftAsda(runway.getInputLeftAsda());
+        this.runway.setInputRightTora(runway.getInputRightTora());
+        this.runway.setInputRightToda(runway.getInputRightToda());
+        this.runway.setInputRightLda(runway.getInputRightLda());
+        this.runway.setInputRightAsda(runway.getInputRightAsda());
+
+        runway.setRunwayDesignatorLeft(temp.getRunwayDesignatorLeft());
+        runway.setRunwayDesignatorRight(temp.getRunwayDesignatorRight());
+        runway.setInputLeftTora(temp.getInputLeftTora());
+        runway.setInputLeftToda(temp.getInputLeftToda());
+        runway.setInputLeftLda(temp.getInputLeftLda());
+        runway.setInputLeftAsda(temp.getInputLeftAsda());
+        runway.setInputRightTora(temp.getInputRightTora());
+        runway.setInputRightToda(temp.getInputRightToda());
+        runway.setInputRightLda(temp.getInputRightLda());
+        runway.setInputRightAsda(temp.getInputRightAsda());
     }
 
     /**
@@ -107,9 +206,10 @@ public class AppWindow {
     /**
      * Starts the main scene.
      */
-    public void startMainScene() {
-        loadScene(new MainScene(new Pane(),this, getWidth(),getHeight()));
-    }
+
+    /**
+     * Start base scene.
+     */
     public void startBaseScene() {
         loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
     }
@@ -118,8 +218,8 @@ public class AppWindow {
      * Starts the runway scene.
      */
     public void startRunwayScene() {
-        //loadScene(new RunwayScene(new Pane(),this,getWidth(),getHeight(),true));
-        loadScene(new RunwaySceneLoader(new Pane(),this,getWidth(),getHeight()));
+        loadScene(new RunwayScene(new Pane(),this,getWidth(),getHeight(),true));
+        //loadScene(new RunwaySceneLoader(new Pane(),this,getWidth(),getHeight()));
     }
 
     /**
@@ -190,12 +290,20 @@ public class AppWindow {
         //root.getChildren().removeAll(root.getChildren());
     }
 
+    /**
+     * Gets airports.
+     *
+     * @return the airports
+     */
     public ArrayList<Airport> getAirports() {
         return airports;
     }
 
+    /**
+     * Start base scene obstacle.
+     */
     public void startBaseSceneObstacle() {
         loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
-        ((BaseScene) currentScene).selectObstacleMenu();
+        ((BaseScene) currentScene).selectObstacleMenu(1);
     }
 }

@@ -14,6 +14,9 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * The type Runway test.
+ */
 class RunwayTest {
 
     private static final Logger logger = LogManager.getLogger(RunwayTest.class);
@@ -22,17 +25,35 @@ class RunwayTest {
     //TODO: Re-work tests to handle left and right
 
 
-    // 09R and 27L
+    /**
+     * The constant runway1.
+     */
+// 09R and 27L
     static Runway runway1 = new Runway();
-    // 09L and 27R
+    /**
+     * The constant runway2.
+     */
+// 09L and 27R
     static Runway runway2 = new Runway();
-    // 07R and 25L
+    /**
+     * The constant runway3.
+     */
+// 07R and 25L
     static Runway runway3 = new Runway();
-    // 16L and 34R
+    /**
+     * The constant runway4.
+     */
+// 16L and 34R
     static Runway runway4 = new Runway();
-    // 04C and 22C
+    /**
+     * The constant runway5.
+     */
+// 04C and 22C
     static Runway runway5 = new Runway();
 
+    /**
+     * Sets up runways.
+     */
     @BeforeAll
     static void setUpRunways() {
         setProperties(
@@ -97,6 +118,20 @@ class RunwayTest {
         );
     }
 
+    /**
+     * Sets properties.
+     *
+     * @param designator the designator
+     * @param leftTora   the left tora
+     * @param leftToda   the left toda
+     * @param leftAsda   the left asda
+     * @param leftLda    the left lda
+     * @param rightTora  the right tora
+     * @param rightToda  the right toda
+     * @param rightAsda  the right asda
+     * @param rightLda   the right lda
+     * @param runway     the runway
+     */
     static void setProperties(
             String designator,
             int leftTora,
@@ -118,6 +153,13 @@ class RunwayTest {
         runway.inputRightAsdaProperty().bind(new SimpleDoubleProperty(rightAsda));
         runway.inputRightLdaProperty().bind(new SimpleDoubleProperty(rightLda));
     }
+
+    /**
+     * Add obstacle.
+     *
+     * @param runway   the runway
+     * @param obstacle the obstacle
+     */
     void addObstacle(Runway runway, Obstacle obstacle){
         runway.removeObstacle();
         obstacle.lengthProperty().set(0);
@@ -126,6 +168,12 @@ class RunwayTest {
 
     // Unit Tests
 
+    /**
+     * Check designator test data.
+     *
+     * @param runway             the runway
+     * @param expectedDesignator the expected designator
+     */
     @DisplayName("Runway Designators : Check 2nd designator is correctly calculated")
     @ParameterizedTest
     @MethodSource("generateCheckDesignatorTestData")
@@ -140,7 +188,22 @@ class RunwayTest {
         assertEquals(expectedDesignator, runway.getRunwayDesignatorRight(), "Runway designator incorrect");
     }
 
-    //TODO: Write Test
+    /**
+     * Recalculate test.
+     *
+     * @param runway            the runway
+     * @param obstacleToAdd     the obstacle to add
+     * @param expectedTORALeft  the expected tora left
+     * @param expectedASDALeft  the expected asda left
+     * @param expectedTODALeft  the expected toda left
+     * @param expectedLDALeft   the expected lda left
+     * @param expectedTORARight the expected tora right
+     * @param expectedASDARight the expected asda right
+     * @param expectedTODARight the expected toda right
+     * @param expectedLDARight  the expected lda right
+     * @param message           the message
+     */
+//TODO: Write Test
     @DisplayName("Landing/ take-off calculations : Recalculate appropriate values")
     @ParameterizedTest
     @MethodSource("generateRecalculateTestData")
@@ -174,15 +237,42 @@ class RunwayTest {
 
     // Test Data Generation
 
-    // Obstacles defined in given scenario's
+    /**
+     * The constant obstacle1.
+     */
+// Obstacles defined in given scenario's
     static Obstacle obstacle1 = new Obstacle("ob1", 12, -50);
+    /**
+     * The Obstacle 2.
+     */
     static Obstacle obstacle2 = new Obstacle("ob2", 25, 2853);
+    /**
+     * The Obstacle 3.
+     */
     static Obstacle obstacle3 = new Obstacle("ob3", 15, 150);
+    /**
+     * The Obstacle 4.
+     */
     static Obstacle obstacle4 = new Obstacle("ob4", 20, 3546);
+    /**
+     * The Obstacle 5.
+     */
     static Obstacle obstacle5 = new Obstacle("ob5", 14, 80);
+    /**
+     * The Obstacle 6.
+     */
     static Obstacle obstacle6 = new Obstacle("ob6", 11, 2285);
+    /**
+     * The Obstacle 7.
+     */
     static Obstacle obstacle7 = new Obstacle("ob7", 13, 976);
+    /**
+     * The Obstacle 8.
+     */
     static Obstacle obstacle8 = new Obstacle("ob8", 17, 0);
+    /**
+     * The Obstacle 9.
+     */
     static Obstacle obstacle9 = new Obstacle("ob9", 8, 484);
 
     //TODO: Change generation to fit new tests

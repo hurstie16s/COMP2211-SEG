@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="airport" type="airportType"/>
+    <xs:complexType name="Right_PropertiesType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="Designator"/>
+            <xs:element type="xs:string" name="TORA"/>
+            <xs:element type="xs:string" name="TODA"/>
+            <xs:element type="xs:string" name="ASDA"/>
+            <xs:element type="xs:string" name="LDA"/>
+            <xs:element type="xs:string" name="Clearway"/>
+            <xs:element type="xs:string" name="Stopway"/>
+            <xs:element type="xs:string" name="Displacement_Threshold"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Left_PropertiesType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="Designator"/>
+            <xs:element type="xs:string" name="TORA"/>
+            <xs:element type="xs:string" name="TODA"/>
+            <xs:element type="xs:string" name="ASDA"/>
+            <xs:element type="xs:string" name="LDA"/>
+            <xs:element type="xs:string" name="Clearway"/>
+            <xs:element type="xs:string" name="Stopway"/>
+            <xs:element type="xs:string" name="Displacement_Threshold"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RunwayType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="Resa_Height"/>
+            <xs:element type="xs:string" name="Resa_Width"/>
+            <xs:element type="Right_PropertiesType" name="Right_Properties"/>
+            <xs:element type="Left_PropertiesType" name="Left_Properties"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Runway_ObstacleType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="Obstacle_Designator"/>
+            <xs:element type="xs:string" name="Obstacle_Height"/>
+            <xs:element type="xs:string" name="Obstacle_Width"/>
+            <xs:element type="xs:string" name="Obstacle_Length"/>
+            <xs:element type="xs:string" name="Distance_From_Threshold"/>
+            <xs:element type="xs:string" name="Distance_From_Other_Threshold"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RunwaysType">
+        <xs:sequence>
+            <xs:element type="RunwayType" name="Runway"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Runway_ObstaclesType">
+        <xs:sequence>
+            <xs:element type="Runway_ObstacleType" name="Runway_Obstacle"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="airportType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="name"/>
+            <xs:element type="xs:string" name="Latitude"/>
+            <xs:element type="xs:string" name="Longitude"/>
+            <xs:element type="RunwaysType" name="Runways"/>
+            <xs:element type="Runway_ObstaclesType" name="Runway_Obstacles"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

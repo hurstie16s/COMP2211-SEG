@@ -26,12 +26,12 @@ public class App extends Application {
   /** The main stage of the application. */
   private Stage stage;
 
-  /**
-   * The main method of the application.
-   *
-   * @param args The command-line arguments passed to the application.
-   */
-  public static void main(String[] args) {
+    /**
+     * The main method of the application.
+     *
+     * @param args The command-line arguments passed to the application.
+     */
+    public static void main(String[] args) {
     logger.info("Starting");
     launch();
   }
@@ -58,34 +58,34 @@ public class App extends Application {
     showAppWindow();
   }
 
-  /**
-   * This method creates a new instance of the {@link AppWindow} class
-   * with the given width and height,using this stage as the parent.
-   * The method then displays the window on the stage.
-   *
-   * The window width and height are currently hardcoded:
-   * at {@link App#width} and {@link App#height} respectively.
-   */
-  public void showAppWindow() {
+    /**
+     * This method creates a new instance of the {@link AppWindow} class
+     * with the given width and height,using this stage as the parent.
+     * The method then displays the window on the stage.
+     * <p>
+     * The window width and height are currently hardcoded:
+     * at {@link App#width} and {@link App#height} respectively.
+     */
+    public void showAppWindow() {
     logger.info("Opening AppWindow");
     new AppWindow(stage, width, height);
     stage.show();
   }
 
-  /**
-   * Shuts down the application.
-   */
-  public void shutdown() {
+    /**
+     * Shuts down the application.
+     */
+    public void shutdown() {
     logger.info("Shutting down");
     System.exit(0);
   }
 
-  /**
-   * Gets the singleton instance of this class.
-   *
-   * @return The singleton instance of this class.
-   */
-  public static App getInstance() {
+    /**
+     * Gets the singleton instance of this class.
+     *
+     * @return The singleton instance of this class.
+     */
+    public static App getInstance() {
     return instance;
   }
 }

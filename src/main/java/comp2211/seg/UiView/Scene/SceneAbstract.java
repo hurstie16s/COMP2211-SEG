@@ -1,17 +1,20 @@
 package comp2211.seg.UiView.Scene;
 
-import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.HandlerPane;
+import comp2211.seg.Controller.Stage.Settings;
 import comp2211.seg.Controller.Stage.Theme;
+import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
+import comp2211.seg.ProcessDataModel.Obstacle;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -19,7 +22,9 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -30,6 +35,9 @@ import java.util.Objects;
 public abstract class SceneAbstract extends Scene {
 
   private static final Logger logger = LogManager.getLogger(SceneAbstract.class);
+  /**
+   * The App window.
+   */
   protected final AppWindow appWindow;
 
   /**
@@ -51,6 +59,9 @@ public abstract class SceneAbstract extends Scene {
    * The height of the scene.
    */
   protected double height;
+  /**
+   * The Help.
+   */
   protected HelpScene help;
 
   /**
@@ -58,8 +69,9 @@ public abstract class SceneAbstract extends Scene {
    *
    * @param root      the root pane of the scene
    * @param appWindow the application window of the scene
+   * @param width     the width
+   * @param height    the height
    */
-
   public SceneAbstract(Pane root, AppWindow appWindow, double width, double height) {
     super(root, appWindow.getWidth(), appWindow.getHeight(), Color.BLACK);
     this.root = root;
@@ -68,6 +80,15 @@ public abstract class SceneAbstract extends Scene {
     this.appWindow = appWindow;
   }
 
+  /**
+   * Instantiates a new Scene abstract.
+   *
+   * @param root        the root
+   * @param appWindow   the app window
+   * @param width       the width
+   * @param height      the height
+   * @param depthBuffer the depth buffer
+   */
   public SceneAbstract(Pane root, AppWindow appWindow, double width, double height, boolean depthBuffer) {
     super(root, appWindow.getWidth(), appWindow.getHeight(), depthBuffer, SceneAntialiasing.BALANCED);
     this.root = root;
@@ -116,14 +137,33 @@ public abstract class SceneAbstract extends Scene {
     MenuItem menu8 = new MenuItem("Help menu");
     helpMenu.getItems().add(menu8);
 
-    MenuItem menu4 = new MenuItem("Import from XML");
-    Menu menu5 = new Menu("Export to XML");
+    Menu menu4 = new Menu("Import from XML");
 
+    MenuItem menu9 = new MenuItem("Import Airport & Obstacle...");
+    MenuItem menu10 = new MenuItem("Import Obstacle...");
+
+    Menu menu5 = new Menu("Export to XML");
     MenuItem menu6 = new MenuItem("Export Obstacle...");
     MenuItem menu7 = new MenuItem("Export Airport & Obstacle...");
 
-    fileMenu.getItems().addAll(menu4, menu5);
+    //Aleks exporting image:
+    Menu menu11 = new Menu("Export to Image");
+    Menu menu12 = new Menu("Export Top-down View...");
+    Menu menu13 = new Menu("Export Side-on View...");
+    //Alex formats:
+    MenuItem menu12png = new MenuItem("png");
+    MenuItem menu12jpg = new MenuItem("jpg");
+    MenuItem menu12gif = new MenuItem("gif");
+    MenuItem menu13png = new MenuItem("png");
+    MenuItem menu13jpg = new MenuItem("jpg");
+    MenuItem menu13gif = new MenuItem("gif");
+
+    fileMenu.getItems().addAll(menu4, menu5, menu11); //Alex add menu11 to File menu
+    menu4.getItems().addAll(menu9, menu10);
     menu5.getItems().addAll(menu6, menu7);
+    menu12.getItems().addAll(menu12png, menu12jpg, menu12gif);
+    menu13.getItems().addAll(menu13png, menu13jpg, menu13gif);
+    menu11.getItems().addAll(menu12, menu13);
 
     MenuBar menuBar = new MenuBar();
     menuBar.getMenus().addAll(fileMenu, OptionsMenu, helpMenu);
@@ -135,17 +175,22 @@ public abstract class SceneAbstract extends Scene {
     root.getChildren().add(layoutPane);
 
     //
-    menu7.setOnAction(e -> {
-      exportAirportButtonEvent();
-    });
+    menu7.setOnAction(e -> exportAirportButtonEvent());
 
-    menu6.setOnAction(e -> {
-      exportObstacleButtonEvent();
-    });
+    menu6.setOnAction(e -> exportObstacleButtonEvent());
 
-    menu8.setOnAction(e -> {
-      help.toggleHelp(this.getClass().getCanonicalName());
-    });
+    menu8.setOnAction(e -> help.toggleHelp(this.getClass().getCanonicalName()));
+
+    menu9.setOnAction(e -> importAirportButtonEvent());
+
+    menu10.setOnAction(e -> importObstacleButtonEvent());
+
+    menu12png.setOnAction(e -> exportTopDownViewButtonEvent("png"));
+    menu12jpg.setOnAction(e -> exportTopDownViewButtonEvent("jpg"));
+    menu12gif.setOnAction(e -> exportTopDownViewButtonEvent("gif"));
+    menu13png.setOnAction(e -> exportSideViewButtonEvent("png"));
+    menu13jpg.setOnAction(e -> exportSideViewButtonEvent("jpg"));
+    menu13gif.setOnAction(e -> exportTopDownViewButtonEvent("gif"));
   }
 
   /**
@@ -177,6 +222,11 @@ public abstract class SceneAbstract extends Scene {
     root.getChildren().add(mainPane);
   }
 
+  /**
+   * Make help.
+   *
+   * @param left the left
+   */
   public void makeHelp(boolean left){
     if (!left) {
 
@@ -203,7 +253,10 @@ public abstract class SceneAbstract extends Scene {
     }
   }
 
-  // repeated method to export button (remove in base scene when done)
+  /**
+   * Export airport button event.
+   */
+// repeated method to export button (remove in base scene when done)
   public void exportAirportButtonEvent() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Choose file to export");
@@ -236,7 +289,10 @@ public abstract class SceneAbstract extends Scene {
     }
   }
 
-  // Repeated method for exporting obstacle event, remove this from base scene when done
+  /**
+   * Export obstacle button event.
+   */
+// Repeated method for exporting obstacle event, remove this from base scene when done
   public void exportObstacleButtonEvent() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Choose file to export");
@@ -267,6 +323,128 @@ public abstract class SceneAbstract extends Scene {
               "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
               "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
     }
+  }
+
+  /**
+   * Import airport button event.
+   */
+  protected void importAirportButtonEvent() {
+    try {
+      logger.info("Import airport");
+      File file = Objects.requireNonNull(generateImportFileChooser("airport").showOpenDialog(new Stage()));
+
+      Airport airport = Objects.requireNonNull(FileHandler.importAirport(file));
+      // Add airport to AppWindow
+      logger.info("Sending airport: "+airport.getName()+" to AppWindow");
+      appWindow.addAirport(airport);
+    } catch (NullPointerException e) {
+      logger.warn(e.getMessage());
+    }
+
+  }
+
+  /**
+   * Import obstacle button event.
+   */
+  protected void importObstacleButtonEvent() {
+    try {
+      logger.info("Import obstacle");
+      File file = Objects.requireNonNull(generateImportFileChooser("obstacle").showOpenDialog(new Stage()));
+
+      Obstacle obstacle = Objects.requireNonNull(FileHandler.importObstacle(file));
+      // Add obstacle to AppWindow
+      logger.info("Sending obstacle: "+obstacle.getObstacleDesignator()+" to AppWindow");
+      appWindow.addObstacle(obstacle);
+    } catch (NullPointerException e) {
+      logger.warn(e.getMessage());
+    }
+
+  }
+
+  /**
+   * Export Top-down View button event
+   */
+  protected void exportTopDownViewButtonEvent(String format) {
+
+    double outputWidth = 1920;
+    double outputHeight = 1080;
+    RunwaySceneLoader runwayScene = new RunwaySceneLoader(new Pane(), appWindow,outputWidth,outputHeight);
+    runwayScene.buildmenulessalt();
+    if (Settings.portrait.get()) {
+      runwayScene.scene.angleXProperty().set(180);
+      runwayScene.scene.angleYProperty().set(0);
+      runwayScene.scene.angleZProperty().set(-90);
+      runwayScene.scene.portrait.set(true);
+    }
+
+    runwayScene.scene.root.maxWidthProperty().set(outputWidth);
+    runwayScene.scene.root.minWidthProperty().set(outputWidth);
+    runwayScene.scene.root.maxHeightProperty().set(outputHeight);
+    runwayScene.scene.root.minHeightProperty().set(outputHeight);
+
+
+    WritableImage image = runwayScene.scene.root.snapshot(null,null);
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Export top-down view");
+    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase() + " format(*." + format + ")","*." + format);
+    fileChooser.getExtensionFilters().add(extFilter);
+    fileChooser.setInitialFileName("Top_down_View");
+    File file = fileChooser.showSaveDialog(new Stage());
+
+    try {
+      ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
+      logger.info("image exported");
+    } catch (IOException e) {
+      logger.error(e);
+    }
+
+  }
+  /**
+   * Export Top-down View button event
+   */
+  protected void exportSideViewButtonEvent(String format) {
+
+    double outputWidth = 1920;
+    double outputHeight = 1080;
+    RunwaySceneLoader runwayScene = new RunwaySceneLoader(new Pane(), appWindow,outputWidth,outputHeight);
+    runwayScene.buildmenulessalt();
+    if (Settings.portrait.get()) {
+      runwayScene.scene.angleYProperty().set(90);
+      runwayScene.scene.angleXProperty().set(90);
+      runwayScene.scene.portrait.set(true);
+    }else {
+      runwayScene.scene.toggleView();
+    }
+
+    runwayScene.scene.root.maxWidthProperty().set(outputWidth);
+    runwayScene.scene.root.minWidthProperty().set(outputWidth);
+    runwayScene.scene.root.maxHeightProperty().set(outputHeight);
+    runwayScene.scene.root.minHeightProperty().set(outputHeight);
+
+
+    WritableImage image = runwayScene.scene.root.snapshot(null,null);
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Export side view");
+    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase() + " format(*." + format + ")","*." + format);
+    fileChooser.getExtensionFilters().add(extFilter);
+    fileChooser.setInitialFileName("Side_View");
+    File file = fileChooser.showSaveDialog(new Stage());
+
+    try {
+      ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
+      logger.info("image exported");
+    } catch (IOException e) {
+      logger.error(e);
+    }
+
+  }
+
+  private FileChooser generateImportFileChooser(String item) {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Choose file to import "+item);
+    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
+    fileChooser.getExtensionFilters().add(extFilter);
+    return fileChooser;
   }
 
 
