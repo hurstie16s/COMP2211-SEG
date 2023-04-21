@@ -716,13 +716,6 @@ public class RunwayScene extends SceneAbstract {
         angleXProperty.set(0);
         angleYProperty.set(0);
         angleZProperty.set(Double.parseDouble(appWindow.runway.runwayDesignatorLeftProperty().getValue().substring(0,2))*10+90);
-        if (appWindow.runway.runwayDesignatorLeftProperty().getValue().substring(2,3).equalsIgnoreCase("r")){
-          angleZProperty.set(angleZProperty.get()+180);
-          imageView.rotateProperty().bind(angleZProperty.subtract(Double.parseDouble(appWindow.runway.runwayDesignatorLeftProperty().getValue().substring(0,2))*10+270));
-        } else {
-          imageView.rotateProperty().bind(angleZProperty.subtract(Double.parseDouble(appWindow.runway.runwayDesignatorLeftProperty().getValue().substring(0,2))*10+90));
-
-        }
       }
     });
   }

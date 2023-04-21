@@ -5,6 +5,7 @@ import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Airport;
+import comp2211.seg.ProcessDataModel.Runway;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -13,10 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -35,7 +33,7 @@ import java.util.function.Consumer;
  * A concrete implementation of the SceneAbstract class representing the home scene of the application.
  * Implements temporary Temp interface with final Strings to be edited if needed.
  */
-public class HomeScene extends SceneAbstract implements GlobalVariables {
+public class HomeScene extends SceneAbstract{
 
   /*
    * Logger object used for logging messages.
@@ -51,6 +49,7 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
    */
   protected TextField nameEntry;
   private ComboBox airports;
+  private ComboBox runways;
 
   /**
    * Constructor to create a HomeScene object.
@@ -100,45 +99,21 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
     logger.info("building");
 
 
-    Text projectInfo = new Text(SEG_INFO);
-    projectInfo.setFont(Theme.font);
-    projectInfo.setFill(Theme.fg);
-    projectInfo.wrappingWidthProperty().bind(mainPane.widthProperty());
-    projectInfo.maxHeight(mainPane.heightProperty().get());
-    projectInfo.minHeight(mainPane.heightProperty().get());
-    Text entryInfo = new Text(HOME_SCENE_INFO);
-    entryInfo.setFont(Theme.font);
-    entryInfo.setFill(Theme.fg);
+
+
     nameEntry = new TextField();
     nameEntry.setPromptText("new airport name");
     nameEntry.setStyle("-fx-prompt-text-fill: gray;");
-
-    var entryBox = new VBox();
-    entryBox.getChildren().addAll(entryInfo, nameEntry);
-    BorderPane.setMargin(entryBox, new Insets(20, 300, 20, 300));
-    BorderPane.setMargin(projectInfo, new Insets(20, 20, 20, 20));
-    VBox.setMargin(entryInfo, new Insets(5, 5, 25, 5));
-    var menuPane = new BorderPane();
-    menuPane.setCenter(entryBox);
-    menuPane.maxWidthProperty().bind(mainPane.widthProperty());
-    menuPane.minWidthProperty().bind(mainPane.widthProperty());
-    menuPane.maxHeightProperty().bind(mainPane.heightProperty());
-    menuPane.minHeightProperty().bind(mainPane.heightProperty());
-
     VBox centrePane = new VBox();
-    centrePane.maxWidthProperty().bind(mainPane.widthProperty().divide(2));
-    centrePane.minWidthProperty().bind(mainPane.widthProperty().divide(2));
-    centrePane.maxHeightProperty().bind(mainPane.heightProperty());
-    centrePane.minHeightProperty().bind(mainPane.heightProperty());
     centrePane.setAlignment(Pos.CENTER);
 
 
-    Text title = new Text("Runway Redeclaration Tool\n\n");
-    title.setFont(Theme.font);
-    title.setFill(Theme.fg);
+    Text title = new Text("Runway Redeclaration Aid\n\n");
+    title.setFont(Theme.fontbig);
+    title.setFill(Theme.fgBright);
 
-    Text desciption = new Text("Welcome! This runway redeclaration tool is designed to help air traffic " +
-        "control professionals visualise the impact of obstacles on declared distances to understand how to continue runway operations");
+    Text desciption = new Text("This tool provides calculation and visual aids to\n" +
+        "the runway redeclaration process");
     desciption.setFont(Theme.font);
     desciption.setFill(Theme.fg);
 
@@ -148,6 +123,22 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
     airports.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     airports.valueProperty().addListener((observableValue, o, t1) -> appWindow.setAirport((Airport) t1));
     airports.valueProperty().set(appWindow.airport);
+
+
+    runways = new ComboBox(FXCollections.observableArrayList(appWindow.airport.getRunways()));
+    runways.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    runways.valueProperty().addListener(new ChangeListener() {
+      @Override
+      public void changed(ObservableValue observableValue, Object o, Object t1) {
+        appWindow.setRunway((Runway) t1);
+        if (! (o == null)) {
+          if (!o.equals(t1)) {
+            appWindow.startHomeScene();
+          }
+        }
+      }
+    });
+    runways.valueProperty().set(appWindow.runway);
 
 
 
@@ -171,23 +162,68 @@ public class HomeScene extends SceneAbstract implements GlobalVariables {
     TextFlow text = new TextFlow(title,desciption);
     text.setTextAlignment(TextAlignment.CENTER);
 
-    VBox buttonsPane = new VBox(startApplication,importAirport,newAirport);
-    VBox airportsPane = new VBox(airports);
+    Label airportText = new Label("Airport");
+    airportText.setFont(Theme.font);
+    airportText.setTextFill(Theme.fgBright);
+    Label runwayText = new Label("Runway");
+    runwayText.setFont(Theme.font);
+    runwayText.setTextFill(Theme.fgBright);
+
+
+    VBox textPane = new VBox(airportText,runwayText);
+    VBox buttonsPane = new VBox(importAirport);
+    VBox airportsPane = new VBox(airports, runways, startApplication);
+    runways.maxWidthProperty().bind(airports.widthProperty());
+    runways.minWidthProperty().bind(airports.widthProperty());
+    startApplication.maxWidthProperty().bind(airports.widthProperty());
+    startApplication.minWidthProperty().bind(airports.widthProperty());
+    importAirport.maxWidthProperty().bind(airports.widthProperty());
+    importAirport.minWidthProperty().bind(airports.widthProperty());
     airportsPane.maxHeightProperty().bind(buttonsPane.heightProperty());
     airportsPane.minHeightProperty().bind(buttonsPane.heightProperty());
 
-    HBox bottomPane = new HBox(airportsPane,buttonsPane);
+    HBox bottomPane = new HBox(textPane, airportsPane,buttonsPane);
     bottomPane.setAlignment(Pos.CENTER);
-    bottomPane.setPadding(new Insets(20));
-    buttonsPane.setPadding(new Insets(20));
-    airportsPane.setPadding(new Insets(20));
+    textPane.setPadding(new Insets(10));
+    textPane.setSpacing(10);
+    buttonsPane.setPadding(new Insets(10));
     buttonsPane.setSpacing(10);
+    airportsPane.setPadding(new Insets(10));
+    airportsPane.setSpacing(10);
 
     centrePane.getChildren().addAll(text, bottomPane);
-    mainPane.getChildren().add(projectInfo);
-    mainPane.getChildren().add(centrePane);
+
+
+    Label projectInfo = new Label(
+            "Josh Douglas " +
+                    "(jod1n21) |" +
+                    "Lam Giang " +
+                    "(lg1n20) |" +
+                    "Samuel Hurst " +
+                    "(shjh1g21) |" +
+                    "David Kuc " +
+                    "(drk1g21) |" +
+                    "Aleksander Pilski " +
+                    "(ajp1e19) |" +
+                    "Josh Willson " +
+                    "(jjrw1g21) \n");
+    projectInfo.setTextAlignment(TextAlignment.CENTER);
+    projectInfo.setFont(Theme.font);
+    projectInfo.setTextFill(Theme.fg);
+    HBox namesBox = new HBox(projectInfo);
+    namesBox.setAlignment(Pos.CENTER);
+
+    VBox layout = new VBox();
+    layout.getChildren().addAll(centrePane,namesBox);
+    namesBox.prefHeight(0);
+    centrePane.maxHeightProperty().bind(mainPane.heightProperty().subtract(namesBox.heightProperty().multiply(2.5)));
+    centrePane.minHeightProperty().bind(mainPane.heightProperty().subtract(namesBox.heightProperty().multiply(2.5)));
+
+    mainPane.getChildren().add(layout);
     mainPane.maxWidthProperty().bind(root.widthProperty());
     mainPane.minWidthProperty().bind(root.widthProperty());
+    mainPane.maxHeightProperty().bind(root.heightProperty());
+    mainPane.minHeightProperty().bind(root.heightProperty());
   }
 
 

@@ -36,6 +36,7 @@ public class Theme {
      * The Fg.
      */
     static public Color fg = Color.gray(0.4);
+    static public Color fgBright = Color.gray(0.35);
     /**
      * The Labelfg.
      */
@@ -104,6 +105,7 @@ public class Theme {
      * The Font.
      */
     static public Font font =Font.font("Calibri", 20);
+    static public Font fontbig =Font.font("Calibri", 32);
     /**
      * The Fontsmall.
      */
@@ -175,6 +177,7 @@ public class Theme {
         veryfocusedBG = Color.gray(0.25);
         extremelyfocusedBG = Color.gray(0.3);
         fg = Color.gray(0.6);
+        fgBright = Color.gray(0.65);
         labelfg = Color.gray(1);
         grass = Color.web("#014130");
         obstacle = Color.web("#e3b7b5");
@@ -202,6 +205,7 @@ public class Theme {
         veryfocusedBG = inverse(veryfocusedBG);
         extremelyfocusedBG = inverse(extremelyfocusedBG);
         fg = inverse(fg);
+        fgBright = inverse(fgBright);
         grass = inverse(grass);
         obstacle = inverse(obstacle);
         slope = inverse(slope);
