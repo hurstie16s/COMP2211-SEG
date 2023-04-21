@@ -13,14 +13,17 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -30,6 +33,8 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Objects;
 
 /**
  * RunwayScene class represents the runway scene of the airport
@@ -370,7 +375,7 @@ public class RunwayScene extends SceneAbstract {
     });
     root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-    scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+    scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.getMINRESA()*2+300)));
     scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));
     mainPane.getChildren().add(group);
 
@@ -394,7 +399,7 @@ public class RunwayScene extends SceneAbstract {
     mainPane.minHeightProperty().bind(root.heightProperty());
     root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-    scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+    scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.getMINRESA()*2+300)));
     scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));
     mainPane.getChildren().add(group);
 
@@ -688,6 +693,31 @@ public class RunwayScene extends SceneAbstract {
     cga.outerHeightProperty().bind(scaleFactorHeight.multiply(-105));
     cga.setTranslateZ(2);
     group.getChildren().add(cga);
+  }
+
+  public void makeAlignButton(){
+    Button button = new Button("Align");
+    Image image = new Image(Objects.requireNonNull(getClass().getResource("/images/compass.png")).toExternalForm());
+    ImageView imageView = new ImageView(image);
+    imageView.setFitWidth(50);
+    imageView.setFitHeight(50);
+    imageView.rotateProperty().bind(angleZProperty.subtract(Double.parseDouble(appWindow.runway.runwayDesignatorLeftProperty().getValue().substring(0,2))*10+90));
+    VBox gui = new VBox(button, imageView);
+
+    HBox box = new HBox(gui);
+    box.setAlignment(Pos.CENTER_LEFT);
+    appWindow.currentScene.topMenu.getChildren().add(box);
+
+
+    button.setOnMouseClicked(new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent mouseEvent) {
+
+        angleXProperty.set(0);
+        angleYProperty.set(0);
+        angleZProperty.set(Double.parseDouble(appWindow.runway.runwayDesignatorLeftProperty().getValue().substring(0,2))*10+90);
+      }
+    });
   }
 
     /**

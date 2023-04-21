@@ -2,10 +2,16 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
+import comp2211.seg.UiView.Scene.RunwayComponents.Sub;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.SceneAntialiasing;
+import javafx.scene.SubScene;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 /**
  * The type Runway scene loader.
@@ -15,6 +21,7 @@ public class RunwaySceneLoader extends SceneAbstract{
      * The Scene.
      */
     public RunwayScene scene;
+    public SubScene subScene;
 
     /**
      * Constructor to create a SceneAbstract object.
@@ -70,16 +77,26 @@ public class RunwaySceneLoader extends SceneAbstract{
                 scene.angleZProperty.set(scene.angley - scene.x + event.getSceneX());
             }
         });
-        setOnScroll(event -> scene.camera.translateZProperty().set(scene.camera.getTranslateZ()+event.getDeltaY()));
+        setOnScroll(event -> subScene.cameraProperty().get().translateZProperty().set(subScene.cameraProperty().get().getTranslateZ()+event.getDeltaY()));
 
 
     }
     public void build(){
         super.build();
-        scene = new RunwayScene(new Pane(),appWindow, width, height,false);
+        Pane runwayPane = new Pane();
+        Pane subPane = new Pane();
+
+        scene = new RunwayScene(runwayPane,appWindow, width, height,false);
         scene.buildmenuless();
         scene.initialise();
-        mainPane.getChildren().add(scene.getRoot());
+        subScene = new Sub(subPane,width,height,true, SceneAntialiasing.BALANCED);
+        subPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+        subPane.getChildren().add(runwayPane);
+        root.getChildren().removeAll(root.getChildren());
+        root.getChildren().add(subScene);
+        VBox layoutPane = new VBox(topMenu,mainPane);
+
+        root.getChildren().add(layoutPane);
         root.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {

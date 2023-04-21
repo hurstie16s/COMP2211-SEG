@@ -218,8 +218,10 @@ public class AppWindow {
      * Starts the runway scene.
      */
     public void startRunwayScene() {
-        loadScene(new RunwayScene(new Pane(),this,getWidth(),getHeight(),true));
-        //loadScene(new RunwaySceneLoader(new Pane(),this,getWidth(),getHeight()));
+        //loadScene(new RunwayScene(new Pane(),this,getWidth(),getHeight(),true));
+        //((RunwayScene) currentScene).makeAlignButton();
+        loadScene(new RunwaySceneLoader(new Pane(),this,getWidth(),getHeight()));
+        ((RunwaySceneLoader) currentScene).scene.makeAlignButton();
     }
 
     /**

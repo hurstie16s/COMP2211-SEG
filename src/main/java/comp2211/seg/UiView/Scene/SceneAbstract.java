@@ -49,6 +49,7 @@ public abstract class SceneAbstract extends Scene {
    * The main pane of the scene.
    */
   public StackPane mainPane;
+  public VBox topMenu;
 
   /**
    * The width of the scene.
@@ -168,8 +169,9 @@ public abstract class SceneAbstract extends Scene {
     MenuBar menuBar = new MenuBar();
     menuBar.getMenus().addAll(fileMenu, OptionsMenu, helpMenu);
 
-    VBox topMenu = new VBox(menuBar);
+    topMenu = new VBox(menuBar);
     topMenu.setAlignment(Pos.TOP_CENTER);
+    topMenu.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     VBox layoutPane = new VBox(topMenu,mainPane);
 
     root.getChildren().add(layoutPane);

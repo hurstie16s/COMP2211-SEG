@@ -1,7 +1,6 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
-import comp2211.seg.Controller.Interfaces.UKAirportsRunways;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Settings;
 import comp2211.seg.ProcessDataModel.Airport;
@@ -29,10 +28,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -176,13 +172,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //right menu
         // Create image views for the icons
         ImageView exportIcon1 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/exportT.png")).toExternalForm()));
+            .getResource("/images/export.png")).toExternalForm()));
         ImageView importIcon1 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/importT.png")).toExternalForm()));
+            .getResource("/images/import.png")).toExternalForm()));
         ImageView exportIcon2 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/exportT.png")).toExternalForm()));
+            .getResource("/images/export.png")).toExternalForm()));
         ImageView importIcon2 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/importT.png")).toExternalForm()));
+            .getResource("/images/import.png")).toExternalForm()));
 
         // Create the buttons and set their graphics
         Button exportAirObsButton = new Button("Export Airport & Obstacle", exportIcon1);
