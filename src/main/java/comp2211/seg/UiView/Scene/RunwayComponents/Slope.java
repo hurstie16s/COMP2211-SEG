@@ -134,22 +134,42 @@ public class Slope extends MeshView {
      * triangular prism MeshView object with the updated vertices and faces.
      */
     public void redraw(){
-        makePrism(new float[]{
-                start.get(), front.get(), bottom.get(),
-                end.get(), front.get(), bottom.get(),
-                start.get(), front.get(), top.get(),
-                start.get(), back.get(), bottom.get(),
-                end.get(), back.get(), bottom.get(),
-                start.get(), back.get(), top.get()
-        }, new int[]{
-                2, 0, 0, 0, 1, 0,
-                4, 0, 3, 0, 5, 0,
-                4, 0, 0, 0, 3, 0,
-                1, 0, 0, 0, 4, 0,
-                3, 0, 0, 0, 5, 0,
-                5, 0, 0, 0, 2, 0,
-                5, 0, 1, 0, 4, 0,
-                2, 0, 1, 0, 5, 0,
-        });
+        if (!direction.get()) {
+            makePrism(new float[]{
+                    start.get(), front.get(), bottom.get(),
+                    end.get(), front.get(), bottom.get(),
+                    start.get(), front.get(), top.get(),
+                    start.get(), back.get(), bottom.get(),
+                    end.get(), back.get(), bottom.get(),
+                    start.get(), back.get(), top.get()
+            }, new int[]{
+                    2, 0, 0, 0, 1, 0,
+                    4, 0, 3, 0, 5, 0,
+                    4, 0, 0, 0, 3, 0,
+                    1, 0, 0, 0, 4, 0,
+                    3, 0, 0, 0, 5, 0,
+                    5, 0, 0, 0, 2, 0,
+                    5, 0, 1, 0, 4, 0,
+                    2, 0, 1, 0, 5, 0,
+            });
+        }else {
+            makePrism(new float[]{
+                    start.get(), front.get(), bottom.get(),
+                    end.get(), front.get(), bottom.get(),
+                    start.get(), front.get(), top.get(),
+                    start.get(), back.get(), bottom.get(),
+                    end.get(), back.get(), bottom.get(),
+                    start.get(), back.get(), top.get()
+            }, new int[]{
+                    2, 0, 1, 0, 0, 0,
+                    4, 0, 5, 0, 3, 0,
+                    4, 0, 3, 0, 0, 0,
+                    1, 0, 4, 0, 0, 0,
+                    3, 0, 5, 0, 0, 0,
+                    5, 0, 2, 0, 0, 0,
+                    5, 0, 4, 0, 1, 0,
+                    2, 0, 5, 0, 1, 0,
+            });
+        }
     }
 }

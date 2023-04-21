@@ -343,8 +343,8 @@ public class RunwayScene extends SceneAbstract {
 //material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
     material.setDiffuseColor(Theme.grass);
     background.setMaterial(material);
-    background.widthProperty().bind((DoubleBinding) Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()));
-    background.heightProperty().bind((DoubleBinding) Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()));
+    background.widthProperty().bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()));
+    background.heightProperty().bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()));
     background.translateXProperty().bind(appWindow.runway.clearwayLeftProperty().add(appWindow.runway.clearwayRightProperty()).add(appWindow.runway.runwayLengthProperty()).divide(2)
             .subtract(appWindow.runway.clearwayLeftProperty().add(appWindow.runway.runwayLengthProperty().divide(2))).multiply(scaleFactor));
     background.setTranslateZ(2.1);

@@ -8,6 +8,7 @@ import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Obstacle;
 import comp2211.seg.ProcessDataModel.Runway;
+import comp2211.seg.UiView.Scene.SceneComponents.*;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -17,17 +18,21 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
@@ -78,13 +83,62 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                     Platform.runLater(appWindow::startHomeScene);
             }
         }));
+        setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                try {
+                    if (mouseEvent.getPickResult().getIntersectedNode().getParent() instanceof TabButton){
+                        TabLayout.oldTabButton = (TabButton) mouseEvent.getPickResult().getIntersectedNode().getParent();
+                    } else {
+                        TabLayout.oldTabButton = null;
+                    }
+                } catch (Exception e) {
+                    TabLayout.oldTabButton = null;
+                }
+            }
+        });
+        setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (TabLayout.oldTabButton != null) {
+                    try {
+                        Parent p = mouseEvent.getPickResult().getIntersectedNode().getParent();
+                        while ((p.getParent() != null) && !((p instanceof TabLayout) || (p instanceof TabButton))) {
+                            p = p.getParent();
+                        }
+                        if (p instanceof TabLayout) {
+                            Parent gp = p.getParent();
+                            while (gp != null) {
+                                if (gp.equals(TabLayout.oldTabButton.tab.getValue())) {
+                                    throw new RuntimeException("Attempted to make tab its own child");
+                                }
+                                gp = gp.getParent();
+                            }
+                            if (TabLayout.oldTabButton != null) {
+                                ((TabLayout) p).makeTab(TabLayout.oldTabButton.tab);
+                                TabLayout.oldTabButton.tabLayout.removeTab(TabLayout.oldTabButton);
+                                TabLayout.oldTabButton = null;
+                            }
+                        } else if (p instanceof TabButton) {
+                            if (TabLayout.oldTabButton.equals(p)) {
+                                ((TabButton) p).run();
+                            }
+                        } else {
+                            throw new RuntimeException("Failed Successfully");
+                        }
+                    } catch (Exception e) {
+                        TabLayout.oldTabButton = null;
+                    }
+                }
+            }
+        });
     }
 
     /**
      * Select obstacle menu.
      */
     public void selectObstacleMenu(int n){
-        tabLayout.tabButtons.get(n).fire();
+        tabLayout.tabButtons.get(n).run();
     }
 
     public void build()  {
@@ -98,8 +152,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
         tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
-        mainPane.maxHeightProperty().bind(root.heightProperty());
-        mainPane.minHeightProperty().bind(root.heightProperty());
+        mainPane.maxHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
+        mainPane.minHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
         mainPane.maxWidthProperty().bind(root.widthProperty());
         mainPane.minWidthProperty().bind(root.widthProperty());
         mainPane.getChildren().add(tabLayout);
@@ -607,10 +661,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
      * @return the pane
      */
     public Pane makeObstacleConfig(){
-        HBox obstacleLayout = new HBox();
-        VBox leftPane = new VBox();
+        TabsPaneHorizontal obstacleLayout = new TabsPaneHorizontal();
+        TabsPaneVertical leftPane = new TabsPaneVertical();
         makeObstaclePane(leftPane);
-        VBox rightPane = new VBox(makeRunwayTabs());
+        TabsPaneVertical rightPane = new TabsPaneVertical();
+        rightPane.getChildren().add(makeRunwayTabs());
 
         leftPane.maxWidthProperty().bind(obstacleLayout.widthProperty().subtract(10).divide(2));
         leftPane.minWidthProperty().bind(obstacleLayout.widthProperty().subtract(10).divide(2));
@@ -618,10 +673,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         rightPane.minWidthProperty().bind(obstacleLayout.widthProperty().subtract(10).divide(2));
         leftPane.maxHeightProperty().bind(obstacleLayout.heightProperty().subtract(10));
         leftPane.minHeightProperty().bind(obstacleLayout.heightProperty().subtract(10));
-        rightPane.maxHeightProperty().bind(obstacleLayout.heightProperty().subtract(10));
-        rightPane.minHeightProperty().bind(obstacleLayout.heightProperty().subtract(10));
+        rightPane.maxHeightProperty().bind(obstacleLayout.heightProperty());
+        rightPane.minHeightProperty().bind(obstacleLayout.heightProperty());
 
-        obstacleLayout.getChildren().addAll(leftPane,rightPane);
+        obstacleLayout.getChildren().add(leftPane);
+        new Divider(obstacleLayout);
+        obstacleLayout.getChildren().add(rightPane);
+
         return obstacleLayout;
     }
 
@@ -644,23 +702,51 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         Pane breakDownPane = new Pane(makeBreakDownPane());
         breakDownPane.maxWidthProperty().bind(obstaclePane.widthProperty());
         breakDownPane.minWidthProperty().bind(obstaclePane.widthProperty());
+
+        obstacleOptionsPane.maxHeightProperty().set(obstaclePane.getHeight() * .4);
+        obstacleOptionsPane.minHeightProperty().set(obstaclePane.getHeight() * .4);
+
+        declaredDistancesPane.maxHeightProperty().set(obstaclePane.getHeight() * .3);
+        declaredDistancesPane.minHeightProperty().set(obstaclePane.getHeight() * .3);
+
+        breakDownPane.maxHeightProperty().set(obstaclePane.getHeight() * .3);
+        breakDownPane.minHeightProperty().set(obstaclePane.getHeight() * .3);
         obstaclePane.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                double height = obstaclePane.heightProperty().get() / 10;
+                if (number.doubleValue() == 0) {
+                    obstacleOptionsPane.maxHeightProperty().set(t1.doubleValue() * .4);
+                    obstacleOptionsPane.minHeightProperty().set(t1.doubleValue() * .4);
 
-                obstacleOptionsPane.maxHeightProperty().set(height * 4);
-                obstacleOptionsPane.minHeightProperty().set(height * 4);
+                    declaredDistancesPane.maxHeightProperty().set(t1.doubleValue() * .3);
+                    declaredDistancesPane.minHeightProperty().set(t1.doubleValue() * .3);
 
-                declaredDistancesPane.maxHeightProperty().set(height * 3);
-                declaredDistancesPane.minHeightProperty().set(height * 3);
+                    breakDownPane.maxHeightProperty().set(t1.doubleValue() * .3);
+                    breakDownPane.minHeightProperty().set(t1.doubleValue() * .3);
+                } else {
 
-                breakDownPane.maxHeightProperty().set(height * 3);
-                breakDownPane.minHeightProperty().set(height * 3);
+                    double difference = t1.doubleValue() / (obstacleOptionsPane.heightProperty().doubleValue() +
+                            declaredDistancesPane.heightProperty().doubleValue() +
+                            breakDownPane.heightProperty().doubleValue());
+
+
+                    obstacleOptionsPane.maxHeightProperty().set(obstacleOptionsPane.heightProperty().get() * difference);
+                    obstacleOptionsPane.minHeightProperty().set(obstacleOptionsPane.heightProperty().get() * difference);
+
+                    declaredDistancesPane.maxHeightProperty().set(declaredDistancesPane.heightProperty().get() * difference);
+                    declaredDistancesPane.minHeightProperty().set(declaredDistancesPane.heightProperty().get() * difference);
+
+                    breakDownPane.maxHeightProperty().set(breakDownPane.heightProperty().get() * difference);
+                    breakDownPane.minHeightProperty().set(breakDownPane.heightProperty().get() * difference);
+                }
+
             }
         });
-
-        obstaclePane.getChildren().addAll(obstacleOptionsPane, declaredDistancesPane, breakDownPane);
+        obstaclePane.getChildren().add(obstacleOptionsPane);
+        new Divider(obstaclePane);
+        obstaclePane.getChildren().add(declaredDistancesPane);
+        new Divider(obstaclePane);
+        obstaclePane.getChildren().add(breakDownPane);
     }
     private Pane makeObstacleOptionsPane() {
         // Obstacle preset ComboBox
@@ -1084,6 +1170,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         sideView.setOnMousePressed((e) -> appWindow.startRunwaySceneRotated());
 
 
+        refreshables.add(runwayScene1);
+        refreshables.add(runwayScene2);
+        refreshables.add(runwayScene3);
+        refreshables.add(runwayScene4);
 
         viewTabs.add(new Pair<>("Both Views", dualView));
         viewTabs.add(new Pair<>("Side-On Views", sideView));
@@ -1220,5 +1310,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         segment.setPadding(new Insets(0,0,0,10));
         return segment;
     }
+
 
 }

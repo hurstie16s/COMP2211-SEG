@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -65,6 +66,8 @@ public abstract class SceneAbstract extends Scene {
    */
   protected HelpScene help;
 
+  protected ArrayList<SceneAbstract> refreshables = new ArrayList<>();
+
   /**
    * Constructor to create a SceneAbstract object.
    *
@@ -102,6 +105,12 @@ public abstract class SceneAbstract extends Scene {
    * Abstract method for initialization.
    */
   public abstract void initialise();
+
+  public void refresh(){
+    for (SceneAbstract scene: refreshables) {
+      scene.refresh();
+    }
+  }
 
   /**
    * Generic build method to create the basic requirements for a JavaFX Scene

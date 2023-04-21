@@ -30,7 +30,7 @@ public class AppWindow {
     /**
      * The Current scene.
      */
-    public SceneAbstract currentScene;
+    public static SceneAbstract currentScene;
     private final ArrayList<Airport> airports;
     private Scene scene;
 
