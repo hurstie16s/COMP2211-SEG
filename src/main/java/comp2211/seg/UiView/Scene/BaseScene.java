@@ -176,13 +176,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //right menu
         // Create image views for the icons
         ImageView exportIcon1 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/export.png")).toExternalForm()));
+            .getResource("/images/exportT.png")).toExternalForm()));
         ImageView importIcon1 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/import.png")).toExternalForm()));
+            .getResource("/images/importT.png")).toExternalForm()));
         ImageView exportIcon2 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/export.png")).toExternalForm()));
+            .getResource("/images/exportT.png")).toExternalForm()));
         ImageView importIcon2 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/import.png")).toExternalForm()));
+            .getResource("/images/importT.png")).toExternalForm()));
 
         // Create the buttons and set their graphics
         Button exportAirObsButton = new Button("Export Airport & Obstacle", exportIcon1);

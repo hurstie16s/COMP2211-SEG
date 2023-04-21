@@ -149,12 +149,21 @@ public abstract class SceneAbstract extends Scene {
 
     //Aleks exporting image:
     Menu menu11 = new Menu("Export to Image");
-    MenuItem menu12 = new MenuItem("Export Top-down View...");
-    MenuItem menu13 = new MenuItem("Export Side-on View...");
+    Menu menu12 = new Menu("Export Top-down View...");
+    Menu menu13 = new Menu("Export Side-on View...");
+    //Alex formats:
+    MenuItem menu12png = new MenuItem("png");
+    MenuItem menu12jpg = new MenuItem("jpg");
+    MenuItem menu12gif = new MenuItem("gif");
+    MenuItem menu13png = new MenuItem("png");
+    MenuItem menu13jpg = new MenuItem("jpg");
+    MenuItem menu13gif = new MenuItem("gif");
 
     fileMenu.getItems().addAll(menu4, menu5, menu11); //Alex add menu11 to File menu
     menu4.getItems().addAll(menu9, menu10);
     menu5.getItems().addAll(menu6, menu7);
+    menu12.getItems().addAll(menu12png, menu12jpg, menu12gif);
+    menu13.getItems().addAll(menu13png, menu13jpg, menu13gif);
     menu11.getItems().addAll(menu12, menu13);
 
     MenuBar menuBar = new MenuBar();
@@ -178,8 +187,12 @@ public abstract class SceneAbstract extends Scene {
 
     menu10.setOnAction(e -> importObstacleButtonEvent());
 
-    menu12.setOnAction(e -> exportTopDownViewButtonEvent());
-    menu13.setOnAction(e -> exportSideViewButtonEvent());
+    menu12png.setOnAction(e -> exportTopDownViewButtonEvent("png"));
+    menu12jpg.setOnAction(e -> exportTopDownViewButtonEvent("jpg"));
+    menu12gif.setOnAction(e -> exportTopDownViewButtonEvent("gif"));
+    menu13png.setOnAction(e -> exportSideViewButtonEvent("png"));
+    menu13jpg.setOnAction(e -> exportSideViewButtonEvent("jpg"));
+    menu13gif.setOnAction(e -> exportTopDownViewButtonEvent("gif"));
   }
 
   /**
@@ -353,7 +366,7 @@ public abstract class SceneAbstract extends Scene {
   /**
    * Export Top-down View button event
    */
-  protected void exportTopDownViewButtonEvent() {
+  protected void exportTopDownViewButtonEvent(String format) {
 
     double outputWidth = 1920;
     double outputHeight = 1080;
@@ -375,13 +388,13 @@ public abstract class SceneAbstract extends Scene {
     WritableImage image = runwayScene.scene.root.snapshot(null,null);
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Export top-down view");
-    FileChooser.ExtensionFilter extFilterPng = new FileChooser.ExtensionFilter("PNG format(*.png)","*.png");
-    fileChooser.getExtensionFilters().add(extFilterPng);
+    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase() + " format(*." + format + ")","*." + format);
+    fileChooser.getExtensionFilters().add(extFilter);
     fileChooser.setInitialFileName("Top_down_View");
     File file = fileChooser.showSaveDialog(new Stage());
 
     try {
-      ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+      ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
       logger.info("image exported");
     } catch (IOException e) {
       logger.error(e);
@@ -391,7 +404,7 @@ public abstract class SceneAbstract extends Scene {
   /**
    * Export Top-down View button event
    */
-  protected void exportSideViewButtonEvent() {
+  protected void exportSideViewButtonEvent(String format) {
 
     double outputWidth = 1920;
     double outputHeight = 1080;
@@ -414,13 +427,13 @@ public abstract class SceneAbstract extends Scene {
     WritableImage image = runwayScene.scene.root.snapshot(null,null);
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Export side view");
-    FileChooser.ExtensionFilter extFilterPng = new FileChooser.ExtensionFilter("PNG format(*.png)","*.png");
-    fileChooser.getExtensionFilters().add(extFilterPng);
+    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase() + " format(*." + format + ")","*." + format);
+    fileChooser.getExtensionFilters().add(extFilter);
     fileChooser.setInitialFileName("Side_View");
     File file = fileChooser.showSaveDialog(new Stage());
 
     try {
-      ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+      ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
       logger.info("image exported");
     } catch (IOException e) {
       logger.error(e);
