@@ -172,13 +172,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //right menu
         // Create image views for the icons
         ImageView exportIcon1 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/export.png")).toExternalForm()));
+            .getResource("/images/exportT.png")).toExternalForm()));
         ImageView importIcon1 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/import.png")).toExternalForm()));
+            .getResource("/images/importT.png")).toExternalForm()));
         ImageView exportIcon2 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/export.png")).toExternalForm()));
+            .getResource("/images/exportT.png")).toExternalForm()));
         ImageView importIcon2 = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/import.png")).toExternalForm()));
+            .getResource("/images/importT.png")).toExternalForm()));
 
         // Create the buttons and set their graphics
         Button exportAirObsButton = new Button("Export Airport & Obstacle", exportIcon1);
@@ -631,59 +631,37 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
      * @param obstaclePane the obstacle pane
      */
     public void makeObstaclePane(VBox obstaclePane){
-        HBox topHalf = new HBox();
-        topHalf.maxWidthProperty().bind(obstaclePane.widthProperty());
-        topHalf.minWidthProperty().bind(obstaclePane.widthProperty());
-        topHalf.maxHeightProperty().bind(obstaclePane.heightProperty().divide(2));
-        topHalf.minHeightProperty().bind(obstaclePane.heightProperty().divide(2));
 
         Pane obstacleOptionsPane = new Pane(makeObstacleOptionsPane());
-        obstacleOptionsPane.maxWidthProperty().bind(topHalf.widthProperty().divide(1.5));
-        obstacleOptionsPane.minWidthProperty().bind(topHalf.widthProperty().divide(1.5));
-        obstacleOptionsPane.maxHeightProperty().bind(topHalf.heightProperty());
-        obstacleOptionsPane.minHeightProperty().bind(topHalf.heightProperty());
+        obstacleOptionsPane.maxWidthProperty().bind(obstaclePane.widthProperty());
+        obstacleOptionsPane.minWidthProperty().bind(obstaclePane.widthProperty());
 
-        Pane changeHistoryPane = new Pane(makeChangeHistoryPane());
-        changeHistoryPane.maxWidthProperty().bind(topHalf.widthProperty().divide(3));
-        changeHistoryPane.minWidthProperty().bind(topHalf.widthProperty().divide(3));
-        changeHistoryPane.maxHeightProperty().bind(topHalf.heightProperty());
-        changeHistoryPane.minHeightProperty().bind(topHalf.heightProperty());
-
-        topHalf.getChildren().addAll(obstacleOptionsPane, changeHistoryPane);
-
-        VBox bottomHalf = new VBox();
-        bottomHalf.maxWidthProperty().bind(obstaclePane.widthProperty());
-        bottomHalf.minWidthProperty().bind(obstaclePane.widthProperty());
-        bottomHalf.maxHeightProperty().bind(obstaclePane.heightProperty().divide(2));
-        bottomHalf.minHeightProperty().bind(obstaclePane.heightProperty().divide(2));
 
         Pane declaredDistancesPane = new Pane(makeDistancesPane());
-        declaredDistancesPane.maxWidthProperty().bind(bottomHalf.widthProperty());
-        declaredDistancesPane.minWidthProperty().bind(bottomHalf.widthProperty());
-        declaredDistancesPane.maxHeightProperty().bind(bottomHalf.heightProperty().divide(2));
-        declaredDistancesPane.minHeightProperty().bind(bottomHalf.heightProperty().divide(2));
+        declaredDistancesPane.maxWidthProperty().bind(obstaclePane.widthProperty());
+        declaredDistancesPane.minWidthProperty().bind(obstaclePane.widthProperty());
 
         Pane breakDownPane = new Pane(makeBreakDownPane());
-        breakDownPane.maxWidthProperty().bind(bottomHalf.widthProperty());
-        breakDownPane.minWidthProperty().bind(bottomHalf.widthProperty());
-        breakDownPane.maxHeightProperty().bind(bottomHalf.heightProperty().divide(2));
-        breakDownPane.minHeightProperty().bind(bottomHalf.heightProperty().divide(2));
+        breakDownPane.maxWidthProperty().bind(obstaclePane.widthProperty());
+        breakDownPane.minWidthProperty().bind(obstaclePane.widthProperty());
+        obstaclePane.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                double height = obstaclePane.heightProperty().get() / 10;
 
-        bottomHalf.getChildren().addAll(declaredDistancesPane, breakDownPane);
+                obstacleOptionsPane.maxHeightProperty().set(height * 4);
+                obstacleOptionsPane.minHeightProperty().set(height * 4);
 
-        obstaclePane.getChildren().addAll(topHalf,bottomHalf);
+                declaredDistancesPane.maxHeightProperty().set(height * 3);
+                declaredDistancesPane.minHeightProperty().set(height * 3);
+
+                breakDownPane.maxHeightProperty().set(height * 3);
+                breakDownPane.minHeightProperty().set(height * 3);
+            }
+        });
+
+        obstaclePane.getChildren().addAll(obstacleOptionsPane, declaredDistancesPane, breakDownPane);
     }
-
-    private Pane makeChangeHistoryPane() {
-        ArrayList<Pair<String, Pane>> changeHistory = new ArrayList<>();
-        ScrollPane history = new ScrollPane(appWindow.runway.changesHistory);
-        history.setFitToWidth(true);
-        history.setPadding(new Insets(16));
-        changeHistory.add(new Pair<>("Change History", new BorderPane(history)));
-        Pane changeHistoryPane = new TabLayout(changeHistory,Theme.focusedBG,Theme.veryfocusedBG);
-        return changeHistoryPane;
-    }
-
     private Pane makeObstacleOptionsPane() {
         // Obstacle preset ComboBox
         ComboBox obstacleComboBox = new ComboBox(FXCollections.observableArrayList(appWindow.obstaclePresets));
@@ -700,31 +678,44 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         GridPane obstacleData = new GridPane();
 
         ColumnConstraints cc1 = new ColumnConstraints();
-        cc1.setPercentWidth(60);
+        cc1.setPercentWidth(17);
+
         ColumnConstraints cc2 = new ColumnConstraints();
-        cc2.setPercentWidth(40);
-        obstacleData.getColumnConstraints().addAll(cc1,cc2);
+        cc2.setPercentWidth(20);
+        ColumnConstraints cc3 = new ColumnConstraints();
+        cc3.setPercentWidth(33);
+        ColumnConstraints cc4 = new ColumnConstraints();
+        cc4.setPercentWidth(30);
+        obstacleData.getColumnConstraints().addAll(cc1,cc2,cc3,cc4);
+        obstacleData.setAlignment(Pos.CENTER_LEFT);
+        obstacleData.setHgap(10);
 
         ArrayList<RowConstraints> rc = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
 
             RowConstraints rcx = new RowConstraints();
-            rcx.setPercentHeight(100/7);
+            rcx.setPercentHeight(20);
             rc.add(rcx);
         }
-        RowConstraints rcx = new RowConstraints();
-        rcx.setPercentHeight(200/7);
-        rc.add(rcx);
         obstacleData.getRowConstraints().addAll(rc);
 
-        obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height (m)"),makeLabel("Width (m)"),makeLabel("Length (m)"),makeLabel("Currently Active?"),makeLabel("Position"));
+        Label pos = makeLabel("Position");
+        GridPane.setRowSpan(pos,2);
+
+        obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height (m)"),makeLabel("Length (m)"),makeLabel("Width (m)"),makeLabel("Active?"));
+
+        obstacleData.add(pos, 2,0);
+        obstacleData.add(makeLabel("Top Landing/Take off"), 2,2);
+        obstacleData.add(makeLabel("Bottom Landing/Take off"), 2,3);
+        obstacleData.add(makeButton(appWindow.runway.directionLeftProperty(),"Towards","Away"),3,2);
+        obstacleData.add(makeButton(appWindow.runway.directionRightProperty(),"Towards","Away"),3,3);
 
         // Obstacle preset dropdown selector
         obstacleData.add(obstacleComboBox,1,0);
 
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().heightProperty()),1,1);
-        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().widthProperty()),1,2);
-        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().lengthProperty()),1,3);
+        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().lengthProperty()),1,2);
+        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().widthProperty()),1,3);
         obstacleData.add(makeButton(appWindow.runway.hasRunwayObstacleProperty(),"No","Yes"),1,4);
         Slider posSlider = new Slider();
         posSlider.minProperty().bind(appWindow.runway.runwayObstacle.lengthProperty().divide(-2));
@@ -737,12 +728,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         BorderPane posvals = new BorderPane();
         posvals.setLeft(posLeft);
         posvals.setRight(posRight);
-        VBox position = new VBox(posSlider,posvals);
-        position.setAlignment(Pos.CENTER);
-        posvals.maxWidthProperty().bind(position.widthProperty().subtract(10));
-        posvals.minWidthProperty().bind(position.widthProperty().subtract(10));
         posvals.setPadding(new Insets(5));
-        obstacleData.add(position,1,5);
+        obstacleData.add(posSlider,3,0);
+        obstacleData.add(posvals,3,1);
         obstacleData.getChildren().forEach(new Consumer<Node>() {
             @Override
             public void accept(Node node) {
@@ -750,8 +738,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             }
         });
 
+        ScrollPane history = new ScrollPane(appWindow.runway.changesHistory);
+        history.setFitToWidth(true);
+        history.setPadding(new Insets(16));
 
         obstacleOptions.add(new Pair<>("Obstacle", obstacleData));
+        obstacleOptions.add(new Pair<>("Change History", new BorderPane(history)));
         Pane obstacleOptionsPane = new TabLayout(obstacleOptions,Theme.focusedBG,Theme.veryfocusedBG);
         return obstacleOptionsPane;
     }

@@ -63,8 +63,8 @@ public class TabLayout extends VBox {
         topbar.setPadding(new Insets(5,0,0,0));
 
 
-        contents.maxHeightProperty().bind(height.subtract(topbar.heightProperty()).subtract(10));
-        contents.minHeightProperty().bind(height.subtract(topbar.heightProperty()).subtract(10));
+        contents.maxHeightProperty().bind(height.subtract(topbar.heightProperty()).subtract(20));
+        contents.minHeightProperty().bind(height.subtract(topbar.heightProperty()).subtract(20));
         contents.setBackground(new Background(new BackgroundFill(fg,null,null)));
         contents.maxWidthProperty().bind(width.subtract(10));
         contents.minWidthProperty().bind(width.subtract(10));

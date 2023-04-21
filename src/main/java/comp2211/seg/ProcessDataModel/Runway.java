@@ -83,7 +83,8 @@ public class Runway {
 
     private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
 
-    private final SimpleBooleanProperty direction = new SimpleBooleanProperty(true);
+    private final SimpleBooleanProperty directionLeft = new SimpleBooleanProperty(true);
+    private final SimpleBooleanProperty directionRight = new SimpleBooleanProperty(true);
     private final SimpleBooleanProperty leftTakeOff = new SimpleBooleanProperty(false);
     private final SimpleBooleanProperty leftLand = new SimpleBooleanProperty(false);
     private final SimpleBooleanProperty rightTakeOff = new SimpleBooleanProperty(false);
@@ -166,7 +167,8 @@ public class Runway {
                 runwayDesignatorLeft,
                 runwayLength,
                 hasRunwayObstacle,
-                direction,
+                directionLeft,
+                directionRight
         }) {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
@@ -182,7 +184,7 @@ public class Runway {
         clearwayRight.bind(inputLeftToda.subtract(inputLeftTora));
         stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
-        direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
+        //direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
         slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2)).greaterThan(runwayObstacle.lengthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2))).otherwise(runwayObstacle.lengthProperty().divide(2).add(240)));
         //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
         runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
@@ -204,7 +206,8 @@ public class Runway {
                 runwayDesignatorLeft,
                 runwayLength,
                 hasRunwayObstacle,
-                direction,
+                directionLeft,
+                directionRight
         }) {
             prop.addListener((observableValue, o, t1) -> recalculate());
         }
@@ -220,7 +223,7 @@ public class Runway {
         clearwayRight.bind(inputLeftToda.subtract(inputLeftTora));
         stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
-        direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
+        //direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
         slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2)).greaterThan(runwayObstacle.lengthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2))).otherwise(runwayObstacle.lengthProperty().divide(2).add(240)));
         //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
         runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
@@ -310,16 +313,19 @@ public class Runway {
 
         if (hasRunwayObstacle.get()) {
             logger.info("Runway has obstacle: calculation methods will be called");
-            if (direction.get()) {
+            if (directionLeft.get()) {
                 logger.info("Calculate take-off towards for left");
-                logger.info("Calculate land towards for right");
                 calculateTakeOffToward();
-                calculateLandTowards();
             } else {
                 logger.info("Calculate take-off away for left");
+                calculateTakeOffAway();
+            }
+            if (directionRight.get()) {
+                logger.info("Calculate land towards for right");
+                calculateLandTowards();
+            } else {
                 logger.info("Calculate land over for right");
                 calculateLandOver();
-                calculateTakeOffAway();
             }
         } else {
             logger.info("Runway has no obstacle: runway returned to original state");
@@ -1386,8 +1392,11 @@ public class Runway {
      *
      * @return The value of direction.
      */
-    public boolean isDirection() {
-        return direction.get();
+    public boolean isDirectionLeft() {
+        return directionLeft.get();
+    }
+    public boolean isDirectionRight() {
+        return directionRight.get();
     }
 
     /**
@@ -1395,8 +1404,11 @@ public class Runway {
      *
      * @return The SimpleBooleanProperty object representing direction.
      */
-    public SimpleBooleanProperty directionProperty() {
-        return direction;
+    public SimpleBooleanProperty directionLeftProperty() {
+        return directionLeft;
+    }
+    public SimpleBooleanProperty directionRightProperty() {
+        return directionRight;
     }
 
     /**
@@ -2677,15 +2689,6 @@ public class Runway {
      */
     public void setLandingMode(boolean landingMode) {
         this.landingMode.set(landingMode);
-    }
-
-    /**
-     * Sets direction.
-     *
-     * @param direction the direction
-     */
-    public void setDirection(boolean direction) {
-        this.direction.set(direction);
     }
 
     /**
