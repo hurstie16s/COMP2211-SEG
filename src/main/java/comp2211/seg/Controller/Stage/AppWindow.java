@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * The AppWindow class is responsible for managing the application's window and scenes.
@@ -251,7 +252,8 @@ public class AppWindow {
         currentScene = newScene;
         // Apply the stylesheet to the scene
         currentScene.getStylesheets().clear();
-        currentScene.getStylesheets().add("/style/darkStyle.css");
+        currentScene.getStylesheets().add(Objects.requireNonNull(getClass()
+                .getResource("/style/darkStyle.css")).toExternalForm());
         //currentScene.getStylesheets().add("/style/lightStyle.css");
         stage.setScene(currentScene);
         //Theme.retheme(currentScene);
