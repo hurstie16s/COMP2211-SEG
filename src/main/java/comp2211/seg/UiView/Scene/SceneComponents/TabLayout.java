@@ -30,8 +30,8 @@ import java.util.Map;
  */
 public class TabLayout extends VBox {
     public static TabButton oldTabButton;
-    public final Color bg;
-    public final Color fg;
+    public final String bg;
+    public final String fg;
     private SimpleDoubleProperty width;
     private SimpleDoubleProperty height;
     /**
@@ -50,7 +50,7 @@ public class TabLayout extends VBox {
      * @param bg   the bg
      * @param fg   the fg
      */
-    public TabLayout(ArrayList<Pair<String, Pane>> tabs, Color bg, Color fg){
+    public TabLayout(ArrayList<Pair<String, Pane>> tabs, String bg, String fg){
         this.bg = bg;
         this.fg = fg;
         parentProperty().addListener(new ChangeListener<Parent>() {
@@ -71,7 +71,7 @@ public class TabLayout extends VBox {
         contents.minHeightProperty().bind(height.subtract(topbar.heightProperty()));
         contents.maxWidthProperty().bind(width);
         contents.minWidthProperty().bind(width);
-        contents.setBackground(new Background(new BackgroundFill(fg,null,null)));
+        contents.getStyleClass().add(fg);
         topbar.maxWidthProperty().bind(width);
         topbar.minWidthProperty().bind(width);
 

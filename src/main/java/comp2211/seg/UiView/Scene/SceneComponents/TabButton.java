@@ -23,9 +23,9 @@ public class TabButton extends Label {
     }
     public void run(){
         for (TabButton tb:tabLayout.tabButtons) {
-            tb.setBackground(new Background(new BackgroundFill(tabLayout.bg,null,null)));
+            getStyleClass().add(tabLayout.bg);
         }
-        setBackground(new Background(new BackgroundFill(tabLayout.fg,null,null)));
+        getStyleClass().add(tabLayout.fg);
         tabLayout.contents.getChildren().removeAll(tabLayout.contents.getChildren());
         tabLayout.contents.getChildren().add(tab.getValue());
         tabLayout.currentContent = tab.getValue();
