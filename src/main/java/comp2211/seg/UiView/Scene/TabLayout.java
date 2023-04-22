@@ -25,8 +25,8 @@ import java.util.Map;
  * The type Tab layout.
  */
 public class TabLayout extends VBox {
-    private final Color bg;
-    private final Color fg;
+    private final String bg;
+    private final String fg;
     private SimpleDoubleProperty width;
     private SimpleDoubleProperty height;
     /**
@@ -44,7 +44,8 @@ public class TabLayout extends VBox {
      * @param bg   the bg
      * @param fg   the fg
      */
-    public TabLayout(ArrayList<Pair<String, Pane>> tabs, Color bg, Color fg){
+    //public TabLayout(ArrayList<Pair<String, Pane>> tabs, Color bg, Color fg){
+    public TabLayout(ArrayList<Pair<String, Pane>> tabs, String bg, String fg){
         this.bg = bg;
         this.fg = fg;
         parentProperty().addListener(new ChangeListener<Parent>() {
@@ -65,7 +66,8 @@ public class TabLayout extends VBox {
 
         contents.maxHeightProperty().bind(height.subtract(topbar.heightProperty()).subtract(20));
         contents.minHeightProperty().bind(height.subtract(topbar.heightProperty()).subtract(20));
-        contents.setBackground(new Background(new BackgroundFill(fg,null,null)));
+        //contents.setBackground(new Background(new BackgroundFill(fg,null,null)));
+        contents.getStyleClass().add(fg);
         contents.maxWidthProperty().bind(width.subtract(10));
         contents.minWidthProperty().bind(width.subtract(10));
         topbar.maxWidthProperty().bind(width);
@@ -91,14 +93,17 @@ public class TabLayout extends VBox {
         tab.getValue().minHeightProperty().bind(contents.heightProperty());
         tab.getValue().maxWidthProperty().bind(contents.widthProperty());
         tab.getValue().minWidthProperty().bind(contents.widthProperty());
-        tabButton.setTextFill(Theme.fg);
+        //tabButton.setTextFill(Theme.fg);
+        tabButton.getStyleClass().add(fg);
         tabButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 for (Button tb:tabButtons) {
-                    tb.setBackground(new Background(new BackgroundFill(bg,null,null)));
+                    //tb.setBackground(new Background(new BackgroundFill(bg,null,null)));
+                    tb.getStyleClass().add(bg);
                 }
-                tabButton.setBackground(new Background(new BackgroundFill(fg,null,null)));
+                //tabButton.setBackground(new Background(new BackgroundFill(fg,null,null)));
+                tabButton.getStyleClass().add(fg);
                 contents.getChildren().removeAll(contents.getChildren());
                 contents.getChildren().add(tab.getValue());
             }

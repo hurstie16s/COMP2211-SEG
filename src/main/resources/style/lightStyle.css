@@ -7,14 +7,26 @@
 .unfocusedBG {
     -fx-background-color: #e6e6e6;
 }
+.unfocusedT {
+    -fx-text-fill: #e6e6e6;
+}
 .focusedBG {
     -fx-background-color: #cccccc;
+}
+.focusedT {
+    -fx-text-fill: #cccccc;
 }
 .veryfocusedBG {
     -fx-background-color: #bfbfbf;
 }
+.veryfocusedT {
+    -fx-text-fill: #bfbfbf;
+}
 .extremelyfocusedBG {
     -fx-background-color: #b3b3b3;
+}
+.extremelyfocusedT {
+    -fx-text-fill: #b3b3b3;
 }
 .fg {
     -fx-text-fill: #666666;

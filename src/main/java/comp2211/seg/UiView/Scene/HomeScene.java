@@ -120,13 +120,15 @@ public class HomeScene extends SceneAbstract{
 
 
     airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
-    airports.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    //airports.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    airports.getStyleClass().add("focusedBG");
     airports.valueProperty().addListener((observableValue, o, t1) -> appWindow.setAirport((Airport) t1));
     airports.valueProperty().set(appWindow.airport);
 
 
     runways = new ComboBox(FXCollections.observableArrayList(appWindow.airport.getRunways()));
-    runways.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    //runways.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    runways.getStyleClass().add("focusedBG");
     runways.valueProperty().addListener(new ChangeListener() {
       @Override
       public void changed(ObservableValue observableValue, Object o, Object t1) {
@@ -147,11 +149,14 @@ public class HomeScene extends SceneAbstract{
     Button importAirport = new Button("Import Airport");
     Button newAirport = new Button("New Airport");
     startApplication.setTextFill(Theme.fg);
-    startApplication.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    //startApplication.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    startApplication.getStyleClass().add("focusedBG");
     importAirport.setTextFill(Theme.fg);
-    importAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    //importAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    importAirport.getStyleClass().add("focusedBG");
     newAirport.setTextFill(Theme.fg);
-    newAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    //newAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    newAirport.getStyleClass().add("focusedBG");
 
     //importAirport.setDisable(true);
     // Import Airport

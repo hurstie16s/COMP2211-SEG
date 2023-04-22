@@ -251,7 +251,8 @@ public class AppWindow {
         currentScene = newScene;
         // Apply the stylesheet to the scene
         currentScene.getStylesheets().clear();
-        currentScene.getStylesheets().add("/style/lightStyle.css");
+        currentScene.getStylesheets().add("/style/darkStyle.css");
+        //currentScene.getStylesheets().add("/style/lightStyle.css");
         stage.setScene(currentScene);
         //Theme.retheme(currentScene);
 
