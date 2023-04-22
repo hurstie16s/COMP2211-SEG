@@ -356,7 +356,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         for (Button button : darkButtons) {
             //button.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
             button.getStyleClass().add("focusedBG");
-            button.setTextFill(Theme.fg);
+            button.getStyleClass().add("fg");
             button.setCursor(Cursor.HAND);
         }
 
@@ -529,12 +529,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             if (node instanceof Control) {
                 Control control = (Control) node;
                 control.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                control.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+                //control.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+                control.getStyleClass().add("fgBorder");
             }
             if (node instanceof Pane) {
                 Pane pane = (Pane) node;
                 pane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                pane.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+                //pane.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+                pane.getStyleClass().add("fgBorder");
             }
             if (node instanceof TextField){
                 ((TextField) node).setAlignment(Pos.CENTER);
@@ -859,7 +861,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private Node makeOutputLabel(SimpleStringProperty string, SimpleBooleanProperty visibility, int i) {
         Label data = new Label();
         data.setFont(new Font(Theme.font.getName(),i));
-        data.setTextFill(Theme.fg);
+        //data.setTextFill(Theme.fg);
+        data.getStyleClass().add("fg");
         data.setText(String.valueOf(string.getValue()));
         data.textProperty().bind(Bindings.when(visibility).then(string).otherwise(new
                 SimpleStringProperty("Error")));
@@ -869,7 +872,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private Node makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility, int i) {
         Label data = new Label();
         data.setFont(Theme.fontsmall);
-        data.setTextFill(Theme.fg);
+        //data.setTextFill(Theme.fg);
+        data.getStyleClass().add("fg");
         data.setText(String.valueOf(property.getValue()));
         property.addListener(new ChangeListener<Number>() {
             @Override
@@ -957,7 +961,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private Node makeOutputLabel(SimpleStringProperty runwayDesignatorProperty, SimpleBooleanProperty visibility) {
         Label data = new Label();
         data.setFont(Theme.font);
-        data.setTextFill(Theme.fg);
+        //data.setTextFill(Theme.fg);
+        data.getStyleClass().add("fg");
         data.setText(String.valueOf(runwayDesignatorProperty.getValue()));
         data.textProperty().bind(Bindings.when(visibility).then(runwayDesignatorProperty).otherwise(new
                 SimpleStringProperty("Error")));
@@ -968,22 +973,26 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         Label dataheader = new Label();
         dataheader.setFont(Theme.font);
-        dataheader.setTextFill(Theme.fg);
+        //dataheader.setTextFill(Theme.fg);
+        dataheader.getStyleClass().add("fg");
         dataheader.setText(String.valueOf(prop1header.getValue()));
 
         Label data = new Label();
         data.setFont(Theme.font);
-        data.setTextFill(Theme.fg);
+        //data.setTextFill(Theme.fg);
+        data.getStyleClass().add("fg");
         data.setText(String.valueOf(prop1.getValue()));
 
         Label data2header = new Label();
         data2header.setFont(Theme.font);
-        data2header.setTextFill(Theme.fg);
+        //data2header.setTextFill(Theme.fg);
+        data2header.getStyleClass().add("fg");
         data2header.setText(String.valueOf(prop2header.getValue()));
 
         Label data2 = new Label();
         data2.setFont(Theme.font);
-        data2.setTextFill(Theme.fg);
+        //data2.setTextFill(Theme.fg);
+        data2.getStyleClass().add("fg");
         data2.setText(String.valueOf(prop2.getValue()));
 
         VBox box = new VBox(dataheader,data,data2header,data2);
@@ -1003,7 +1012,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     public Label makeLabel(String string){
         Label label = new Label(string);
         label.setFont(Theme.font);
-        label.setTextFill(Theme.fg);
+        //label.setTextFill(Theme.fg);
+        label.getStyleClass().add("fg");
         return label;
     }
 
@@ -1017,7 +1027,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     public Label makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility) {
         Label data = new Label();
         data.setFont(Theme.font);
-        data.setTextFill(Theme.fg);
+        //data.setTextFill(Theme.fg);
+        data.getStyleClass().add("fg");
         data.setText(String.valueOf(property.getValue()));
         property.addListener(new ChangeListener<Number>() {
             @Override
@@ -1085,7 +1096,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private TextField makeTableCell(SimpleDoubleProperty property){
         TextField textField = new TextField();
         textField.setAlignment(Pos.CENTER);
-        textField.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+        //textField.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+        textField.getStyleClass().add("fgBorder");
         textField.textProperty().set(property.asString().get());
         textField.editableProperty().set(false);
         textField.textProperty().addListener(new ChangeListener<String>() {
@@ -1111,7 +1123,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private TextField makeTableCell(SimpleStringProperty property){
         TextField textField = new TextField();
         textField.setAlignment(Pos.CENTER);
-        textField.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+        //textField.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+        textField.getStyleClass().add("fgBorder");
         textField.textProperty().set(property.get());
         textField.editableProperty().set(false);
         textField.textProperty().addListener(new ChangeListener<String>() {
@@ -1272,11 +1285,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         ToggleButton button = new ToggleButton(label1);
         ToggleButton button2 = new ToggleButton(label2);
         button.setFont(Theme.font);
-        button.setTextFill(Theme.fg);
+        //button.setTextFill(Theme.fg);
+        button.getStyleClass().add("fg");
         //button .setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
         button.getStyleClass().add("focusedBG");
         button2.setFont(Theme.font);
-        button2.setTextFill(Theme.fg);
+        //button2.setTextFill(Theme.fg);
+        button2.getStyleClass().add("fg");
         //button2.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
         button2.getStyleClass().add("veryfocusedBG");
         segment.getChildren().addAll(button,button2);
@@ -1290,7 +1305,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                     property.set(true);
                     //button2.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
                     button2.getStyleClass().add("extremelyfocusedBG");
-                    button2.setTextFill(Theme.fg);
+                    //button2.setTextFill(Theme.fg);
+                    button2.getStyleClass().add("fg");
                     button.getStyleClass().add("unfocusedBG");
                     //button.setTextFill(Theme.extremelyfocusedBG);
                     button.getStyleClass().add("extremelyfocusedT");
@@ -1311,7 +1327,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                     button2.getStyleClass().add("extremelyfocusedT");
                     //button.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
                     button.getStyleClass().add("extremelyfocusedBG");
-                    button.setTextFill(Theme.fg);
+                    //button.setTextFill(Theme.fg);
+                    button.getStyleClass().add("fg");
                 }
             }
         });

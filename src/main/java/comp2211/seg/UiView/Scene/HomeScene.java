@@ -115,7 +115,8 @@ public class HomeScene extends SceneAbstract{
     Text desciption = new Text("This tool provides calculation and visual aids to\n" +
         "the runway redeclaration process");
     desciption.setFont(Theme.font);
-    desciption.setFill(Theme.fg);
+    //desciption.setFill(Theme.fg);
+    desciption.getStyleClass().add("fg");
 
 
 
@@ -148,13 +149,16 @@ public class HomeScene extends SceneAbstract{
     startApplication.setOnMousePressed(this::startApplication);
     Button importAirport = new Button("Import Airport");
     Button newAirport = new Button("New Airport");
-    startApplication.setTextFill(Theme.fg);
+    //startApplication.setTextFill(Theme.fg);
+    startApplication.getStyleClass().add("fg");
     //startApplication.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     startApplication.getStyleClass().add("focusedBG");
-    importAirport.setTextFill(Theme.fg);
+    //importAirport.setTextFill(Theme.fg);
+    importAirport.getStyleClass().add("fg");
     //importAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     importAirport.getStyleClass().add("focusedBG");
-    newAirport.setTextFill(Theme.fg);
+    //newAirport.setTextFill(Theme.fg);
+    newAirport.getStyleClass().add("fg");
     //newAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     newAirport.getStyleClass().add("focusedBG");
 
@@ -214,7 +218,8 @@ public class HomeScene extends SceneAbstract{
                     "(jjrw1g21) \n");
     projectInfo.setTextAlignment(TextAlignment.CENTER);
     projectInfo.setFont(Theme.font);
-    projectInfo.setTextFill(Theme.fg);
+    //projectInfo.setTextFill(Theme.fg);
+    projectInfo.getStyleClass().add("fg");
     HBox namesBox = new HBox(projectInfo);
     namesBox.setAlignment(Pos.CENTER);
 

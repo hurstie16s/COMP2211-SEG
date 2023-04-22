@@ -35,7 +35,7 @@ public class Theme {
     /**
      * The Fg.
      */
-    static public Color fg = Color.gray(0.4);
+    //static public Color fg = Color.gray(0.4);
     static public Color fgBright = Color.gray(0.35);
     /**
      * The Labelfg.

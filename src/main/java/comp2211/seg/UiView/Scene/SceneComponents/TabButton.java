@@ -17,7 +17,8 @@ public class TabButton extends Label {
         super(tab.getKey());
         this.tabLayout = tabLayout;
         this.tab = tab;
-        setTextFill(Theme.fg);
+        //setTextFill(Theme.fg);
+        this.getStyleClass().add("fg");
         setFont(Theme.font);
         setPadding(new Insets(5));
     }
