@@ -25,7 +25,8 @@ public class TabButton extends Label {
     }
     public void run(){
         for (TabButton tb:tabLayout.tabButtons) {
-            getStyleClass().add(tabLayout.bg);
+            tb.getStyleClass().clear();
+            tb.getStyleClass().add(tabLayout.bg);
         }
         getStyleClass().add(tabLayout.fg);
         tabLayout.contents.getChildren().removeAll(tabLayout.contents.getChildren());
