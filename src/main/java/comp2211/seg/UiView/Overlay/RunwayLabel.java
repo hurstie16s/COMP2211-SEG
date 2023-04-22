@@ -67,7 +67,8 @@ public class RunwayLabel extends Group {
         label.textProperty().bind((new SimpleStringProperty(name)).concat(" (").concat(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(Long.toString(Math.round(length.get()))).otherwise(Long.toString(Math.round(length.get()*-1)))).concat(scene.appWindow.runway.unitsProperty()).concat(")"));
         //label.setFill(Theme.labelfg);
         label.getStyleClass().add("labelfg");
-        label.setFont(Theme.font);
+        //label.setFont(Theme.font);
+        label.getStyleClass().add("font");
         if (direction) {
             label.yProperty().set(label.getBoundsInLocal().getHeight() / 2 + 8);
             label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2);

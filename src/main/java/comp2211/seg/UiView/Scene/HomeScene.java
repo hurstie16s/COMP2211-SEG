@@ -115,7 +115,8 @@ public class HomeScene extends SceneAbstract{
 
     Text desciption = new Text("This tool provides calculation and visual aids to\n" +
         "the runway redeclaration process");
-    desciption.setFont(Theme.font);
+    //desciption.setFont(Theme.font);
+    desciption.getStyleClass().add("font");
     //desciption.setFill(Theme.fg);
     desciption.getStyleClass().add("fg");
 
@@ -173,11 +174,13 @@ public class HomeScene extends SceneAbstract{
     text.setTextAlignment(TextAlignment.CENTER);
 
     Label airportText = new Label("Airport");
-    airportText.setFont(Theme.font);
+    //airportText.setFont(Theme.font);
+    airportText.getStyleClass().add("font");
     //airportText.setTextFill(Theme.fgBright);
     airportText.getStyleClass().add("fgBright");
     Label runwayText = new Label("Runway");
-    runwayText.setFont(Theme.font);
+    //runwayText.setFont(Theme.font);
+    runwayText.getStyleClass().add("font");
     //runwayText.setTextFill(Theme.fgBright);
     runwayText.getStyleClass().add("fgBright");
 
@@ -220,7 +223,8 @@ public class HomeScene extends SceneAbstract{
                     "Josh Willson " +
                     "(jjrw1g21) \n");
     projectInfo.setTextAlignment(TextAlignment.CENTER);
-    projectInfo.setFont(Theme.font);
+    //projectInfo.setFont(Theme.font);
+    projectInfo.getStyleClass().add("font");
     //projectInfo.setTextFill(Theme.fg);
     projectInfo.getStyleClass().add("fg");
     HBox namesBox = new HBox(projectInfo);

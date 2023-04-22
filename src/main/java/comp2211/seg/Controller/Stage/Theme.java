@@ -107,8 +107,13 @@ public class Theme {
     static public Color blastallowance = Color.web("#cccc00");
     /**
      * The Font.
+     * left for sake of:
+     * private Node makeOutputLabel(SimpleStringProperty string, SimpleBooleanProperty visibility, int i) {
+     *         Label data = new Label();
+     *         data.setFont(new Font(Theme.font.getName(),i));
+     * in BaseScene line 863
      */
-    static public Font font =Font.font("Calibri", 20);
+    //static public Font font =Font.font("Calibri", 20);
     static public Font fontbig =Font.font("Calibri", 32);
     /**
      * The Fontsmall.

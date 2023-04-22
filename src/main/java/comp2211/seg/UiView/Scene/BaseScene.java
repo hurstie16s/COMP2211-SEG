@@ -960,7 +960,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Node makeOutputLabel(SimpleStringProperty runwayDesignatorProperty, SimpleBooleanProperty visibility) {
         Label data = new Label();
-        data.setFont(Theme.font);
+        //data.setFont(Theme.font);
+        data.getStyleClass().add("font");
         //data.setTextFill(Theme.fg);
         data.getStyleClass().add("fg");
         data.setText(String.valueOf(runwayDesignatorProperty.getValue()));
@@ -972,25 +973,29 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private Pane makeOutputLabel(SimpleStringProperty prop1header,SimpleStringProperty prop1,SimpleStringProperty prop2header,SimpleStringProperty prop2) {
 
         Label dataheader = new Label();
-        dataheader.setFont(Theme.font);
+        //dataheader.setFont(Theme.font);
+        dataheader.getStyleClass().add("font");
         //dataheader.setTextFill(Theme.fg);
         dataheader.getStyleClass().add("fg");
         dataheader.setText(String.valueOf(prop1header.getValue()));
 
         Label data = new Label();
-        data.setFont(Theme.font);
+        //data.setFont(Theme.font);
+        data.getStyleClass().add("font");
         //data.setTextFill(Theme.fg);
         data.getStyleClass().add("fg");
         data.setText(String.valueOf(prop1.getValue()));
 
         Label data2header = new Label();
-        data2header.setFont(Theme.font);
+        //data2header.setFont(Theme.font);
+        data2header.getStyleClass().add("font");
         //data2header.setTextFill(Theme.fg);
         data2header.getStyleClass().add("fg");
         data2header.setText(String.valueOf(prop2header.getValue()));
 
         Label data2 = new Label();
-        data2.setFont(Theme.font);
+        //data2.setFont(Theme.font);
+        data2.getStyleClass().add("font");
         //data2.setTextFill(Theme.fg);
         data2.getStyleClass().add("fg");
         data2.setText(String.valueOf(prop2.getValue()));
@@ -1011,7 +1016,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
      */
     public Label makeLabel(String string){
         Label label = new Label(string);
-        label.setFont(Theme.font);
+        //label.setFont(Theme.font);
+        label.getStyleClass().add("font");
         //label.setTextFill(Theme.fg);
         label.getStyleClass().add("fg");
         return label;
@@ -1026,7 +1032,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
      */
     public Label makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility) {
         Label data = new Label();
-        data.setFont(Theme.font);
+        //data.setFont(Theme.font);
+        data.getStyleClass().add("font");
         //data.setTextFill(Theme.fg);
         data.getStyleClass().add("fg");
         data.setText(String.valueOf(property.getValue()));
@@ -1284,12 +1291,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         HBox segment = new HBox();
         ToggleButton button = new ToggleButton(label1);
         ToggleButton button2 = new ToggleButton(label2);
-        button.setFont(Theme.font);
+        //button.setFont(Theme.font);
+        button.getStyleClass().add("font");
         //button.setTextFill(Theme.fg);
         button.getStyleClass().add("fg");
         //button .setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
         button.getStyleClass().add("focusedBG");
-        button2.setFont(Theme.font);
+        //button2.setFont(Theme.font);
+        button2.getStyleClass().add("font");
         //button2.setTextFill(Theme.fg);
         button2.getStyleClass().add("fg");
         //button2.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));

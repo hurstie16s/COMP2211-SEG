@@ -546,10 +546,12 @@ public class RunwayScene extends SceneAbstract {
     });
     rwyDir.textProperty().set(designator.getValue().substring(0,2));
     rwyLabel.textProperty().set(designator.getValue().substring(2));
-    rwyDir.setFont(Theme.font);
+    //rwyDir.setFont(Theme.font);
+      rwyDir.getStyleClass().add("font");
     //rwyDir.setFill(Theme.labelfg);
       rwyDir.getStyleClass().add("labelfg");
-    rwyLabel.setFont(Theme.font);
+    //rwyLabel.setFont(Theme.font);
+      rwyLabel.getStyleClass().add("font");
     //rwyLabel.setFill(Theme.labelfg);
       rwyLabel.getStyleClass().add("labelfg");
     Text bars = new Text("\n||||| |||||");
@@ -574,6 +576,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.runwayObstacle.heightProperty().multiply(1),
             Theme.obstacle
             );
+    obstacleView.getStyleClass().add("obstacle");
     obstacleView.visibleProperty().bind(appWindow.runway.hasRunwayObstacleProperty());
 
     group.getChildren().add(new Slope(
