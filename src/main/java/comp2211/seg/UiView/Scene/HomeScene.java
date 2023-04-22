@@ -110,7 +110,8 @@ public class HomeScene extends SceneAbstract{
 
     Text title = new Text("Runway Redeclaration Aid\n\n");
     title.setFont(Theme.fontbig);
-    title.setFill(Theme.fgBright);
+    //title.setFill(Theme.fgBright);
+    title.getStyleClass().add("fgBright");
 
     Text desciption = new Text("This tool provides calculation and visual aids to\n" +
         "the runway redeclaration process");
@@ -173,10 +174,12 @@ public class HomeScene extends SceneAbstract{
 
     Label airportText = new Label("Airport");
     airportText.setFont(Theme.font);
-    airportText.setTextFill(Theme.fgBright);
+    //airportText.setTextFill(Theme.fgBright);
+    airportText.getStyleClass().add("fgBright");
     Label runwayText = new Label("Runway");
     runwayText.setFont(Theme.font);
-    runwayText.setTextFill(Theme.fgBright);
+    //runwayText.setTextFill(Theme.fgBright);
+    runwayText.getStyleClass().add("fgBright");
 
 
     VBox textPane = new VBox(airportText,runwayText);

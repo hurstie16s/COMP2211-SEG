@@ -547,11 +547,14 @@ public class RunwayScene extends SceneAbstract {
     rwyDir.textProperty().set(designator.getValue().substring(0,2));
     rwyLabel.textProperty().set(designator.getValue().substring(2));
     rwyDir.setFont(Theme.font);
-    rwyDir.setFill(Theme.labelfg);
+    //rwyDir.setFill(Theme.labelfg);
+      rwyDir.getStyleClass().add("labelfg");
     rwyLabel.setFont(Theme.font);
-    rwyLabel.setFill(Theme.labelfg);
+    //rwyLabel.setFill(Theme.labelfg);
+      rwyLabel.getStyleClass().add("labelfg");
     Text bars = new Text("\n||||| |||||");
-    bars.setFill(Theme.labelfg);
+    //bars.setFill(Theme.labelfg);
+      bars.getStyleClass().add("labelfg");
     TextFlow data = new TextFlow(rwyDir,new Text("\n"),rwyLabel,bars);
     data.setTextAlignment(TextAlignment.CENTER);
     return data;

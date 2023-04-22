@@ -36,9 +36,13 @@ public class Theme {
      * The Fg.
      */
     //static public Color fg = Color.gray(0.4);
-    static public Color fgBright = Color.gray(0.35);
+    //static public Color fgBright = Color.gray(0.35);
     /**
      * The Labelfg.
+     * left for sake of
+     * public RunwayLabel(String name, Color color, <- this param
+     * DoubleBinding xOffset, double yOffset, DoubleBinding length,
+     * RunwayScene scene, boolean direction, SimpleBooleanProperty visibility)
      */
     static public Color labelfg = Color.gray(0);
     /**
