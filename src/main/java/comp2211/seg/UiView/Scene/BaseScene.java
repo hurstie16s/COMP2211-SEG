@@ -470,7 +470,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             Label data = makeLabel(titles[i]);
             data.setAlignment(Pos.CENTER);
             data.setTextAlignment(TextAlignment.CENTER);
-            data.setFont(Theme.fontsmall);
+            //data.setFont(Theme.fontsmall);
+            data.getStyleClass().add("fontsmall");
             if (i>=5){
                 GridPane.setRowSpan(data,2);
                 airportData.add(data,6+i,0);
@@ -486,8 +487,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             var lengthLabel = makeLabel("Length");
             var widthLabel = makeLabel("Width");
 
-            lengthLabel.setFont(Theme.fontsmall);
-            widthLabel.setFont(Theme.fontsmall);
+            //lengthLabel.setFont(Theme.fontsmall);
+            lengthLabel.getStyleClass().add("fontsmall");
+            //widthLabel.setFont(Theme.fontsmall);
+            widthLabel.getStyleClass().add("fontsmall");
 
             airportData.add(lengthLabel,1+i*2,1);
             airportData.add(widthLabel,2+i*2,1);
@@ -871,7 +874,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Node makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility, int i) {
         Label data = new Label();
-        data.setFont(Theme.fontsmall);
+        //data.setFont(Theme.fontsmall);
+        data.getStyleClass().add("fontsmall");
         //data.setTextFill(Theme.fg);
         data.getStyleClass().add("fg");
         data.setText(String.valueOf(property.getValue()));
