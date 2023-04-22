@@ -113,12 +113,12 @@ public class Theme {
      *         data.setFont(new Font(Theme.font.getName(),i));
      * in BaseScene line 863
      */
-    //static public Font font =Font.font("Calibri", 20);
-    static public Font fontbig =Font.font("Calibri", 32);
+    static public Font font =Font.font("Calibri", 20);
+    //static public Font fontbig =Font.font("Calibri", 32);
     /**
      * The Fontsmall.
      */
-    static public Font fontsmall =Font.font("Calibri", 16);
+    //static public Font fontsmall =Font.font("Calibri", 16);
 
     /**
      * Reverse color.
@@ -238,7 +238,7 @@ public class Theme {
      *
      * @param scene the scene
      */
-    public static void retheme(Scene scene) {
-
-    }
+//    public static void retheme(Scene scene) {
+//
+//    }
 }

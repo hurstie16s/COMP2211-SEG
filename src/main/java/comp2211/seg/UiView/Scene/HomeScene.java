@@ -109,7 +109,8 @@ public class HomeScene extends SceneAbstract{
 
 
     Text title = new Text("Runway Redeclaration Aid\n\n");
-    title.setFont(Theme.fontbig);
+    //title.setFont(Theme.fontbig);
+    title.getStyleClass().add("fontbig");
     //title.setFill(Theme.fgBright);
     title.getStyleClass().add("fgBright");
 
