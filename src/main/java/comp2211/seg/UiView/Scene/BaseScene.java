@@ -136,14 +136,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                                 gp = gp.getParent();
                             }
                             if (TabLayout.oldTabButton != null) {
-                                System.out.println();
-                                System.out.println();
                                 if ((mouseEvent.getSceneX() - ((TabLayout) p).contents.localToScene(((TabLayout) p).contents.getLayoutBounds()).getMinX()) / ((TabLayout) p).contents.getBoundsInLocal().getWidth() < (2/3.0) &&
                                         (mouseEvent.getSceneY() - ((TabLayout) p).contents.localToScene(((TabLayout) p).contents.getLayoutBounds()).getMinY()) / ((TabLayout) p).contents.getBoundsInLocal().getHeight() < (2/3.0)) {
                                     ((TabLayout) p).makeTab(TabLayout.oldTabButton.tab);
                                 } else if ((mouseEvent.getSceneX() - ((TabLayout) p).contents.localToScene(((TabLayout) p).contents.getLayoutBounds()).getMinX()) / ((TabLayout) p).contents.getBoundsInLocal().getWidth() <
                                         (mouseEvent.getSceneY() - ((TabLayout) p).contents.localToScene(((TabLayout) p).contents.getLayoutBounds()).getMinY()) / ((TabLayout) p).contents.getBoundsInLocal().getHeight()){
-                                    // go Right
+                                    // go Down
                                     Pane pp = ((Pane) p.getParent());
                                     int index = pp.getChildren().indexOf(p);
                                     TabsPaneVertical tabsPane = new TabsPaneVertical((TabLayout) p,TabLayout.oldTabButton);
@@ -152,13 +150,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                                     } else if (pp instanceof TabsPaneHorizontal) {
                                         ((TabsPaneHorizontal) pp).replace(index, tabsPane);
                                     }else {
-                                        pp.getChildren().remove(p);
                                         pp.getChildren().add(tabsPane);
+
                                     }
 
 
                                 } else {
-                                    // go Down
+                                    // go Right
                                     Pane pp = ((Pane) p.getParent());
                                     int index = pp.getChildren().indexOf(p);
                                     TabsPaneHorizontal tabsPane = new TabsPaneHorizontal((TabLayout) p,TabLayout.oldTabButton);
@@ -167,7 +165,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                                     } else if (pp instanceof TabsPaneHorizontal) {
                                         ((TabsPaneHorizontal) pp).replace(index, tabsPane);
                                     }else {
-                                        pp.getChildren().remove(p);
                                         pp.getChildren().add(tabsPane);
                                     }
                                 }
@@ -210,16 +207,18 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
         tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
 
-        tabLayout.maxHeightProperty().bind(mainPane.heightProperty());
-        tabLayout.minHeightProperty().bind(mainPane.heightProperty());
-        tabLayout.maxWidthProperty().bind(mainPane.widthProperty());
-        tabLayout.minWidthProperty().bind(mainPane.widthProperty());
-
         mainPane.maxHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
         mainPane.minHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
         mainPane.maxWidthProperty().bind(root.widthProperty());
         mainPane.minWidthProperty().bind(root.widthProperty());
-        mainPane.getChildren().add(tabLayout);
+        TabsPaneVertical tabsPaneVertical = new TabsPaneVertical();
+        tabsPaneVertical.add(tabLayout);
+
+        tabsPaneVertical.maxHeightProperty().bind(mainPane.heightProperty());
+        tabsPaneVertical.minHeightProperty().bind(mainPane.heightProperty());
+        tabsPaneVertical.maxWidthProperty().bind(mainPane.widthProperty());
+        tabsPaneVertical.minWidthProperty().bind(mainPane.widthProperty());
+        mainPane.getChildren().add(tabsPaneVertical);
     }
 
     /**
