@@ -28,5 +28,6 @@ public class TabButton extends Label {
         setBackground(new Background(new BackgroundFill(tabLayout.fg,null,null)));
         tabLayout.contents.getChildren().removeAll(tabLayout.contents.getChildren());
         tabLayout.contents.getChildren().add(tab.getValue());
+        tabLayout.currentContent = tab.getValue();
     }
 }

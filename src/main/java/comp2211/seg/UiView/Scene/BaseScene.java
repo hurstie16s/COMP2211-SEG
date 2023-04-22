@@ -8,6 +8,7 @@ import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Obstacle;
 import comp2211.seg.ProcessDataModel.Runway;
+import comp2211.seg.UiView.Scene.RunwayComponents.Sub;
 import comp2211.seg.UiView.Scene.SceneComponents.*;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -25,6 +26,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -33,6 +35,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
@@ -55,6 +58,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     //logger for BaseScene
     private static final Logger logger = LogManager.getLogger(BaseScene.class);
     private TabLayout tabLayout;
+    public static ArrayList<TabLayout> tabs = new ArrayList<>();
+    private boolean overlay;
 
     public VBox topView;
 
@@ -89,6 +94,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 try {
                     if (mouseEvent.getPickResult().getIntersectedNode().getParent() instanceof TabButton){
                         TabLayout.oldTabButton = (TabButton) mouseEvent.getPickResult().getIntersectedNode().getParent();
+                        overlay = false;
                     } else {
                         TabLayout.oldTabButton = null;
                     }
@@ -97,12 +103,27 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 }
             }
         });
+        setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (TabLayout.oldTabButton != null && !overlay) {
+                    overlay = true;
+                    for (TabLayout tab:tabs) {
+                        tab.renderOverlay();
+                    }
+                }
+            }
+        });
         setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (TabLayout.oldTabButton != null) {
+
+                    for (TabLayout tab:tabs) {
+                        tab.clearOverlay();
+                    }
                     try {
-                        Parent p = mouseEvent.getPickResult().getIntersectedNode().getParent();
+                        Node p = mouseEvent.getPickResult().getIntersectedNode();
                         while ((p.getParent() != null) && !((p instanceof TabLayout) || (p instanceof TabButton))) {
                             p = p.getParent();
                         }
@@ -110,12 +131,48 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                             Parent gp = p.getParent();
                             while (gp != null) {
                                 if (gp.equals(TabLayout.oldTabButton.tab.getValue())) {
-                                    throw new RuntimeException("Attempted to make tab its own child");
+                                    throw new RuntimeException("Attempted place tab inside itself");
                                 }
                                 gp = gp.getParent();
                             }
                             if (TabLayout.oldTabButton != null) {
-                                ((TabLayout) p).makeTab(TabLayout.oldTabButton.tab);
+                                System.out.println();
+                                System.out.println();
+                                if ((mouseEvent.getSceneX() - ((TabLayout) p).contents.localToScene(((TabLayout) p).contents.getLayoutBounds()).getMinX()) / ((TabLayout) p).contents.getBoundsInLocal().getWidth() < (2/3.0) &&
+                                        (mouseEvent.getSceneY() - ((TabLayout) p).contents.localToScene(((TabLayout) p).contents.getLayoutBounds()).getMinY()) / ((TabLayout) p).contents.getBoundsInLocal().getHeight() < (2/3.0)) {
+                                    ((TabLayout) p).makeTab(TabLayout.oldTabButton.tab);
+                                } else if ((mouseEvent.getSceneX() - ((TabLayout) p).contents.localToScene(((TabLayout) p).contents.getLayoutBounds()).getMinX()) / ((TabLayout) p).contents.getBoundsInLocal().getWidth() <
+                                        (mouseEvent.getSceneY() - ((TabLayout) p).contents.localToScene(((TabLayout) p).contents.getLayoutBounds()).getMinY()) / ((TabLayout) p).contents.getBoundsInLocal().getHeight()){
+                                    // go Right
+                                    Pane pp = ((Pane) p.getParent());
+                                    int index = pp.getChildren().indexOf(p);
+                                    TabsPaneVertical tabsPane = new TabsPaneVertical((TabLayout) p,TabLayout.oldTabButton);
+                                    if (pp instanceof TabsPaneVertical){
+                                        ((TabsPaneVertical) pp).replace(index, tabsPane);
+                                    } else if (pp instanceof TabsPaneHorizontal) {
+                                        ((TabsPaneHorizontal) pp).replace(index, tabsPane);
+                                    }else {
+                                        pp.getChildren().remove(p);
+                                        pp.getChildren().add(tabsPane);
+                                    }
+
+
+                                } else {
+                                    // go Down
+                                    Pane pp = ((Pane) p.getParent());
+                                    int index = pp.getChildren().indexOf(p);
+                                    TabsPaneHorizontal tabsPane = new TabsPaneHorizontal((TabLayout) p,TabLayout.oldTabButton);
+                                    if (pp instanceof TabsPaneVertical){
+                                        ((TabsPaneVertical) pp).replace(index, tabsPane);
+                                    } else if (pp instanceof TabsPaneHorizontal) {
+                                        ((TabsPaneHorizontal) pp).replace(index, tabsPane);
+                                    }else {
+                                        pp.getChildren().remove(p);
+                                        pp.getChildren().add(tabsPane);
+                                    }
+                                }
+
+
                                 TabLayout.oldTabButton.tabLayout.removeTab(TabLayout.oldTabButton);
                                 TabLayout.oldTabButton = null;
                             }
@@ -152,6 +209,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
         tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
+
+        tabLayout.maxHeightProperty().bind(mainPane.heightProperty());
+        tabLayout.minHeightProperty().bind(mainPane.heightProperty());
+        tabLayout.maxWidthProperty().bind(mainPane.widthProperty());
+        tabLayout.minWidthProperty().bind(mainPane.widthProperty());
+
         mainPane.maxHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
         mainPane.minHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
         mainPane.maxWidthProperty().bind(root.widthProperty());
@@ -667,19 +730,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         TabsPaneVertical rightPane = new TabsPaneVertical();
         rightPane.getChildren().add(makeRunwayTabs());
 
-        leftPane.maxWidthProperty().bind(obstacleLayout.widthProperty().subtract(10).divide(2));
-        leftPane.minWidthProperty().bind(obstacleLayout.widthProperty().subtract(10).divide(2));
-        rightPane.maxWidthProperty().bind(obstacleLayout.widthProperty().subtract(10).divide(2));
-        rightPane.minWidthProperty().bind(obstacleLayout.widthProperty().subtract(10).divide(2));
-        leftPane.maxHeightProperty().bind(obstacleLayout.heightProperty().subtract(10));
-        leftPane.minHeightProperty().bind(obstacleLayout.heightProperty().subtract(10));
-        rightPane.maxHeightProperty().bind(obstacleLayout.heightProperty());
-        rightPane.minHeightProperty().bind(obstacleLayout.heightProperty());
 
         obstacleLayout.getChildren().add(leftPane);
         new Divider(obstacleLayout);
         obstacleLayout.getChildren().add(rightPane);
-
         return obstacleLayout;
     }
 
@@ -688,67 +742,21 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
      *
      * @param obstaclePane the obstacle pane
      */
-    public void makeObstaclePane(VBox obstaclePane){
+    public void makeObstaclePane(TabsPaneVertical obstaclePane){
 
-        Pane obstacleOptionsPane = new Pane(makeObstacleOptionsPane());
-        obstacleOptionsPane.maxWidthProperty().bind(obstaclePane.widthProperty());
-        obstacleOptionsPane.minWidthProperty().bind(obstaclePane.widthProperty());
-
-
-        Pane declaredDistancesPane = new Pane(makeDistancesPane());
-        declaredDistancesPane.maxWidthProperty().bind(obstaclePane.widthProperty());
-        declaredDistancesPane.minWidthProperty().bind(obstaclePane.widthProperty());
-
-        Pane breakDownPane = new Pane(makeBreakDownPane());
-        breakDownPane.maxWidthProperty().bind(obstaclePane.widthProperty());
-        breakDownPane.minWidthProperty().bind(obstaclePane.widthProperty());
-
-        obstacleOptionsPane.maxHeightProperty().set(obstaclePane.getHeight() * .4);
-        obstacleOptionsPane.minHeightProperty().set(obstaclePane.getHeight() * .4);
-
-        declaredDistancesPane.maxHeightProperty().set(obstaclePane.getHeight() * .3);
-        declaredDistancesPane.minHeightProperty().set(obstaclePane.getHeight() * .3);
-
-        breakDownPane.maxHeightProperty().set(obstaclePane.getHeight() * .3);
-        breakDownPane.minHeightProperty().set(obstaclePane.getHeight() * .3);
-        obstaclePane.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                if (number.doubleValue() == 0) {
-                    obstacleOptionsPane.maxHeightProperty().set(t1.doubleValue() * .4);
-                    obstacleOptionsPane.minHeightProperty().set(t1.doubleValue() * .4);
-
-                    declaredDistancesPane.maxHeightProperty().set(t1.doubleValue() * .3);
-                    declaredDistancesPane.minHeightProperty().set(t1.doubleValue() * .3);
-
-                    breakDownPane.maxHeightProperty().set(t1.doubleValue() * .3);
-                    breakDownPane.minHeightProperty().set(t1.doubleValue() * .3);
-                } else {
-
-                    double difference = t1.doubleValue() / (obstacleOptionsPane.heightProperty().doubleValue() +
-                            declaredDistancesPane.heightProperty().doubleValue() +
-                            breakDownPane.heightProperty().doubleValue());
+        TabLayout obstacleOptionsPane = makeObstacleOptionsPane();
+        TabLayout declaredDistancesPane = makeDistancesPane();
+        TabLayout breakDownPane = makeBreakDownPane();
 
 
-                    obstacleOptionsPane.maxHeightProperty().set(obstacleOptionsPane.heightProperty().get() * difference);
-                    obstacleOptionsPane.minHeightProperty().set(obstacleOptionsPane.heightProperty().get() * difference);
-
-                    declaredDistancesPane.maxHeightProperty().set(declaredDistancesPane.heightProperty().get() * difference);
-                    declaredDistancesPane.minHeightProperty().set(declaredDistancesPane.heightProperty().get() * difference);
-
-                    breakDownPane.maxHeightProperty().set(breakDownPane.heightProperty().get() * difference);
-                    breakDownPane.minHeightProperty().set(breakDownPane.heightProperty().get() * difference);
-                }
-
-            }
-        });
         obstaclePane.getChildren().add(obstacleOptionsPane);
         new Divider(obstaclePane);
         obstaclePane.getChildren().add(declaredDistancesPane);
         new Divider(obstaclePane);
         obstaclePane.getChildren().add(breakDownPane);
+        obstaclePane.rebalance();
     }
-    private Pane makeObstacleOptionsPane() {
+    private TabLayout makeObstacleOptionsPane() {
         // Obstacle preset ComboBox
         ComboBox obstacleComboBox = new ComboBox(FXCollections.observableArrayList(appWindow.obstaclePresets));
         obstacleComboBox.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
@@ -830,7 +838,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         obstacleOptions.add(new Pair<>("Obstacle", obstacleData));
         obstacleOptions.add(new Pair<>("Change History", new BorderPane(history)));
-        Pane obstacleOptionsPane = new TabLayout(obstacleOptions,Theme.focusedBG,Theme.veryfocusedBG);
+        TabLayout obstacleOptionsPane = new TabLayout(obstacleOptions,Theme.focusedBG,Theme.veryfocusedBG);
         return obstacleOptionsPane;
     }
 
@@ -864,7 +872,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     }
 
-    private Pane makeDistancesPane() {
+    private TabLayout makeDistancesPane() {
         GridPane distancesGrid = new GridPane();
         distancesGrid.add(makeLabel("Designator"),1,0);
         distancesGrid.add(makeLabel("TORA"),2,0);
@@ -922,7 +930,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         ArrayList<Pair<String, Pane>> declaredDistances = new ArrayList<>();
         declaredDistances.add(new Pair<>("Declared Distances", distancesGrid));
-        Pane declaredDistancesPane = new TabLayout(declaredDistances,Theme.focusedBG,Theme.veryfocusedBG);
+        TabLayout declaredDistancesPane = new TabLayout(declaredDistances,Theme.focusedBG,Theme.veryfocusedBG);
         distancesGrid.getChildren().forEach(new Consumer<Node>() {
             @Override
             public void accept(Node node) {
@@ -1011,7 +1019,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return data;
     }
 
-    private Pane makeBreakDownPane() {
+    private TabLayout makeBreakDownPane() {
         ArrayList<Pair<String, Pane>> breakDown = new ArrayList<>();
         breakDown.add(
                 new Pair<>(
@@ -1057,7 +1065,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                         )
                 )
         );
-        Pane breakDownPane = new TabLayout(breakDown,Theme.focusedBG,Theme.veryfocusedBG);
+        TabLayout breakDownPane = new TabLayout(breakDown,Theme.focusedBG,Theme.veryfocusedBG);
         return breakDownPane;
     }
     private TextField makeTableCell(SimpleDoubleProperty property){
@@ -1119,11 +1127,15 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
      */
     public Pane makeRunwayTabs(){
         ArrayList<Pair<String, Pane>> viewTabs = new ArrayList<>();
+
         RunwayScene runwayScene1 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
         RunwayScene runwayScene2 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
         runwayScene1.buildmenulessalt();
         runwayScene2.buildmenulessalt();
         runwayScene2.toggleView();
+
+
+
         VBox dualView = new VBox(runwayScene1.getRoot(),runwayScene2.getRoot());
         for (RunwayScene scene: new RunwayScene[] {runwayScene1,runwayScene2}) {
             scene.root.maxWidthProperty().bind(dualView.widthProperty());

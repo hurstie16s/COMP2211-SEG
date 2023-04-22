@@ -3,6 +3,7 @@ package comp2211.seg.UiView.Scene.SceneComponents;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Theme;
+import comp2211.seg.UiView.Scene.BaseScene;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
@@ -17,6 +18,8 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Polygon;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -38,6 +41,7 @@ public class TabLayout extends VBox {
     public HBox topbar;
     private VBox layout;
     public StackPane contents;
+    public Pane currentContent;
 
     /**
      * Instantiates a new Tab layout.
@@ -53,8 +57,8 @@ public class TabLayout extends VBox {
             @Override
             public void changed(ObservableValue<? extends Parent> observableValue, Parent parent, Parent t1) {
                 if (t1 != null) {
-                    width.bind(((Pane) t1).widthProperty());
-                    height.bind(((Pane) t1).heightProperty());
+                    width.bind(widthProperty());
+                    height.bind(heightProperty());
                 }
             }
         });
@@ -62,6 +66,11 @@ public class TabLayout extends VBox {
         height = new SimpleDoubleProperty(0);
         contents = new StackPane();
         topbar = new HBox();
+
+        contents.maxHeightProperty().bind(height.subtract(topbar.heightProperty()));
+        contents.minHeightProperty().bind(height.subtract(topbar.heightProperty()));
+        contents.maxWidthProperty().bind(width);
+        contents.minWidthProperty().bind(width);
         contents.setBackground(new Background(new BackgroundFill(fg,null,null)));
         topbar.maxWidthProperty().bind(width);
         topbar.minWidthProperty().bind(width);
@@ -76,6 +85,7 @@ public class TabLayout extends VBox {
             makeTab(tab);
         }
         tabButtons.get(0).run();
+        BaseScene.tabs.add(this);
     }
 
     public TabButton makeTab(Pair<String, Pane> tab) {
@@ -109,6 +119,50 @@ public class TabLayout extends VBox {
             if (contents.getChildren().get(0).equals(tab.tab.getValue())){
                 tabButtons.get(0).run();
             }
+        }
+    }
+    public void renderOverlay(){
+        Polygon bottom = new Polygon();
+        bottom.getPoints().addAll(
+                0.0,contents.heightProperty().get(),
+                0.0,contents.heightProperty().get()*2/3,
+                contents.widthProperty().get()*2/3,contents.heightProperty().get()*2/3,
+                contents.widthProperty().get(),contents.heightProperty().get());
+        bottom.translateYProperty().set(contents.heightProperty().get()/3);
+        bottom.setFill(new Color(0.2,0.3,0.4,0.1));
+        bottom.setStroke(Color.BLACK);
+
+        Polygon side = new Polygon();
+        side.getPoints().addAll(
+                contents.widthProperty().get(),0.0,
+                contents.widthProperty().get()*2/3,0.0,
+                contents.widthProperty().get()*2/3,contents.heightProperty().get()*2/3,
+                contents.widthProperty().get(),contents.heightProperty().get());
+        side.translateXProperty().set(contents.widthProperty().get()/3);
+        side.setFill(new Color(0.2,0.4,0.3,0.1));
+        side.setStroke(Color.BLACK);
+
+        Polygon center = new Polygon();
+        center.getPoints().addAll(
+                0.0,0.0,
+                contents.widthProperty().get()*2/3,0.0,
+                contents.widthProperty().get()*2/3,contents.heightProperty().get()*2/3,
+                0.0,contents.heightProperty().get()*2/3);
+        center.translateXProperty().set(-contents.widthProperty().get()/6);
+        center.translateYProperty().set(-contents.heightProperty().get()/6);
+        center.setFill(new Color(0.2,0.4,0.4,0.1));
+        center.setStroke(Color.BLACK);
+
+
+        contents.getChildren().removeAll(contents.getChildren());
+        contents.getChildren().add(bottom);
+        contents.getChildren().add(side);
+        contents.getChildren().add(center);
+        contents.getChildren().add(currentContent);
+    }
+    public void clearOverlay(){
+        while (contents.getChildren().size()>1){
+            contents.getChildren().remove(0);
         }
     }
 }

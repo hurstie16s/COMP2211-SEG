@@ -1,6 +1,7 @@
 package comp2211.seg.UiView.Scene.SceneComponents;
 
 import comp2211.seg.Controller.Stage.AppWindow;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
@@ -39,10 +40,10 @@ public class Divider extends Line {
                 if (((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).maxWidthProperty().isBound()){
                     ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).maxWidthProperty().unbind();
                 }
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).minWidthProperty().set(size1 + x - event.getSceneX());
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).maxWidthProperty().set(size1 + x - event.getSceneX());
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).minWidthProperty().set(size2 - x + event.getSceneX());
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).maxWidthProperty().set(size2 - x + event.getSceneX());
+                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).minWidthProperty().bind(new SimpleDoubleProperty(size1 + x - event.getSceneX()));
+                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).maxWidthProperty().bind(new SimpleDoubleProperty(size1 + x - event.getSceneX()));
+                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).minWidthProperty().bind(new SimpleDoubleProperty(size2 - x + event.getSceneX()));
+                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).maxWidthProperty().bind(new SimpleDoubleProperty(size2 - x + event.getSceneX()));
 
                 AppWindow.currentScene.refresh();
 
@@ -57,10 +58,10 @@ public class Divider extends Line {
                 size2 = ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).heightProperty().get();
             });
             setOnMouseDragged(event ->{
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).minHeightProperty().set(size1 + y - event.getSceneY());
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).maxHeightProperty().set(size1 + y - event.getSceneY());
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).minHeightProperty().set(size2 - y + event.getSceneY());
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).maxHeightProperty().set(size2 - y + event.getSceneY());
+                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).minHeightProperty().bind(new SimpleDoubleProperty(size1 + y - event.getSceneY()));
+                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).maxHeightProperty().bind(new SimpleDoubleProperty(size1 + y - event.getSceneY()));
+                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).minHeightProperty().bind(new SimpleDoubleProperty(size2 - y + event.getSceneY()));
+                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).maxHeightProperty().bind(new SimpleDoubleProperty(size2 - y + event.getSceneY()));
 
                 AppWindow.currentScene.refresh();
 
