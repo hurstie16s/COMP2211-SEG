@@ -27,6 +27,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -50,6 +51,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+
 /**
  * The type Base scene.
  */
@@ -62,6 +64,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private boolean overlay;
 
     public VBox topView;
+    public Scene scene;
 
 
     /**
@@ -74,6 +77,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
      */
     public BaseScene(Pane root, AppWindow appWindow, double width, double height) {
         super(root, appWindow, width, height);
+        this.scene = root.getScene();
     }
 
     @Override
@@ -197,18 +201,21 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     public void build()  {
         super.build();
-        root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+        //root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+        root.getStyleClass().add("unfocusedBG");
         mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
 
         ArrayList<Pair<String, Pane>> tabs = new ArrayList<>();
         tabs.add(new Pair<>("Airport Configuration", makeAirportConfig()));
 
-
         tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
-        tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
+        //tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
+        tabLayout = new TabLayout(tabs,"unfocusedBG","focusedBG");
 
         mainPane.maxHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
         mainPane.minHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
+        mainPane.maxHeightProperty().bind(root.heightProperty());
+        mainPane.minHeightProperty().bind(root.heightProperty());
         mainPane.maxWidthProperty().bind(root.widthProperty());
         mainPane.minWidthProperty().bind(root.widthProperty());
         TabsPaneVertical tabsPaneVertical = new TabsPaneVertical();
@@ -219,6 +226,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         tabsPaneVertical.maxWidthProperty().bind(mainPane.widthProperty());
         tabsPaneVertical.minWidthProperty().bind(mainPane.widthProperty());
         mainPane.getChildren().add(tabsPaneVertical);
+    }
+
+    private Scene getScene() {
+        return this;
     }
 
     /**
@@ -242,7 +253,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //left menu
         //top
         ComboBox airportsCombo = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
-        airportsCombo.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+        //airportsCombo.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+        airportsCombo.getStyleClass().add("veryfocusedBG");
         airportsCombo.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
@@ -263,7 +275,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //bottom
 
         ComboBox runwaysCombo = new ComboBox(FXCollections.observableArrayList(appWindow.airport.getRunways())); //FXCollections.observableArrayList(appWindow.airport.getRunways()));
-        runwaysCombo.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+        //runwaysCombo.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+        runwaysCombo.getStyleClass().add("veryfocusedBG");
         runwaysCombo.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object o, Object t1) {
@@ -341,7 +354,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
         for (Button button : darkButtons) {
-            button.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+            //button.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+            button.getStyleClass().add("focusedBG");
             button.setTextFill(Theme.fg);
             button.setCursor(Cursor.HAND);
         }
@@ -758,7 +772,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private TabLayout makeObstacleOptionsPane() {
         // Obstacle preset ComboBox
         ComboBox obstacleComboBox = new ComboBox(FXCollections.observableArrayList(appWindow.obstaclePresets));
-        obstacleComboBox.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+        //obstacleComboBox.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+        obstacleComboBox.getStyleClass().add("veryfocusedBG");
 
         obstacleComboBox.setOnAction(event -> {
             Object selectedObstacle = obstacleComboBox.getSelectionModel().getSelectedItem();
@@ -837,7 +852,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         obstacleOptions.add(new Pair<>("Obstacle", obstacleData));
         obstacleOptions.add(new Pair<>("Change History", new BorderPane(history)));
-        TabLayout obstacleOptionsPane = new TabLayout(obstacleOptions,Theme.focusedBG,Theme.veryfocusedBG);
+        TabLayout obstacleOptionsPane = new TabLayout(obstacleOptions,"focusedBG","veryfocusedBG");
         return obstacleOptionsPane;
     }
 
@@ -929,7 +944,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         ArrayList<Pair<String, Pane>> declaredDistances = new ArrayList<>();
         declaredDistances.add(new Pair<>("Declared Distances", distancesGrid));
-        TabLayout declaredDistancesPane = new TabLayout(declaredDistances,Theme.focusedBG,Theme.veryfocusedBG);
+        TabLayout declaredDistancesPane = new TabLayout(declaredDistances,"focusedBG","veryfocusedBG");
         distancesGrid.getChildren().forEach(new Consumer<Node>() {
             @Override
             public void accept(Node node) {
@@ -1064,7 +1079,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                         )
                 )
         );
-        TabLayout breakDownPane = new TabLayout(breakDown,Theme.focusedBG,Theme.veryfocusedBG);
+        TabLayout breakDownPane = new TabLayout(breakDown,"focusedBG","veryfocusedBG");
         return breakDownPane;
     }
     private TextField makeTableCell(SimpleDoubleProperty property){
@@ -1189,7 +1204,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         viewTabs.add(new Pair<>("Both Views", dualView));
         viewTabs.add(new Pair<>("Side-On Views", sideView));
         viewTabs.add(new Pair<>("Top-Down Views", topView));
-        TabLayout viewPane = new TabLayout(viewTabs,Theme.focusedBG,Theme.veryfocusedBG);
+        TabLayout viewPane = new TabLayout(viewTabs,"focusedBG","veryfocusedBG");
         return viewPane;
     }
 
@@ -1258,10 +1273,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         ToggleButton button2 = new ToggleButton(label2);
         button.setFont(Theme.font);
         button.setTextFill(Theme.fg);
-        button .setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+        //button .setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+        button.getStyleClass().add("focusedBG");
         button2.setFont(Theme.font);
         button2.setTextFill(Theme.fg);
-        button2.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+        //button2.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+        button2.getStyleClass().add("veryfocusedBG");
         segment.getChildren().addAll(button,button2);
         button.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -1271,10 +1288,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 }
                 if (t1) {
                     property.set(true);
-                    button2.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
+                    //button2.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
+                    button2.getStyleClass().add("extremelyfocusedBG");
                     button2.setTextFill(Theme.fg);
-                    button.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
-                    button.setTextFill(Theme.extremelyfocusedBG);
+                    button.getStyleClass().add("unfocusedBG");
+                    //button.setTextFill(Theme.extremelyfocusedBG);
+                    button.getStyleClass().add("extremelyfocusedT");
                 }
             }
         });
@@ -1286,9 +1305,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 }
                 if (t1) {
                     property.set(false);
-                    button2.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
-                    button2.setTextFill(Theme.extremelyfocusedBG);
-                    button.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
+                    //button.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+                    button2.getStyleClass().add("unfocusedBG");
+                    //button2.setTextFill(Theme.extremelyfocusedBG);
+                    button2.getStyleClass().add("extremelyfocusedT");
+                    //button.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
+                    button.getStyleClass().add("extremelyfocusedBG");
                     button.setTextFill(Theme.fg);
                 }
             }

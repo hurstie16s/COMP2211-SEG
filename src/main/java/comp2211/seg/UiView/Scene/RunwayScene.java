@@ -352,7 +352,8 @@ public class RunwayScene extends SceneAbstract {
   }
   public void buildmenuless(){
     super.buildmenuless();
-    setFill(Theme.bgRunway);
+    //setFill(Theme.bgRunway);
+    getRoot().getStyleClass().add("bgRunway");
     logger.info("building");
     configureCamera();
     render();
@@ -388,7 +389,8 @@ public class RunwayScene extends SceneAbstract {
      */
     public void buildmenulessalt(){
     super.buildmenuless();
-    setFill(Theme.bgRunway);
+      //setFill(Theme.bgRunway);
+    getRoot().getStyleClass().add("bgRunway");
     logger.info("building");
     configureCamera();
     render();
@@ -414,7 +416,8 @@ public class RunwayScene extends SceneAbstract {
   @Override
   public void build() {
     super.build();
-    setFill(Theme.bgRunway);
+    //setFill(Theme.bgRunway);
+    getRoot().getStyleClass().add("bgRunway");
     logger.info("building");
     configureCamera();
     render();

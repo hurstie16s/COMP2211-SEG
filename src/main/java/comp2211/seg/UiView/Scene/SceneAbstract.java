@@ -132,7 +132,8 @@ public abstract class SceneAbstract extends Scene {
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
     mainPane.setPickOnBounds(false);
     root.setPickOnBounds(false);
-    root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG, null, null)));
+    //root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG, null, null)));
+    root.getStyleClass().add("unfocusedBG");
 
     root.setMaxWidth(width);
     root.setMaxHeight(height);
@@ -224,7 +225,8 @@ public abstract class SceneAbstract extends Scene {
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
     mainPane.setPickOnBounds(false);
     root.setPickOnBounds(false);
-    root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG, null, null)));
+    //root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG, null, null)));
+    root.getStyleClass().add("unfocusedBG");
 
     root.setMaxWidth(width);
     root.setMaxHeight(height);
