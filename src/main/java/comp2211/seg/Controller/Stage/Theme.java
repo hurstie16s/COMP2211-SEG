@@ -138,7 +138,6 @@ public class Theme {
     public static Color inverse(Color colour) {
         double total = (Math.exp(1 - Math.log(1+(colour.getRed()+ colour.getGreen()+colour.getBlue())*(Math.E-1)/3))-1)/(Math.E-1);
         return makeColour(total, colour);
-
     }
 
     /**
