@@ -1,0 +1,84 @@
+.bg {
+    -fx-background-color: #cccccc;
+}
+.bgRunway {
+    -fx-background-color: #d9d9d9;
+}
+.unfocusedBG {
+    -fx-background-color: #e6e6e6;
+}
+.focusedBG {
+    -fx-background-color: #cccccc;
+}
+.veryfocusedBG {
+    -fx-background-color: #bfbfbf;
+}
+.extremelyfocusedBG {
+    -fx-background-color: #b3b3b3;
+}
+.fg {
+    -fx-text-fill: #666666;
+}
+.fgBright {
+    -fx-text-fill: #595959;
+}
+.labelfg {
+    -fx-text-fill: #000000;
+}
+.grass {
+    -fx-background-color: #93cd81;
+}
+.obstacle {
+    -fx-background-color: #ff0000;
+}
+.slope {
+    -fx-background-color: #008080;
+}
+.cga {
+    -fx-background-color: #008080;
+}
+.clearway {
+    -fx-background-color: #db0056;
+}
+.stopway {
+    -fx-background-color: #faa40a;
+}
+.physicalResa {
+    -fx-background-color: #fed9b4;
+}
+.runway {
+    -fx-background-color: #a5a5a5;
+}
+.toda {
+    -fx-background-color: #ff00ff;
+}
+.tora {
+    -fx-background-color: #00ffff;
+}
+.asda {
+    -fx-background-color: #ffff00;
+}
+.lda {
+    -fx-background-color: #0000ff;
+}
+.resa {
+    -fx-background-color: #d06800;
+}
+.stripend {
+    -fx-background-color: #00ff00;
+}
+.blastallowance {
+    -fx-background-color: #cccc00;
+}
+.font {
+    -fx-font-family: "Calibri";
+    -fx-font-size: 20;
+}
+.fontbig {
+    -fx-font-family: "Calibri";
+    -fx-font-size: 32;
+}
+.fontsmall {
+    -fx-font-family: "Calibri";
+    -fx-font-size: 16;
+}

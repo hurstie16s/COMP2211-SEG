@@ -2,7 +2,6 @@ package comp2211.seg.Controller.Stage;
 
 import comp2211.seg.App;
 import comp2211.seg.Controller.Interfaces.AirportsData;
-import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.Obstacle;
 import comp2211.seg.ProcessDataModel.Runway;
@@ -14,8 +13,9 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * The AppWindow class is responsible for managing the application's window and scenes.
@@ -66,7 +66,7 @@ public class AppWindow {
         airports = AirportsData.getAirports();
         obstaclePresets = new ArrayList<>();
         obstaclePresetSetup();
-        Theme.makeDark();
+        //Theme.makeDark();
 
         airport = airports.get(0);
 
@@ -180,11 +180,10 @@ public class AppWindow {
     }
 
     /**
-     * Loads any required resources for the application.
+     * Sets up the resources for the application.
      */
-    private void setupResources() {
-        logger.info("Loading resources"); //no resources used atm i.e. CSS/FXML
-    }
+    private void setupResources() {}
+
 
     /**
      * Sets up the primary stage of the application.
@@ -194,6 +193,7 @@ public class AppWindow {
         stage.setMinWidth(width);
         stage.setMinHeight(height);
         stage.setOnCloseRequest(ev -> App.getInstance().shutdown());
+
     }
 
     /**
@@ -249,8 +249,12 @@ public class AppWindow {
         // Create the new scene and set it up
         newScene.build();
         currentScene = newScene;
+        // Apply the stylesheet to the scene
+        currentScene.getStylesheets().clear();
+        currentScene.getStylesheets().add("/style/lightStyle.css");
         stage.setScene(currentScene);
-        Theme.retheme(currentScene);
+        //Theme.retheme(currentScene);
+
         currentScene.makeHelp(false);
 
         // Initialise the scene when ready
