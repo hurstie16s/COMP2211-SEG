@@ -19,6 +19,7 @@ import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,6 +28,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
@@ -263,17 +265,43 @@ public class RunwayScene extends SceneAbstract {
      * Make scale.
      */
     public void makeScale(){
-    double length = 200;
-    addCuboid(appWindow.runway.runwayLengthProperty().divide(2).add(appWindow.runway.clearwayLeftProperty()).subtract(new SimpleDoubleProperty(length+20).divide(2)),
-            new SimpleDoubleProperty(100).add(5),
-            (DoubleBinding) Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).subtract(20).divide(-2).divide(scaleFactorDepth),
-            new SimpleDoubleProperty(length).add(0),
-            new SimpleDoubleProperty(2).divide(scaleFactorHeight),
-            new SimpleDoubleProperty(2).divide(scaleFactorDepth),
-            Color.WHITE
-    );
+      Line line = new Line();
+      line.startXProperty().set(0);
+      Label sclabel = new Label();
+      VBox scale = new VBox(line,sclabel);
 
-  }
+      double total = (Math.abs(Math.sin(Math.toRadians(angleZProperty.get()))/ scaleFactor.get()) + Math.abs(Math.cos(Math.toRadians(angleZProperty.get()))/ scaleFactorHeight.get()));
+      double sf = 100 * Math.pow(2, Math.floor(Math.log(0.004 * total) / Math.log(2)));
+      double length = sf * (Math.abs(Math.sin(Math.toRadians(angleZProperty.get()))* scaleFactor.get()) + Math.abs(Math.cos(Math.toRadians(angleZProperty.get()))* scaleFactorHeight.get()));
+      line.endXProperty().set(length);
+      sclabel.setText(Double.toString(sf));
+      ChangeListener scaleCalc = new ChangeListener<Number>() {
+        @Override
+        public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+          double total = (Math.abs(Math.sin(Math.toRadians(angleZProperty.get()))/ scaleFactor.get()) + Math.abs(Math.cos(Math.toRadians(angleZProperty.get()))/ scaleFactorHeight.get()));
+          double sf = 100 * Math.pow(2, Math.floor(Math.log(0.004 * total * widthProperty().get()) / Math.log(2)));
+          double length = sf * (Math.abs(Math.sin(Math.toRadians(angleZProperty.get()))* scaleFactor.get()) + Math.abs(Math.cos(Math.toRadians(angleZProperty.get()))* scaleFactorHeight.get()));
+          line.endXProperty().set(length);
+          sclabel.setText(Double.toString(sf));
+
+
+        }
+      };
+
+      appWindow.currentScene.topMenu.getChildren().add(scale);
+
+      scaleFactor.addListener(scaleCalc);
+      scaleFactorHeight.addListener(scaleCalc);
+      addCuboid(appWindow.runway.runwayLengthProperty().divide(2).add(appWindow.runway.clearwayLeftProperty()).subtract(new SimpleDoubleProperty(length+20).divide(2)),
+              new SimpleDoubleProperty(100).add(5),
+              (DoubleBinding) Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).subtract(20).divide(-2).divide(scaleFactorDepth),
+              new SimpleDoubleProperty(length).add(0),
+              new SimpleDoubleProperty(2).divide(scaleFactorHeight),
+              new SimpleDoubleProperty(2).divide(scaleFactorDepth),
+              Color.WHITE
+      );
+
+    }
 
     /**
      * Creates a 3D box representing the runway, textured with
