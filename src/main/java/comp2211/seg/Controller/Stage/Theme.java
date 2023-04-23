@@ -44,7 +44,7 @@ public class Theme {
      * DoubleBinding xOffset, double yOffset, DoubleBinding length,
      * RunwayScene scene, boolean direction, SimpleBooleanProperty visibility)
      */
-    static public Color labelfg = Color.gray(0);
+    static public Color labelfg;// = Color.gray(0);
     /**
      * The Grass.
      */

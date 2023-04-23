@@ -126,6 +126,7 @@ public class HomeScene extends SceneAbstract{
     airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
     //airports.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     airports.getStyleClass().add("focusedBG");
+    airports.getStyleClass().add("fontsmall");
     airports.valueProperty().addListener((observableValue, o, t1) -> appWindow.setAirport((Airport) t1));
     airports.valueProperty().set(appWindow.airport);
 
@@ -133,6 +134,7 @@ public class HomeScene extends SceneAbstract{
     runways = new ComboBox(FXCollections.observableArrayList(appWindow.airport.getRunways()));
     //runways.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     runways.getStyleClass().add("focusedBG");
+    runways.getStyleClass().add("fontsmall");
     runways.valueProperty().addListener(new ChangeListener() {
       @Override
       public void changed(ObservableValue observableValue, Object o, Object t1) {
@@ -156,14 +158,17 @@ public class HomeScene extends SceneAbstract{
     startApplication.getStyleClass().add("fg");
     //startApplication.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     startApplication.getStyleClass().add("focusedBG");
+    startApplication.getStyleClass().add("fontsmall");
     //importAirport.setTextFill(Theme.fg);
     importAirport.getStyleClass().add("fg");
     //importAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     importAirport.getStyleClass().add("focusedBG");
+    importAirport.getStyleClass().add("fontsmall");
     //newAirport.setTextFill(Theme.fg);
     newAirport.getStyleClass().add("fg");
     //newAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     newAirport.getStyleClass().add("focusedBG");
+    newAirport.getStyleClass().add("fontsmall");
 
     //importAirport.setDisable(true);
     // Import Airport
