@@ -78,6 +78,7 @@ public abstract class SceneAbstract extends Scene {
    */
   public SceneAbstract(Pane root, AppWindow appWindow, double width, double height) {
     super(root, appWindow.getWidth(), appWindow.getHeight(), Color.BLACK);
+    refreshables.clear();
     this.root = root;
     this.width = width;
     this.height = height;
@@ -95,6 +96,7 @@ public abstract class SceneAbstract extends Scene {
    */
   public SceneAbstract(Pane root, AppWindow appWindow, double width, double height, boolean depthBuffer) {
     super(root, appWindow.getWidth(), appWindow.getHeight(), depthBuffer, SceneAntialiasing.BALANCED);
+    refreshables.clear();
     this.root = root;
     this.width = width;
     this.height = height;

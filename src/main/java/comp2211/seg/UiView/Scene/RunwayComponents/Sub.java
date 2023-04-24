@@ -17,6 +17,7 @@ public class Sub extends SubScene {
     }
     public void build(){
 
+        getRoot().getStyleClass().add("transparent");
         PerspectiveCamera camera = new PerspectiveCamera();
         setCamera(camera);
     }

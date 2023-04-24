@@ -206,10 +206,8 @@ public class RunwayScene extends SceneAbstract {
       angley = angleZProperty.get();
     });
     setOnMouseDragged(event ->{
-      if (!sideProperty.get()) {
-        angleXProperty.set(Math.min(Math.max(anglex + y - event.getSceneY(), -90), 0));
-        angleZProperty.set(angley - x + event.getSceneX());
-      }
+      angleXProperty.set(Math.min(Math.max(anglex + y - event.getSceneY(), -90), 0));
+      angleZProperty.set(angley - x + event.getSceneX());
     });
     setOnScroll(event -> mainPane.translateZProperty().set(mainPane.getTranslateZ()-event.getDeltaY()));
   }
@@ -400,7 +398,11 @@ public class RunwayScene extends SceneAbstract {
   public void buildmenuless(){
     super.buildmenuless();
     //setFill(Theme.bgRunway);
-    getRoot().getStyleClass().add("bgRunway");
+    getRoot().getStyleClass().add("transparent");
+    root.getStyleClass().clear();
+    mainPane.getStyleClass().clear();
+    root.getStyleClass().add("transparent");
+    mainPane.getStyleClass().add("transparent");
     logger.info("building");
     configureCamera();
     render();
@@ -437,7 +439,11 @@ public class RunwayScene extends SceneAbstract {
     public void buildmenulessalt(){
     super.buildmenuless();
       //setFill(Theme.bgRunway);
-    getRoot().getStyleClass().add("bgRunway");
+    getRoot().getStyleClass().add("transparent");
+    root.getStyleClass().clear();
+    mainPane.getStyleClass().clear();
+    root.getStyleClass().add("transparent");
+    mainPane.getStyleClass().add("transparent");
     logger.info("building");
     configureCamera();
     render();
@@ -464,7 +470,11 @@ public class RunwayScene extends SceneAbstract {
   public void build() {
     super.build();
     //setFill(Theme.bgRunway);
-    getRoot().getStyleClass().add("bgRunway");
+    getRoot().getStyleClass().add("transparent");
+    root.getStyleClass().clear();
+    mainPane.getStyleClass().clear();
+    root.getStyleClass().add("transparent");
+    mainPane.getStyleClass().add("transparent");
     logger.info("building");
     configureCamera();
     render();

@@ -4,6 +4,11 @@
 .bgRunway {
     -fx-background-color: #2b2b2b;
 }
+.transparent {
+    -fx-background-color: transparent;
+    -fx-base: transparent;
+}
+
 .unfocusedBG {
     -fx-background-color: #1f1f1f;
 }

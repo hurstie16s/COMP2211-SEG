@@ -72,10 +72,8 @@ public class RunwaySceneLoader extends SceneAbstract{
             scene.angley = scene.angleZProperty.get();
         });
         setOnMouseDragged(event ->{
-            if (!scene.sideProperty.get()) {
-                scene.angleXProperty.set(Math.min(Math.max(scene.anglex + scene.y - event.getSceneY(), -90), 0));
-                scene.angleZProperty.set(scene.angley - scene.x + event.getSceneX());
-            }
+            scene.angleXProperty.set(Math.min(Math.max(scene.anglex + scene.y - event.getSceneY(), -90), 0));
+            scene.angleZProperty.set(scene.angley - scene.x + event.getSceneX());
         });
         setOnScroll(event -> subScene.cameraProperty().get().translateZProperty().set(subScene.cameraProperty().get().getTranslateZ()+event.getDeltaY()));
 
@@ -91,6 +89,10 @@ public class RunwaySceneLoader extends SceneAbstract{
         scene.initialise();
         subScene = new Sub(subPane,width,height,true, SceneAntialiasing.BALANCED);
         subPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+        runwayPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+        getRoot().getStyleClass().add("transparent");
+        root.getStyleClass().add("transparent");
+        mainPane.getStyleClass().add("transparent");
         subPane.getChildren().add(runwayPane);
         root.getChildren().removeAll(root.getChildren());
         root.getChildren().add(subScene);

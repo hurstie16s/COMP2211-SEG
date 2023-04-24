@@ -230,11 +230,9 @@ public class AppWindow {
      */
     public void startRunwaySceneRotated() {
         startRunwayScene();
-        try {
-
+        if (currentScene instanceof RunwayScene){
             ((RunwayScene) currentScene).toggleView();
-        }catch (Exception e){
-
+        } else if (currentScene instanceof RunwaySceneLoader) {
             ((RunwaySceneLoader) currentScene).scene.toggleView();
         }
     }
