@@ -3,6 +3,7 @@ package comp2211.seg.UiView.Overlay;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.UiView.Scene.RunwayScene;
+import comp2211.seg.UiView.Scene.Utilities.CssColorParser;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.NumberBinding;
@@ -104,18 +105,27 @@ public class RunwayLabel extends Group {
             color
         );
 
+        Color labelfgColor;
+        try {
+            labelfgColor = CssColorParser.getColorFromCssClass(scene,".labelfg","-fx-text-fill:",15);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         Group leftVertical = makeLineVertical(
                 xOffset,
                 (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
-                Theme.labelfg
+                //Theme.labelfg
+                labelfgColor
         );
 
         Group rightVertical = makeLineVertical(
                 xOffset.subtract(length),
                 (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
-                Theme.labelfg
+                //Theme.labelfg
+                labelfgColor
         );
 
         leftHorizontal.getTransforms().add(xRotate);

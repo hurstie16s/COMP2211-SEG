@@ -1,7 +1,7 @@
 package comp2211.seg.UiView.Scene.RunwayComponents;
 
-import comp2211.seg.Controller.Interfaces.GlobalVariables;
-import comp2211.seg.Controller.Stage.Theme;
+import comp2211.seg.UiView.Scene.RunwayScene;
+import comp2211.seg.UiView.Scene.Utilities.CssColorParser;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Parent;
@@ -26,10 +26,11 @@ public class ClearedGradedArea extends Polygon {
     /**
      * Constructs a new instance of the ClearedGradedArea class with the specified parent.
      *
-     * @param parent the parent object of this cleared graded area
-     * @param filled the filled
+     * @param parent      the parent object of this cleared graded area
+     * @param filled      the filled
+     * @param runwayScene added to get stylesheet
      */
-    public ClearedGradedArea(Parent parent,boolean filled){
+    public ClearedGradedArea(Parent parent, boolean filled, RunwayScene runwayScene){
         this.parent = parent;
         for (Property prop: new Property[] {
             left,
@@ -43,10 +44,18 @@ public class ClearedGradedArea extends Polygon {
         }) {
             prop.addListener((observableValue, o, t1) -> redraw());
         }
+        Color cgaColor;
+        try {
+            cgaColor = CssColorParser.getColorFromCssClass(runwayScene,".cga","-fx-background-color:",22);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         if (filled) {
-            setFill(Theme.cga);
+            //setFill(Theme.cga);
+            setFill(cgaColor);
         } else {
-            setStroke(Theme.cga);
+            //setStroke(Theme.cga);
+            setStroke(cgaColor);
             setFill(Color.TRANSPARENT);
             setStrokeWidth(2);
         }
