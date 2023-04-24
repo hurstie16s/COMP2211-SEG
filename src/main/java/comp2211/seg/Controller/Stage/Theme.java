@@ -44,67 +44,67 @@ public class Theme {
      * DoubleBinding xOffset, double yOffset, DoubleBinding length,
      * RunwayScene scene, boolean direction, SimpleBooleanProperty visibility)
      */
-    static public Color labelfg;// = Color.gray(0);
+    //static public Color labelfg = Color.gray(0);
     /**
      * The Grass.
      */
-    static public Color grass = Color.web("#93cd81");
+    //static public Color grass = Color.web("#93cd81");
     /**
      * The Obstacle.
      */
-    static public Color obstacle = Color.web("#ff0000");
+    //static public Color obstacle = Color.web("#ff0000");
     /**
      * The Slope.
      */
-    static public Color slope = Color.web("#008080");
+    //static public Color slope = Color.web("#008080");
     /**
      * The Cga.
      */
-    static public Color cga = Color.web("#008080");
+    //static public Color cga = Color.web("#008080");
     /**
      * The Clearway.
      */
-    static public Color clearway = Color.web("#db0056");
+    //static public Color clearway = Color.web("#db0056");
     /**
      * The Stopway.
      */
-    static public Color stopway = Color.web("#faa40a");
+    //static public Color stopway = Color.web("#faa40a");
     /**
      * The Physical resa.
      */
-    static public Color physicalResa = Color.web("#fed9b4");
+    //static public Color physicalResa = Color.web("#fed9b4");
     /**
      * The Runway.
      */
-    static public Color runway = Color.web("#a5a5a5");
+    //static public Color runway = Color.web("#a5a5a5");
     /**
      * The Toda.
      */
-    static public Color toda = Color.web("#ff00ff");
+    //static public Color toda = Color.web("#ff00ff");
     /**
      * The Tora.
      */
-    static public Color tora = Color.web("#00ffff");
+    //static public Color tora = Color.web("#00ffff");
     /**
      * The Asda.
      */
-    static public Color asda = Color.web("#ffff00");
+    //static public Color asda = Color.web("#ffff00");
     /**
      * The Lda.
      */
-    static public Color lda = Color.web("#0000ff");;
+    //static public Color lda = Color.web("#0000ff");;
     /**
      * The Resa.
      */
-    static public Color resa = Color.web("#d06800");
+    //static public Color resa = Color.web("#d06800");
     /**
      * The Stripend.
      */
-    static public Color stripend = Color.web("#00ff00");
+    //static public Color stripend = Color.web("#00ff00");
     /**
      * The Blastallowance.
      */
-    static public Color blastallowance = Color.web("#cccc00");
+    //static public Color blastallowance = Color.web("#cccc00");
     /**
      * The Font.
      * left for sake of:
@@ -113,7 +113,7 @@ public class Theme {
      *         data.setFont(new Font(Theme.font.getName(),i));
      * in BaseScene line 863
      */
-    static public Font font =Font.font("Calibri", 20);
+    //static public Font font =Font.font("Calibri", 20);
     //static public Font fontbig =Font.font("Calibri", 32);
     /**
      * The Fontsmall.

@@ -863,7 +863,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Node makeOutputLabel(SimpleStringProperty string, SimpleBooleanProperty visibility, int i) {
         Label data = new Label();
-        data.setFont(new Font(Theme.font.getName(),i));
+
+        data.setFont(new Font("Calibri",i)); //Hardcoding this annoying use was easier lol
         //data.setTextFill(Theme.fg);
         data.getStyleClass().add("fg");
         data.setText(String.valueOf(string.getValue()));

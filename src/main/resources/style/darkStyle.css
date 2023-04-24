@@ -75,9 +75,6 @@
 .asda {
     -fx-background-color: #49ba26;
 }
-#myLabel {
-    -fx-text-fill: #ff0000;
-}
 .lda {
     -fx-background-color: #00edfa;
 }
@@ -101,6 +98,128 @@
 .fontsmall {
     -fx-font-family: "Calibri";
     -fx-font-size: 16;
+}
+.spinner {
+    -fx-base: rgba(60, 63, 65, 255);
+}
+
+.home-background {
+    -fx-background-image: url("../images/heathrowRunway.jpg");
+    -fx-background-size: cover;
+}
+.runway-background {
+    -fx-background-image: url("../images/grass.jpg");
+    -fx-background-size: cover;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-pane{
+    -fx-background-color: transparent;
+}
+.text-field {
+    -fx-background-color: rgba(52, 52, 52, 255);
+    -fx-background-insets: 0;
+    -fx-padding: 0 0 0 0;
+    -fx-text-fill: rgba(180, 180, 180, 255);
+}
+.text-field:focused {
+    -fx-background-color: rgba(52, 52, 52, 255);
+    -fx-text-fill: rgba(255, 255, 255, 255);
+}
+.table-cell:filled {
+    -fx-background-color: rgba(52, 52, 52, 255);
+    -fx-text-fill: rgba(180, 180, 180, 255);
+}
+
+.table-view:row-selection .table-row-cell:selected .table-cell {
+    -fx-background-color: rgba(65, 65, 65, 255);
+}
+
+.table-view:cell-selection .table-cell:selected {
+    -fx-background-color: rgba(65, 65, 65, 255);
+}
+.combo-box {
+    -fx-background-color: rgba(39, 39, 39, 255);
+}.combo-box .list-cell {
+     -fx-background-color: rgba(39, 39, 39, 255);
+     -fx-text-fill: rgba(180, 180, 180, 255);
+ }
+.combo-box .combo-box-popup .list-view, .combo-box .combo-box-popup .list-cell {
+    -fx-background-color: rgba(39, 39, 39, 255);
+    -fx-text-fill: rgba(180, 180, 180, 255);
+}.combo-box .combo-box-popup .list-cell:hover {
+     -fx-background-color: rgba(52, 52, 52, 255);
+     -fx-text-fill: rgba(180, 180, 180, 255);
+ }
+.table-view {
+    -fx-base: rgba(26, 26, 26, 255);
+    -fx-background-color: grey;
+    -fx-border-style: solid;
+    -fx-border-color: black;
+    -fx-text-fill: white;
+    /* -fx-border-width: 0; */
+}
+/* just die! */
+.table-view .scroll-bar * {
+    -fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+}
+/*Style of entire tableView when is getting focused*/
+.table-view:focused{
+    -fx-background-color: grey;
+}
+/*Style of each column header's label  in the tableView*/
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-font-weight:bold;
+    -fx-font-size:17px;
+    -fx-text-fill: white;
+}
+/*Style of each table cell*/
+.table-view .table-cell{
+    -fx-font-size:16px;
+    -fx-border-color: black;
+    /* -fx-text-fill:orange; */
+}
+/*Style of each column in the tableView*/
+.table-view .table-column{
+    -fx-alignment:center;
+}
+/*Style of each entire row in the table view when is getting focused*/
+.table-row-cell:focused {
+    -fx-background-color: grey;
+}
+.table-row-cell:selected {
+    -fx-background-color: grey;
+}
+
+.grid-border-text-style {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+}
+.button-dark {
+    -fx-background-color: rgba(26, 26, 26, 255);
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+/* useless but for a record */
+.table-row-cell:empty {
+    -fx-background-color: rgba(26, 26, 26, 255);
+}
+
+.table-row-cell:empty .table-cell {
+    -fx-border-width: 0px;
+}
+
+.table-view .table-column:empty {
+    -fx-background-color: transparent;
 }
 
 

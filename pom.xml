@@ -65,6 +65,11 @@
             <artifactId>javafx-swing</artifactId>
             <version>19.0.2.1</version>
         </dependency>
+        <dependency>
+            <groupId>net.sourceforge.cssparser</groupId>
+            <artifactId>cssparser</artifactId>
+            <version>0.9.30</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
