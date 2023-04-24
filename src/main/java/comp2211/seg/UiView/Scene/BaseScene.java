@@ -445,15 +445,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         GridPane airportData = new GridPane();
 
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < 10; i++) {
             ColumnConstraints ccx = new ColumnConstraints();
-            ccx.setPercentWidth(100/17);
-            airportData.getColumnConstraints().add(ccx);
-        }
-        for (int i = 0; i < 3; i++) {
-
-            ColumnConstraints ccx = new ColumnConstraints();
-            ccx.setPercentWidth(200/17);
+            ccx.setPercentWidth(10);
             airportData.getColumnConstraints().add(ccx);
         }
 
@@ -464,70 +458,81 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             rcx.setPercentHeight(100/4);
             rc.add(rcx);
         }
-        String[] titles = new String[] {"Runway(RWY)","Runway Strip","Stopway(SWY)","Clearway(CWY)","RESA","Threshold\nDisplacement","Strip End","Blast\nProtection"};
-        for (int i = 0; i < 8; i++) {
+        String[] titles = new String[] {"Runway(RWY)","Stopway(SWY)","Clearway(CWY)","RESA","Threshold\nDisplacement","Strip End","Blast\nProtection"};
+        for (int i = 0; i < 7; i++) {
 
             Label data = makeLabel(titles[i]);
             data.setAlignment(Pos.CENTER);
             data.setTextAlignment(TextAlignment.CENTER);
             //data.setFont(Theme.fontsmall);
             data.getStyleClass().add("fontsmall");
-            if (i>=5){
-                GridPane.setRowSpan(data,2);
-                airportData.add(data,6+i,0);
-            }else{
+            if (i==0){
                 GridPane.setColumnSpan(data,2);
+                airportData.add(data,1,0);
+            }else if (i==3){
+                GridPane.setColumnSpan(data,2);
+                airportData.add(data,5,0);
+            }else if (i<3&&i>0){
                 //data.setFont(new Font("Calibri",17));
-                airportData.add(data,1+i*2,0);
+                airportData.add(data,i+2,0);
+            }else{
+                GridPane.setRowSpan(data,2);
+                //data.setFont(new Font("Calibri",17));
+                airportData.add(data,i+3,0);
             }
 
         }
-        for (int i = 0; i < 5; i++) {
+        int counter = 0;
+        for (int i = 0; i < 4; i++) {
+            if (i==0 || i==3){
+                var lengthLabel = makeLabel("Length");
+                var widthLabel = makeLabel("Width");
 
-            var lengthLabel = makeLabel("Length");
-            var widthLabel = makeLabel("Width");
+                //lengthLabel.setFont(Theme.fontsmall);
+                lengthLabel.getStyleClass().add("fontsmall");
+                //widthLabel.setFont(Theme.fontsmall);
+                widthLabel.getStyleClass().add("fontsmall");
 
-            //lengthLabel.setFont(Theme.fontsmall);
-            lengthLabel.getStyleClass().add("fontsmall");
-            //widthLabel.setFont(Theme.fontsmall);
-            widthLabel.getStyleClass().add("fontsmall");
+                counter += 1;
+                airportData.add(lengthLabel,counter,1);
+                counter += 1;
+                airportData.add(widthLabel,counter,1);
+            }else{
+                var lengthLabel = makeLabel("Length");
 
-            airportData.add(lengthLabel,1+i*2,1);
-            airportData.add(widthLabel,2+i*2,1);
+                //lengthLabel.setFont(Theme.fontsmall);
+                lengthLabel.getStyleClass().add("fontsmall");
+
+                counter += 1;
+                airportData.add(lengthLabel,counter,1);
+            }
+
         }
         Label desl = makeLabel(appWindow.runway.getRunwayDesignatorLeft());
         desl.setAlignment(Pos.CENTER);
         airportData.add(desl,0,2);
         airportData.add(makeTableCell(appWindow.runway.runwayLengthProperty()),1,2);
         airportData.add(makeTableCell(appWindow.runway.runwayWidthProperty()),2,2);
-        airportData.add(new TextField("-"),3,2);
-        airportData.add(new TextField("-"),4,2);
-        airportData.add(makeTableCell(appWindow.runway.stopwayLeftProperty()),5,2);
-        airportData.add(new TextField("-"),6,2);
-        airportData.add(makeTableCell(appWindow.runway.clearwayLeftProperty()),7,2);
-        airportData.add(new TextField("-"),8,2);
-        airportData.add(makeTableCell(appWindow.runway.RESAWidthProperty()),9,2);
-        airportData.add(makeTableCell(appWindow.runway.RESAHeightProperty()),10,2);
-        airportData.add(makeTableCell(appWindow.runway.dispThresholdLeftProperty()),11,2);
-        airportData.add(makeTableCell(appWindow.runway.stripEndProperty()),12,2);
-        airportData.add(new TextField("500m"),13,2);
+        airportData.add(makeTableCell(appWindow.runway.stopwayLeftProperty()),3,2);
+        airportData.add(makeTableCell(appWindow.runway.clearwayLeftProperty()),4,2);
+        airportData.add(makeTableCell(appWindow.runway.RESAWidthProperty()),5,2);
+        airportData.add(makeTableCell(appWindow.runway.RESAHeightProperty()),6,2);
+        airportData.add(makeTableCell(appWindow.runway.dispThresholdLeftProperty()),7,2);
+        airportData.add(makeTableCell(appWindow.runway.stripEndProperty()),8,2);
+        airportData.add(new TextField("500m"),9,2);
 
         Label desr = makeLabel(appWindow.runway.getRunwayDesignatorRight());
         desr.setAlignment(Pos.CENTER);
         airportData.add(desr,0,3);
         airportData.add(makeTableCell(appWindow.runway.runwayLengthProperty()),1,3);
         airportData.add(makeTableCell(appWindow.runway.runwayWidthProperty()),2,3);
-        airportData.add(new TextField("-"),3,3);
-        airportData.add(new TextField("-"),4,3);
-        airportData.add(makeTableCell(appWindow.runway.stopwayRightProperty()),5,3);
-        airportData.add(new TextField("-"),6,3);
-        airportData.add(makeTableCell(appWindow.runway.clearwayRightProperty()),7,3);
-        airportData.add(new TextField("-"),8,3);
-        airportData.add(makeTableCell(appWindow.runway.RESAWidthProperty()),9,3);
-        airportData.add(makeTableCell(appWindow.runway.RESAHeightProperty()),10,3);
-        airportData.add(makeTableCell(appWindow.runway.dispThresholdRightProperty()),11,3);
-        airportData.add(makeTableCell(appWindow.runway.stripEndProperty()),12,3);
-        airportData.add(new TextField("500m"),13,3);
+        airportData.add(makeTableCell(appWindow.runway.stopwayRightProperty()),3,3);
+        airportData.add(makeTableCell(appWindow.runway.clearwayRightProperty()),4,3);
+        airportData.add(makeTableCell(appWindow.runway.RESAWidthProperty()),5,3);
+        airportData.add(makeTableCell(appWindow.runway.RESAHeightProperty()),6,3);
+        airportData.add(makeTableCell(appWindow.runway.dispThresholdRightProperty()),7,3);
+        airportData.add(makeTableCell(appWindow.runway.stripEndProperty()),8,3);
+        airportData.add(new TextField("500m"),9,3);
         for (Node node:airportData.getChildren()) {
             if (node instanceof Control) {
                 Control control = (Control) node;
