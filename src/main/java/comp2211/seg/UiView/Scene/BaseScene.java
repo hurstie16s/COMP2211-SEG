@@ -374,7 +374,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         HBox hBoxMenuButtons = new HBox();
         Region region = new Region();
         HBox.setHgrow(region,Priority.ALWAYS);
-        hBoxMenuButtons.getChildren().addAll(leftMenu,region,rightMenu);
+//        hBoxMenuButtons.getChildren().addAll(leftMenu,region,rightMenu);
+        hBoxMenuButtons.getChildren().addAll(leftMenu);
 
         vBoxAirportLayout.getChildren().addAll(hBoxMenuButtons,vBoxTable);
         //return vBox
@@ -476,6 +477,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             data.getStyleClass().add("tableH1");
             data.setAlignment(Pos.CENTER);
             data.setTextAlignment(TextAlignment.CENTER);
+            data.setPadding(new Insets(10, 0, 10, 0));
             if (i==0){
                 GridPane.setColumnSpan(data,2);
                 airportData.add(data,1,0);
@@ -500,8 +502,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
                 //lengthLabel.setFont(Theme.fontsmall);
                 lengthLabel.getStyleClass().add("tableH2");
+                lengthLabel.setPadding(new Insets(8, 0, 8 ,0));
                 //widthLabel.setFont(Theme.fontsmall);
                 widthLabel.getStyleClass().add("tableH2");
+                widthLabel.setPadding(new Insets(8, 0, 8 ,0));
 
                 counter += 1;
                 airportData.add(lengthLabel,counter,1);
@@ -512,6 +516,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
                 //lengthLabel.setFont(Theme.fontsmall);
                 lengthLabel.getStyleClass().add("tableH2");
+                lengthLabel.setPadding(new Insets(8, 0, 8 ,0));
 
                 counter += 1;
                 airportData.add(lengthLabel,counter,1);
