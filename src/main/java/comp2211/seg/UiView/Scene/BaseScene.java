@@ -19,6 +19,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -463,13 +464,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             airportData.getColumnConstraints().add(ccx);
         }
 
-        ArrayList<RowConstraints> rc = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-
-            RowConstraints rcx = new RowConstraints();
-            rcx.setPercentHeight(100/4);
-            rc.add(rcx);
-        }
         String[] titles = new String[] {"Runway (RWY)","Stopway (SWY)","Clearway (CWY)","RESA","Threshold\nDisplacement","Strip End","Blast\nProtection"};
         for (int i = 0; i < 7; i++) {
 
@@ -534,7 +528,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         airportData.add(makeTableCell(appWindow.runway.RESAHeightProperty()),6,2);
         airportData.add(makeTableCell(appWindow.runway.dispThresholdLeftProperty()),7,2);
         airportData.add(makeTableCell(appWindow.runway.stripEndProperty()),8,2);
-        airportData.add(new TextField("500m"),9,2);
+        airportData.add(makeTableCell(new SimpleDoubleProperty(500)),9,2);
 
         Label desr = makeLabel(appWindow.runway.getRunwayDesignatorRight());
         desr.setAlignment(Pos.CENTER);
@@ -547,7 +541,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         airportData.add(makeTableCell(appWindow.runway.RESAHeightProperty()),6,3);
         airportData.add(makeTableCell(appWindow.runway.dispThresholdRightProperty()),7,3);
         airportData.add(makeTableCell(appWindow.runway.stripEndProperty()),8,3);
-        airportData.add(new TextField("500m"),9,3);
+        airportData.add(makeTableCell(new SimpleDoubleProperty(500)),9,3);
         for (Node node:airportData.getChildren()) {
             if (node instanceof Control) {
                 Control control = (Control) node;
@@ -850,10 +844,38 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().lengthProperty()),1,2);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().widthProperty()),1,3);
         obstacleData.add(makeButton(appWindow.runway.hasRunwayObstacleProperty(),"No","Yes"),1,4);
-        Slider posSlider = new Slider();
-        posSlider.minProperty().bind(appWindow.runway.runwayObstacle.lengthProperty().divide(-2));
-        posSlider.maxProperty().bind(appWindow.runway.runwayLengthProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)));
-        posSlider.valueProperty().bindBidirectional(appWindow.runway.runwayObstacle.distFromThresholdProperty());
+        Slider slider = new Slider();
+        slider.minProperty().bind(appWindow.runway.runwayObstacle.lengthProperty().divide(-2));
+        slider.maxProperty().bind(appWindow.runway.runwayLengthProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)));
+        slider.valueProperty().bindBidirectional(appWindow.runway.runwayObstacle.distFromThresholdProperty());
+        Button leftButton = new Button("<");
+        leftButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+
+                    slider.valueProperty().set(slider.valueProperty().get()-1);
+                } catch (Exception e){}
+            }
+        });
+        Button rightButton = new Button(">");
+        rightButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+
+                    slider.valueProperty().set(slider.valueProperty().get()+1);
+                } catch (Exception e){}
+            }
+        });
+        leftButton.setPadding(new Insets(3));
+        rightButton.setPadding(new Insets(3));
+
+
+        HBox posSlider = new HBox(leftButton,slider,rightButton);
+        posSlider.setAlignment(Pos.CENTER);
+
+
         VBox posLeft = new VBox(makeOutputLabel(new SimpleStringProperty("Left"),new SimpleBooleanProperty(true),18),makeOutputLabel(appWindow.runway.runwayObstacle.distFromThresholdProperty(),new SimpleBooleanProperty(true),5));
         VBox posRight = new VBox(makeOutputLabel(new SimpleStringProperty("Right"),new SimpleBooleanProperty(true),18),makeOutputLabel(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty(),new SimpleBooleanProperty(true),5));
         posLeft.setAlignment(Pos.CENTER);
@@ -1132,26 +1154,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         TextField textField = new TextField();
         textField.setAlignment(Pos.CENTER);
         //textField.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+
         textField.getStyleClass().addAll("fgBorder", "font");
-        textField.textProperty().set(property.asString().get());
+        textField.textProperty().bind(property.asString().concat(Runway.units));
         textField.editableProperty().set(false);
-        textField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                if (!s.equals(t1)){
-                    if (Objects.equals(t1, "")) {
-                        property.set(0);
-                    } else {
-                        try {
-                            property.set(Double.parseDouble(t1));
-                        } catch (Exception e) {
-                            displayErrorMessage("Invalid Entry", t1 + " must be a number");
-                            textField.setText(s);
-                        }
-                    }
-                }
-            }
-        });
         return textField;
     }
 
@@ -1289,7 +1295,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         binding.addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                spinner.getEditor().setText(Double.toString(t1.doubleValue()));
+                if (Double.parseDouble(spinner.getEditor().textProperty().get()) != t1.doubleValue()) {
+                    System.out.println(spinner.getEditor().textProperty().get());
+                    System.out.println(t1.doubleValue());
+                    spinner.getEditor().setText(Double.toString(t1.doubleValue()));
+                }
             }
         });
 

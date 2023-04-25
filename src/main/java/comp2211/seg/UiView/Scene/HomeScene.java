@@ -141,8 +141,6 @@ public class HomeScene extends SceneAbstract{
     });
     runways.valueProperty().set(appWindow.runway);
 
-
-
     Button startApplication = new Button("Start Application");
     startApplication.setOnMousePressed(this::startApplication);
     Button importAirport = new Button("Import Airport");
@@ -184,28 +182,41 @@ public class HomeScene extends SceneAbstract{
     runwayText.getStyleClass().add("fgBright");
 
 
-    VBox textPane = new VBox(airportText,runwayText);
-    VBox buttonsPane = new VBox(importAirport);
-    VBox airportsPane = new VBox(airports, runways, startApplication);
+    GridPane buttons = new GridPane();
+
+    buttons.addColumn(0,airportText,runwayText);
+    buttons.addColumn(1,airports, runways, startApplication);
+    buttons.addColumn(2,importAirport);
+
+    ColumnConstraints ccx = new ColumnConstraints();
+    ccx.setPercentWidth(20);
+    buttons.getColumnConstraints().add(ccx);
+    for (int i = 0; i < 2; i++) {
+      ccx = new ColumnConstraints();
+      ccx.setPercentWidth(40);
+      buttons.getColumnConstraints().add(ccx);
+    }
+
+    buttons.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
     runways.maxWidthProperty().bind(airports.widthProperty());
     runways.minWidthProperty().bind(airports.widthProperty());
     startApplication.maxWidthProperty().bind(airports.widthProperty());
     startApplication.minWidthProperty().bind(airports.widthProperty());
     importAirport.maxWidthProperty().bind(airports.widthProperty());
     importAirport.minWidthProperty().bind(airports.widthProperty());
-    airportsPane.maxHeightProperty().bind(buttonsPane.heightProperty());
-    airportsPane.minHeightProperty().bind(buttonsPane.heightProperty());
+    HBox buttonsPane = new HBox(buttons);
+    VBox buttonsPane2 = new VBox(buttonsPane);
 
-    HBox bottomPane = new HBox(textPane, airportsPane,buttonsPane);
-    bottomPane.setAlignment(Pos.CENTER);
-    textPane.setPadding(new Insets(10));
-    textPane.setSpacing(10);
-    buttonsPane.setPadding(new Insets(10));
-    buttonsPane.setSpacing(10);
-    airportsPane.setPadding(new Insets(10));
-    airportsPane.setSpacing(10);
+    centrePane.getChildren().addAll(text, buttonsPane2);
+    buttons.setAlignment(Pos.CENTER);
+    centrePane.setAlignment(Pos.CENTER);
+    HBox.setHgrow(buttons,Priority.NEVER);
+    buttonsPane.fillHeightProperty().set(false);
+    VBox.setVgrow(buttonsPane,Priority.NEVER);
+    buttonsPane2.fillWidthProperty().set(false);
+    buttonsPane2.setAlignment(Pos.CENTER);
 
-    centrePane.getChildren().addAll(text, bottomPane);
+
 
 
     Label projectInfo = new Label(

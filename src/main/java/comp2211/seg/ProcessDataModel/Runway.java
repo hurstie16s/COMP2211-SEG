@@ -107,7 +107,7 @@ public class Runway {
     private final SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
     private final SimpleDoubleProperty runwayWidth = new SimpleDoubleProperty(60);
     private final SimpleBooleanProperty hasRunwayObstacle = new SimpleBooleanProperty(false);
-    private final SimpleStringProperty units = new SimpleStringProperty("m");
+    public static final SimpleStringProperty units = new SimpleStringProperty("m");
 
     // Calculation Breakdowns
     // TODO: Calculation breakdown - backend
