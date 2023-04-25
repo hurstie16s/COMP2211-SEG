@@ -267,8 +267,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             }
         });
         airportsCombo.valueProperty().set(appWindow.airport);
+        airportsCombo.getStyleClass().add("font");
+
         Label airportsLabel = makeLabel("Airport");
+        airportsLabel.getStyleClass().add("font");
+        airportsLabel.setPrefWidth(80);
+        airportsLabel.setAlignment(Pos.CENTER_RIGHT);
         HBox hBoxAirports = new HBox();
+        hBoxAirports.setAlignment(Pos.CENTER_LEFT);
         hBoxAirports.getChildren().addAll(airportsLabel,airportsCombo);
         HBox.setMargin(airportsCombo,new Insets(0,0,0,10));
 
@@ -289,8 +295,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             }
         });
         runwaysCombo.valueProperty().set(appWindow.runway);
+        runwaysCombo.getStyleClass().add("font");
         Label runwaysLabel = makeLabel("Runway");
+        runwaysLabel.getStyleClass().add("font");
+        runwaysLabel.setPrefWidth(80);
+        runwaysLabel.setAlignment(Pos.CENTER_RIGHT);
         HBox hBoxRunways = new HBox();
+        hBoxRunways.setAlignment(Pos.CENTER_LEFT);
         hBoxRunways.getChildren().addAll(runwaysLabel,runwaysCombo);
         HBox.setMargin(runwaysCombo,new Insets(0,0,0,10));
         //left menu children
@@ -458,14 +469,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             rcx.setPercentHeight(100/4);
             rc.add(rcx);
         }
-        String[] titles = new String[] {"Runway(RWY)","Stopway(SWY)","Clearway(CWY)","RESA","Threshold\nDisplacement","Strip End","Blast\nProtection"};
+        String[] titles = new String[] {"Runway (RWY)","Stopway (SWY)","Clearway (CWY)","RESA","Threshold\nDisplacement","Strip End","Blast\nProtection"};
         for (int i = 0; i < 7; i++) {
 
             Label data = makeLabel(titles[i]);
+            data.getStyleClass().add("tableH1");
             data.setAlignment(Pos.CENTER);
             data.setTextAlignment(TextAlignment.CENTER);
-            //data.setFont(Theme.fontsmall);
-            data.getStyleClass().add("fontsmall");
             if (i==0){
                 GridPane.setColumnSpan(data,2);
                 airportData.add(data,1,0);
@@ -489,9 +499,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 var widthLabel = makeLabel("Width");
 
                 //lengthLabel.setFont(Theme.fontsmall);
-                lengthLabel.getStyleClass().add("fontsmall");
+                lengthLabel.getStyleClass().add("tableH2");
                 //widthLabel.setFont(Theme.fontsmall);
-                widthLabel.getStyleClass().add("fontsmall");
+                widthLabel.getStyleClass().add("tableH2");
 
                 counter += 1;
                 airportData.add(lengthLabel,counter,1);
@@ -501,7 +511,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 var lengthLabel = makeLabel("Length");
 
                 //lengthLabel.setFont(Theme.fontsmall);
-                lengthLabel.getStyleClass().add("fontsmall");
+                lengthLabel.getStyleClass().add("tableH2");
 
                 counter += 1;
                 airportData.add(lengthLabel,counter,1);
@@ -783,8 +793,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         // Obstacle preset ComboBox
         ComboBox obstacleComboBox = new ComboBox(FXCollections.observableArrayList(appWindow.obstaclePresets));
         //obstacleComboBox.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
-        obstacleComboBox.getStyleClass().add("veryfocusedBG");
-
+        obstacleComboBox.getStyleClass().addAll("veryfocusedBG", "font");
         obstacleComboBox.setOnAction(event -> {
             Object selectedObstacle = obstacleComboBox.getSelectionModel().getSelectedItem();
             appWindow.runway.addObstacle((Obstacle) selectedObstacle);
@@ -818,7 +827,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         obstacleData.getRowConstraints().addAll(rc);
 
         Label pos = makeLabel("Position");
-        GridPane.setRowSpan(pos,2);
+//        GridPane.setRowSpan(pos,2);
+//        pos.setAlignment(Pos.TOP_CENTER);
 
         obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height (m)"),makeLabel("Length (m)"),makeLabel("Width (m)"),makeLabel("Active?"));
 
@@ -841,7 +851,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         posSlider.valueProperty().bindBidirectional(appWindow.runway.runwayObstacle.distFromThresholdProperty());
         VBox posLeft = new VBox(makeOutputLabel(new SimpleStringProperty("Left"),new SimpleBooleanProperty(true),18),makeOutputLabel(appWindow.runway.runwayObstacle.distFromThresholdProperty(),new SimpleBooleanProperty(true),5));
         VBox posRight = new VBox(makeOutputLabel(new SimpleStringProperty("Right"),new SimpleBooleanProperty(true),18),makeOutputLabel(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty(),new SimpleBooleanProperty(true),5));
-        posRight.setAlignment(Pos.CENTER_RIGHT);
+        posLeft.setAlignment(Pos.CENTER);
+        posLeft.setMinWidth(50);
+        posRight.setAlignment(Pos.CENTER);
+        posRight.setMinWidth(50);
 
         BorderPane posvals = new BorderPane();
         posvals.setLeft(posLeft);
@@ -869,7 +882,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     private Node makeOutputLabel(SimpleStringProperty string, SimpleBooleanProperty visibility, int i) {
         Label data = new Label();
 
-        data.setFont(new Font("Calibri",i)); //Hardcoding this annoying use was easier lol
+        data.getStyleClass().addAll("fontsmall", "bold"); //Hardcoding this annoying use was easier lol
         //data.setTextFill(Theme.fg);
         data.getStyleClass().add("fg");
         data.setText(String.valueOf(string.getValue()));
@@ -1027,7 +1040,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     public Label makeLabel(String string){
         Label label = new Label(string);
         //label.setFont(Theme.font);
-        label.getStyleClass().add("font");
+        label.getStyleClass().addAll("font", "bold");
         //label.setTextFill(Theme.fg);
         label.getStyleClass().add("fg");
         return label;
@@ -1114,7 +1127,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         TextField textField = new TextField();
         textField.setAlignment(Pos.CENTER);
         //textField.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
-        textField.getStyleClass().add("fgBorder");
+        textField.getStyleClass().addAll("fgBorder", "font");
         textField.textProperty().set(property.asString().get());
         textField.editableProperty().set(false);
         textField.textProperty().addListener(new ChangeListener<String>() {
@@ -1249,6 +1262,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         SpinnerValueFactory<Double> svf = new SpinnerValueFactory.DoubleSpinnerValueFactory(0,999999999,binding.get());
         spinner.setValueFactory(svf);
         spinner.editableProperty().set(true);
+        spinner.getStyleClass().add("font");
+        spinner.getEditor().setStyle("-fx-padding: 4px 10px 4px 10px;");
+
 
         spinner.getEditor().textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -1301,19 +1317,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         HBox segment = new HBox();
         ToggleButton button = new ToggleButton(label1);
         ToggleButton button2 = new ToggleButton(label2);
-        //button.setFont(Theme.font);
+
         button.getStyleClass().add("font");
-        //button.setTextFill(Theme.fg);
-        button.getStyleClass().add("fg");
-        //button .setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
-        button.getStyleClass().add("focusedBG");
-        //button2.setFont(Theme.font);
+        button.getStyleClass().add("toggleButtonFocused");
         button2.getStyleClass().add("font");
-        //button2.setTextFill(Theme.fg);
-        button2.getStyleClass().add("fg");
-        //button2.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
-        button2.getStyleClass().add("veryfocusedBG");
+        button2.getStyleClass().add("toggleButtonNotFocused");
         segment.getChildren().addAll(button,button2);
+
         button.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
@@ -1322,13 +1332,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 }
                 if (t1) {
                     property.set(true);
-                    //button2.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
-                    button2.getStyleClass().add("extremelyfocusedBG");
-                    //button2.setTextFill(Theme.fg);
-                    button2.getStyleClass().add("fg");
-                    button.getStyleClass().add("unfocusedBG");
-                    //button.setTextFill(Theme.extremelyfocusedBG);
-                    button.getStyleClass().add("extremelyfocusedT");
+
+                    button.getStyleClass().add("toggleButtonFocused");
+                    button.getStyleClass().remove("toggleButtonNotFocused");
+                    button2.getStyleClass().add("toggleButtonNotFocused");
+                    button2.getStyleClass().remove("toggleButtonFocused");
                 }
             }
         });
@@ -1340,14 +1348,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 }
                 if (t1) {
                     property.set(false);
-                    //button.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
-                    button2.getStyleClass().add("unfocusedBG");
-                    //button2.setTextFill(Theme.extremelyfocusedBG);
-                    button2.getStyleClass().add("extremelyfocusedT");
-                    //button.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG,null,null)));
-                    button.getStyleClass().add("extremelyfocusedBG");
-                    //button.setTextFill(Theme.fg);
-                    button.getStyleClass().add("fg");
+
+                    button2.getStyleClass().add("toggleButtonFocused");
+                    button2.getStyleClass().remove("toggleButtonNotFocused");
+                    button.getStyleClass().add("toggleButtonNotFocused");
+                    button.getStyleClass().remove("toggleButtonFocused");
+
                 }
             }
         });
@@ -1356,8 +1362,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 button.setMinWidth(0);
                 button2.setMinWidth(0);
-                button.setMinWidth(t1.doubleValue() /2-10);
-                button2.setMinWidth(t1.doubleValue() /2-10);
+                button.setMinWidth(t1.doubleValue() / 2);
+                button2.setMinWidth(t1.doubleValue() / 2);
                 button.setMaxWidth(t1.doubleValue() /2);
                 button2.setMaxWidth(t1.doubleValue() /2);
             }
@@ -1376,7 +1382,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         button.selectedProperty().set(property.get());
         button2.selectedProperty().set(!property.get());
-        segment.setPadding(new Insets(0,0,0,10));
+        segment.setPadding(new Insets(4,0,4,0));
         return segment;
     }
 

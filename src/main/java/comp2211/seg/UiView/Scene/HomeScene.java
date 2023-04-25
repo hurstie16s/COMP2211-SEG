@@ -108,25 +108,18 @@ public class HomeScene extends SceneAbstract{
     centrePane.setAlignment(Pos.CENTER);
 
 
-    Text title = new Text("Runway Redeclaration Aid\n\n");
-    //title.setFont(Theme.fontbig);
-    title.getStyleClass().add("fontbig");
-    //title.setFill(Theme.fgBright);
-    title.getStyleClass().add("fgBright");
+    Text title = new Text("Runway Redeclaration Aid\n");
+    title.getStyleClass().addAll("fontbig", "bold", "fg");
 
     Text desciption = new Text("This tool provides calculation and visual aids to\n" +
-        "the runway redeclaration process");
-    //desciption.setFont(Theme.font);
-    desciption.getStyleClass().add("font");
-    //desciption.setFill(Theme.fg);
-    desciption.getStyleClass().add("fg");
+        "the runway redeclaration process\n");
+    desciption.getStyleClass().addAll("font", "fg");
 
 
 
     airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
-    //airports.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     airports.getStyleClass().add("focusedBG");
-    airports.getStyleClass().add("fontsmall");
+    airports.getStyleClass().add("font");
     airports.valueProperty().addListener((observableValue, o, t1) -> appWindow.setAirport((Airport) t1));
     airports.valueProperty().set(appWindow.airport);
 
@@ -134,7 +127,7 @@ public class HomeScene extends SceneAbstract{
     runways = new ComboBox(FXCollections.observableArrayList(appWindow.airport.getRunways()));
     //runways.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     runways.getStyleClass().add("focusedBG");
-    runways.getStyleClass().add("fontsmall");
+    runways.getStyleClass().add("font");
     runways.valueProperty().addListener(new ChangeListener() {
       @Override
       public void changed(ObservableValue observableValue, Object o, Object t1) {
@@ -158,12 +151,12 @@ public class HomeScene extends SceneAbstract{
     startApplication.getStyleClass().add("fg");
     //startApplication.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     startApplication.getStyleClass().add("focusedBG");
-    startApplication.getStyleClass().add("fontsmall");
+    startApplication.getStyleClass().add("font");
     //importAirport.setTextFill(Theme.fg);
     importAirport.getStyleClass().add("fg");
     //importAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     importAirport.getStyleClass().add("focusedBG");
-    importAirport.getStyleClass().add("fontsmall");
+    importAirport.getStyleClass().add("font");
     //newAirport.setTextFill(Theme.fg);
     newAirport.getStyleClass().add("fg");
     //newAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
@@ -181,12 +174,12 @@ public class HomeScene extends SceneAbstract{
 
     Label airportText = new Label("Airport");
     //airportText.setFont(Theme.font);
-    airportText.getStyleClass().add("font");
+    airportText.getStyleClass().addAll("font", "bold");
     //airportText.setTextFill(Theme.fgBright);
     airportText.getStyleClass().add("fgBright");
     Label runwayText = new Label("Runway");
     //runwayText.setFont(Theme.font);
-    runwayText.getStyleClass().add("font");
+    runwayText.getStyleClass().addAll("font", "bold");
     //runwayText.setTextFill(Theme.fgBright);
     runwayText.getStyleClass().add("fgBright");
 
@@ -217,15 +210,15 @@ public class HomeScene extends SceneAbstract{
 
     Label projectInfo = new Label(
             "Josh Douglas " +
-                    "(jod1n21) |" +
+                    "(jod1n21) | " +
                     "Lam Giang " +
-                    "(lg1n20) |" +
+                    "(lg1n20) | " +
                     "Samuel Hurst " +
-                    "(shjh1g21) |" +
+                    "(shjh1g21) | " +
                     "David Kuc " +
-                    "(drk1g21) |" +
+                    "(drk1g21) | " +
                     "Aleksander Pilski " +
-                    "(ajp1e19) |" +
+                    "(ajp1e19) | " +
                     "Josh Willson " +
                     "(jjrw1g21) \n");
     projectInfo.setTextAlignment(TextAlignment.CENTER);

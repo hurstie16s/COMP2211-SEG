@@ -1,6 +1,5 @@
 package comp2211.seg.UiView.Scene.SceneComponents;
 
-import comp2211.seg.Controller.Stage.Theme;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,18 +16,17 @@ public class TabButton extends Label {
         super(tab.getKey());
         this.tabLayout = tabLayout;
         this.tab = tab;
-        //setTextFill(Theme.fg);
         this.getStyleClass().add("fg");
-        //setFont(Theme.font);
-        this.getStyleClass().add("font");
         setPadding(new Insets(5));
     }
     public void run(){
         for (TabButton tb:tabLayout.tabButtons) {
             tb.getStyleClass().clear();
-            tb.getStyleClass().add(tabLayout.bg);
+            tb.getStyleClass().addAll(tabLayout.bg, "tabUnselected");
+            tb.getStyleClass().remove("tabSelected");
         }
-        getStyleClass().add(tabLayout.fg);
+        getStyleClass().remove("tabUnselected");
+        getStyleClass().addAll(tabLayout.fg, "tabSelected");
         tabLayout.contents.getChildren().removeAll(tabLayout.contents.getChildren());
         tabLayout.contents.getChildren().add(tab.getValue());
         tabLayout.currentContent = tab.getValue();
