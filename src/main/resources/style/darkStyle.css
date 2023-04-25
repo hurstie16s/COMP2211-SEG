@@ -59,6 +59,10 @@
 .labelfg {
     -fx-text-fill: #ffffff;
 }
+.runwaylabelfg {
+    -fx-text-fill: #ffffff;
+    -fx-fill: #ffffff;
+}
 .grass {
     -fx-background-color: #014130;
 }
