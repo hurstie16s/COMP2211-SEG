@@ -117,6 +117,7 @@ public abstract class SceneAbstract extends Scene {
   public void build() {
     try {
       getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/darkStyle.css")).toExternalForm());
+      //getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/lightStyle.css")).toExternalForm());
 
     } catch (Exception e) {
       logger.error(e);
@@ -203,6 +204,7 @@ public abstract class SceneAbstract extends Scene {
   public void buildmenuless() {
     try {
       getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/darkStyle.css")).toExternalForm());
+      getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/lightStyle.css")).toExternalForm());
 
     } catch (Exception e) {
       logger.error(e);

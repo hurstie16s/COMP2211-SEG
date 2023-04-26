@@ -68,7 +68,7 @@ public class RunwayLabel extends Group {
             }
         });
         label.textProperty().bind((new SimpleStringProperty(name)).concat(" (").concat(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(Long.toString(Math.round(length.get()))).otherwise(Long.toString(Math.round(length.get()*-1)))).concat(scene.appWindow.runway.unitsProperty()).concat(")"));
-        //label.setFill(Theme.labelfg);
+        //label.setFill(Theme.getLabelFg);
         label.getStyleClass().add("runwaylabelfg");
         //label.setFont(Theme.font);
         label.getStyleClass().add("font");
@@ -107,27 +107,19 @@ public class RunwayLabel extends Group {
             color
         );
 
-        Color labelfgColor;
-        try {
-            labelfgColor = CssColorParser.getColorFromCssClass(scene,".labelfg","-fx-text-fill:",15);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
         Group leftVertical = makeLineVertical(
                 xOffset,
                 (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
-                //Theme.labelfg
-                labelfgColor
+                Theme.getLabelFg()
         );
 
         Group rightVertical = makeLineVertical(
                 xOffset.subtract(length),
                 (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
-                //Theme.labelfg
-                labelfgColor
+                Theme.getLabelFg()
+
         );
 
         leftHorizontal.getTransforms().add(xRotate);
@@ -191,7 +183,7 @@ public class RunwayLabel extends Group {
             }
         });
         label.textProperty().bind(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(Long.toString(Math.round(length.get()))).otherwise(Long.toString(Math.round(length.get()*-1))).concat(scene.appWindow.runway.unitsProperty()));
-        //label.setFill(Theme.labelfg);
+        //label.setFill(Theme.getLabelFg());
         label.getStyleClass().add("runwaylabelfg");
         //label.setFont(Theme.font);
         label.getStyleClass().add("font");
@@ -231,27 +223,22 @@ public class RunwayLabel extends Group {
             color
         );
 
-        Color labelfgColor;
-        try {
-            labelfgColor = CssColorParser.getColorFromCssClass(scene,".labelfg","-fx-text-fill:",15);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
 
         Group leftVertical = makeLineVertical(
                 xOffset,
                 (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
-                //Theme.labelfg
-                labelfgColor
+                Theme.getLabelFg()
+
         );
 
         Group rightVertical = makeLineVertical(
                 xOffset.subtract(length),
                 (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
-                //Theme.labelfg
-                labelfgColor
+                Theme.getLabelFg()
+
         );
 
         leftHorizontal.getTransforms().add(xRotate);

@@ -6,14 +6,18 @@ import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.Obstacle;
 import comp2211.seg.ProcessDataModel.Runway;
 import comp2211.seg.UiView.Scene.*;
+import comp2211.seg.UiView.Scene.Utilities.CssColorParser;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.w3c.dom.css.CSSRuleList;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -64,6 +68,9 @@ public class AppWindow {
         this.stage = stage;
         this.width = width;
         this.height = height;
+        setupResources("/style/darkStyle.css","/style/lightStyle.css");
+
+
         airports = AirportsData.getAirports();
         obstaclePresets = new ArrayList<>();
         obstaclePresetSetup();
@@ -78,6 +85,63 @@ public class AppWindow {
         startHomeScene();
         //startMainScene();
         //startRunwayScene();
+    }
+    /**
+     * Sets up the resources for the application.
+     */
+    private void setupResources(String stylesheet1, String stylesheet2) {
+        logger.info("Getting stylesheets rules...");
+        CSSRuleList cssRuleList1;
+        try {
+            cssRuleList1 = CssColorParser.getCssRules(stylesheet1);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        CSSRuleList cssRuleList2;
+        try {
+            cssRuleList2 = CssColorParser.getCssRules(stylesheet2);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        ArrayList<String> cssClasses = new ArrayList<>();
+        cssClasses.add(".labelfg");
+        cssClasses.add(".runway");
+        cssClasses.add(".grass");
+        cssClasses.add(".obstacle");
+        cssClasses.add(".slope");
+        cssClasses.add(".clearway");
+        cssClasses.add(".stopway");
+        cssClasses.add(".lda");
+        cssClasses.add(".tora");
+        cssClasses.add(".asda");
+        cssClasses.add(".toda");
+        cssClasses.add(".resa");
+        cssClasses.add(".cga");
+        cssClasses.add(".stripend");
+        cssClasses.add(".blastallowance");
+        cssClasses.add(".physicalResa");
+        ArrayList<String> cssPrefixes = new ArrayList<>();
+        cssPrefixes.add("-fx-text-fill:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        ArrayList<Color> cssDarkColors = CssColorParser.getCssColors(cssRuleList1,cssClasses,cssPrefixes);
+        logger.info(cssDarkColors.get(0));
+        Theme themeDark = new Theme();
+        themeDark.setThemeColors(cssDarkColors);
+        logger.info("Test: " + Theme.getAsda());
     }
 
     /**
@@ -181,12 +245,6 @@ public class AppWindow {
     }
 
     /**
-     * Sets up the resources for the application.
-     */
-    private void setupResources() {}
-
-
-    /**
      * Sets up the primary stage of the application.
      */
     public void setupStage() {
@@ -248,16 +306,8 @@ public class AppWindow {
         // Create the new scene and set it up
         newScene.build();
         currentScene = newScene;
-        // Apply the stylesheet to the scene
-        //currentScene.getStylesheets().clear();
-        //currentScene.getStylesheets().add(Objects.requireNonNull(getClass()
-                //.getResource("/style/darkStyle.css")).toExternalForm());
-        //currentScene.getStylesheets().add("/style/lightStyle.css");
         stage.setScene(currentScene);
-        //Theme.retheme(currentScene);
-
         currentScene.makeHelp(false);
-
         // Initialise the scene when ready
         Platform.runLater(() -> currentScene.initialise());
     }

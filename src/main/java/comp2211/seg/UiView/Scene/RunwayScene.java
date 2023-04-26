@@ -309,15 +309,10 @@ public class RunwayScene extends SceneAbstract {
      */
     public void makeRunway() {
       // Parse the color value from the .obstacle class in the current stylesheet
-      Color runwayColor;
-      try {
-        runwayColor = CssColorParser.getColorFromCssClass(this,".runway","-fx-background-color:",22);
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
+
     PhongMaterial material = new PhongMaterial();
-    //material.setDiffuseColor(Theme.runway);
-      material.setDiffuseColor(runwayColor);
+    material.setDiffuseColor(Theme.getRunway());
+
     //import these from runway somehow
     Box box = new Box(0,0,runwayOffset.get());
     box.widthProperty().bind(appWindow.runway.runwayLengthProperty().multiply(scaleFactor));
@@ -374,19 +369,12 @@ public class RunwayScene extends SceneAbstract {
      * Creates a background box, adds a phong material and sets it to the group.
      */
     public void makeBackground() {
-      // Parse the color value from the .obstacle class in the current stylesheet
-      Color grassColor;
-      try {
-        grassColor = CssColorParser.getColorFromCssClass(this,".grass","-fx-background-color:",22);
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
 
     background = new Box(width,height,0);
     PhongMaterial material = new PhongMaterial();
 //material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
-    //material.setDiffuseColor(Theme.grass);
-      material.setDiffuseColor(grassColor);
+    material.setDiffuseColor(Theme.getGrass());
+
     background.setMaterial(material);
     background.widthProperty().bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()));
     background.heightProperty().bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()));
@@ -624,21 +612,6 @@ public class RunwayScene extends SceneAbstract {
      */
     public void renderObstacle() {
 
-      // Parse the color value from the .obstacle class in the current stylesheet
-      Color obstacleColor;
-      try {
-        obstacleColor = CssColorParser.getColorFromCssClass(this,".obstacle","-fx-background-color:",22);
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-      Color slopeColor;
-      try {
-        slopeColor = CssColorParser.getColorFromCssClass(this,".slope","-fx-background-color:",22);
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-
-
       // Render the obstacle using the retrieved color value
       Box obstacleView = addCuboid(
           appWindow.runway.runwayLengthProperty().divide(-2).add(appWindow.runway.runwayObstacle.distFromThresholdProperty()),
@@ -647,8 +620,7 @@ public class RunwayScene extends SceneAbstract {
           appWindow.runway.runwayObstacle.lengthProperty().multiply(1),
           appWindow.runway.runwayObstacle.widthProperty().multiply(1),
           appWindow.runway.runwayObstacle.heightProperty().multiply(1),
-          //Theme.obstacle
-          obstacleColor
+          Theme.getObstacle()
       );
     obstacleView.visibleProperty().bind(appWindow.runway.hasRunwayObstacleProperty());
 
@@ -659,8 +631,7 @@ public class RunwayScene extends SceneAbstract {
             new SimpleDoubleProperty(0).multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             appWindow.runway.runwayObstacle.heightProperty().multiply(1),
-            //Theme.slope,
-            slopeColor,
+            Theme.getSlope(),
             appWindow.runway.directionLeftProperty(),
             scaleFactor,
             scaleFactorHeight,
@@ -673,8 +644,7 @@ public class RunwayScene extends SceneAbstract {
             new SimpleDoubleProperty(0).multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             appWindow.runway.runwayObstacle.heightProperty().multiply(1),
-            //Theme.slope,
-            slopeColor,
+            Theme.getSlope(),
             appWindow.runway.directionRightProperty(),
             scaleFactor,
             scaleFactorHeight,
@@ -688,26 +658,6 @@ public class RunwayScene extends SceneAbstract {
      */
     public void addTopView(){
 
-      // Parse the color value from the .obstacle class in the current stylesheet
-      Color claerwayColor;
-      try {
-        claerwayColor = CssColorParser.getColorFromCssClass(this,".clearway","-fx-background-color:",22);
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-      Color stopwayColor;
-      try {
-        stopwayColor = CssColorParser.getColorFromCssClass(this,".stopway","-fx-background-color:",22);
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-      Color physicalResaColor;
-      try {
-        physicalResaColor = CssColorParser.getColorFromCssClass(this,".physicalResa","-fx-background-color:",22);
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-
 
     //Clearway Right
     addCuboid(
@@ -717,8 +667,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.clearwayRightProperty().multiply(1),
             appWindow.runway.clearwayHeightProperty().multiply(1),
             new SimpleDoubleProperty(9.9).multiply(1),
-            //Theme.clearway);
-            claerwayColor);
+            Theme.getClearway());
 
     //Clearway Left
     addCuboid(
@@ -728,8 +677,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.clearwayLeftProperty().multiply(1),
             appWindow.runway.clearwayHeightProperty().multiply(1),
             new SimpleDoubleProperty(9.9).multiply(1),
-            //Theme.clearway);
-            claerwayColor);
+            Theme.getClearway());
 
 
     //RESA Right
@@ -740,8 +688,8 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.RESAWidthProperty().multiply(1),
             appWindow.runway.RESAHeightProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            //Theme.physicalResa);
-            physicalResaColor);
+            Theme.getPhysicalResa());
+
 
     //RESA Left
     addCuboid(
@@ -751,8 +699,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.RESAWidthProperty().multiply(1),
             appWindow.runway.RESAHeightProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            //Theme.physicalResa);
-            physicalResaColor);
+            Theme.getPhysicalResa());
 
     //Stopway Left
     addCuboid(
@@ -762,8 +709,8 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.stopwayLeftProperty().multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            //Theme.stopway);
-            stopwayColor);
+            Theme.getStopway());
+
 
     //Stopway Right
     addCuboid(
@@ -773,8 +720,8 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.stopwayRightProperty().multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            //Theme.stopway);
-            stopwayColor);
+            Theme.getStopway());
+
 
   }
 
@@ -863,51 +810,6 @@ public class RunwayScene extends SceneAbstract {
     public void buildLabels() {
     Pane labelPane = new Pane();
 
-    // Parse the color value from the .obstacle class in the current stylesheet
-    Color todaColor;
-    try {
-      todaColor = CssColorParser.getColorFromCssClass(this,".toda","-fx-background-color:",22);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    Color asdaColor;
-    try {
-      asdaColor = CssColorParser.getColorFromCssClass(this,".asda","-fx-background-color:",22);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    Color toraColor;
-    try {
-      toraColor = CssColorParser.getColorFromCssClass(this,".tora","-fx-background-color:",22);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    Color ldaColor;
-    try {
-      ldaColor = CssColorParser.getColorFromCssClass(this,".lda","-fx-background-color:",22);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    Color resaColor;
-    try {
-      resaColor = CssColorParser.getColorFromCssClass(this,".resa","-fx-background-color:",22);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    Color stripEndColor;
-    try {
-      stripEndColor = CssColorParser.getColorFromCssClass(this,".stripend","-fx-background-color:",22);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    Color blastAllowanceColor;
-    try {
-      blastAllowanceColor = CssColorParser.getColorFromCssClass(this,".blastallowance","-fx-background-color:",22);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-
-
     //Lengths and xOffsets need binding to back-end variables, work hasn't been done yet so constants used
     DoubleBinding leftDisplacementO = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()).add(Bindings.when(appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).subtract(appWindow.runway.dispThresholdLeftProperty())).otherwise(0));
     DoubleBinding leftDisplacementT = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(Bindings.when(appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(appWindow.runway.BLASTZONEProperty()).subtract(appWindow.runway.dispThresholdLeftProperty())).otherwise(0));
@@ -917,30 +819,30 @@ public class RunwayScene extends SceneAbstract {
     DoubleBinding rightDisplacementL = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()).subtract(Bindings.when(appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(appWindow.runway.slopeLengthProperty())).otherwise(0));
 
     //RunwayArrow TODARightLabel = new RunwayArrowRight("TODA", Color.RED, scaleFactor, 100, 25, 3000);
-    RunwayLabel TODALeftLabel = new RunwayLabel("TODA", todaColor, leftDisplacementT,
+    RunwayLabel TODALeftLabel = new RunwayLabel("TODA", Theme.getToda(), leftDisplacementT,
             0.95, appWindow.runway.leftTodaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
-    RunwayLabel ASDALeftLabel = new RunwayLabel("ASDA", asdaColor, leftDisplacementT,
+    RunwayLabel ASDALeftLabel = new RunwayLabel("ASDA", Theme.getAsda(), leftDisplacementT,
             0.8, appWindow.runway.leftAsdaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
-    RunwayLabel TORALeftLabel = new RunwayLabel("TORA", toraColor, leftDisplacementT,
+    RunwayLabel TORALeftLabel = new RunwayLabel("TORA", Theme.getTora(), leftDisplacementT,
             0.65, appWindow.runway.leftToraProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
-    RunwayLabel LDALeftLabel = new RunwayLabel("LDA", ldaColor, leftDisplacementL,
+    RunwayLabel LDALeftLabel = new RunwayLabel("LDA", Theme.getLda(), leftDisplacementL,
             0.5, appWindow.runway.leftLdaProperty().multiply(-1),this,true, appWindow.runway.leftLandProperty());
-    RunwayLabel TODARightLabel = new RunwayLabel("TODA", todaColor, rightDisplacementT,
+    RunwayLabel TODARightLabel = new RunwayLabel("TODA", Theme.getToda(), rightDisplacementT,
             -0.95, appWindow.runway.rightTodaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
-    RunwayLabel ASDARightLabel = new RunwayLabel("ASDA", asdaColor, rightDisplacementT,
+    RunwayLabel ASDARightLabel = new RunwayLabel("ASDA", Theme.getAsda(), rightDisplacementT,
             -0.8, appWindow.runway.rightAsdaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
-    RunwayLabel TORARightLabel = new RunwayLabel("TORA", toraColor, rightDisplacementT,
+    RunwayLabel TORARightLabel = new RunwayLabel("TORA", Theme.getTora(), rightDisplacementT,
             -0.65, appWindow.runway.rightToraProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
-    RunwayLabel LDARightLabel = new RunwayLabel("LDA", ldaColor, rightDisplacementL,
+    RunwayLabel LDARightLabel = new RunwayLabel("LDA", Theme.getLda(), rightDisplacementL,
             -0.5, appWindow.runway.rightLdaProperty().multiply(1),this,false, appWindow.runway.rightLandProperty());
     group.getChildren().addAll(TODARightLabel, ASDARightLabel, TORARightLabel, LDARightLabel, TODALeftLabel, ASDALeftLabel, TORALeftLabel, LDALeftLabel);
 
-    RunwayLabel resaLeft = new RunwayLabel(resaColor,leftDisplacementO,0.15,appWindow.runway.RESAWidthProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
-    RunwayLabel stripendLeft = new RunwayLabel(stripEndColor,leftDisplacementO.add(appWindow.runway.RESAWidthProperty()),0.25,appWindow.runway.stripEndProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
-    RunwayLabel blastAllowanceLeft = new RunwayLabel(blastAllowanceColor,leftDisplacementO.add(0),0.35,appWindow.runway.BLASTZONEProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
-    RunwayLabel resaRight = new RunwayLabel(resaColor,rightDisplacementO,-0.15,appWindow.runway.RESAWidthProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()));
-    RunwayLabel stripendRight = new RunwayLabel(stripEndColor,rightDisplacementO.subtract(appWindow.runway.RESAWidthProperty()),-0.25,appWindow.runway.stripEndProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()));
-    RunwayLabel blastAllowanceRight = new RunwayLabel(blastAllowanceColor,rightDisplacementO.add(0),-0.35,appWindow.runway.BLASTZONEProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel resaLeft = new RunwayLabel(Theme.getResa(),leftDisplacementO,0.15,appWindow.runway.RESAWidthProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel stripendLeft = new RunwayLabel(Theme.getStripEnd(),leftDisplacementO.add(appWindow.runway.RESAWidthProperty()),0.25,appWindow.runway.stripEndProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel blastAllowanceLeft = new RunwayLabel(Theme.getBlastAllowance(),leftDisplacementO.add(0),0.35,appWindow.runway.BLASTZONEProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel resaRight = new RunwayLabel(Theme.getResa(),rightDisplacementO,-0.15,appWindow.runway.RESAWidthProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel stripendRight = new RunwayLabel(Theme.getStripEnd(),rightDisplacementO.subtract(appWindow.runway.RESAWidthProperty()),-0.25,appWindow.runway.stripEndProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel blastAllowanceRight = new RunwayLabel(Theme.getBlastAllowance(),rightDisplacementO.add(0),-0.35,appWindow.runway.BLASTZONEProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()));
 
     group.getChildren().addAll(resaLeft, stripendLeft, blastAllowanceLeft, resaRight, stripendRight, blastAllowanceRight);
 
