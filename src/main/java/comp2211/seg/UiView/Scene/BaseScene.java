@@ -5,10 +5,8 @@ import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Settings;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
-import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Obstacle;
 import comp2211.seg.ProcessDataModel.Runway;
-import comp2211.seg.UiView.Scene.RunwayComponents.Sub;
 import comp2211.seg.UiView.Scene.SceneComponents.*;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -27,7 +25,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.SceneAntialiasing;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -36,9 +33,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
-import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -381,8 +375,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         return vBoxAirportLayout;
     }
 
-    //exporting the Airport with runways and objects
-    public void exportAirportButtonEvent() {
+    //exporting the Airport with runways and no objects
+    public void exportAirportNoObsButtonEvent() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose file to export");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
@@ -411,6 +405,38 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             logger.info("No airport initiated, hence: " +
                 "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
                 "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
+        }
+    }
+
+    public void exportAirportButtonEvent() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose file to export");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName("AirportWithObstacle");
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        try {
+            if (file == null) {
+                return;
+            }
+
+            if (!file.getName().contains(".xml")) {
+                logger.info("reached");
+                file = new File(file.getAbsolutePath() + ".xml");
+                logger.info(file.getAbsolutePath());
+            }
+
+            if (FileHandler.exportAirportAndOb(file, appWindow.airport, appWindow.runway.runwayObstacle)) {
+                FileHandler.exportAirportAndOb(file, appWindow.airport,appWindow.runway.runwayObstacle);
+                logger.info("Exporting Successful");
+            } else {
+                logger.info("Exporting Airport failed");
+            }
+        } catch (NullPointerException nullPointerException) {
+            logger.info("No airport initiated, hence: " +
+                    "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
+                    "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
         }
     }
 

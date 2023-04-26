@@ -56,6 +56,102 @@ public abstract class FileHandler {
      * @param obstacle the obstacle
      * @return the boolean
      */
+    public static boolean exportAirportAndOb(File file, Airport airport, Obstacle obstacle) {
+
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = docFactory.newDocumentBuilder();
+
+            // These are the root elements
+            Document document = documentBuilder.newDocument();
+            Element rootElement = document.createElement("airport");
+            document.appendChild(rootElement);
+
+            Element name = document.createElement("name");
+            name.appendChild(document.createTextNode(airport.toString()));
+            rootElement.appendChild(document.createTextNode("\n"));
+            rootElement.appendChild(name);
+
+            Element lat = document.createElement("Latitude");
+            lat.appendChild(document.createTextNode(Double.toString(airport.getLatitude())));
+            rootElement.appendChild(document.createTextNode("\n"));
+            rootElement.appendChild(lat);
+
+            Element longitude = document.createElement("Longitude");
+            longitude.appendChild(document.createTextNode(Double.toString(airport.getLongitude())));
+            rootElement.appendChild(document.createTextNode("\n"));
+            rootElement.appendChild(longitude);
+
+
+            Element runways = document.createElement("Runways");
+            rootElement.appendChild(document.createTextNode("\n"));
+            rootElement.appendChild(runways);
+
+            for (Runway runway : airport.getRunways()) {
+                Element runwayElement = document.createElement("Runway");
+                runways.appendChild(runwayElement);
+//
+                appendElementWithNewline(runwayElement, "Resa_Height", Double.toString(runway.getRESAHeight()), document);
+                appendElementWithNewline(runwayElement, "Resa_Width", Double.toString(runway.getRESAWidth()), document);
+//
+                Element rightElement = document.createElement("Right_Properties");
+                runwayElement.appendChild(rightElement);
+                appendElementWithNewline(rightElement, "Designator", runway.getRunwayDesignatorRight(), document);
+                appendElementWithNewline(rightElement, "TORA", Double.toString(runway.getInputRightTora()), document);
+                appendElementWithNewline(rightElement, "TODA", Double.toString(runway.getInputRightToda()), document);
+                appendElementWithNewline(rightElement, "ASDA", Double.toString(runway.getInputRightAsda()), document);
+                appendElementWithNewline(rightElement, "LDA", Double.toString(runway.getInputRightLda()), document);
+                appendElementWithNewline(rightElement, "Clearway", Double.toString(runway.getClearwayRight()), document);
+                appendElementWithNewline(rightElement, "Stopway", Double.toString(runway.getStopwayRight()), document);
+                appendElementWithNewline(rightElement, "Displacement_Threshold", Double.toString(runway.getDispThresholdRight()), document);
+//
+                Element leftElement = document.createElement("Left_Properties");
+                runwayElement.appendChild(leftElement);
+                appendElementWithNewline(leftElement, "Designator", runway.getRunwayDesignatorLeft(), document);
+                appendElementWithNewline(leftElement, "TORA", Double.toString(runway.getInputLeftTora()), document);
+                appendElementWithNewline(leftElement, "TODA", Double.toString(runway.getInputLeftToda()), document);
+                appendElementWithNewline(leftElement, "ASDA", Double.toString(runway.getInputLeftAsda()), document);
+                appendElementWithNewline(leftElement, "LDA", Double.toString(runway.getInputLeftLda()), document);
+                appendElementWithNewline(leftElement, "Clearway", Double.toString(runway.getClearwayLeft()), document);
+                appendElementWithNewline(leftElement, "Stopway", Double.toString(runway.getStopwayLeft()), document);
+                appendElementWithNewline(leftElement, "Displacement_Threshold", Double.toString(runway.getDispThresholdLeft()), document);
+//
+                runwayElement.appendChild(document.createTextNode("\n"));
+
+            }
+
+            Element runwayObs = document.createElement("Runway_Obstacles");
+            rootElement.appendChild(runwayObs);
+
+            Element runwayOb = document.createElement("Runway_Obstacle");
+            runwayObs.appendChild(runwayOb);
+
+            appendElementWithNewline(runwayOb,"Obstacle_Designator", (obstacle.getObstacleDesignator()), document);
+            appendElementWithNewline(runwayOb,"Obstacle_Height", Double.toString(obstacle.getHeight()), document);
+            appendElementWithNewline(runwayOb,"Obstacle_Width", Double.toString(obstacle.getWidth()), document);
+            appendElementWithNewline(runwayOb,"Obstacle_Length", Double.toString(obstacle.getLength()), document);
+            appendElementWithNewline(runwayOb,"Distance_From_Threshold", Double.toString(obstacle.getDistFromThreshold()), document);
+            appendElementWithNewline(runwayOb,"Distance_From_Other_Threshold", Double.toString(obstacle.getDistFromOtherThreshold()), document);
+
+            DOMSource domSource = new DOMSource(document);
+            StreamResult res = new StreamResult(file);
+
+            try {
+                TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                Transformer transformer = transformerFactory.newTransformer();
+                transformer.transform(domSource, res);
+                return true;
+            }
+            catch (TransformerException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean exportAirport(File file, Airport airport, Obstacle obstacle) {
 
         try {
@@ -69,43 +165,31 @@ public abstract class FileHandler {
 
             Element name = document.createElement("name");
             name.appendChild(document.createTextNode(airport.toString()));
+            rootElement.appendChild(document.createTextNode("\n"));
             rootElement.appendChild(name);
 
             Element lat = document.createElement("Latitude");
             lat.appendChild(document.createTextNode(Double.toString(airport.getLatitude())));
+            rootElement.appendChild(document.createTextNode("\n"));
             rootElement.appendChild(lat);
 
             Element longitude = document.createElement("Longitude");
             longitude.appendChild(document.createTextNode(Double.toString(airport.getLongitude())));
+            rootElement.appendChild(document.createTextNode("\n"));
             rootElement.appendChild(longitude);
 
+
             Element runways = document.createElement("Runways");
+            rootElement.appendChild(document.createTextNode("\n"));
             rootElement.appendChild(runways);
 
             for (Runway runway : airport.getRunways()) {
                 Element runwayElement = document.createElement("Runway");
                 runways.appendChild(runwayElement);
-
+//
                 appendElementWithNewline(runwayElement, "Resa_Height", Double.toString(runway.getRESAHeight()), document);
                 appendElementWithNewline(runwayElement, "Resa_Width", Double.toString(runway.getRESAWidth()), document);
-
-                if (runway.isHasRunwayObstacle()) {
-
-                    Element ObstacleElement = document.createElement("Runway_Obstacle");
-                    runways.appendChild(ObstacleElement);
-
-                    appendElementWithNewline(ObstacleElement,"Obstacle_Designator", runway.getRunwayObstacle().toString(), document);
-                    appendElementWithNewline(ObstacleElement,"Obstacle_Height", Double.toString(runway.getRunwayObstacle().getHeight()), document);
-                    appendElementWithNewline(ObstacleElement, "Obstacle_Width", Double.toString(runway.getRunwayObstacle().getLength()), document);
-                    appendElementWithNewline(ObstacleElement, "Obstacle_Length", Double.toString(runway.getRunwayObstacle().getWidth()), document);
-                    appendElementWithNewline(ObstacleElement, "Distance_From_Threshold", Double.toString(runway.getRunwayObstacle().getDistFromThreshold()), document);
-                    appendElementWithNewline(ObstacleElement, "Distance_From_Other_Threshold", Double.toString(runway.getRunwayObstacle().getDistFromOtherThreshold()), document);
-                    logger.info("Runway has Obstacles");
-
-                } else {
-                    logger.info("Runway has no Obstacles");
-                }
-
+//
                 Element rightElement = document.createElement("Right_Properties");
                 runwayElement.appendChild(rightElement);
                 appendElementWithNewline(rightElement, "Designator", runway.getRunwayDesignatorRight(), document);
@@ -116,7 +200,7 @@ public abstract class FileHandler {
                 appendElementWithNewline(rightElement, "Clearway", Double.toString(runway.getClearwayRight()), document);
                 appendElementWithNewline(rightElement, "Stopway", Double.toString(runway.getStopwayRight()), document);
                 appendElementWithNewline(rightElement, "Displacement_Threshold", Double.toString(runway.getDispThresholdRight()), document);
-
+//
                 Element leftElement = document.createElement("Left_Properties");
                 runwayElement.appendChild(leftElement);
                 appendElementWithNewline(leftElement, "Designator", runway.getRunwayDesignatorLeft(), document);
@@ -127,8 +211,9 @@ public abstract class FileHandler {
                 appendElementWithNewline(leftElement, "Clearway", Double.toString(runway.getClearwayLeft()), document);
                 appendElementWithNewline(leftElement, "Stopway", Double.toString(runway.getStopwayLeft()), document);
                 appendElementWithNewline(leftElement, "Displacement_Threshold", Double.toString(runway.getDispThresholdLeft()), document);
-
+//
                 runwayElement.appendChild(document.createTextNode("\n"));
+
             }
 
             DOMSource domSource = new DOMSource(document);
@@ -149,6 +234,8 @@ public abstract class FileHandler {
             return false;
         }
     }
+
+
 
 
     private static void appendElementWithNewline(Element parent, String elementName, String textContent, Document document) {
@@ -176,9 +263,12 @@ public abstract class FileHandler {
             Element rootElement = document.createElement("Obstacle");
             document.appendChild(rootElement);
 
+            appendElementWithNewline(rootElement,"Obstacle_Designator", (obstacle.getObstacleDesignator()), document);
             appendElementWithNewline(rootElement,"Height", Double.toString(obstacle.getHeight()), document);
             appendElementWithNewline(rootElement,"Length", Double.toString(obstacle.getLength()), document);
             appendElementWithNewline(rootElement,"Width", Double.toString(obstacle.getWidth()), document);
+            appendElementWithNewline(rootElement,"Distance_From_Threshold", Double.toString(obstacle.getDistFromThreshold()), document);
+
 
 
             DOMSource domSource = new DOMSource(document);

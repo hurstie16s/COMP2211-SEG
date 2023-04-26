@@ -2,15 +2,11 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Settings;
-import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.ProcessDataModel.Obstacle;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.*;
@@ -148,6 +144,7 @@ public abstract class SceneAbstract extends Scene {
     Menu menu5 = new Menu("Export to XML");
     MenuItem menu6 = new MenuItem("Export Obstacle...");
     MenuItem menu7 = new MenuItem("Export Airport & Obstacle...");
+    MenuItem menu15 = new MenuItem("Export Airport...");
 
     //Aleks exporting image:
     Menu menu11 = new Menu("Export to Image");
@@ -163,7 +160,7 @@ public abstract class SceneAbstract extends Scene {
 
     fileMenu.getItems().addAll(menu4, menu5, menu11); //Alex add menu11 to File menu
     menu4.getItems().addAll(menu9, menu10);
-    menu5.getItems().addAll(menu6, menu7);
+    menu5.getItems().addAll(menu7, menu15, menu6);
     menu12.getItems().addAll(menu12png, menu12jpg, menu12gif);
     menu13.getItems().addAll(menu13png, menu13jpg, menu13gif);
     menu11.getItems().addAll(menu12, menu13);
@@ -182,6 +179,8 @@ public abstract class SceneAbstract extends Scene {
     menu7.setOnAction(e -> exportAirportButtonEvent());
 
     menu6.setOnAction(e -> exportObstacleButtonEvent());
+
+    menu15.setOnAction(e -> exportAirportNoObsButtonEvent());
 
     menu8.setOnAction(e -> help.toggleHelp(this.getClass().getCanonicalName()));
 
@@ -258,6 +257,39 @@ public abstract class SceneAbstract extends Scene {
     }
   }
 
+  //exporting the Airport with runways and no objects
+  public void exportAirportNoObsButtonEvent() {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Choose file to export");
+    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
+    fileChooser.getExtensionFilters().add(extFilter);
+    fileChooser.setInitialFileName("Airport");
+    File file = fileChooser.showSaveDialog(new Stage());
+
+    try {
+      if (file == null) {
+        return;
+      }
+
+      if (!file.getName().contains(".xml")) {
+        logger.info("reached");
+        file = new File(file.getAbsolutePath() + ".xml");
+        logger.info(file.getAbsolutePath());
+      }
+
+      if (FileHandler.exportAirport(file, appWindow.airport, appWindow.runway.runwayObstacle)) {
+        FileHandler.exportAirport(file, appWindow.airport,appWindow.runway.runwayObstacle);
+        logger.info("Exporting Successful");
+      } else {
+        logger.info("Exporting Airport failed");
+      }
+    } catch (NullPointerException nullPointerException) {
+      logger.info("No airport initiated, hence: " +
+              "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
+              "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
+    }
+  }
+
   /**
    * Export airport button event.
    */
@@ -281,8 +313,8 @@ public abstract class SceneAbstract extends Scene {
         logger.info(file.getAbsolutePath());
       }
 
-      if (FileHandler.exportAirport(file, appWindow.airport, appWindow.runway.runwayObstacle)) {
-        FileHandler.exportAirport(file, appWindow.airport,appWindow.runway.runwayObstacle);
+      if (FileHandler.exportAirportAndOb(file, appWindow.airport, appWindow.runway.runwayObstacle)) {
+        FileHandler.exportAirportAndOb(file, appWindow.airport,appWindow.runway.runwayObstacle);
         logger.info("Exporting Successful");
       } else {
         logger.info("Exporting Airport failed");
