@@ -215,8 +215,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         mainPane.maxHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
         mainPane.minHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
-        mainPane.maxHeightProperty().bind(root.heightProperty());
-        mainPane.minHeightProperty().bind(root.heightProperty());
         mainPane.maxWidthProperty().bind(root.widthProperty());
         mainPane.minWidthProperty().bind(root.widthProperty());
         TabsPaneVertical tabsPaneVertical = new TabsPaneVertical();

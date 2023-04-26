@@ -918,29 +918,29 @@ public class RunwayScene extends SceneAbstract {
 
     //RunwayArrow TODARightLabel = new RunwayArrowRight("TODA", Color.RED, scaleFactor, 100, 25, 3000);
     RunwayLabel TODALeftLabel = new RunwayLabel("TODA", todaColor, leftDisplacementT,
-            0.9, appWindow.runway.leftTodaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
+            0.95, appWindow.runway.leftTodaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
     RunwayLabel ASDALeftLabel = new RunwayLabel("ASDA", asdaColor, leftDisplacementT,
-            0.75, appWindow.runway.leftAsdaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
+            0.8, appWindow.runway.leftAsdaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
     RunwayLabel TORALeftLabel = new RunwayLabel("TORA", toraColor, leftDisplacementT,
-            0.6, appWindow.runway.leftToraProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
+            0.65, appWindow.runway.leftToraProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
     RunwayLabel LDALeftLabel = new RunwayLabel("LDA", ldaColor, leftDisplacementL,
-            0.45, appWindow.runway.leftLdaProperty().multiply(-1),this,true, appWindow.runway.leftLandProperty());
+            0.5, appWindow.runway.leftLdaProperty().multiply(-1),this,true, appWindow.runway.leftLandProperty());
     RunwayLabel TODARightLabel = new RunwayLabel("TODA", todaColor, rightDisplacementT,
-            -0.9, appWindow.runway.rightTodaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
+            -0.95, appWindow.runway.rightTodaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
     RunwayLabel ASDARightLabel = new RunwayLabel("ASDA", asdaColor, rightDisplacementT,
-            -0.75, appWindow.runway.rightAsdaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
+            -0.8, appWindow.runway.rightAsdaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
     RunwayLabel TORARightLabel = new RunwayLabel("TORA", toraColor, rightDisplacementT,
-            -0.6, appWindow.runway.rightToraProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
+            -0.65, appWindow.runway.rightToraProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
     RunwayLabel LDARightLabel = new RunwayLabel("LDA", ldaColor, rightDisplacementL,
-            -0.45, appWindow.runway.rightLdaProperty().multiply(1),this,false, appWindow.runway.rightLandProperty());
+            -0.5, appWindow.runway.rightLdaProperty().multiply(1),this,false, appWindow.runway.rightLandProperty());
     group.getChildren().addAll(TODARightLabel, ASDARightLabel, TORARightLabel, LDARightLabel, TODALeftLabel, ASDALeftLabel, TORALeftLabel, LDALeftLabel);
 
-    RunwayLabel resaLeft = new RunwayLabel(resaColor,leftDisplacementO,0.2,appWindow.runway.RESAWidthProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel resaLeft = new RunwayLabel(resaColor,leftDisplacementO,0.15,appWindow.runway.RESAWidthProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
     RunwayLabel stripendLeft = new RunwayLabel(stripEndColor,leftDisplacementO.add(appWindow.runway.RESAWidthProperty()),0.25,appWindow.runway.stripEndProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
-    RunwayLabel blastAllowanceLeft = new RunwayLabel(blastAllowanceColor,leftDisplacementO.add(0),0.3,appWindow.runway.BLASTZONEProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
-    RunwayLabel resaRight = new RunwayLabel(resaColor,rightDisplacementO,-0.2,appWindow.runway.RESAWidthProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel blastAllowanceLeft = new RunwayLabel(blastAllowanceColor,leftDisplacementO.add(0),0.35,appWindow.runway.BLASTZONEProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel resaRight = new RunwayLabel(resaColor,rightDisplacementO,-0.15,appWindow.runway.RESAWidthProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()));
     RunwayLabel stripendRight = new RunwayLabel(stripEndColor,rightDisplacementO.subtract(appWindow.runway.RESAWidthProperty()),-0.25,appWindow.runway.stripEndProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()));
-    RunwayLabel blastAllowanceRight = new RunwayLabel(blastAllowanceColor,rightDisplacementO.add(0),-0.3,appWindow.runway.BLASTZONEProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel blastAllowanceRight = new RunwayLabel(blastAllowanceColor,rightDisplacementO.add(0),-0.35,appWindow.runway.BLASTZONEProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()));
 
     group.getChildren().addAll(resaLeft, stripendLeft, blastAllowanceLeft, resaRight, stripendRight, blastAllowanceRight);
 

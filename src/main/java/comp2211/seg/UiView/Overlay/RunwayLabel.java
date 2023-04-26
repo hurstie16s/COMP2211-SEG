@@ -180,6 +180,48 @@ public class RunwayLabel extends Group {
                         visibility));
          */
 
+        Group labelRotateGroup = new Group();
+        label = new Text();
+
+
+        length.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                label.textProperty().bind(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(Long.toString(Math.round(length.get()))).otherwise(Long.toString(Math.round(length.get()*-1))).concat(scene.appWindow.runway.unitsProperty()));
+            }
+        });
+        label.textProperty().bind(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(Long.toString(Math.round(length.get()))).otherwise(Long.toString(Math.round(length.get()*-1))).concat(scene.appWindow.runway.unitsProperty()));
+        //label.setFill(Theme.labelfg);
+        label.getStyleClass().add("runwaylabelfg");
+        //label.setFont(Theme.font);
+        label.getStyleClass().add("font");
+        if (direction) {
+            label.yProperty().set(label.getBoundsInLocal().getHeight() / 2 + 8);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2);
+        } else {
+            label.yProperty().set(-5);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 - 10);
+        }
+
+        labelRotateGroup.getTransforms().addAll(
+                xRotate = new Rotate(0, Rotate.X_AXIS),
+                yRotate = new Rotate(0, Rotate.Y_AXIS),
+                zRotate = new Rotate(0, Rotate.Z_AXIS)
+        );
+        scene.angleXProperty().addListener((observableValue, number, t1) -> {setAngle();});
+        scene.angleYProperty().addListener((observableValue, number, t1) -> {setAngle();});
+        scene.angleZProperty().addListener((observableValue, number, t1) -> {setAngle();});
+        scene.portrait.addListener((observableValue, number, t1) -> {setAngle();});
+
+        labelRotateGroup.getChildren().add(label);
+        if (direction) {
+            labelRotateGroup.translateXProperty().bind(xOffset.multiply(scene.scaleFactorProperty()).add(label.getBoundsInLocal().getWidth() / 2));
+        } else {
+            labelRotateGroup.translateXProperty().bind(xOffset.multiply(scene.scaleFactorProperty()).subtract(label.getBoundsInLocal().getWidth() / 2));
+        }
+        labelRotateGroup.translateYProperty().bind(Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(-0.5 * yOffset));
+        labelRotateGroup.translateZProperty().bind(Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(-0.5 * yOffset));
+
 
         Node leftHorizontal = makeLineHorizontal(
             xOffset,
@@ -212,10 +254,8 @@ public class RunwayLabel extends Group {
                 labelfgColor
         );
 
-        xRotate = new Rotate(0, Rotate.X_AXIS);
-        xRotate.angleProperty().bind(scene.angleXProperty().multiply(-1));
         leftHorizontal.getTransforms().add(xRotate);
-        getChildren().addAll(leftHorizontal, leftVertical, rightVertical);
+        getChildren().addAll(labelRotateGroup, leftHorizontal, leftVertical, rightVertical);
 
 
 
@@ -297,6 +337,7 @@ public class RunwayLabel extends Group {
     public Node makeLineHorizontal(DoubleBinding start, DoubleBinding length, DoubleBinding height, double thickness, Color color){
         Line line = new Line();
         line.startXProperty().set(0);
+        line.setStrokeWidth(3);
         line.endXProperty().bind(length.multiply(scene.scaleFactorProperty()));
         line.setFill(color);
         line.setStroke(color);

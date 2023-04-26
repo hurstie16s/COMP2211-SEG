@@ -126,21 +126,11 @@ public abstract class SceneAbstract extends Scene {
       logger.error(e);
     }
     mainPane = new StackPane();
-    mainPane.setMaxWidth(width);
-    mainPane.setMaxHeight(height);
-
-    mainPane.setMinWidth(width);
-    mainPane.setMinHeight(height);
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
     mainPane.setPickOnBounds(false);
     root.setPickOnBounds(false);
     //root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG, null, null)));
     root.getStyleClass().add("unfocusedBG");
-
-    root.setMaxWidth(width);
-    root.setMaxHeight(height);
-    root.setMinWidth(width);
-    root.setMinHeight(height);
 
     //Top menu
     Menu fileMenu = new Menu("File");
