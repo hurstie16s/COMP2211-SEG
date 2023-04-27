@@ -53,7 +53,6 @@ public class TabsPaneVertical extends  VBox{
         refresh();
     }
     public void replace(int index, Pane newPane){
-        System.out.println(getChildren().size());
 
         ArrayList<Node> kids = new ArrayList<>();
         for (Node child:getChildren()) {
@@ -66,10 +65,8 @@ public class TabsPaneVertical extends  VBox{
             kids.add(newPane);
         }
 
-        System.out.println(getChildren().size());
         getChildren().removeAll(getChildren());
         getChildren().addAll(kids);
-        System.out.println(getChildren().size());
 
         //reDivide();
     }

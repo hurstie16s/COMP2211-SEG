@@ -170,19 +170,16 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
                                 TabLayout.oldTabButton.tabLayout.removeTab(TabLayout.oldTabButton);
-                                TabLayout.oldTabButton = null;
                             }
                         } else if (p instanceof TabButton) {
                             if (TabLayout.oldTabButton.equals(p)) {
                                 ((TabButton) p).run();
                             }
-                        } else {
-                            throw new RuntimeException("Failed Successfully");
                         }
-                    } catch (Exception e) {
-                        TabLayout.oldTabButton = null;
+                    } catch (Exception ignored) {
                     }
                 }
+                TabLayout.oldTabButton = null;
             }
         });
     }
@@ -201,7 +198,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             //tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
             tabLayout = new TabLayout(tabs, "unfocusedBG", "focusedBG");
             tabLayout.tabButtons.get(1).run();
-            ((TabLayout) ((TabsPaneVertical) ((TabsPaneHorizontal) tabLayout.contents.getChildren().get(0)).getChildren().get(0)).getChildren().get(0)).tabButtons.get(0).run();
+
+            //appWindow.startBaseScene();
+            //tabLayout.tabButtons.get(0).run();
+            //((TabLayout) ((TabsPaneVertical) ((TabsPaneHorizontal) tabLayout.contents.getChildren().get(0)).getChildren().get(0)).getChildren().get(0)).tabButtons.get(1).run();
         }
         for (TabLayout tab: tabs) {
             tab.clearOverlay();
@@ -902,10 +902,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         HBox posSlider = new HBox(leftButton,slider,rightButton);
         posSlider.setAlignment(Pos.CENTER);
+        Node l = makeOutputLabel(appWindow.runway.runwayObstacle.distFromThresholdProperty(),new SimpleBooleanProperty(true),5);
+        Node r = makeOutputLabel(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty(),new SimpleBooleanProperty(true),5);
 
-
-        VBox posLeft = new VBox(makeOutputLabel(new SimpleStringProperty("Left"),new SimpleBooleanProperty(true),18),makeOutputLabel(appWindow.runway.runwayObstacle.distFromThresholdProperty(),new SimpleBooleanProperty(true),5));
-        VBox posRight = new VBox(makeOutputLabel(new SimpleStringProperty("Right"),new SimpleBooleanProperty(true),18),makeOutputLabel(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty(),new SimpleBooleanProperty(true),5));
+        VBox posLeft = new VBox(makeOutputLabel(new SimpleStringProperty("Left"),new SimpleBooleanProperty(true),18),l);
+        VBox posRight = new VBox(makeOutputLabel(new SimpleStringProperty("Right"),new SimpleBooleanProperty(true),18),r);
         posLeft.setAlignment(Pos.CENTER);
         posLeft.setMinWidth(50);
         posRight.setAlignment(Pos.CENTER);
@@ -953,18 +954,24 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //data.setTextFill(Theme.fg);
         data.getStyleClass().add("fg");
         data.setText(String.valueOf(property.getValue()));
-        property.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                if (!t1.equals(number)){
-                    data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
-                            SimpleStringProperty("Error")));
-                    System.out.println(data.textProperty().get());
+        property.addListener((observableValue, number, t1) -> {
+            if (!t1.equals(number)){
+                if (visibility.get()){
+                    data.textProperty().set(Math.round(property.get())+appWindow.runway.unitsProperty().get());
+                }else {
+                    data.textProperty().set("Error");
                 }
+                logger.info(data.textProperty().get());
             }
         });
-        data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
-                SimpleStringProperty("Error")));
+        data.textProperty().set(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
+                SimpleStringProperty("Error")).get());
+        data.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                logger.info("clicked " + data.textProperty().get());
+            }
+        });
         return data;
 
     }
@@ -1325,8 +1332,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 if (Double.parseDouble(spinner.getEditor().textProperty().get()) != t1.doubleValue()) {
-                    System.out.println(spinner.getEditor().textProperty().get());
-                    System.out.println(t1.doubleValue());
                     spinner.getEditor().setText(Double.toString(t1.doubleValue()));
                 }
             }

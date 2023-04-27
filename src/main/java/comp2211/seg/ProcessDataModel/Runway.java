@@ -305,7 +305,6 @@ public class Runway {
     public void recalculate(){
 
         logger.info("Recalculating runway values");
-        System.out.println("test");
         rightTora.bind(inputRightTora);
         rightToda.bind(inputRightToda);
         rightAsda.bind(inputRightAsda);

@@ -52,7 +52,6 @@ public class TabsPaneHorizontal extends  HBox{
         refresh();
     }
     public void replace(int index, Pane newPane){
-        System.out.println(getChildren().size());
 
         ArrayList<Node> kids = new ArrayList<>();
         for (Node child:getChildren()) {
@@ -64,10 +63,8 @@ public class TabsPaneHorizontal extends  HBox{
         if (getChildren().size()  <= index){
             kids.add(newPane);
         }
-        System.out.println(getChildren().size());
         getChildren().removeAll(getChildren());
         getChildren().addAll(kids);
-        System.out.println(getChildren().size());
 
         //reDivide();
     }

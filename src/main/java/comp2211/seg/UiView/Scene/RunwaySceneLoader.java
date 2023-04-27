@@ -207,8 +207,6 @@ public class RunwaySceneLoader extends SceneAbstract{
         scene.angleXProperty.set(anglex);
         scene.angleYProperty.set(angley);
         scene.angleZProperty.set(anglez);
-        System.out.println(root.widthProperty().get());
-        System.out.println(((Pane) root.getParent()).widthProperty().get());
     }
     public void refresh(){
         scene.refresh();
