@@ -15,9 +15,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.AmbientLight;
-import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
+import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -67,7 +65,7 @@ public class RunwayScene extends SceneAbstract {
     /**
      * The camera used to view the runway scene.
      */
-    public PerspectiveCamera camera;
+    public Camera camera;
     /**
      * The Background.
      */
@@ -366,6 +364,31 @@ public class RunwayScene extends SceneAbstract {
   }
 
     /**
+     * Configures the camera by adding ambient light, creating a perspective camera,
+     * and setting up rotations for the group.
+     * Binds angle properties to corresponding rotate angles.
+     */
+    public void configureCameraAlt() {
+    AmbientLight light = new AmbientLight();
+    light.setLightOn(true);
+    group.getChildren().add(light);
+    camera = new ParallelCamera();
+    setCamera(camera);
+    Rotate xRotate;
+    Rotate yRotate;
+    Rotate zRotate;
+
+    group.getTransforms().addAll(
+        xRotate = new Rotate(0,Rotate.X_AXIS),
+        yRotate = new Rotate(0,Rotate.Y_AXIS),
+        zRotate = new Rotate(0,Rotate.Z_AXIS)
+    );
+    xRotate.angleProperty().bind(angleXProperty);
+    yRotate.angleProperty().bind(angleYProperty);
+    zRotate.angleProperty().bind(angleZProperty);
+  }
+
+    /**
      * Creates a background box, adds a phong material and sets it to the group.
      */
     public void makeBackground() {
@@ -433,7 +456,7 @@ public class RunwayScene extends SceneAbstract {
     root.getStyleClass().add("transparent");
     mainPane.getStyleClass().add("transparent");
     logger.info("building");
-    configureCamera();
+    configureCameraAlt();
     render();
 
     mainPane.maxWidthProperty().bind(root.widthProperty());
