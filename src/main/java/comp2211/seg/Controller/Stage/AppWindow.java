@@ -56,6 +56,10 @@ public class AppWindow {
      * The Obstacle presets.
      */
     public final ArrayList<Obstacle> obstaclePresets;
+    private String pathToStyle = "/style/darkStyle.css";
+    public Theme theme;
+    private ArrayList<Color> cssDarkColors;
+    private ArrayList<Color> cssLightColors;
 
     /**
      * Constructs an AppWindow object with the specified stage, width, and height.
@@ -89,17 +93,17 @@ public class AppWindow {
     /**
      * Sets up the resources for the application.
      */
-    private void setupResources(String stylesheet1, String stylesheet2) {
+    private void setupResources(String styleDark, String styleLight) {
         logger.info("Getting stylesheets rules...");
         CSSRuleList cssRuleList1;
         try {
-            cssRuleList1 = CssColorParser.getCssRules(stylesheet1);
+            cssRuleList1 = CssColorParser.getCssRules(styleDark);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         CSSRuleList cssRuleList2;
         try {
-            cssRuleList2 = CssColorParser.getCssRules(stylesheet2);
+            cssRuleList2 = CssColorParser.getCssRules(styleLight);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -137,11 +141,13 @@ public class AppWindow {
         cssPrefixes.add("-fx-background-color:");
         cssPrefixes.add("-fx-background-color:");
         cssPrefixes.add("-fx-background-color:");
-        ArrayList<Color> cssDarkColors = CssColorParser.getCssColors(cssRuleList1,cssClasses,cssPrefixes);
-        logger.info(cssDarkColors.get(0));
-        Theme themeDark = new Theme();
-        themeDark.setThemeColors(cssDarkColors);
-        logger.info("Test: " + Theme.getAsda());
+        cssDarkColors = CssColorParser.getCssColors(cssRuleList1,cssClasses,cssPrefixes);
+        cssLightColors = CssColorParser.getCssColors(cssRuleList2,cssClasses,cssPrefixes);
+        theme = new Theme();
+        logger.info("Setting theme colors...");
+        assert cssDarkColors != null;
+        //set default
+        theme.setThemeColors(cssDarkColors);
     }
 
     /**
@@ -301,11 +307,12 @@ public class AppWindow {
      * @param newScene the scene to load
      */
     public void loadScene(SceneAbstract newScene) {
-        // Cleanup remains of the previous scene
-        cleanup();
+
         // Create the new scene and set it up
         newScene.build();
         currentScene = newScene;
+        currentScene.getRoot().getStylesheets().add(pathToStyle);
+
         stage.setScene(currentScene);
         currentScene.makeHelp(false);
         // Initialise the scene when ready
@@ -344,7 +351,7 @@ public class AppWindow {
      */
     public void cleanup(){
         //clear listeners
-        //root.getChildren().removeAll(root.getChildren());
+        stage.setScene(null);
     }
 
     /**
@@ -362,5 +369,19 @@ public class AppWindow {
     public void startBaseSceneObstacle() {
         loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
         ((BaseScene) currentScene).selectObstacleMenu(1);
+    }
+
+    public void setStyle(String pathToStyle,String style) {
+        logger.info("theme changed to "+ pathToStyle);
+        this.pathToStyle = pathToStyle;
+        if(style.equals("d")) {
+            theme.setThemeColors(cssDarkColors);
+        } else {
+            theme.setThemeColors(cssLightColors);
+        }
+        // Cleanup remains of the previous scene
+        //cleanup();
+        //this.loadScene(currentScene);
+        startHomeScene();
     }
 }

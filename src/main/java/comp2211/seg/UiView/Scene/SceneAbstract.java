@@ -5,6 +5,7 @@ import comp2211.seg.Controller.Stage.Settings;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.ProcessDataModel.Obstacle;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -115,13 +116,13 @@ public abstract class SceneAbstract extends Scene {
    * This is used to define a generic structure used by all the children
    */
   public void build() {
-    try {
-      getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/darkStyle.css")).toExternalForm());
+    //try {
+      //getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/darkStyle.css")).toExternalForm());
       //getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/lightStyle.css")).toExternalForm());
 
-    } catch (Exception e) {
-      logger.error(e);
-    }
+    //} catch (Exception e) {
+      //logger.error(e);
+    //}
     mainPane = new StackPane();
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
     mainPane.setPickOnBounds(false);
@@ -131,7 +132,14 @@ public abstract class SceneAbstract extends Scene {
 
     //Top menu
     Menu fileMenu = new Menu("File");
-    Menu OptionsMenu = new Menu("Options");
+    Menu optionsMenu = new Menu("Options");
+    Menu themeMenu = new Menu("Colour Schemes");
+    MenuItem darkStyle = new MenuItem("Dark Theme");
+    MenuItem lightStyle = new MenuItem("Light Theme");
+    themeMenu.getItems().addAll(darkStyle,lightStyle);
+    optionsMenu.getItems().add(themeMenu);
+
+
     Menu helpMenu = new Menu("Help");
 
     MenuItem menu8 = new MenuItem("Help menu");
@@ -167,7 +175,7 @@ public abstract class SceneAbstract extends Scene {
     menu11.getItems().addAll(menu12, menu13);
 
     MenuBar menuBar = new MenuBar();
-    menuBar.getMenus().addAll(fileMenu, OptionsMenu, helpMenu);
+    menuBar.getMenus().addAll(fileMenu, optionsMenu, helpMenu);
 
     topMenu = new VBox(menuBar);
     topMenu.setAlignment(Pos.TOP_CENTER);
@@ -195,6 +203,8 @@ public abstract class SceneAbstract extends Scene {
     menu13png.setOnAction(e -> exportSideViewButtonEvent("png"));
     menu13jpg.setOnAction(e -> exportSideViewButtonEvent("jpg"));
     menu13gif.setOnAction(e -> exportTopDownViewButtonEvent("gif"));
+    darkStyle.setOnAction(e -> appWindow.setStyle("/style/darkStyle.css","d"));
+    lightStyle.setOnAction(e -> appWindow.setStyle("/style/lightStyle.css","l"));
   }
 
   /**
