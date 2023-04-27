@@ -54,9 +54,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     //logger for BaseScene
     private static final Logger logger = LogManager.getLogger(BaseScene.class);
-    private static TabLayout tabLayout;
+    private static TabLayout tabLayout = null;
     public static ArrayList<TabLayout> tabs = new ArrayList<>();
-    private boolean overlay;
+    private boolean overlay = false;
 
     public VBox topView;
     public Scene scene;
@@ -187,12 +187,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         });
     }
 
-    /**
-     * Select obstacle menu.
-     */
-    public void selectObstacleMenu(int n){
-        tabLayout.tabButtons.get(n).run();
-    }
 
     public void build()  {
         super.build();
@@ -206,6 +200,11 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
             //tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
             tabLayout = new TabLayout(tabs, "unfocusedBG", "focusedBG");
+            tabLayout.tabButtons.get(1).run();
+            ((TabLayout) ((TabsPaneVertical) ((TabsPaneHorizontal) tabLayout.contents.getChildren().get(0)).getChildren().get(0)).getChildren().get(0)).tabButtons.get(0).run();
+        }
+        for (TabLayout tab: tabs) {
+            tab.clearOverlay();
         }
 
         mainPane.maxHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
@@ -225,10 +224,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     }
 
-    @Override
-    public void refresh() {
-        super.refresh();
-    }
 
     private Scene getScene() {
         return this;
@@ -964,6 +959,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 if (!t1.equals(number)){
                     data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
                             SimpleStringProperty("Error")));
+                    System.out.println(data.textProperty().get());
                 }
             }
         });
@@ -1060,28 +1056,28 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         dataheader.getStyleClass().add("font");
         //dataheader.setTextFill(Theme.fg);
         dataheader.getStyleClass().add("fg");
-        dataheader.setText(String.valueOf(prop1header.getValue()));
+        dataheader.textProperty().bind(prop1header);
 
         Label data = new Label();
         //data.setFont(Theme.font);
         data.getStyleClass().add("font");
         //data.setTextFill(Theme.fg);
         data.getStyleClass().add("fg");
-        data.setText(String.valueOf(prop1.getValue()));
+        data.textProperty().bind(prop1);
 
         Label data2header = new Label();
         //data2header.setFont(Theme.font);
         data2header.getStyleClass().add("font");
         //data2header.setTextFill(Theme.fg);
         data2header.getStyleClass().add("fg");
-        data2header.setText(String.valueOf(prop2header.getValue()));
+        data2header.textProperty().bind(prop2header);
 
         Label data2 = new Label();
         //data2.setFont(Theme.font);
         data2.getStyleClass().add("font");
         //data2.setTextFill(Theme.fg);
         data2.getStyleClass().add("fg");
-        data2.setText(String.valueOf(prop2.getValue()));
+        data2.textProperty().bind(prop2);
 
         VBox box = new VBox(dataheader,data,data2header,data2);
         VBox.setVgrow(data, Priority.ALWAYS);

@@ -175,9 +175,9 @@ public class Runway {
         logger.info("Created Runway object");
 
         logger.info("Created initial VOID runway obstacle");
-        runwayObstacle = new Obstacle("VOID", 0,0);
 
         runwayLength.bind(Bindings.when(Bindings.greaterThan(inputLeftTora,inputRightTora)).then(inputLeftTora).otherwise(inputRightTora));
+        runwayObstacle = new Obstacle("VOID", 5,runwayLength.get()/2);
         clearwayLeft.bind(inputRightToda.subtract(inputRightTora));
         stopwayLeft.bind(inputRightAsda.subtract(inputRightTora));
         dispThresholdRight.bind(inputRightTora.subtract(inputRightLda));
@@ -187,6 +187,8 @@ public class Runway {
         //direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
         slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2)).greaterThan(runwayObstacle.lengthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2))).otherwise(runwayObstacle.lengthProperty().divide(2).add(240)));
         //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
+
+
         runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
 
 
@@ -214,9 +216,9 @@ public class Runway {
         logger.info("Created Runway object");
 
         logger.info("Created initial VOID runway obstacle");
-        runwayObstacle = new Obstacle("VOID", 0,0);
 
         runwayLength.bind(Bindings.when(Bindings.greaterThan(inputLeftTora,inputRightTora)).then(inputLeftTora).otherwise(inputRightTora));
+        runwayObstacle = new Obstacle("VOID", 5,runwayLength.get()/2);
         clearwayLeft.bind(inputRightToda.subtract(inputRightTora));
         stopwayLeft.bind(inputRightAsda.subtract(inputRightTora));
         dispThresholdRight.bind(inputRightTora.subtract(inputRightLda));
@@ -226,7 +228,9 @@ public class Runway {
         //direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
         slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2)).greaterThan(runwayObstacle.lengthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2))).otherwise(runwayObstacle.lengthProperty().divide(2).add(240)));
         //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
+
         runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
+
 
 
         recalculate();

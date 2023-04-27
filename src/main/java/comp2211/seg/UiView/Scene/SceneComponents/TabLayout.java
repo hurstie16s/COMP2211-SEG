@@ -31,7 +31,7 @@ import java.util.Map;
  * The type Tab layout.
  */
 public class TabLayout extends VBox {
-    public static TabButton oldTabButton;
+    public static TabButton oldTabButton = null;
     public final String bg;
     public final String fg;
     /**
