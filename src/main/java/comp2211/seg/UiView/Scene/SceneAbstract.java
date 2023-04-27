@@ -62,8 +62,9 @@ public abstract class SceneAbstract extends Scene {
    * The Help.
    */
   protected HelpScene help;
+  protected String type;
 
-  protected ArrayList<SceneAbstract> refreshables = new ArrayList<>();
+  public static ArrayList<SceneAbstract> refreshables = new ArrayList<>();
 
   /**
    * Constructor to create a SceneAbstract object.
@@ -75,7 +76,6 @@ public abstract class SceneAbstract extends Scene {
    */
   public SceneAbstract(Pane root, AppWindow appWindow, double width, double height) {
     super(root, appWindow.getWidth(), appWindow.getHeight(), Color.BLACK);
-    refreshables.clear();
     this.root = root;
     this.width = width;
     this.height = height;
@@ -93,7 +93,6 @@ public abstract class SceneAbstract extends Scene {
    */
   public SceneAbstract(Pane root, AppWindow appWindow, double width, double height, boolean depthBuffer) {
     super(root, appWindow.getWidth(), appWindow.getHeight(), depthBuffer, SceneAntialiasing.BALANCED);
-    refreshables.clear();
     this.root = root;
     this.width = width;
     this.height = height;
@@ -111,11 +110,19 @@ public abstract class SceneAbstract extends Scene {
     }
   }
 
+  public void reset(){
+    for (SceneAbstract scene: refreshables) {
+      scene.reset();
+    }
+    refresh();
+  }
+
   /**
    * Generic build method to create the basic requirements for a JavaFX Scene
    * This is used to define a generic structure used by all the children
    */
   public void build() {
+    type = "build";
     //try {
       //getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/darkStyle.css")).toExternalForm());
       //getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/lightStyle.css")).toExternalForm());
@@ -217,6 +224,7 @@ public abstract class SceneAbstract extends Scene {
    * This is used to define a generic structure used by all the children
    */
   public void buildmenuless() {
+    type = "buildmenuless";
 //    try {
 //      getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/darkStyle.css")).toExternalForm());
 //      getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/lightStyle.css")).toExternalForm());
@@ -235,11 +243,6 @@ public abstract class SceneAbstract extends Scene {
     root.setPickOnBounds(false);
     //root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG, null, null)));
     root.getStyleClass().add("unfocusedBG");
-
-    root.setMaxWidth(width);
-    root.setMaxHeight(height);
-    root.setMinWidth(width);
-    root.setMinHeight(height);
     root.getChildren().add(mainPane);
   }
 

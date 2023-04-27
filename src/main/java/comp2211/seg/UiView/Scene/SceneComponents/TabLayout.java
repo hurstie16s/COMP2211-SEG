@@ -4,6 +4,7 @@ import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.UiView.Scene.BaseScene;
+import comp2211.seg.UiView.Scene.RunwayComponents.Sub;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
@@ -14,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -32,8 +34,6 @@ public class TabLayout extends VBox {
     public static TabButton oldTabButton;
     public final String bg;
     public final String fg;
-    private SimpleDoubleProperty width;
-    private SimpleDoubleProperty height;
     /**
      * The Tab buttons.
      */
@@ -42,6 +42,7 @@ public class TabLayout extends VBox {
     private VBox layout;
     public StackPane contents;
     public Pane currentContent;
+    public SubScene subScene;
 
     /**
      * Instantiates a new Tab layout.
@@ -53,32 +54,36 @@ public class TabLayout extends VBox {
     public TabLayout(ArrayList<Pair<String, Pane>> tabs, String bg, String fg){
         this.bg = bg;
         this.fg = fg;
-        parentProperty().addListener(new ChangeListener<Parent>() {
-            @Override
-            public void changed(ObservableValue<? extends Parent> observableValue, Parent parent, Parent t1) {
-                if (t1 != null) {
-                    width.bind(widthProperty());
-                    height.bind(heightProperty());
-                }
-            }
-        });
-        width = new SimpleDoubleProperty(0);
-        height = new SimpleDoubleProperty(0);
+        getStyleClass().add(bg);
         contents = new StackPane();
         topbar = new HBox();
 
-        contents.maxHeightProperty().bind(height.subtract(topbar.heightProperty()));
-        contents.minHeightProperty().bind(height.subtract(topbar.heightProperty()));
-        contents.maxWidthProperty().bind(width);
-        contents.minWidthProperty().bind(width);
+
+        subScene = new Sub(contents,widthProperty().get(),heightProperty().get());
+        contents.getStylesheets().add(AppWindow.pathToStyle.get());
+        AppWindow.pathToStyle.addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                contents.getStylesheets().clear();
+                contents.getStylesheets().add(AppWindow.pathToStyle.get());
+            }
+        });
+        subScene.widthProperty().bind(widthProperty());
+        subScene.heightProperty().bind(heightProperty().subtract(topbar.heightProperty()));
+
+        contents.maxHeightProperty().bind(heightProperty().subtract(topbar.heightProperty()));
+        contents.minHeightProperty().bind(heightProperty().subtract(topbar.heightProperty()));
+        contents.maxWidthProperty().bind(widthProperty());
+        contents.minWidthProperty().bind(widthProperty());
         contents.getStyleClass().add(fg);
-        topbar.maxWidthProperty().bind(width);
-        topbar.minWidthProperty().bind(width);
+        subScene.getStyleClass().add(fg);
+        topbar.maxWidthProperty().bind(widthProperty());
+        topbar.minWidthProperty().bind(widthProperty());
 
 
-        getChildren().addAll(topbar,contents);
-        maxWidthProperty().bind(width);
-        minWidthProperty().bind(width);
+        getChildren().addAll(topbar,subScene);
+        maxWidthProperty().bind(widthProperty());
+        minWidthProperty().bind(widthProperty());
 
 
         for (Pair<String, Pane> tab: tabs) {
@@ -90,10 +95,10 @@ public class TabLayout extends VBox {
 
     public TabButton makeTab(Pair<String, Pane> tab) {
         TabButton tabButton = new TabButton(tab, this);
-        tab.getValue().maxHeightProperty().bind(height.subtract(topbar.heightProperty()));
-        tab.getValue().minHeightProperty().bind(height.subtract(topbar.heightProperty()));
-        tab.getValue().maxWidthProperty().bind(width);
-        tab.getValue().minWidthProperty().bind(width);
+        tab.getValue().maxHeightProperty().bind(heightProperty().subtract(topbar.heightProperty()));
+        tab.getValue().minHeightProperty().bind(heightProperty().subtract(topbar.heightProperty()));
+        tab.getValue().maxWidthProperty().bind(widthProperty());
+        tab.getValue().minWidthProperty().bind(widthProperty());
         tabButtons.add(tabButton);
         topbar.getChildren().add(tabButton);
         return tabButton;

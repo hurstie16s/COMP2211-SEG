@@ -175,7 +175,7 @@ public class RunwayScene extends SceneAbstract {
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
-          appWindow.startBaseSceneObstacle();
+          appWindow.startBaseScene();
           break;
         case W:
           group.translateYProperty().set(group.getTranslateY()-10);
@@ -309,6 +309,7 @@ public class RunwayScene extends SceneAbstract {
       // Parse the color value from the .obstacle class in the current stylesheet
 
     PhongMaterial material = new PhongMaterial();
+    logger.info("making runway with colour " + Theme.getRunway().toString());
     material.setDiffuseColor(Theme.getRunway());
 
     //import these from runway somehow
@@ -320,22 +321,6 @@ public class RunwayScene extends SceneAbstract {
     box.setMaterial(material);
 
     group.getChildren().add(box);
-    /*
-    try {
-      material = new PhongMaterial();
-      material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/runway.png")).toExternalForm()));
-      //import these from runway somehow
-      Box overlay = new Box(0,0,0);
-      overlay.widthProperty().bind(appWindow.runway.runwayLengthProperty().multiply(scaleFactor));
-      overlay.heightProperty().bind(appWindow.runway.runwayWidthProperty().multiply(scaleFactorHeight));
-      overlay.setMaterial(material);
-      overlay.translateZProperty().set(1);
-      group.getChildren().add(overlay);
-
-    }catch (Exception e){
-      logger.error(e);
-    }
-     */
   }
 
 
@@ -395,7 +380,6 @@ public class RunwayScene extends SceneAbstract {
 
     background = new Box(width,height,0);
     PhongMaterial material = new PhongMaterial();
-//material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
     material.setDiffuseColor(Theme.getGrass());
 
     background.setMaterial(material);
@@ -409,7 +393,6 @@ public class RunwayScene extends SceneAbstract {
   public void buildmenuless(){
     super.buildmenuless();
     //setFill(Theme.bgRunway);
-    getRoot().getStyleClass().add("transparent");
     root.getStyleClass().clear();
     mainPane.getStyleClass().clear();
     root.getStyleClass().add("transparent");
@@ -481,7 +464,6 @@ public class RunwayScene extends SceneAbstract {
   public void build() {
     super.build();
     //setFill(Theme.bgRunway);
-    getRoot().getStyleClass().add("transparent");
     root.getStyleClass().clear();
     mainPane.getStyleClass().clear();
     root.getStyleClass().add("transparent");
@@ -759,10 +741,9 @@ public class RunwayScene extends SceneAbstract {
     }else {
       //appWindow.currentScene.getWindow().setWidth(getWidth()+0.0001);
       scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).subtract(0.0001).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.getMINRESA()*2+300)));
-
-
     }
   }
+
 
     /**
      * Creates the Cleared and Graded Area (CGA) and adds it to the 3D group.

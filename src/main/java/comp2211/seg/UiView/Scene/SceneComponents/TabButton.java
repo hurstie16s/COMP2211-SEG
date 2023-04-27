@@ -16,7 +16,7 @@ public class TabButton extends Label {
         super(tab.getKey());
         this.tabLayout = tabLayout;
         this.tab = tab;
-        this.getStyleClass().add("fg");
+        getStyleClass().addAll(tabLayout.bg, "tabUnselected");
         setPadding(new Insets(5));
     }
     public void run(){

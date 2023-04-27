@@ -22,6 +22,8 @@ public class RunwaySceneLoader extends SceneAbstract{
      */
     public RunwayScene scene;
     public SubScene subScene;
+    public double width;
+    public double height;
 
     /**
      * Constructor to create a SceneAbstract object.
@@ -42,7 +44,7 @@ public class RunwaySceneLoader extends SceneAbstract{
         setOnKeyPressed((keyEvent -> {
             switch (keyEvent.getCode()){
                 case ESCAPE:
-                    appWindow.startBaseSceneObstacle();
+                    appWindow.startBaseScene();
                     break;
                 case W:
                     scene.group.translateYProperty().set(scene.group.getTranslateY()-10);
@@ -117,7 +119,7 @@ public class RunwaySceneLoader extends SceneAbstract{
     }
     public void buildmenuless(){
         super.buildmenuless();
-        scene = new RunwayScene(new Pane(),appWindow, width, height,false);
+        scene = new RunwayScene(new Pane(),appWindow, root.getWidth(), root.getHeight(),false);
         scene.buildmenuless();
         scene.initialise();
         mainPane.getChildren().add(scene.getRoot());
@@ -139,14 +141,16 @@ public class RunwaySceneLoader extends SceneAbstract{
     }
     public void buildmenulessalt(){
         super.buildmenuless();
+        type = "buildmenulessalt";
         Pane runwayPane = new Pane();
         Pane subPane = new Pane();
 
-        scene = new RunwayScene(runwayPane,appWindow, width, height,false);
+        scene = new RunwayScene(runwayPane,appWindow, root.widthProperty().get(), root.heightProperty().get(),false);
         scene.buildmenulessalt();
         scene.initialise();
-        subScene = new Sub(subPane,width,height);
+        subScene = new Sub(subPane, root.getWidth(), root.getHeight());
         subPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+        subPane.getStylesheets().add(AppWindow.pathToStyle.get());
         runwayPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
         getRoot().getStyleClass().add("transparent");
         root.getStyleClass().add("sky");
@@ -158,6 +162,11 @@ public class RunwaySceneLoader extends SceneAbstract{
         root.getChildren().add(mainPane);
         subScene.widthProperty().bind(root.widthProperty());
         subScene.heightProperty().bind(root.heightProperty());
+
+        scene.root.setMinWidth(root.widthProperty().get());
+        scene.root.setMaxWidth(root.widthProperty().get());
+        scene.root.setMinHeight(root.heightProperty().get());
+        scene.root.setMaxHeight(root.heightProperty().get());
         root.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -175,6 +184,34 @@ public class RunwaySceneLoader extends SceneAbstract{
         });
 
 
+    }
+
+    public void reset(){
+        double anglex = scene.angleXProperty.get();
+        double angley = scene.angleYProperty.get();
+        double anglez = scene.angleZProperty.get();
+        root.getChildren().clear();
+        root.getStyleClass().clear();
+        subScene = null;
+        scene = null;
+
+        if (type.equals("build")){
+            build();
+        } else if (type.equals("buildmenuless")){
+            buildmenuless();
+        } else if (type.equals("buildmenulessalt")){
+            buildmenulessalt();
+        } else {
+            //build();
+        }
+        scene.angleXProperty.set(anglex);
+        scene.angleYProperty.set(angley);
+        scene.angleZProperty.set(anglez);
+        System.out.println(root.widthProperty().get());
+        System.out.println(((Pane) root.getParent()).widthProperty().get());
+    }
+    public void refresh(){
+        scene.refresh();
     }
 
 }

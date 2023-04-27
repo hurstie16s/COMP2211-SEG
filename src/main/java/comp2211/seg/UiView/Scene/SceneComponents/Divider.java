@@ -28,24 +28,26 @@ public class Divider extends Line {
                 size2 = ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).widthProperty().get();
             });
             setOnMouseDragged(event ->{
-                if (((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).minWidthProperty().isBound()){
-                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).minWidthProperty().unbind();
-                }
-                if (((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).minWidthProperty().isBound()){
-                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).minWidthProperty().unbind();
-                }
-                if (((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).maxWidthProperty().isBound()){
-                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).maxWidthProperty().unbind();
-                }
-                if (((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).maxWidthProperty().isBound()){
-                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).maxWidthProperty().unbind();
-                }
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).minWidthProperty().bind(new SimpleDoubleProperty(size1 + x - event.getSceneX()));
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).maxWidthProperty().bind(new SimpleDoubleProperty(size1 + x - event.getSceneX()));
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).minWidthProperty().bind(new SimpleDoubleProperty(size2 - x + event.getSceneX()));
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).maxWidthProperty().bind(new SimpleDoubleProperty(size2 - x + event.getSceneX()));
+                if (size2 - x + event.getSceneX() > 40 && size1 + x - event.getSceneX() > 40) {
+                    if (((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).minWidthProperty().isBound()) {
+                        ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).minWidthProperty().unbind();
+                    }
+                    if (((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).minWidthProperty().isBound()) {
+                        ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).minWidthProperty().unbind();
+                    }
+                    if (((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).maxWidthProperty().isBound()) {
+                        ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).maxWidthProperty().unbind();
+                    }
+                    if (((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).maxWidthProperty().isBound()) {
+                        ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).maxWidthProperty().unbind();
+                    }
+                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).minWidthProperty().bind(new SimpleDoubleProperty(size1 + x - event.getSceneX()));
+                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).maxWidthProperty().bind(new SimpleDoubleProperty(size1 + x - event.getSceneX()));
+                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).minWidthProperty().bind(new SimpleDoubleProperty(size2 - x + event.getSceneX()));
+                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).maxWidthProperty().bind(new SimpleDoubleProperty(size2 - x + event.getSceneX()));
 
-                AppWindow.currentScene.refresh();
+                    AppWindow.currentScene.refresh();
+                }
 
 
             });
@@ -58,12 +60,13 @@ public class Divider extends Line {
                 size2 = ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).heightProperty().get();
             });
             setOnMouseDragged(event ->{
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).minHeightProperty().bind(new SimpleDoubleProperty(size1 + y - event.getSceneY()));
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).maxHeightProperty().bind(new SimpleDoubleProperty(size1 + y - event.getSceneY()));
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).minHeightProperty().bind(new SimpleDoubleProperty(size2 - y + event.getSceneY()));
-                ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).maxHeightProperty().bind(new SimpleDoubleProperty(size2 - y + event.getSceneY()));
-
-                AppWindow.currentScene.refresh();
+                if (size1 + y - event.getSceneY() > 40 && size2 - y + event.getSceneY() > 40) {
+                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).minHeightProperty().bind(new SimpleDoubleProperty(size1 + y - event.getSceneY()));
+                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).maxHeightProperty().bind(new SimpleDoubleProperty(size1 + y - event.getSceneY()));
+                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).minHeightProperty().bind(new SimpleDoubleProperty(size2 - y + event.getSceneY()));
+                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).maxHeightProperty().bind(new SimpleDoubleProperty(size2 - y + event.getSceneY()));
+                    AppWindow.currentScene.refresh();
+                }
 
             });
         } else {

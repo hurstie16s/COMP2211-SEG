@@ -54,7 +54,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     //logger for BaseScene
     private static final Logger logger = LogManager.getLogger(BaseScene.class);
-    private TabLayout tabLayout;
+    private static TabLayout tabLayout;
     public static ArrayList<TabLayout> tabs = new ArrayList<>();
     private boolean overlay;
 
@@ -199,13 +199,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
         root.getStyleClass().add("unfocusedBG");
         mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+        if (tabLayout == null) {
+            ArrayList<Pair<String, Pane>> tabs = new ArrayList<>();
+            tabs.add(new Pair<>("Airport Configuration", makeAirportConfig()));
 
-        ArrayList<Pair<String, Pane>> tabs = new ArrayList<>();
-        tabs.add(new Pair<>("Airport Configuration", makeAirportConfig()));
-
-        tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
-        //tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
-        tabLayout = new TabLayout(tabs,"unfocusedBG","focusedBG");
+            tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
+            //tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
+            tabLayout = new TabLayout(tabs, "unfocusedBG", "focusedBG");
+        }
 
         mainPane.maxHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
         mainPane.minHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
@@ -219,6 +220,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         tabsPaneVertical.maxWidthProperty().bind(mainPane.widthProperty());
         tabsPaneVertical.minWidthProperty().bind(mainPane.widthProperty());
         mainPane.getChildren().add(tabsPaneVertical);
+        reset();
+        refresh();
+
+    }
+
+    @Override
+    public void refresh() {
+        super.refresh();
     }
 
     private Scene getScene() {

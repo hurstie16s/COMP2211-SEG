@@ -8,6 +8,7 @@ import comp2211.seg.ProcessDataModel.Runway;
 import comp2211.seg.UiView.Scene.*;
 import comp2211.seg.UiView.Scene.Utilities.CssColorParser;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -56,7 +57,7 @@ public class AppWindow {
      * The Obstacle presets.
      */
     public final ArrayList<Obstacle> obstaclePresets;
-    private String pathToStyle = "/style/darkStyle.css";
+    public static SimpleStringProperty pathToStyle = new SimpleStringProperty("/style/darkStyle.css");
     public Theme theme;
     private ArrayList<Color> cssDarkColors;
     private ArrayList<Color> cssLightColors;
@@ -278,6 +279,15 @@ public class AppWindow {
         stage.setOnCloseRequest(ev -> App.getInstance().shutdown());
 
     }
+    public void reloadScene(){
+        if (currentScene instanceof HomeScene){
+            startHomeScene();
+        }else if (currentScene instanceof BaseScene){
+            startBaseScene();
+        }  else if (currentScene instanceof RunwayScene || currentScene instanceof RunwaySceneLoader){
+            startRunwayScene();
+        }
+    }
 
     /**
      * Starts the home scene.
@@ -329,7 +339,7 @@ public class AppWindow {
         // Create the new scene and set it up
         newScene.build();
         currentScene = newScene;
-        currentScene.getRoot().getStylesheets().add(pathToStyle);
+        currentScene.getRoot().getStylesheets().add(pathToStyle.get());
 
         stage.setScene(currentScene);
         currentScene.makeHelp(false);
@@ -373,13 +383,6 @@ public class AppWindow {
         return airports;
     }
 
-    /**
-     * Start base scene obstacle.
-     */
-    public void startBaseSceneObstacle() {
-        loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
-        ((BaseScene) currentScene).selectObstacleMenu(1);
-    }
 
     /**
      * Cleans up the remains of the previous scene.
@@ -391,9 +394,10 @@ public class AppWindow {
 
     public void setStyle(String pathToStyle,String style) {
 
-        if(!(pathToStyle.equals(this.pathToStyle))) {
+        if(!(pathToStyle.equals(this.pathToStyle.get()))) {
+
             logger.info("theme changed to "+ pathToStyle);
-            this.pathToStyle = pathToStyle;
+            this.pathToStyle.set(pathToStyle);
             if (style.equals("d")) {
                 theme.setThemeColors(cssDarkColors);
             } else if (style.equals("e")) {
@@ -406,7 +410,7 @@ public class AppWindow {
             // Cleanup remains of the previous scene
             //cleanup();
             //this.loadScene(currentScene);
-            startHomeScene();
+            reloadScene();
         } else {
             logger.info(pathToStyle + " is current style");
         }
