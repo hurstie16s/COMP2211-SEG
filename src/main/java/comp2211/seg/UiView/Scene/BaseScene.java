@@ -70,7 +70,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
      * @param width     the width
      * @param height    the height
      */
-    public BaseScene(Pane root, AppWindow appWindow, double width, double height) {
+    public BaseScene(Pane root, AppWindow appWindow, SimpleDoubleProperty width, SimpleDoubleProperty height) {
         super(root, appWindow, width, height);
         this.scene = root.getScene();
     }
@@ -125,6 +125,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                         Node p = mouseEvent.getPickResult().getIntersectedNode();
                         while ((p.getParent() != null) && !((p instanceof TabLayout) || (p instanceof TabButton))) {
                             p = p.getParent();
+                            logger.info(p.getClass().getName());
                         }
                         if (p instanceof TabLayout) {
                             Parent gp = p.getParent();
@@ -197,7 +198,6 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
             //tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
             tabLayout = new TabLayout(tabs, "unfocusedBG", "focusedBG");
-            tabLayout.tabButtons.get(1).run();
 
             //appWindow.startBaseScene();
             //tabLayout.tabButtons.get(0).run();
@@ -1420,28 +1420,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 }
             }
         });
-        segment.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                button.setMinWidth(0);
-                button2.setMinWidth(0);
-                button.setMinWidth(t1.doubleValue() / 2);
-                button2.setMinWidth(t1.doubleValue() / 2);
-                button.setMaxWidth(t1.doubleValue() /2);
-                button2.setMaxWidth(t1.doubleValue() /2);
-            }
-        });
-        segment.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                button.setMinHeight(0);
-                button2.setMinHeight(0);
-                button.setMinHeight(t1.doubleValue()-10);
-                button2.setMinHeight(t1.doubleValue()-10);
-                button.setMaxHeight(t1.doubleValue());
-                button2.setMaxHeight(t1.doubleValue());
-            }
-        });
+        button.minWidthProperty().bind(segment.widthProperty().divide(2).subtract(8));
+        button.maxWidthProperty().bind(segment.widthProperty().divide(2).subtract(8));
+        button2.minWidthProperty().bind(segment.widthProperty().divide(2).subtract(8));
+        button2.maxWidthProperty().bind(segment.widthProperty().divide(2).subtract(8));
+        button.minHeightProperty().bind(segment.heightProperty().subtract(12));
+        button.maxHeightProperty().bind(segment.heightProperty().subtract(12));
+        button2.minHeightProperty().bind(segment.heightProperty().subtract(12));
+        button2.maxHeightProperty().bind(segment.heightProperty().subtract(12));
 
         button.selectedProperty().set(property.get());
         button2.selectedProperty().set(!property.get());

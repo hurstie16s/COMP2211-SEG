@@ -8,6 +8,7 @@ import comp2211.seg.ProcessDataModel.Runway;
 import comp2211.seg.UiView.Scene.*;
 import comp2211.seg.UiView.Scene.Utilities.CssColorParser;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -31,8 +32,8 @@ public class AppWindow {
     private static final Logger logger = LogManager.getLogger(AppWindow.class);
 
     private final Stage stage;
-    private final int width;
-    private final int height;
+    private SimpleDoubleProperty width = new SimpleDoubleProperty(1280);
+    private SimpleDoubleProperty height = new SimpleDoubleProperty(720);
     /**
      * The Current scene.
      */
@@ -75,8 +76,8 @@ public class AppWindow {
      */
     public AppWindow(Stage stage, int width, int height) {
         this.stage = stage;
-        this.width = width;
-        this.height = height;
+        this.width.set(width);
+        this.height.set(height);
         setupResources("/style/darkStyle.css","/style/lightStyle.css", "/style/blueYellowCB.css", "/style/redGreenCB.css");
 
 
@@ -274,8 +275,6 @@ public class AppWindow {
      */
     public void setupStage() {
         stage.setTitle("Runway tool");
-        stage.setMinWidth(width);
-        stage.setMinHeight(height);
         stage.setOnCloseRequest(ev -> App.getInstance().shutdown());
 
     }
@@ -304,7 +303,7 @@ public class AppWindow {
      * Start base scene.
      */
     public void startBaseScene() {
-        loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
+        loadScene(new BaseScene(new Pane(),this, width,height));
     }
 
     /**
@@ -313,7 +312,7 @@ public class AppWindow {
     public void startRunwayScene() {
         //loadScene(new RunwayScene(new Pane(),this,getWidth(),getHeight(),true));
         //((RunwayScene) currentScene).makeAlignButton();
-        loadScene(new RunwaySceneLoader(new Pane(),this,getWidth(),getHeight()));
+        loadScene(new RunwaySceneLoader(new Pane(),this, width,height));
         ((RunwaySceneLoader) currentScene).scene.makeAlignButton();
     }
 
@@ -356,23 +355,6 @@ public class AppWindow {
         return stage;
     }
 
-    /**
-     * Gets the width of the application's window.
-     *
-     * @return the width of the application's window
-     */
-    public int getWidth() {
-        return width;
-    }
-
-    /**
-     * Gets the height of the application's window.
-     *
-     * @return the height of the application's window
-     */
-    public int getHeight() {
-        return height;
-    }
 
     /**
      * Gets airports.
@@ -414,5 +396,12 @@ public class AppWindow {
         } else {
             logger.info(pathToStyle + " is current style");
         }
+    }
+
+    public double getWidth() {
+        return width.get();
+    }
+    public double getHeight() {
+        return height.get();
     }
 }

@@ -8,6 +8,7 @@ import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.Runway;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -59,7 +60,7 @@ public class HomeScene extends SceneAbstract{
    * @param width     the width
    * @param height    the height
    */
-  public HomeScene(Pane root, AppWindow appWindow, double width, double height) {
+  public HomeScene(Pane root, AppWindow appWindow, SimpleDoubleProperty width, SimpleDoubleProperty height) {
     super(root, appWindow, width, height);
     this.appWindow = appWindow;
   }

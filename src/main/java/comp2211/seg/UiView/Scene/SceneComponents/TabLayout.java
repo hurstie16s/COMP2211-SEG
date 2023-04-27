@@ -59,7 +59,7 @@ public class TabLayout extends VBox {
         topbar = new HBox();
 
 
-        subScene = new Sub(contents,widthProperty().get(),heightProperty().get());
+        //subScene = new Sub(contents,widthProperty().get(),heightProperty().get());
         contents.getStylesheets().add(AppWindow.pathToStyle.get());
         AppWindow.pathToStyle.addListener(new ChangeListener<String>() {
             @Override
@@ -68,20 +68,20 @@ public class TabLayout extends VBox {
                 contents.getStylesheets().add(AppWindow.pathToStyle.get());
             }
         });
-        subScene.widthProperty().bind(widthProperty());
-        subScene.heightProperty().bind(heightProperty().subtract(topbar.heightProperty()));
+        //subScene.widthProperty().bind(widthProperty());
+        //subScene.heightProperty().bind(heightProperty().subtract(topbar.heightProperty()));
 
         contents.maxHeightProperty().bind(heightProperty().subtract(topbar.heightProperty()));
         contents.minHeightProperty().bind(heightProperty().subtract(topbar.heightProperty()));
         contents.maxWidthProperty().bind(widthProperty());
         contents.minWidthProperty().bind(widthProperty());
         contents.getStyleClass().add(fg);
-        subScene.getStyleClass().add(fg);
+        //subScene.getStyleClass().add(fg);
         topbar.maxWidthProperty().bind(widthProperty());
         topbar.minWidthProperty().bind(widthProperty());
 
 
-        getChildren().addAll(topbar,subScene);
+        getChildren().addAll(topbar,contents);
         maxWidthProperty().bind(widthProperty());
         minWidthProperty().bind(widthProperty());
 

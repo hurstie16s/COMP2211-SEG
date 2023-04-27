@@ -158,7 +158,7 @@ public class RunwayScene extends SceneAbstract {
      * @param depthBuffer the depth buffer
      */
     public RunwayScene(Pane root, AppWindow appWindow, double width, double height, boolean depthBuffer) {
-    super(root, appWindow, width, height, depthBuffer);
+    super(root, appWindow, new SimpleDoubleProperty(width), new SimpleDoubleProperty(height), depthBuffer);
     this.width = width;
     this.height = height;
 
@@ -378,7 +378,7 @@ public class RunwayScene extends SceneAbstract {
      */
     public void makeBackground() {
 
-    background = new Box(width,height,0);
+    background = new Box(widthProperty().get(),heightProperty().get(),0);
     PhongMaterial material = new PhongMaterial();
     material.setDiffuseColor(Theme.getGrass());
 
@@ -400,28 +400,20 @@ public class RunwayScene extends SceneAbstract {
     logger.info("building");
     configureCamera();
     render();
-    root.widthProperty().addListener(new ChangeListener<Number>() {
-      @Override
-      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-        mainPane.setMinWidth((Double) t1);
-        mainPane.setMaxWidth((Double) t1);
-        group.translateXProperty().set(group.translateXProperty().get()+((double) t1 - (double) number)/2);
-      }
-    });
-    root.heightProperty().addListener(new ChangeListener<Number>() {
-      @Override
-      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-        mainPane.setMinHeight((Double) t1);
-        mainPane.setMaxHeight((Double) t1);
-        group.translateYProperty().set(group.translateYProperty().get()+((double) t1 - (double) number)/2);
 
-      }
-    });
+
+
+    mainPane.maxWidthProperty().bind(root.widthProperty());
+    mainPane.minWidthProperty().bind(root.widthProperty());
+    mainPane.maxHeightProperty().bind(root.heightProperty());
+    mainPane.minHeightProperty().bind(root.heightProperty());
+
     root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.getMINRESA()*2+300)));
     scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));
     mainPane.getChildren().add(group);
+
 
     addListeners();
   }

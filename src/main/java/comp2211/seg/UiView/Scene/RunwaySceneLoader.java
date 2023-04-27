@@ -3,6 +3,7 @@ package comp2211.seg.UiView.Scene;
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.UiView.Scene.RunwayComponents.Sub;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.SceneAntialiasing;
@@ -34,9 +35,14 @@ public class RunwaySceneLoader extends SceneAbstract{
      * @param height    the height
      */
     public RunwaySceneLoader(Pane root, AppWindow appWindow, double width, double height) {
-        super(root, appWindow, width, height);
+        super(root, appWindow, new SimpleDoubleProperty(width), new SimpleDoubleProperty(height));
         this.width = width;
         this.height = height;
+    }
+    public RunwaySceneLoader(Pane root, AppWindow appWindow, SimpleDoubleProperty width, SimpleDoubleProperty height) {
+        super(root, appWindow, width, height);
+        this.width = width.get();
+        this.height = height.get();
     }
 
     @Override
@@ -101,21 +107,14 @@ public class RunwaySceneLoader extends SceneAbstract{
         VBox layoutPane = new VBox(topMenu,mainPane);
 
         root.getChildren().add(layoutPane);
-        root.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                scene.root.setMinWidth((Double) t1);
-                scene.root.setMaxWidth((Double) t1);
-            }
-        });
-        root.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                scene.root.setMinHeight((Double) t1);
-                scene.root.setMaxHeight((Double) t1);
 
-            }
-        });
+        scene.root.maxWidthProperty().bind(root.widthProperty());
+        scene.root.minWidthProperty().bind(root.widthProperty());
+        scene.root.maxHeightProperty().bind(root.heightProperty());
+        scene.root.minHeightProperty().bind(root.heightProperty());
+
+        subScene.widthProperty().bind(root.widthProperty());
+        subScene.heightProperty().bind(root.heightProperty());
     }
     public void buildmenuless(){
         super.buildmenuless();
@@ -123,21 +122,11 @@ public class RunwaySceneLoader extends SceneAbstract{
         scene.buildmenuless();
         scene.initialise();
         mainPane.getChildren().add(scene.getRoot());
-        root.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                scene.mainPane.setMinWidth((Double) t1);
-                scene.mainPane.setMaxWidth((Double) t1);
-            }
-        });
-        root.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                scene.mainPane.setMinHeight((Double) t1);
-                scene.mainPane.setMaxHeight((Double) t1);
 
-            }
-        });
+        scene.root.maxWidthProperty().bind(root.widthProperty());
+        scene.root.minWidthProperty().bind(root.widthProperty());
+        scene.root.maxHeightProperty().bind(root.heightProperty());
+        scene.root.minHeightProperty().bind(root.heightProperty());
     }
     public void buildmenulessalt(){
         super.buildmenuless();
@@ -163,25 +152,11 @@ public class RunwaySceneLoader extends SceneAbstract{
         subScene.widthProperty().bind(root.widthProperty());
         subScene.heightProperty().bind(root.heightProperty());
 
-        scene.root.setMinWidth(root.widthProperty().get());
-        scene.root.setMaxWidth(root.widthProperty().get());
-        scene.root.setMinHeight(root.heightProperty().get());
-        scene.root.setMaxHeight(root.heightProperty().get());
-        root.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                scene.root.setMinWidth((Double) t1);
-                scene.root.setMaxWidth((Double) t1);
-            }
-        });
-        root.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                scene.root.setMinHeight((Double) t1);
-                scene.root.setMaxHeight((Double) t1);
 
-            }
-        });
+        scene.root.maxWidthProperty().bind(root.widthProperty());
+        scene.root.minWidthProperty().bind(root.widthProperty());
+        scene.root.maxHeightProperty().bind(root.heightProperty());
+        scene.root.minHeightProperty().bind(root.heightProperty());
 
 
     }

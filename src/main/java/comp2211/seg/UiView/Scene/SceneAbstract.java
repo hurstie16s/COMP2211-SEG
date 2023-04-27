@@ -6,6 +6,7 @@ import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.ProcessDataModel.Obstacle;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -74,11 +75,14 @@ public abstract class SceneAbstract extends Scene {
    * @param width     the width
    * @param height    the height
    */
-  public SceneAbstract(Pane root, AppWindow appWindow, double width, double height) {
-    super(root, appWindow.getWidth(), appWindow.getHeight(), Color.BLACK);
+  public SceneAbstract(Pane root, AppWindow appWindow, SimpleDoubleProperty width, SimpleDoubleProperty height) {
+    super(root, width.get(), height.get(), Color.BLACK);
+
+    logger.info(Double.toString(appWindow.getWidth()) + " " + Double.toString(appWindow.getHeight()));
     this.root = root;
-    this.width = width;
-    this.height = height;
+    width.bind(root.widthProperty());
+    height.bind(root.heightProperty());
+
     this.appWindow = appWindow;
   }
 
@@ -91,11 +95,12 @@ public abstract class SceneAbstract extends Scene {
    * @param height      the height
    * @param depthBuffer the depth buffer
    */
-  public SceneAbstract(Pane root, AppWindow appWindow, double width, double height, boolean depthBuffer) {
-    super(root, appWindow.getWidth(), appWindow.getHeight(), depthBuffer, SceneAntialiasing.BALANCED);
+  public SceneAbstract(Pane root, AppWindow appWindow, SimpleDoubleProperty width, SimpleDoubleProperty height, boolean depthBuffer) {
+    super(root, width.get(), height.get(), depthBuffer, SceneAntialiasing.BALANCED);
+    logger.info(Double.toString(appWindow.getWidth()) + " " + Double.toString(appWindow.getHeight()));
     this.root = root;
-    this.width = width;
-    this.height = height;
+    width.bind(root.widthProperty());
+    height.bind(root.heightProperty());
     this.appWindow = appWindow;
   }
 
@@ -233,11 +238,10 @@ public abstract class SceneAbstract extends Scene {
 //     logger.error(e);
 //    }
     mainPane = new StackPane();
-    mainPane.setMaxWidth(width);
-    mainPane.setMaxHeight(height);
-
-    mainPane.setMinWidth(width);
-    mainPane.setMinHeight(height);
+    mainPane.maxWidthProperty().bind(root.widthProperty());
+    mainPane.minWidthProperty().bind(root.widthProperty());
+    mainPane.maxHeightProperty().bind(root.heightProperty());
+    mainPane.minHeightProperty().bind(root.heightProperty());
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
     mainPane.setPickOnBounds(false);
     root.setPickOnBounds(false);
