@@ -69,7 +69,9 @@ public class RunwayLabel extends Group {
         });
         label.textProperty().bind((new SimpleStringProperty(name)).concat(" (").concat(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(Long.toString(Math.round(length.get()))).otherwise(Long.toString(Math.round(length.get()*-1)))).concat(scene.appWindow.runway.unitsProperty()).concat(")"));
         //label.setFill(Theme.getLabelFg);
+        label.getStyleClass().clear();
         label.getStyleClass().add("runwaylabelfg");
+        label.setFill(Theme.getLabelFg());
         //label.setFont(Theme.font);
         label.getStyleClass().add("font");
         if (direction) {
@@ -184,6 +186,7 @@ public class RunwayLabel extends Group {
         });
         label.textProperty().bind(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(Long.toString(Math.round(length.get()))).otherwise(Long.toString(Math.round(length.get()*-1))).concat(scene.appWindow.runway.unitsProperty()));
         //label.setFill(Theme.getLabelFg());
+        label.getStyleClass().clear();
         label.getStyleClass().add("runwaylabelfg");
         //label.setFont(Theme.font);
         label.getStyleClass().add("font");
