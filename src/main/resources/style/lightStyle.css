@@ -91,6 +91,9 @@
 .blastallowance {
     -fx-background-color: #cccc00;
 }
+.sky {
+    -fx-background-color: #B4C7E7;
+}
 .font {
     -fx-font-family: "Calibri";
     -fx-font-size: 20;

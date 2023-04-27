@@ -9,7 +9,7 @@ import javafx.scene.transform.Rotate;
 public class Sub extends SubScene {
     public Sub(Parent parent, double v, double v1) {
         super(parent, v, v1);
-        build();
+        buildAlt();
     }
     public Sub(Parent parent, double v, double v1, boolean b, SceneAntialiasing sceneAntialiasing) {
         super(parent, v, v1, b, sceneAntialiasing);
@@ -19,6 +19,12 @@ public class Sub extends SubScene {
 
         getRoot().getStyleClass().add("transparent");
         PerspectiveCamera camera = new PerspectiveCamera();
+        setCamera(camera);
+    }
+    public void buildAlt(){
+
+        getRoot().getStyleClass().add("transparent");
+        ParallelCamera camera = new ParallelCamera();
         setCamera(camera);
     }
 }

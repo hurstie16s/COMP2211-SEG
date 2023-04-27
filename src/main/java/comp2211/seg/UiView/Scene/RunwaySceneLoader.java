@@ -91,7 +91,7 @@ public class RunwaySceneLoader extends SceneAbstract{
         subPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
         runwayPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
         getRoot().getStyleClass().add("transparent");
-        root.getStyleClass().add("transparent");
+        root.getStyleClass().add("sky");
         mainPane.getStyleClass().add("transparent");
         subPane.getChildren().add(runwayPane);
         root.getChildren().removeAll(root.getChildren());
@@ -139,10 +139,41 @@ public class RunwaySceneLoader extends SceneAbstract{
     }
     public void buildmenulessalt(){
         super.buildmenuless();
-        scene = new RunwayScene(new Pane(),appWindow, width, height,false);
+        Pane runwayPane = new Pane();
+        Pane subPane = new Pane();
+
+        scene = new RunwayScene(runwayPane,appWindow, width, height,false);
         scene.buildmenulessalt();
         scene.initialise();
-        mainPane.getChildren().add(scene.getRoot());
+        subScene = new Sub(subPane,width,height);
+        subPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+        runwayPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+        getRoot().getStyleClass().add("transparent");
+        root.getStyleClass().add("sky");
+        mainPane.getStyleClass().add("transparent");
+        subPane.getChildren().add(runwayPane);
+        root.getChildren().removeAll(root.getChildren());
+        root.getChildren().add(subScene);
+
+        root.getChildren().add(mainPane);
+        subScene.widthProperty().bind(root.widthProperty());
+        subScene.heightProperty().bind(root.heightProperty());
+        root.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                scene.root.setMinWidth((Double) t1);
+                scene.root.setMaxWidth((Double) t1);
+            }
+        });
+        root.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                scene.root.setMinHeight((Double) t1);
+                scene.root.setMaxHeight((Double) t1);
+
+            }
+        });
+
 
     }
 

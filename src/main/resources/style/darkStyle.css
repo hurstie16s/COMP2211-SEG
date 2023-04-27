@@ -107,6 +107,9 @@
 .blastallowance {
     -fx-background-color: #cccc00;
 }
+.sky {
+    -fx-background-color: #000044;
+}
 
 .tabSelected {
     -fx-font-family: "Arial";
