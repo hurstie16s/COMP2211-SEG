@@ -212,13 +212,13 @@ public abstract class SceneAbstract extends Scene {
    * This is used to define a generic structure used by all the children
    */
   public void buildmenuless() {
-    try {
-      getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/darkStyle.css")).toExternalForm());
-      getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/lightStyle.css")).toExternalForm());
-
-    } catch (Exception e) {
-      logger.error(e);
-    }
+//    try {
+//      getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/darkStyle.css")).toExternalForm());
+//      getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style/lightStyle.css")).toExternalForm());
+//
+//    } catch (Exception e) {
+//     logger.error(e);
+//    }
     mainPane = new StackPane();
     mainPane.setMaxWidth(width);
     mainPane.setMaxHeight(height);

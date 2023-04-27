@@ -347,14 +347,6 @@ public class AppWindow {
     }
 
     /**
-     * Cleans up the remains of the previous scene.
-     */
-    public void cleanup(){
-        //clear listeners
-        stage.setScene(null);
-    }
-
-    /**
      * Gets airports.
      *
      * @return the airports
@@ -369,6 +361,14 @@ public class AppWindow {
     public void startBaseSceneObstacle() {
         loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
         ((BaseScene) currentScene).selectObstacleMenu(1);
+    }
+
+    /**
+     * Cleans up the remains of the previous scene.
+     */
+    public void cleanup(){
+        //clear listeners
+        stage.setScene(null);
     }
 
     public void setStyle(String pathToStyle,String style) {
