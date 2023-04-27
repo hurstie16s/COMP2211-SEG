@@ -130,115 +130,20 @@ public class HelpScene extends Scene {
      * Runway labels.
      */
     public void runwayLabels() {
+        makeColour(Theme.getRunway(), "Runway");
+        makeColour(Theme.getLda(), "LDA");
+        makeColour(Theme.getTora(), "TORA");
+        makeColour(Theme.getAsda(), "ASDA");
+        makeColour(Theme.getToda(), "TODA");
+        makeColour(Theme.getObstacle(),"Obstacle");
+        makeColour(Theme.getResa(), "RESA");
+        makeColour(Theme.getStripEnd(), "Strip End");
+        makeColour(Theme.getBlastAllowance(), "Blast Allowance");
+        makeColour(Theme.getCga(), "Cleared & Graded Area");
+        makeColour(Theme.getStopway(), "Stopway");
+        makeColour(Theme.getClearway(), "Clearway");
+        makeColour(Theme.getPhysicalResa(), "Physical Resa");
 
-
-        Color obstacleColor = null;
-        try {
-            obstacleColor = CssColorParser.getColorFromCssClass(this, ".obstacle","-fx-background-color:",22);
-        } catch (Exception e) {
-            // Handle the exception
-        }
-        Color cgaColor = null;
-        try {
-            cgaColor = CssColorParser.getColorFromCssClass(this,".cga","-fx-background-color:",22);
-        } catch (Exception e) {
-            // Handle the exception
-        }
-        // Parse the color value from the .obstacle class in the current stylesheet
-        Color clearwayColor = null;
-        try {
-            clearwayColor = CssColorParser.getColorFromCssClass(this,".clearway","-fx-background-color:",22);
-        } catch (Exception e) {
-            // Handle the exception
-        }
-        Color stopwayColor = null;
-        try {
-            stopwayColor = CssColorParser.getColorFromCssClass(this,".stopway","-fx-background-color:",22);
-        } catch (Exception e) {
-            // Handle the exception;
-        }
-        Color physicalResaColor = null;
-        try {
-            physicalResaColor = CssColorParser.getColorFromCssClass(this,".physicalResa","-fx-background-color:",22);
-        } catch (Exception e) {
-            // Handle the exception;
-        }
-        Color runwayColor = null;
-        try {
-            runwayColor = CssColorParser.getColorFromCssClass(this,".runway","-fx-background-color:",22);
-        } catch (Exception e) {
-            // Handle the exception;
-        }
-        Color ldaColor = null;
-        try {
-            ldaColor = CssColorParser.getColorFromCssClass(this,".lda","-fx-background-color:",22);
-        } catch (Exception e) {
-            // Handle the exception;
-        }
-        Color toraColor = null;
-        try {
-            toraColor = CssColorParser.getColorFromCssClass(this,".tora","-fx-background-color:",22);
-        } catch (Exception e) {
-            // Handle the exception;
-        }
-        Color asdaColor = null;
-        try {
-            asdaColor = CssColorParser.getColorFromCssClass(this,".asda","-fx-background-color:",22);
-        } catch (Exception e) {
-            // Handle the exception;
-        }
-        Color todaColor = null;
-        try {
-            todaColor = CssColorParser.getColorFromCssClass(this,".toda","-fx-background-color:",22);
-        } catch (Exception e) {
-            // Handle the exception;
-        }
-        Color resaColor = null;
-        try {
-            resaColor = CssColorParser.getColorFromCssClass(this,".resa","-fx-background-color:",22);
-        } catch (Exception e) {
-            // Handle the exception;
-        }
-        Color stripendColor = null;
-        try {
-            stripendColor = CssColorParser.getColorFromCssClass(this,".stripend","-fx-background-color:",22);
-        } catch (Exception e) {
-            // Handle the exception;
-        }
-        Color blastallowanceColor = null;
-        try {
-            blastallowanceColor = CssColorParser.getColorFromCssClass(this,".blastallowance","-fx-background-color:",22);
-        } catch (Exception e) {
-            // Handle the exception;
-        }
-
-
-        //makeColour(Theme.lda, "LDA");
-        makeColour(ldaColor, "LDA");
-        //makeColour(Theme.tora, "TORA");
-        makeColour(toraColor, "TORA");
-        //makeColour(Theme.asda, "ASDA");
-        makeColour(asdaColor, "ASDA");
-        //makeColour(Theme.toda, "TODA");
-        makeColour(todaColor, "TODA");
-        //makeColour(Theme.obstacle,"Obstacle");
-        makeColour(obstacleColor, "Obstacle");
-        //makeColour(Theme.resa, "RESA");
-        makeColour(resaColor, "RESA");
-        //makeColour(Theme.stripend, "Strip End");
-        makeColour(stripendColor, "Strip End");
-        //makeColour(Theme.blastallowance, "Blast Allowance");
-        makeColour(blastallowanceColor, "Blast Allowance");
-        //makeColour(Theme.runway, "Runway");
-        makeColour(runwayColor, "Runway");
-        //makeColour(Theme.cga, "Cleared & Graded Area");
-        makeColour(cgaColor,"Cleared & Graded Area");
-        //makeColour(Theme.stopway, "Stopway");
-        makeColour(stopwayColor,"Stopway");
-        //makeColour(Theme.clearway, "Clearway");
-        makeColour(clearwayColor,"Clearway");
-        //makeColour(Theme.physicalResa, "Physical Resa");
-        makeColour(physicalResaColor, "Physical Resa");
 
     }
 

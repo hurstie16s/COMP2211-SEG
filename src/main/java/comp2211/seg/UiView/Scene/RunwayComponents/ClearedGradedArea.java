@@ -1,5 +1,6 @@
 package comp2211.seg.UiView.Scene.RunwayComponents;
 
+import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.UiView.Scene.RunwayScene;
 import comp2211.seg.UiView.Scene.Utilities.CssColorParser;
 import javafx.beans.property.Property;
@@ -44,18 +45,11 @@ public class ClearedGradedArea extends Polygon {
         }) {
             prop.addListener((observableValue, o, t1) -> redraw());
         }
-        Color cgaColor;
-        try {
-            cgaColor = CssColorParser.getColorFromCssClass(runwayScene,".cga","-fx-background-color:",22);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
         if (filled) {
-            //setFill(Theme.cga);
-            setFill(cgaColor);
+            setFill(Theme.getCga());
         } else {
-            //setStroke(Theme.cga);
-            setStroke(cgaColor);
+            setStroke(Theme.getCga());
             setFill(Color.TRANSPARENT);
             setStrokeWidth(2);
         }

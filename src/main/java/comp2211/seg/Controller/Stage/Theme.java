@@ -3,19 +3,26 @@ package comp2211.seg.Controller.Stage;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
 
 /**
  * The type Theme.
  */
 public class Theme {
+
+  private static final Logger logger = LogManager.getLogger(Theme.class);
+  public static ArrayList<Color> themeColors;
     /**
      * The Bg.
      */
-    //static public Color bg = Color.gray(0.8);
+    //static public Color bg;
     /**
      * The Bg runway.
      */
-    //static public Color bgRunway = Color.gray(0.85);
+    //static public Color bgRunway;
     /**
      * The Unfocused bg.
      */
@@ -44,67 +51,67 @@ public class Theme {
      * DoubleBinding xOffset, double yOffset, DoubleBinding length,
      * RunwayScene scene, boolean direction, SimpleBooleanProperty visibility)
      */
-    //static public Color labelfg = Color.gray(0);
+    static public Color labelfg;
     /**
      * The Grass.
      */
-    //static public Color grass = Color.web("#93cd81");
+    static public Color grass;
     /**
      * The Obstacle.
      */
-    //static public Color obstacle = Color.web("#ff0000");
+    static public Color obstacle;
     /**
      * The Slope.
      */
-    //static public Color slope = Color.web("#008080");
+    static public Color slope;
     /**
      * The Cga.
      */
-    //static public Color cga = Color.web("#008080");
+    public static Color cga;
     /**
      * The Clearway.
      */
-    //static public Color clearway = Color.web("#db0056");
+    static public Color clearway;
     /**
      * The Stopway.
      */
-    //static public Color stopway = Color.web("#faa40a");
+    static public Color stopway;
     /**
      * The Physical resa.
      */
-    //static public Color physicalResa = Color.web("#fed9b4");
+    static public Color physicalResa;
     /**
      * The Runway.
      */
-    //static public Color runway = Color.web("#a5a5a5");
+    static public Color runway;
     /**
      * The Toda.
      */
-    //static public Color toda = Color.web("#ff00ff");
+    static public Color toda;
     /**
      * The Tora.
      */
-    //static public Color tora = Color.web("#00ffff");
+    static public Color tora;
     /**
      * The Asda.
      */
-    //static public Color asda = Color.web("#ffff00");
+    static public Color asda;
     /**
      * The Lda.
      */
-    //static public Color lda = Color.web("#0000ff");;
+    static public Color lda;
     /**
      * The Resa.
      */
-    //static public Color resa = Color.web("#d06800");
+    static public Color resa;
     /**
      * The Stripend.
      */
-    //static public Color stripend = Color.web("#00ff00");
+    static public Color stripend;
     /**
      * The Blastallowance.
      */
-    //static public Color blastallowance = Color.web("#cccc00");
+    static public Color blastallowance;
     /**
      * The Font.
      * left for sake of:
@@ -120,12 +127,104 @@ public class Theme {
      */
     //static public Font fontsmall =Font.font("Calibri", 16);
 
-    /**
-     * Reverse color.
-     *
-     * @param color the color
-     * @return the color
-     */
+    public Theme() {
+      this.themeColors = new ArrayList<>();
+      themeColors.add(labelfg);
+      themeColors.add(runway);
+      themeColors.add(grass);
+      themeColors.add(obstacle);
+      themeColors.add(slope);
+      themeColors.add(clearway);
+      themeColors.add(stopway);
+      themeColors.add(lda);
+      themeColors.add(tora);
+      themeColors.add(asda);
+      themeColors.add(toda);
+      themeColors.add(resa);
+      themeColors.add(cga);
+      themeColors.add(stripend);
+      themeColors.add(blastallowance);
+      themeColors.add(physicalResa);
+    }
+
+  public void setThemeColors(ArrayList<Color> cssColors) {
+    for (int i = 0; i < cssColors.size() && i < themeColors.size(); i++) {
+      themeColors.set(i, cssColors.get(i));
+      logger.info("Color set at index " + i + ": " + themeColors.get(i));
+    }
+  }
+
+  public static Color getLabelFg() {
+    return themeColors.get(0);
+  }
+
+  public static Color getRunway() {
+    return themeColors.get(1);
+  }
+
+  public static Color getGrass() {
+    return themeColors.get(2);
+  }
+
+  public static Color getObstacle() {
+    return themeColors.get(3);
+  }
+
+  public static Color getSlope() {
+    return themeColors.get(4);
+  }
+
+  public static Color getClearway() {
+    return themeColors.get(5);
+  }
+
+  public static Color getStopway() {
+    return themeColors.get(6);
+  }
+
+  public static Color getLda() {
+    return themeColors.get(7);
+  }
+
+  public static Color getTora() {
+    return themeColors.get(8);
+  }
+
+  public static Color getAsda() {
+    return themeColors.get(9);
+  }
+
+  public static Color getToda() {
+    return themeColors.get(10);
+  }
+
+  public static Color getResa() {
+    return themeColors.get(11);
+  }
+
+  public static Color getCga() {
+    return themeColors.get(12);
+  }
+
+  public static Color getStripEnd() {
+    return themeColors.get(13);
+  }
+
+  public static Color getBlastAllowance() {
+    return themeColors.get(14);
+  }
+
+  public static Color getPhysicalResa() {
+    return themeColors.get(15);
+  }
+
+
+  /**
+   * Reverse color.
+   *
+   * @param color the color
+   * @return the color
+   */
 //    public static Color reverse(Color color){
 //        double r = color.getRed();
 //        double g = color.getGreen();

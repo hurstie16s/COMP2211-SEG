@@ -4,6 +4,10 @@
 .bgRunway {
     -fx-background-color: #d9d9d9;
 }
+.transparent {
+    -fx-background-color: transparent;
+    -fx-base: transparent;
+}
 .unfocusedBG {
     -fx-background-color: #e6e6e6;
 }
@@ -101,6 +105,10 @@
 }
 .spinner {
     -fx-base: rgba(60, 63, 65, 255);
+}
+
+.bold {
+    -fx-font-weight: 700;
 }
 
 .home-background {
