@@ -136,7 +136,9 @@ public abstract class SceneAbstract extends Scene {
     Menu themeMenu = new Menu("Colour Schemes");
     MenuItem darkStyle = new MenuItem("Dark Theme");
     MenuItem lightStyle = new MenuItem("Light Theme");
-    themeMenu.getItems().addAll(darkStyle,lightStyle);
+    MenuItem blueYellowCBStyle = new MenuItem("Tritanopia Theme");
+    MenuItem redGreenCBStyle = new MenuItem("Deuteranomaly Theme");
+    themeMenu.getItems().addAll(darkStyle,lightStyle, blueYellowCBStyle, redGreenCBStyle);
     optionsMenu.getItems().add(themeMenu);
 
 
@@ -205,6 +207,9 @@ public abstract class SceneAbstract extends Scene {
     menu13gif.setOnAction(e -> exportTopDownViewButtonEvent("gif"));
     darkStyle.setOnAction(e -> appWindow.setStyle("/style/darkStyle.css","d"));
     lightStyle.setOnAction(e -> appWindow.setStyle("/style/lightStyle.css","l"));
+    blueYellowCBStyle.setOnAction(e -> appWindow.setStyle("/style/blueYellowCB.css","f"));
+    redGreenCBStyle.setOnAction(e -> appWindow.setStyle("/style/redGreenCB.css","e"));
+
   }
 
   /**

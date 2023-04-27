@@ -61,6 +61,10 @@ public class AppWindow {
     private ArrayList<Color> cssDarkColors;
     private ArrayList<Color> cssLightColors;
 
+    private ArrayList<Color> cssBlueYellowCBColors;
+
+    private ArrayList<Color> cssRedGreenCBColors;
+
     /**
      * Constructs an AppWindow object with the specified stage, width, and height.
      *
@@ -72,7 +76,7 @@ public class AppWindow {
         this.stage = stage;
         this.width = width;
         this.height = height;
-        setupResources("/style/darkStyle.css","/style/lightStyle.css");
+        setupResources("/style/darkStyle.css","/style/lightStyle.css", "/style/blueYellowCB.css", "/style/redGreenCB.css");
 
 
         airports = AirportsData.getAirports();
@@ -93,7 +97,7 @@ public class AppWindow {
     /**
      * Sets up the resources for the application.
      */
-    private void setupResources(String styleDark, String styleLight) {
+    private void setupResources(String styleDark, String styleLight, String styleBlueYellowCB, String styleRedGreenCB) {
         logger.info("Getting stylesheets rules...");
         CSSRuleList cssRuleList1;
         try {
@@ -104,6 +108,18 @@ public class AppWindow {
         CSSRuleList cssRuleList2;
         try {
             cssRuleList2 = CssColorParser.getCssRules(styleLight);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        CSSRuleList cssRuleList3;
+        try {
+            cssRuleList3 = CssColorParser.getCssRules(styleBlueYellowCB);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        CSSRuleList cssRuleList4;
+        try {
+            cssRuleList4 = CssColorParser.getCssRules(styleRedGreenCB);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -143,6 +159,8 @@ public class AppWindow {
         cssPrefixes.add("-fx-background-color:");
         cssDarkColors = CssColorParser.getCssColors(cssRuleList1,cssClasses,cssPrefixes);
         cssLightColors = CssColorParser.getCssColors(cssRuleList2,cssClasses,cssPrefixes);
+        cssBlueYellowCBColors = CssColorParser.getCssColors(cssRuleList3,cssClasses,cssPrefixes);
+        cssRedGreenCBColors = CssColorParser.getCssColors(cssRuleList4,cssClasses,cssPrefixes);
         theme = new Theme();
         logger.info("Setting theme colors...");
         assert cssDarkColors != null;
@@ -378,6 +396,10 @@ public class AppWindow {
             this.pathToStyle = pathToStyle;
             if (style.equals("d")) {
                 theme.setThemeColors(cssDarkColors);
+            } else if (style.equals("e")) {
+                theme.setThemeColors(cssRedGreenCBColors);
+            } else if (style.equals("f")) {
+                theme.setThemeColors(cssBlueYellowCBColors);
             } else {
                 theme.setThemeColors(cssLightColors);
             }
