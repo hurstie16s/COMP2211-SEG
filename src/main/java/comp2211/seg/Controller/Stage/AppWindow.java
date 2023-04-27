@@ -372,16 +372,21 @@ public class AppWindow {
     }
 
     public void setStyle(String pathToStyle,String style) {
-        logger.info("theme changed to "+ pathToStyle);
-        this.pathToStyle = pathToStyle;
-        if(style.equals("d")) {
-            theme.setThemeColors(cssDarkColors);
+
+        if(!(pathToStyle.equals(this.pathToStyle))) {
+            logger.info("theme changed to "+ pathToStyle);
+            this.pathToStyle = pathToStyle;
+            if (style.equals("d")) {
+                theme.setThemeColors(cssDarkColors);
+            } else {
+                theme.setThemeColors(cssLightColors);
+            }
+            // Cleanup remains of the previous scene
+            //cleanup();
+            //this.loadScene(currentScene);
+            startHomeScene();
         } else {
-            theme.setThemeColors(cssLightColors);
+            logger.info(pathToStyle + " is current style");
         }
-        // Cleanup remains of the previous scene
-        //cleanup();
-        //this.loadScene(currentScene);
-        startHomeScene();
     }
 }
