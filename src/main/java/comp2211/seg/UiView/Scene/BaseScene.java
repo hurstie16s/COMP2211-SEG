@@ -859,7 +859,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         obstacleData.add(makeLabel("Top Landing/Take off"), 2,2);
         obstacleData.add(makeLabel("Bottom Landing/Take off"), 2,3);
         obstacleData.add(makeButton(appWindow.runway.directionLeftProperty(),"Towards","Away"),3,2);
-        obstacleData.add(makeButton(appWindow.runway.directionRightProperty(),"Towards","Away"),3,3);
+        obstacleData.add(makeButton(appWindow.runway.directionRightProperty(),"Away","Towards"),3,3);
 
         // Obstacle preset dropdown selector
         obstacleData.add(obstacleComboBox,1,0);
@@ -867,7 +867,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().heightProperty()),1,1);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().lengthProperty()),1,2);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().widthProperty()),1,3);
-        obstacleData.add(makeButton(appWindow.runway.hasRunwayObstacleProperty(),"No","Yes"),1,4);
+        obstacleData.add(makeButton(appWindow.runway.hasRunwayObstacleProperty(),"Yes","No"),1,4);
         Slider slider = new Slider();
         slider.minProperty().bind(appWindow.runway.runwayObstacle.lengthProperty().divide(-2));
         slider.maxProperty().bind(appWindow.runway.runwayLengthProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)));
@@ -1358,9 +1358,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         ToggleButton button2 = new ToggleButton(label2);
 
         button.getStyleClass().add("font");
-        button.getStyleClass().add("toggleButtonFocused");
+        button.getStyleClass().add("toggleButtonNotFocused");
         button2.getStyleClass().add("font");
-        button2.getStyleClass().add("toggleButtonNotFocused");
+        button2.getStyleClass().add("toggleButtonFocused");
         segment.getChildren().addAll(button,button2);
 
         button.selectedProperty().addListener(new ChangeListener<Boolean>() {
@@ -1372,10 +1372,17 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 if (t1) {
                     property.set(true);
 
-                    button.getStyleClass().add("toggleButtonFocused");
                     button.getStyleClass().remove("toggleButtonNotFocused");
-                    button2.getStyleClass().add("toggleButtonNotFocused");
+                    button.getStyleClass().add("toggleButtonFocused");
+
                     button2.getStyleClass().remove("toggleButtonFocused");
+                    button2.getStyleClass().add("toggleButtonNotFocused");
+                } else {
+                    button.getStyleClass().remove("toggleButtonFocused");
+                    button.getStyleClass().add("toggleButtonNotFocused");
+
+                    button2.getStyleClass().remove("toggleButtonNotFocused");
+                    button2.getStyleClass().add("toggleButtonFocused");
                 }
             }
         });
@@ -1388,11 +1395,18 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 if (t1) {
                     property.set(false);
 
-                    button2.getStyleClass().add("toggleButtonFocused");
-                    button2.getStyleClass().remove("toggleButtonNotFocused");
-                    button.getStyleClass().add("toggleButtonNotFocused");
                     button.getStyleClass().remove("toggleButtonFocused");
+                    button.getStyleClass().add("toggleButtonNotFocused");
 
+                    button2.getStyleClass().remove("toggleButtonNotFocused");
+                    button2.getStyleClass().add("toggleButtonFocused");
+
+                } else {
+                    button.getStyleClass().remove("toggleButtonNotFocused");
+                    button.getStyleClass().add("toggleButtonFocused");
+
+                    button2.getStyleClass().remove("toggleButtonFocused");
+                    button2.getStyleClass().add("toggleButtonNotFocused");
                 }
             }
         });

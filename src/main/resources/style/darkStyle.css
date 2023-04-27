@@ -27,12 +27,12 @@
     -fx-text-fill: #3c3c3c;
 }
 
-.toggleButtonNotFocused {
+.toggleButtonFocused {
     -fx-background-color: #505050;
     -fx-text-fill: #cdcfd1;
 }
 
-.toggleButtonFocused {
+.toggleButtonNotFocused {
     -fx-background-color: #272727;
     -fx-text-fill: #595a5c !important;
 }
@@ -57,6 +57,7 @@
 }
 .labelfg {
     -fx-text-fill: #ffffff;
+    -fx-fill: #ffffff;
 }
 .runwaylabelfg {
     -fx-text-fill: #ffffff;
