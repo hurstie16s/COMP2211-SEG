@@ -184,7 +184,7 @@ public abstract class SceneAbstract extends Scene {
     if(!(this instanceof HomeScene)) {
       fileMenu.getItems().addAll(menu4, menu5, menu11); //Alex add menu11 to File menu
     } else {
-      fileMenu.getItems().addAll(menu4, menu5);
+      fileMenu.getItems().addAll(menu4);
     }
     menu4.getItems().addAll(menu9, menu10);
     menu5.getItems().addAll(menu7, menu15, menu6);
