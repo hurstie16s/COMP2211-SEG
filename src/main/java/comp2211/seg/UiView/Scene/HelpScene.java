@@ -130,21 +130,22 @@ public class HelpScene extends Scene {
      * Runway labels.
      */
     public void runwayLabels() {
-        makeColour(Theme.getRunway(), "Runway");
+        makeColour(Theme.getRunway(), "Runway(RWY)");
+        makeColour(Theme.getStopway(), "Stopway(SWY)");
+        makeColour(Theme.getClearway(), "Clearway(CWY)");
+        makeColour(Theme.getResa(), "RESA");
         makeColour(Theme.getLda(), "LDA");
         makeColour(Theme.getTora(), "TORA");
         makeColour(Theme.getAsda(), "ASDA");
         makeColour(Theme.getToda(), "TODA");
         makeColour(Theme.getObstacle(),"Obstacle");
-        makeColour(Theme.getResa(), "RESA");
+        makeColour(Theme.getSlope(), "TOCS/ALS Slope");
         makeColour(Theme.getStripEnd(), "Strip End");
         makeColour(Theme.getBlastAllowance(), "Blast Allowance");
         makeColour(Theme.getCga(), "Cleared & Graded Area");
-        makeColour(Theme.getStopway(), "Stopway");
-        makeColour(Theme.getClearway(), "Clearway");
+
+
         makeColour(Theme.getPhysicalResa(), "Physical Resa");
-
-
 
     }
 
