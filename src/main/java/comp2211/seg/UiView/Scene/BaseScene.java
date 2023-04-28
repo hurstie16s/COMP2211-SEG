@@ -826,7 +826,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             appWindow.runway.addObstacle((Obstacle) selectedObstacle);
         });
 
-        obstacleComboBox.valueProperty().set("None");
+        obstacleComboBox.valueProperty().set("Default");
 
         ArrayList<Pair<String, Pane>> obstacleOptions = new ArrayList<>();
         GridPane obstacleData = new GridPane();

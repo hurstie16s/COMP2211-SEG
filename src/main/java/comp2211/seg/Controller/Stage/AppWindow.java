@@ -206,6 +206,7 @@ public class AppWindow {
     }
 
     private void obstaclePresetSetup() {
+
         obstaclePresets.add(new Obstacle("Airbus A320-200", 11.76, 0));
         obstaclePresets.get(0).lengthProperty().set(37.57);
         obstaclePresets.get(0).widthProperty().set(35.8);
@@ -227,6 +228,9 @@ public class AppWindow {
         obstaclePresets.add(new Obstacle("Maintenance truck", 3, 0));
         obstaclePresets.get(6).lengthProperty().set(6);
         obstaclePresets.get(6).widthProperty().set(2.5);
+        obstaclePresets.add(new Obstacle("Default", 5, 0));
+        obstaclePresets.get(7).lengthProperty().set(100.0);
+        obstaclePresets.get(7).widthProperty().set(60.0);
     }
 
     /**
