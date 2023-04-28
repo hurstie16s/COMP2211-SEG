@@ -181,12 +181,18 @@ public abstract class SceneAbstract extends Scene {
     MenuItem menu13jpg = new MenuItem("jpg");
     MenuItem menu13gif = new MenuItem("gif");
 
-    fileMenu.getItems().addAll(menu4, menu5, menu11); //Alex add menu11 to File menu
+    if(!(this instanceof HomeScene)) {
+      fileMenu.getItems().addAll(menu4, menu5, menu11); //Alex add menu11 to File menu
+    } else {
+      fileMenu.getItems().addAll(menu4, menu5);
+    }
     menu4.getItems().addAll(menu9, menu10);
     menu5.getItems().addAll(menu7, menu15, menu6);
-    menu12.getItems().addAll(menu12png);//, menu12jpg, menu12gif);
-    menu13.getItems().addAll(menu13png);//, menu13jpg, menu13gif);
-    menu11.getItems().addAll(menu12, menu13);
+
+      menu12.getItems().addAll(menu12png);//, menu12jpg, menu12gif);
+      menu13.getItems().addAll(menu13png);//, menu13jpg, menu13gif);
+      menu11.getItems().addAll(menu12, menu13);
+
 
     MenuBar menuBar = new MenuBar();
     menuBar.getMenus().addAll(fileMenu, optionsMenu, helpMenu);
