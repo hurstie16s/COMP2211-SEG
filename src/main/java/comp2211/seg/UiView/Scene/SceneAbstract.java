@@ -433,8 +433,9 @@ public abstract class SceneAbstract extends Scene {
    */
   protected void exportTopDownViewButtonEvent(String format) {
 
-    double outputWidth = 1920;
-    double outputHeight = 1080;
+    logger.info("exporting TopDownView ... ");
+    double outputWidth = 1280;
+    double outputHeight = 720;
     RunwaySceneLoader runwayScene = new RunwaySceneLoader(new Pane(), appWindow,outputWidth,outputHeight);
     runwayScene.buildmenulessalt();
     if (Settings.portrait.get()) {
@@ -444,10 +445,10 @@ public abstract class SceneAbstract extends Scene {
       runwayScene.scene.portrait.set(true);
     }
 
-    runwayScene.scene.root.maxWidthProperty().set(outputWidth);
-    runwayScene.scene.root.minWidthProperty().set(outputWidth);
-    runwayScene.scene.root.maxHeightProperty().set(outputHeight);
-    runwayScene.scene.root.minHeightProperty().set(outputHeight);
+    //runwayScene.scene.root.maxWidthProperty().set(outputWidth);
+    //runwayScene.scene.root.minWidthProperty().set(outputWidth);
+    //runwayScene.scene.root.maxHeightProperty().set(outputHeight);
+    //runwayScene.scene.root.minHeightProperty().set(outputHeight);
 
 
     WritableImage image = runwayScene.scene.root.snapshot(null,null);
@@ -471,8 +472,9 @@ public abstract class SceneAbstract extends Scene {
    */
   protected void exportSideViewButtonEvent(String format) {
 
-    double outputWidth = 1920;
-    double outputHeight = 1080;
+    logger.info("exporting SideView ... ");
+    double outputWidth = 1280;
+    double outputHeight = 720;
     RunwaySceneLoader runwayScene = new RunwaySceneLoader(new Pane(), appWindow,outputWidth,outputHeight);
     runwayScene.buildmenulessalt();
     if (Settings.portrait.get()) {
@@ -483,10 +485,10 @@ public abstract class SceneAbstract extends Scene {
       runwayScene.scene.toggleView();
     }
 
-    runwayScene.scene.root.maxWidthProperty().set(outputWidth);
-    runwayScene.scene.root.minWidthProperty().set(outputWidth);
-    runwayScene.scene.root.maxHeightProperty().set(outputHeight);
-    runwayScene.scene.root.minHeightProperty().set(outputHeight);
+    //runwayScene.scene.root.maxWidthProperty().set(outputWidth);
+    //runwayScene.scene.root.minWidthProperty().set(outputWidth);
+    //runwayScene.scene.root.maxHeightProperty().set(outputHeight);
+    //runwayScene.scene.root.minHeightProperty().set(outputHeight);
 
 
     WritableImage image = runwayScene.scene.root.snapshot(null,null);
