@@ -143,8 +143,6 @@ public class HelpScene extends Scene {
         makeColour(Theme.getStripEnd(), "Strip End");
         makeColour(Theme.getBlastAllowance(), "Blast Allowance");
         makeColour(Theme.getCga(), "Cleared & Graded Area");
-
-
         makeColour(Theme.getPhysicalResa(), "Physical Resa");
 
     }
