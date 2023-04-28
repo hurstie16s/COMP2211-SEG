@@ -184,8 +184,8 @@ public abstract class SceneAbstract extends Scene {
     fileMenu.getItems().addAll(menu4, menu5, menu11); //Alex add menu11 to File menu
     menu4.getItems().addAll(menu9, menu10);
     menu5.getItems().addAll(menu7, menu15, menu6);
-    menu12.getItems().addAll(menu12png, menu12jpg, menu12gif);
-    menu13.getItems().addAll(menu13png, menu13jpg, menu13gif);
+    menu12.getItems().addAll(menu12png);//, menu12jpg, menu12gif);
+    menu13.getItems().addAll(menu13png);//, menu13jpg, menu13gif);
     menu11.getItems().addAll(menu12, menu13);
 
     MenuBar menuBar = new MenuBar();
@@ -212,11 +212,11 @@ public abstract class SceneAbstract extends Scene {
     menu10.setOnAction(e -> importObstacleButtonEvent());
 
     menu12png.setOnAction(e -> exportTopDownViewButtonEvent("png"));
-    menu12jpg.setOnAction(e -> exportTopDownViewButtonEvent("jpg"));
-    menu12gif.setOnAction(e -> exportTopDownViewButtonEvent("gif"));
+   // menu12jpg.setOnAction(e -> exportTopDownViewButtonEvent("jpg"));
+   // menu12gif.setOnAction(e -> exportTopDownViewButtonEvent("gif"));
     menu13png.setOnAction(e -> exportSideViewButtonEvent("png"));
-    menu13jpg.setOnAction(e -> exportSideViewButtonEvent("jpg"));
-    menu13gif.setOnAction(e -> exportTopDownViewButtonEvent("gif"));
+   // menu13jpg.setOnAction(e -> exportSideViewButtonEvent("jpg"));
+   // menu13gif.setOnAction(e -> exportTopDownViewButtonEvent("gif"));
     darkStyle.setOnAction(e -> appWindow.setStyle("/style/darkStyle.css","d"));
     lightStyle.setOnAction(e -> appWindow.setStyle("/style/lightStyle.css","l"));
     blueYellowCBStyle.setOnAction(e -> appWindow.setStyle("/style/blueYellowCB.css","f"));
