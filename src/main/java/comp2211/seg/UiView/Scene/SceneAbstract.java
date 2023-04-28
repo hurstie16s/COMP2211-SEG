@@ -174,10 +174,10 @@ public abstract class SceneAbstract extends Scene {
     Menu menu12 = new Menu("Export Top-down View...");
     Menu menu13 = new Menu("Export Side-on View...");
     //Alex formats:
-    MenuItem menu12png = new MenuItem("png");
+    MenuItem menu12png = new MenuItem("PNG");
     MenuItem menu12jpg = new MenuItem("jpg");
     MenuItem menu12gif = new MenuItem("gif");
-    MenuItem menu13png = new MenuItem("png");
+    MenuItem menu13png = new MenuItem("PNG");
     MenuItem menu13jpg = new MenuItem("jpg");
     MenuItem menu13gif = new MenuItem("gif");
 
