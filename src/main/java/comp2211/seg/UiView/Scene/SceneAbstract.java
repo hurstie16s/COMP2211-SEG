@@ -197,7 +197,13 @@ public abstract class SceneAbstract extends Scene {
     MenuBar menuBar = new MenuBar();
     menuBar.getMenus().addAll(fileMenu, optionsMenu, helpMenu);
 
+    //Region region = new Region();
+    //Button sillyButton = new Button("Silly");
+    //HBox sillyHBox = new HBox();
+    //sillyHBox.getChildren().addAll(menuBar,region,sillyButton);
+    //HBox.setHgrow(region,Priority.ALWAYS);
     topMenu = new VBox(menuBar);
+    //topMenu = new VBox(sillyHBox);
     topMenu.setAlignment(Pos.TOP_CENTER);
     topMenu.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     VBox layoutPane = new VBox(topMenu,mainPane);

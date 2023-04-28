@@ -771,7 +771,10 @@ public class RunwayScene extends SceneAbstract {
     imageView.rotateProperty().bind(angleZProperty.subtract(Double.parseDouble(appWindow.runway.runwayDesignatorLeftProperty().getValue().substring(0,2))*10+90));
     VBox gui = new VBox(button, imageView);
 
+    //Region region = new Region();
+    //HBox box = new HBox(region,gui);
     HBox box = new HBox(gui);
+    //HBox.setHgrow(region,Priority.ALWAYS);
     box.setAlignment(Pos.CENTER_LEFT);
     appWindow.currentScene.topMenu.getChildren().add(box);
 
