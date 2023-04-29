@@ -361,16 +361,24 @@ public class Runway {
             if (directionLeft.get()) {
                 logger.info("Calculate take-off towards for left");
                 calculateTakeOffToward();
+                //calculateTakeOffTowardLeft
+                //calculateLandTowardLeft
             } else {
                 logger.info("Calculate take-off away for left");
                 calculateTakeOffAway();
+                //calculateTakeOffAwayLeft
+                //calculateLandAwayLeft
             }
             if (directionRight.get()) {
                 logger.info("Calculate land towards for right");
                 calculateLandTowards();
+                //calculateTakeOffTowardRight
+                //calculateLandTowardRight
             } else {
                 logger.info("Calculate land over for right");
                 calculateLandOver();
+                //calculateTakeOffAwayRight
+                //calculateLandAwayRight
             }
         } else {
             logger.info("Runway has no obstacle: runway returned to original state");
