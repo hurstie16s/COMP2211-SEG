@@ -1064,6 +1064,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //dataheader.setTextFill(Theme.fg);
         dataheader.getStyleClass().add("fg");
         dataheader.textProperty().bind(prop1header);
+        dataheader.setAlignment(Pos.CENTER_LEFT);
 
         Label data = new Label();
         //data.setFont(Theme.font);
@@ -1071,6 +1072,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //data.setTextFill(Theme.fg);
         data.getStyleClass().add("fg");
         data.textProperty().bind(prop1);
+        data.setAlignment(Pos.CENTER_LEFT);
 
         Label data2header = new Label();
         //data2header.setFont(Theme.font);
@@ -1078,6 +1080,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //data2header.setTextFill(Theme.fg);
         data2header.getStyleClass().add("fg");
         data2header.textProperty().bind(prop2header);
+        data2header.setAlignment(Pos.CENTER_LEFT);
 
         Label data2 = new Label();
         //data2.setFont(Theme.font);
@@ -1085,10 +1088,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //data2.setTextFill(Theme.fg);
         data2.getStyleClass().add("fg");
         data2.textProperty().bind(prop2);
+        data2.setAlignment(Pos.CENTER_LEFT);
 
         VBox box = new VBox(dataheader,data,data2header,data2);
         VBox.setVgrow(data, Priority.ALWAYS);
-        box.setAlignment(Pos.CENTER);
+        box.setAlignment(Pos.CENTER_LEFT);
+        box.setPadding(new Insets(0,5,0,5));
 
         return box;
 
