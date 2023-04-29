@@ -132,6 +132,11 @@ public abstract class RunwayCalculations {
                             .concat(new SimpleStringProperty(") - Stripend"))
             );
 
+            if (runway.leftTora.lessThan(0).get()) {
+                runway.leftTora.bind(new SimpleDoubleProperty(0));
+                runway.leftToraBreakdown.bind(new SimpleStringProperty("TORA cannot be less than 0m"));
+            }
+
             runway.leftAsda.bind(runway.leftTora);
             runway.leftAsdaBreakdown.bind(
                     new SimpleStringProperty("Left ASDA = ")
@@ -146,6 +151,7 @@ public abstract class RunwayCalculations {
             );
             runway.leftToraBreakdownHeader.bind(new SimpleStringProperty("Left TODA = Left TORA"));
         }
+
     }
 
     /**
@@ -168,6 +174,7 @@ public abstract class RunwayCalculations {
             );
             runway.leftLdaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
         } else {
+
             runway.leftLdaBreakdown.bind(
                     new SimpleStringProperty("Left LDA = ")
                             .concat(runway.runwayObstacle.distFromThresholdProperty().intValue())
@@ -180,6 +187,12 @@ public abstract class RunwayCalculations {
             runway.leftLdaBreakdownHeader.bind(
                     new SimpleStringProperty("Left LDA = Obstacle dist from left threshold - Minimum RESA - Stripend")
             );
+
+            if (runway.leftLda.lessThan(0).get()) {
+                runway.leftLda.bind(new SimpleDoubleProperty(0));
+                runway.leftLdaBreakdown.bind(new SimpleStringProperty("LDA cannot be less than 0m"));
+            }
+
         }
 
         logger.info("New LDA calculated for landing towards and obstacle for runway "+runway.runwayDesignatorLeft.get());
@@ -247,6 +260,11 @@ public abstract class RunwayCalculations {
                         .concat(new SimpleStringProperty(" - Right displaced threshold - (Runway length / 2)"))
         );
 
+        if (runway.leftTora.lessThan(0).get()) {
+            runway.leftTora.bind(new SimpleDoubleProperty(0));
+            runway.leftToraBreakdown.bind(new SimpleStringProperty("TORA cannot be less than 0m"));
+        }
+
         runway.leftAsda.bind(runway.leftTora.add(runway.stopwayRight));
         runway.leftAsdaBreakdown.bind(
                 new SimpleStringProperty("Left ASDA = ")
@@ -256,7 +274,7 @@ public abstract class RunwayCalculations {
                         .concat(" = ")
                         .concat(runway.leftAsda.intValue())
         );
-        runway.leftAsdaBreakdownHeader.bind(new SimpleStringProperty("Left ASDA = Left TORA - Right stopway"));
+        runway.leftAsdaBreakdownHeader.bind(new SimpleStringProperty("Left ASDA = Left TORA + Right stopway"));
 
         runway.leftToda.bind(runway.leftTora.add(runway.clearwayRight));
         runway.leftTodaBreakdown.bind(
@@ -298,12 +316,18 @@ public abstract class RunwayCalculations {
                             .concat(" - ")
                             .concat(runway.leftLdaSubBreakdown)
                             .concat(" = ")
-                            .concat(runway.leftLda)
+                            .concat(runway.leftLda.intValue())
             );
             runway.leftLdaBreakdownHeader.bind(
                     new SimpleStringProperty("Left LDA = Original left LDA - ")
                             .concat(runway.leftLdaSubBreakdownHeader)
             );
+
+            if (runway.leftLda.lessThan(0).get()) {
+                runway.leftLda.bind(new SimpleDoubleProperty(0));
+                runway.leftLdaBreakdown.bind(new SimpleStringProperty("LDA cannot be less than 0m"));
+            }
+
         }
 
         logger.info("New LDA calculated for landing over an obstacle for runway "+runway.runwayDesignatorLeft.get());
@@ -426,6 +450,11 @@ public abstract class RunwayCalculations {
                             .concat(new SimpleStringProperty(") - Stripend"))
             );
 
+            if (runway.rightTora.lessThan(0).get()) {
+                runway.rightTora.bind(new SimpleDoubleProperty(0));
+                runway.rightToraBreakdown.bind(new SimpleStringProperty("TORA cannot be less than 0m"));
+            }
+
             runway.rightAsda.bind(runway.rightTora);
             runway.rightAsdaBreakdown.bind(
                     new SimpleStringProperty("Right ASDA = ")
@@ -475,6 +504,12 @@ public abstract class RunwayCalculations {
             runway.rightLdaBreakdownHeader.bind(
                     new SimpleStringProperty("Right LDA = Obstacle dist from right threshold - Minimum RESA - Stripend")
             );
+
+            if (runway.rightLda.lessThan(0).get()) {
+                runway.rightLda.bind(new SimpleDoubleProperty(0));
+                runway.rightLdaBreakdown.bind(new SimpleStringProperty("LDA cannot be less than 0m"));
+            }
+
         }
 
         logger.info("New LDA calculated for landing towards and obstacle for runway "+runway.runwayDesignatorRight.get());
@@ -506,7 +541,7 @@ public abstract class RunwayCalculations {
                             "(Right) Calculated TORA greater than original TORA, original TORA taken as output"
                     )
             );
-            runway.rightTodaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
+            runway.rightToraBreakdownHeader.bind(new SimpleStringProperty("N/A"));
         } else {
             runway.rightToraBreakdown.bind(
                     new SimpleStringProperty("Right TORA = ")
@@ -536,7 +571,7 @@ public abstract class RunwayCalculations {
                             .concat(") = ")
                             .concat(runway.rightTora.intValue())
             );
-            runway.rightTodaBreakdownHeader.bind(
+            runway.rightToraBreakdownHeader.bind(
                     new SimpleStringProperty("Right TORA = Obstacle dist from left threshold - ")
                             .concat(
                                     Bindings.when(
@@ -551,6 +586,12 @@ public abstract class RunwayCalculations {
                             )
                             .concat(" + Left displaced threshold - (Runway length / 2)")
             );
+
+            if (runway.rightTora.lessThan(0).get()) {
+                runway.rightTora.bind(new SimpleDoubleProperty(0));
+                runway.rightToraBreakdown.bind(new SimpleStringProperty("TORA cannot be less than 0m"));
+            }
+
         }
 
         runway.rightAsda.bind(runway.rightTora.add(runway.stopwayLeft));
@@ -613,6 +654,12 @@ public abstract class RunwayCalculations {
                     new SimpleStringProperty("Right LDA = Original right LDA - ")
                             .concat(runway.rightLdaSubBreakdownHeader)
             );
+
+            if (runway.rightLda.lessThan(0).get()) {
+                runway.rightLda.bind(new SimpleDoubleProperty(0));
+                runway.rightLdaBreakdown.bind(new SimpleStringProperty("LDA cannot be less than 0m"));
+            }
+
         }
         logger.info("New LDA calculated for landing over an obstacle for runway "+runway.runwayDesignatorRight.get());
     }
