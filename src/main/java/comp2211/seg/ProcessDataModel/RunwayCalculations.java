@@ -18,7 +18,136 @@ public abstract class RunwayCalculations {
      *
      * @param runway the runway
      */
-    public static void calculateTakeOffTowardLeft(Runway runway) {}
+    public static void calculateTakeOffTowardLeft(Runway runway) {
+        // Calculate left take-off values, taking off towards the obstacle
+        runway.leftTora.bind(
+                runway.runwayObstacle.distFromThresholdProperty()
+                        .add(runway.dispThresholdLeft)
+                        .subtract(Bindings.max(
+                                runway.runwayObstacle.heightProperty().multiply(runway.SLOPE),
+                                runway.MINRESA.add(runway.runwayObstacle.lengthProperty().divide(2))
+                        ))
+                        .subtract(runway.STRIPEND)
+        );
+
+        // Ensure Declared distance isn't more than original value
+        if (runway.leftTora.get() > runway.inputLeftTora.get()) {
+            var distanceFromToraEnd = new SimpleDoubleProperty();
+            distanceFromToraEnd.bind(runway.leftTora.subtract(runway.inputLeftTora));
+            runway.leftTora.bind(runway.inputLeftTora);
+
+            runway.leftToraBreakdown.bind(
+                    new SimpleStringProperty(
+                            "(Left) Calculated TORA greater than original TORA, original TORA taken as output"
+                    )
+            );
+            runway.leftToraBreakdownHeader.bind(new SimpleStringProperty("N/A"));
+
+            runway.leftAsda.bind(Bindings.min(runway.leftTora.add(distanceFromToraEnd), runway.leftTora.add(runway.stopwayRight)));
+
+            runway.leftAsdaBreakdown.bind(
+                    new SimpleStringProperty("Left ASDA = ")
+                            .concat(runway.leftTora.intValue())
+                            .concat(" + ")
+                            .concat(Math.min(distanceFromToraEnd.intValue(), runway.stopwayRight.intValue()))
+                            .concat(" = ")
+                            .concat(runway.leftAsda.intValue())
+            );
+            runway.leftAsdaBreakdownHeader.bind(
+                    new SimpleStringProperty("Left ASDA = Left TORA + ")
+                            .concat(Bindings.when(
+                                            Bindings.lessThan(
+                                                    distanceFromToraEnd, runway.stopwayRight
+                                            ))
+                                    .then(new SimpleStringProperty("Obstacle dist from TORA end"))
+                                    .otherwise(new SimpleStringProperty("Right stopway"))
+                            )
+            );
+
+            runway.leftToda.bind(Bindings.min(runway.leftTora.add(distanceFromToraEnd), runway.leftTora.add(runway.clearwayRight)));
+
+            runway.leftTodaBreakdown.bind(
+                    new SimpleStringProperty("Left TODA = ")
+                            .concat(runway.leftTora.intValue())
+                            .concat(" + ")
+                            .concat(Math.min(distanceFromToraEnd.intValue(), runway.clearwayRight.intValue()))
+                            .concat(" = ")
+                            .concat(runway.leftToda.intValue())
+            );
+            runway.leftTodaBreakdownHeader.bind(
+                    new SimpleStringProperty("Left TODA = Left TORA + ")
+                            .concat(Bindings.when(
+                                            Bindings.lessThan(
+                                                    distanceFromToraEnd, runway.clearwayRight
+                                            ))
+                                    .then(new SimpleStringProperty("Obstacle dist from TORA end"))
+                                    .otherwise("Right clearway")
+                            )
+            );
+
+        } else {
+
+            runway.leftToraBreakdown.bind(
+                    new SimpleStringProperty("Left TORA = ")
+                            .concat(runway.runwayObstacle.distFromThresholdProperty().intValue())
+                            .concat(" + ")
+                            .concat(runway.dispThresholdLeft.intValue())
+                            .concat( " - ")
+                            .concat(Bindings.when(
+                                            Bindings.greaterThan(
+                                                    runway.runwayObstacle.heightProperty().multiply(runway.SLOPE),
+                                                    runway.MINRESA.add(runway.runwayObstacle.lengthProperty().divide(2))
+                                            ))
+                                    .then(
+                                            new SimpleStringProperty("(")
+                                                    .concat(runway.runwayObstacle.heightProperty().intValue())
+                                                    .concat(" x ")
+                                                    .concat(runway.SLOPE)
+                                    )
+                                    .otherwise(
+                                            new SimpleStringProperty()
+                                                    .concat(runway.MINRESA)
+                                                    .concat(" + (")
+                                                    .concat(runway.runwayObstacle.lengthProperty().intValue())
+                                                    .concat(" / ")
+                                                    .concat(2)
+                                    )
+                            )
+                            .concat(") - ")
+                            .concat(runway.STRIPEND)
+                            .concat(" = ")
+                            .concat(runway.leftTora.intValue())
+            );
+
+            runway.leftToraBreakdownHeader.bind(
+                    new SimpleStringProperty(
+                            "Left TORA = Obstacle dist from left threshold + Left displaced threshold - ")
+                            .concat(Bindings.when(
+                                            Bindings.greaterThan(
+                                                    runway.runwayObstacle.heightProperty().multiply(runway.SLOPE),
+                                                    runway.MINRESA.add(runway.runwayObstacle.lengthProperty().divide(2))
+                                            ))
+                                    .then(new SimpleStringProperty("(Runway height x ALS slope"))
+                                    .otherwise(new SimpleStringProperty("Minimum RESA + (Runway length / 2"))
+                            )
+                            .concat(new SimpleStringProperty(") - Stripend"))
+            );
+
+            runway.leftAsda.bind(runway.leftTora);
+            runway.leftAsdaBreakdown.bind(
+                    new SimpleStringProperty("Left ASDA = ")
+                            .concat(runway.leftAsda.intValue())
+            );
+            runway.leftAsdaBreakdownHeader.bind(new SimpleStringProperty("Left ASDA = Left TORA"));
+
+            runway.leftToda.bind(runway.leftTora);
+            runway.leftTodaBreakdown.bind(
+                    new SimpleStringProperty("Left TODA = ")
+                            .concat(runway.leftToda.intValue())
+            );
+            runway.leftToraBreakdownHeader.bind(new SimpleStringProperty("Left TODA = Left TORA"));
+        }
+    }
 
     /**
      * Calculate land toward left.
@@ -62,7 +191,85 @@ public abstract class RunwayCalculations {
      *
      * @param runway the runway
      */
-    public static void calculateTakeOffAwayLeft(Runway runway) {}
+    public static void calculateTakeOffAwayLeft(Runway runway) {
+        // Calculate left take-off values, taking off away from the obstacle
+        runway.leftTora.bind(
+                runway.inputLeftTora
+                        .subtract(runway.runwayObstacle.distFromThresholdProperty())
+                        .subtract(Bindings.max(
+                                runway.BLASTZONE, runway.STRIPEND.add(runway.MINRESA)
+                                )
+                        )
+                        .subtract(runway.dispThresholdLeft)
+                        .subtract(
+                                runway.runwayObstacle.lengthProperty().divide(2)
+                        )
+        );
+
+        runway.leftToraBreakdown.bind(
+                new SimpleStringProperty("Left TORA = ")
+                        .concat(runway.inputLeftTora.intValue())
+                        .concat(" - ")
+                        .concat(runway.runwayObstacle.distFromThresholdProperty().intValue())
+                        .concat(" - ")
+                        .concat(Bindings.when(
+                                        Bindings.lessThan(
+                                                runway.BLASTZONE, runway.STRIPEND.add(runway.MINRESA)
+                                        ))
+                                .then(new SimpleStringProperty().concat(runway.BLASTZONE))
+                                .otherwise(
+                                        new SimpleStringProperty("(")
+                                                .concat(runway.STRIPEND)
+                                                .concat(" + ")
+                                                .concat(runway.MINRESA)
+                                                .concat(")")
+                                )
+                        )
+                        .concat(" - ")
+                        .concat(runway.dispThresholdRight.intValue())
+                        .concat(" - (")
+                        .concat(runway.runwayObstacle.lengthProperty().intValue())
+                        .concat(" / ")
+                        .concat(2)
+                        .concat(") = ")
+                        .concat(runway.leftTora.intValue())
+        );
+
+        runway.leftToraBreakdownHeader.bind(
+                new SimpleStringProperty("Left TORA = Original left TORA - Obstacle dist from left threshold - ")
+                        .concat(
+                                Bindings.when(
+                                                Bindings.lessThan(
+                                                        runway.BLASTZONE, runway.STRIPEND.add(runway.MINRESA)
+                                                ))
+                                        .then(new SimpleStringProperty("Blastzone"))
+                                        .otherwise("(Stripend + Minimum RESA)")
+                        )
+                        .concat(new SimpleStringProperty(" - Right displaced threshold - (Runway length / 2)"))
+        );
+
+        runway.leftAsda.bind(runway.leftTora.add(runway.stopwayRight));
+        runway.leftAsdaBreakdown.bind(
+                new SimpleStringProperty("Left ASDA = ")
+                        .concat(runway.leftTora.intValue())
+                        .concat(" + ")
+                        .concat(runway.stopwayRight.intValue())
+                        .concat(" = ")
+                        .concat(runway.leftAsda.intValue())
+        );
+        runway.leftAsdaBreakdownHeader.bind(new SimpleStringProperty("Left ASDA = Left TORA - Right stopway"));
+
+        runway.leftToda.bind(runway.leftTora.add(runway.clearwayRight));
+        runway.leftTodaBreakdown.bind(
+                new SimpleStringProperty("Left TODA = ")
+                        .concat(runway.leftTora.intValue())
+                        .concat(" + ")
+                        .concat(runway.clearwayRight.intValue())
+                        .concat(" = ")
+                        .concat(runway.leftToda.intValue())
+        );
+        runway.leftTodaBreakdownHeader.bind(new SimpleStringProperty("Left TODA = Left TORA + Right clearway"));
+    }
 
     /**
      * Calculate land over left.
@@ -108,7 +315,133 @@ public abstract class RunwayCalculations {
      *
      * @param runway the runway
      */
-    public static void calculateTakeOffTowardRight(Runway runway) {}
+    public static void calculateTakeOffTowardRight(Runway runway) {
+        // Calculate right take-off values, taking off towards the obstacle
+        runway.rightTora.bind(
+                runway.runwayObstacle.distFromOtherThresholdProperty()
+                        .add(runway.dispThresholdRightProperty())
+                        .subtract(
+                                Bindings.max(
+                                        runway.runwayObstacle.heightProperty().multiply(runway.SLOPE),
+                                        runway.MINRESA.add(runway.runwayObstacle.lengthProperty().divide(2))))
+                        .subtract(runway.STRIPEND));
+
+        // Ensure Declared distance isn't more than original value
+        if (runway.rightTora.get() > runway.inputRightTora.get()) {
+            var distanceFromToraEnd = new SimpleDoubleProperty();
+            distanceFromToraEnd.bind(runway.rightTora.subtract(runway.inputRightTora));
+            runway.rightTora.bind(runway.inputRightTora);
+
+            runway.rightToraBreakdown.bind(
+                    new SimpleStringProperty(
+                            "(Right) Calculated  TORA greater than original TORA, original TORA taken as output"
+                    )
+            );
+            runway.rightTodaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
+
+            runway.rightAsda.bind(Bindings.min(runway.rightTora.add(distanceFromToraEnd), runway.rightTora.add(runway.stopwayLeft)));
+
+            runway.rightAsdaBreakdown.bind(
+                    new SimpleStringProperty("Right ASDA = ")
+                            .concat(runway.rightTora.intValue())
+                            .concat(" + ")
+                            .concat(Math.min(distanceFromToraEnd.intValue(), runway.stopwayLeft.intValue()))
+                            .concat(" = ")
+                            .concat(runway.rightAsda.intValue())
+            );
+            runway.rightAsdaBreakdownHeader.bind(
+                    new SimpleStringProperty("Right ASDA = Right TORA + ")
+                            .concat(Bindings.when(
+                                            Bindings.greaterThan(
+                                                    distanceFromToraEnd, runway.stopwayLeft
+                                            ))
+                                    .then(new SimpleStringProperty("Obstacle dist from TORA end"))
+                                    .otherwise(new SimpleStringProperty("Left stopway"))
+                            )
+            );
+
+            runway.rightToda.bind(Bindings.min(runway.rightTora.add(distanceFromToraEnd), runway.rightTora.add(runway.clearwayLeft)));
+
+            runway.rightTodaBreakdown.bind(
+                    new SimpleStringProperty("Right TODA = ")
+                            .concat(runway.rightTora.intValue())
+                            .concat(" + ")
+                            .concat(Math.min(distanceFromToraEnd.intValue(), runway.clearwayLeft.intValue()))
+                            .concat(" = ")
+                            .concat(runway.rightToda.intValue())
+            );
+            runway.rightTodaBreakdownHeader.bind(
+                    new SimpleStringProperty("Right TODA = Right TORA + ")
+                            .concat(Bindings.when(
+                                            Bindings.greaterThan(
+                                                    distanceFromToraEnd, runway.clearwayLeft
+                                            ))
+                                    .then(new SimpleStringProperty("Obstacle dist from TORA end"))
+                                    .otherwise(new SimpleStringProperty("Left clearway"))
+                            )
+            );
+
+        } else {
+
+            runway.rightToraBreakdown.bind(
+                    new SimpleStringProperty("Right TORA = ")
+                            .concat(runway.runwayObstacle.distFromOtherThresholdProperty().intValue())
+                            .concat(" + ")
+                            .concat(runway.dispThresholdRight.intValue())
+                            .concat(" - ")
+                            .concat(Bindings.when(
+                                            Bindings.greaterThan(
+                                                    runway.runwayObstacle.heightProperty().multiply(runway.SLOPE),
+                                                    runway.MINRESA.add(runway.runwayObstacle.lengthProperty().divide(2))
+                                            ))
+                                    .then(
+                                            new SimpleStringProperty("(")
+                                                    .concat(runway.runwayObstacle.heightProperty().intValue())
+                                                    .concat(" x ")
+                                                    .concat(runway.SLOPE)
+                                    )
+                                    .otherwise(
+                                            new SimpleStringProperty()
+                                                    .concat(runway.MINRESA)
+                                                    .concat(" + (")
+                                                    .concat(runway.runwayObstacle.lengthProperty().intValue())
+                                                    .concat(" / ")
+                                                    .concat(2)
+                                    )
+                            )
+                            .concat(") - ")
+                            .concat(runway.STRIPEND)
+                            .concat(" = ")
+                            .concat(runway.rightTora.intValue())
+            );
+            runway.rightToraBreakdownHeader.bind(
+                    new SimpleStringProperty("Right TORA = Obstacle dist from right threshold + Right displaced threshold - ")
+                            .concat(Bindings.when(
+                                            Bindings.greaterThan(
+                                                    runway.runwayObstacle.heightProperty().multiply(runway.SLOPE),
+                                                    runway.MINRESA.add(runway.runwayObstacle.lengthProperty().divide(2))
+                                            ))
+                                    .then(new SimpleStringProperty("(Runway height x ALS slope"))
+                                    .otherwise(new SimpleStringProperty("Minimum RESA + (Runway length / 2"))
+                            )
+                            .concat(new SimpleStringProperty(") - Stripend"))
+            );
+
+            runway.rightAsda.bind(runway.rightTora);
+            runway.rightAsdaBreakdown.bind(
+                    new SimpleStringProperty("Right ASDA = ")
+                            .concat(runway.rightAsda.intValue())
+            );
+            runway.rightAsdaBreakdownHeader.bind(new SimpleStringProperty("Right ASDA = Right TORA"));
+
+            runway.rightToda.bind(runway.rightTora);
+            runway.rightTodaBreakdown.bind(
+                    new SimpleStringProperty("Right TODA = ")
+                            .concat(runway.rightToda.intValue())
+            );
+            runway.rightTodaBreakdownHeader.bind(new SimpleStringProperty("Right TODA = Right TORA"));
+        }
+    }
 
     /**
      * Calculate land toward right.
@@ -153,7 +486,100 @@ public abstract class RunwayCalculations {
      *
      * @param runway the runway
      */
-    public static void calculateTakeOffAwayRight(Runway runway) {}
+    public static void calculateTakeOffAwayRight(Runway runway) {
+        // Calculate right take-off values, taking off away from the obstacle
+        runway.rightTora.bind(
+                runway.runwayObstacle.distFromThresholdProperty()
+                        .subtract(
+                                Bindings.max(
+                                        runway.BLASTZONE,
+                                        runway.STRIPEND.add(runway.MINRESA)
+                                ))
+                        .add(runway.dispThresholdLeft)
+                        .subtract(runway.runwayObstacle.lengthProperty().divide(2))
+        );
+
+        // Ensure Declared distance isn't more than original value
+        if (runway.rightTora.get() > runway.inputRightTora.get()) {
+            runway.rightTora.bind(runway.inputRightTora);
+            runway.rightToraBreakdown.bind(
+                    new SimpleStringProperty(
+                            "(Right) Calculated TORA greater than original TORA, original TORA taken as output"
+                    )
+            );
+            runway.rightTodaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
+        } else {
+            runway.rightToraBreakdown.bind(
+                    new SimpleStringProperty("Right TORA = ")
+                            .concat(runway.runwayObstacle.distFromThresholdProperty().intValue())
+                            .concat(" - ")
+                            .concat(
+                                    Bindings.when(
+                                            Bindings.greaterThan(
+                                                    runway.BLASTZONE, runway.STRIPEND.add(runway.MINRESA)
+                                            )
+                                    ).then(
+                                            new SimpleStringProperty().concat(runway.BLASTZONE)
+                                    ).otherwise(
+                                            new SimpleStringProperty("(")
+                                                    .concat(runway.STRIPEND)
+                                                    .concat(" + ")
+                                                    .concat(runway.MINRESA)
+                                                    .concat(")")
+                                    )
+                            )
+                            .concat(" + ")
+                            .concat(runway.dispThresholdLeft.intValue())
+                            .concat(" - (")
+                            .concat(runway.runwayObstacle.lengthProperty().intValue())
+                            .concat(" / ")
+                            .concat(2)
+                            .concat(") = ")
+                            .concat(runway.rightTora.intValue())
+            );
+            runway.rightTodaBreakdownHeader.bind(
+                    new SimpleStringProperty("Right TORA = Obstacle dist from left threshold - ")
+                            .concat(
+                                    Bindings.when(
+                                            Bindings.greaterThan(
+                                                    runway.BLASTZONE, runway.STRIPEND.add(runway.MINRESA)
+                                            )
+                                    ).then(
+                                            new SimpleStringProperty("Blastzone")
+                                    ).otherwise(
+                                            new SimpleStringProperty("(Stripend + Minimum RESA)")
+                                    )
+                            )
+                            .concat(" + Left displaced threshold - (Runway length / 2)")
+            );
+        }
+
+        runway.rightAsda.bind(runway.rightTora.add(runway.stopwayLeft));
+        runway.rightAsdaBreakdown.bind(
+                new SimpleStringProperty("Right ASDA = ")
+                        .concat(runway.rightTora.intValue())
+                        .concat(" + ")
+                        .concat(runway.stopwayLeft.intValue())
+                        .concat(" = ")
+                        .concat(runway.rightAsda.intValue())
+        );
+        runway.rightAsdaBreakdownHeader.bind(
+                new SimpleStringProperty("Right ASDA = Right TORA + Left stopway")
+        );
+
+        runway.rightToda.bind(runway.rightTora.add(runway.clearwayLeft));
+        runway.rightTodaBreakdown.bind(
+                new SimpleStringProperty("Right TODA = ")
+                        .concat(runway.rightTora.intValue())
+                        .concat(" + ")
+                        .concat(runway.clearwayLeft.intValue())
+                        .concat(" = ")
+                        .concat(runway.rightToda.intValue())
+        );
+        runway.rightTodaBreakdownHeader.bind(
+                new SimpleStringProperty("Right TODA = Right TORA + Left clearway")
+        );
+    }
 
     /**
      * Calculate land over right.
