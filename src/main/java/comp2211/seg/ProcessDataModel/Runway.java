@@ -56,14 +56,14 @@ public class Runway {
      */
     private final SimpleStringProperty runwayDesignatorLeft = new SimpleStringProperty("00L");
     private final SimpleStringProperty runwayDesignatorRight = new SimpleStringProperty("18R");
-    private final SimpleDoubleProperty inputRightTora = new SimpleDoubleProperty(1000);
-    private final SimpleDoubleProperty inputRightToda = new SimpleDoubleProperty(1500);
-    private final SimpleDoubleProperty inputRightAsda = new SimpleDoubleProperty(1150);
-    private final SimpleDoubleProperty inputRightLda = new SimpleDoubleProperty(1000);
-    private final SimpleDoubleProperty inputLeftTora = new SimpleDoubleProperty(1000);
-    private final SimpleDoubleProperty inputLeftToda = new SimpleDoubleProperty(1500);
-    private final SimpleDoubleProperty inputLeftAsda = new SimpleDoubleProperty(1150);
-    private final SimpleDoubleProperty inputLeftLda = new SimpleDoubleProperty(900);
+    private SimpleDoubleProperty inputRightTora = new SimpleDoubleProperty(1000);
+    private SimpleDoubleProperty inputRightToda = new SimpleDoubleProperty(1500);
+    private SimpleDoubleProperty inputRightAsda = new SimpleDoubleProperty(1150);
+    private SimpleDoubleProperty inputRightLda = new SimpleDoubleProperty(1000);
+    private SimpleDoubleProperty inputLeftTora = new SimpleDoubleProperty(1000);
+    private SimpleDoubleProperty inputLeftToda = new SimpleDoubleProperty(1500);
+    private SimpleDoubleProperty inputLeftAsda = new SimpleDoubleProperty(1150);
+    private SimpleDoubleProperty inputLeftLda = new SimpleDoubleProperty(900);
     private final SimpleDoubleProperty rightTora = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty rightToda = new SimpleDoubleProperty(0);
     private final SimpleDoubleProperty rightAsda = new SimpleDoubleProperty(0);
@@ -110,8 +110,6 @@ public class Runway {
     public static final SimpleStringProperty units = new SimpleStringProperty("m");
 
     // Calculation Breakdowns
-    // TODO: Calculation breakdown - backend
-    // TODO: Create bindings for breakdown properties - frontend
 
     // Left TORA
     private final SimpleStringProperty leftToraBreakdown = new SimpleStringProperty("N/A");
@@ -195,8 +193,8 @@ public class Runway {
         recalculate();
         validityChecks();
 
-        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get())));
-        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get())));
+        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
+        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
     }
 
     /**
@@ -236,18 +234,24 @@ public class Runway {
         recalculate();
         validityChecks();
 
-        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get())));
-        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get())));
+        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
+        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
     }
-    public String toString(){
-        return runwayDesignatorLeft.concat("/").concat(runwayDesignatorRight).get();
+    public String toString(boolean dual){
+        String designators;
+        if (dual) {
+            designators = runwayDesignatorLeft.concat("/").concat(runwayDesignatorRight).get();
+        } else {
+            designators = runwayDesignatorLeft.get();
+        }
+        return designators;
     }
 
     /**
      * Calculates the runway designator for the runway in the opposite direction
      * @param designator The designator that has been changes, used to calculate the new designator for the runways complement direction
      */
-    private String calculateRunwayDesignator(String designator) {
+    private String calculateRunwayDesignator(String designator, boolean left) {
         var number = String.valueOf((Integer.parseInt(designator.substring(0,2)) + 18) % 36);
         if (number.length() == 1) {
             number = "0"+number;
@@ -259,6 +263,7 @@ public class Runway {
             case "R":  newCharacter = "L"; break;
             case "L": newCharacter = "R"; break;
             case "C": newCharacter = "C"; break;
+            case "" : break;
             default: {
                 newCharacter = "ERROR";
                 logger.error("Incorrect initial character"); break;
@@ -269,8 +274,44 @@ public class Runway {
 
         logger.info("Runway Designators: "+designator+", "+newDesignator);
 
+        if ((Integer.parseInt(number) < 18 && left) || (Integer.parseInt(number) > 18 && !left)) {
+            try {
+                // This will cascade and correct the other designator
+                return designator;
+            } finally {
+                // TODO : Swap left and right
+                swapLeftRight();
+            }
+        }
+
         return newDesignator;
     }
+
+    private void swapLeftRight() {
+        // Swap all inputs, call recalculate
+        SimpleDoubleProperty temp;
+
+        // TORA
+        temp = inputLeftTora;
+        inputLeftTora = inputRightTora;
+        inputRightTora = temp;
+        // TODA
+        temp = inputLeftToda;
+        inputLeftToda = inputRightToda;
+        inputRightToda = temp;
+        // ASDA
+        temp = inputLeftAsda;
+        inputLeftAsda = inputRightAsda;
+        inputRightAsda = temp;
+        // LDA
+        temp = inputLeftLda;
+        inputLeftLda = inputRightLda;
+        inputRightLda = temp;
+
+        recalculate();
+    }
+
+
 
     /**
      * Adds an obstacle to the list of obstacles on the runway.
