@@ -36,14 +36,14 @@ public class Runway {
     private final ArrayList<String> changeHistory = new ArrayList<>();
 
     // Runway dimensions and properties
-    private final SimpleDoubleProperty clearwayLeft = new SimpleDoubleProperty(500);
-    private final SimpleDoubleProperty clearwayRight = new SimpleDoubleProperty(500);
-    private final SimpleDoubleProperty clearwayHeight = new SimpleDoubleProperty(150);
-    private final SimpleDoubleProperty stopwayLeft = new SimpleDoubleProperty(150);
-    private final SimpleDoubleProperty stopwayRight = new SimpleDoubleProperty(150);
-    private final SimpleDoubleProperty stripEnd = new SimpleDoubleProperty(60);
-    private final SimpleDoubleProperty RESAWidth = new SimpleDoubleProperty(240);
-    private final SimpleDoubleProperty RESAHeight = new SimpleDoubleProperty(90);
+    public final SimpleDoubleProperty clearwayLeft = new SimpleDoubleProperty(500);
+    public final SimpleDoubleProperty clearwayRight = new SimpleDoubleProperty(500);
+    public final SimpleDoubleProperty clearwayHeight = new SimpleDoubleProperty(150);
+    public final SimpleDoubleProperty stopwayLeft = new SimpleDoubleProperty(150);
+    public final SimpleDoubleProperty stopwayRight = new SimpleDoubleProperty(150);
+    public final SimpleDoubleProperty stripEnd = new SimpleDoubleProperty(60);
+    public final SimpleDoubleProperty RESAWidth = new SimpleDoubleProperty(240);
+    public final SimpleDoubleProperty RESAHeight = new SimpleDoubleProperty(90);
 
     //Inputs
 
@@ -54,26 +54,26 @@ public class Runway {
     if the azimuth of the centre-line is 153 then the runway designator will be 15
     followed by either L C or R to differentiate between parallel runways
      */
-    private final SimpleStringProperty runwayDesignatorLeft = new SimpleStringProperty("00L");
-    private final SimpleStringProperty runwayDesignatorRight = new SimpleStringProperty("18R");
-    private SimpleDoubleProperty inputRightTora = new SimpleDoubleProperty(1000);
-    private SimpleDoubleProperty inputRightToda = new SimpleDoubleProperty(1500);
-    private SimpleDoubleProperty inputRightAsda = new SimpleDoubleProperty(1150);
-    private SimpleDoubleProperty inputRightLda = new SimpleDoubleProperty(1000);
-    private SimpleDoubleProperty inputLeftTora = new SimpleDoubleProperty(1000);
-    private SimpleDoubleProperty inputLeftToda = new SimpleDoubleProperty(1500);
-    private SimpleDoubleProperty inputLeftAsda = new SimpleDoubleProperty(1150);
-    private SimpleDoubleProperty inputLeftLda = new SimpleDoubleProperty(900);
-    private final SimpleDoubleProperty rightTora = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty rightToda = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty rightAsda = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty rightLda = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty leftTora = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty leftToda = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty leftAsda = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty leftLda = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty dispThresholdLeft = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(60);
+    public final SimpleStringProperty runwayDesignatorLeft = new SimpleStringProperty("00L");
+    public final SimpleStringProperty runwayDesignatorRight = new SimpleStringProperty("18R");
+    public SimpleDoubleProperty inputRightTora = new SimpleDoubleProperty(1000);
+    public SimpleDoubleProperty inputRightToda = new SimpleDoubleProperty(1500);
+    public SimpleDoubleProperty inputRightAsda = new SimpleDoubleProperty(1150);
+    public SimpleDoubleProperty inputRightLda = new SimpleDoubleProperty(1000);
+    public SimpleDoubleProperty inputLeftTora = new SimpleDoubleProperty(1000);
+    public SimpleDoubleProperty inputLeftToda = new SimpleDoubleProperty(1500);
+    public SimpleDoubleProperty inputLeftAsda = new SimpleDoubleProperty(1150);
+    public SimpleDoubleProperty inputLeftLda = new SimpleDoubleProperty(900);
+    public final SimpleDoubleProperty rightTora = new SimpleDoubleProperty(0);
+    public final SimpleDoubleProperty rightToda = new SimpleDoubleProperty(0);
+    public final SimpleDoubleProperty rightAsda = new SimpleDoubleProperty(0);
+    public final SimpleDoubleProperty rightLda = new SimpleDoubleProperty(0);
+    public final SimpleDoubleProperty leftTora = new SimpleDoubleProperty(0);
+    public final SimpleDoubleProperty leftToda = new SimpleDoubleProperty(0);
+    public final SimpleDoubleProperty leftAsda = new SimpleDoubleProperty(0);
+    public final SimpleDoubleProperty leftLda = new SimpleDoubleProperty(0);
+    public final SimpleDoubleProperty dispThresholdLeft = new SimpleDoubleProperty(0);
+    public final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(60);
 
 
     /**
@@ -81,14 +81,14 @@ public class Runway {
      */
     public Obstacle runwayObstacle = new Obstacle("One", 10,0);
 
-    private final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
+    public final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
 
-    private final SimpleBooleanProperty directionLeft = new SimpleBooleanProperty(true);
-    private final SimpleBooleanProperty directionRight = new SimpleBooleanProperty(true);
-    private final SimpleBooleanProperty leftTakeOff = new SimpleBooleanProperty(false);
-    private final SimpleBooleanProperty leftLand = new SimpleBooleanProperty(false);
-    private final SimpleBooleanProperty rightTakeOff = new SimpleBooleanProperty(false);
-    private final SimpleBooleanProperty rightLand = new SimpleBooleanProperty(false);
+    public final SimpleBooleanProperty directionLeft = new SimpleBooleanProperty(true);
+    public final SimpleBooleanProperty directionRight = new SimpleBooleanProperty(true);
+    public final SimpleBooleanProperty leftTakeOff = new SimpleBooleanProperty(false);
+    public final SimpleBooleanProperty leftLand = new SimpleBooleanProperty(false);
+    public final SimpleBooleanProperty rightTakeOff = new SimpleBooleanProperty(false);
+    public final SimpleBooleanProperty rightLand = new SimpleBooleanProperty(false);
 
     // End of Inputs
 
@@ -96,55 +96,55 @@ public class Runway {
 
     // Typical values, may become variable down the line
     // Constants
-    private final SimpleDoubleProperty MINRESA = new SimpleDoubleProperty(240);
-    private final SimpleDoubleProperty STRIPEND = new SimpleDoubleProperty(60);
-    private final SimpleDoubleProperty BLASTZONE = new SimpleDoubleProperty(500);
-    private final SimpleDoubleProperty SLOPE = new SimpleDoubleProperty(50);
-    private final SimpleDoubleProperty STOPWAYMIN = new SimpleDoubleProperty(0);
-    private final SimpleDoubleProperty slopeLength = new SimpleDoubleProperty(50);
+    public final SimpleDoubleProperty MINRESA = new SimpleDoubleProperty(240);
+    public final SimpleDoubleProperty STRIPEND = new SimpleDoubleProperty(60);
+    public final SimpleDoubleProperty BLASTZONE = new SimpleDoubleProperty(500);
+    public final SimpleDoubleProperty SLOPE = new SimpleDoubleProperty(50);
+    public final SimpleDoubleProperty STOPWAYMIN = new SimpleDoubleProperty(0);
+    public final SimpleDoubleProperty slopeLength = new SimpleDoubleProperty(50);
 
     // Runway dimensions
-    private final SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
-    private final SimpleDoubleProperty runwayWidth = new SimpleDoubleProperty(60);
-    private final SimpleBooleanProperty hasRunwayObstacle = new SimpleBooleanProperty(false);
+    public final SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
+    public final SimpleDoubleProperty runwayWidth = new SimpleDoubleProperty(60);
+    public final SimpleBooleanProperty hasRunwayObstacle = new SimpleBooleanProperty(false);
     public static final SimpleStringProperty units = new SimpleStringProperty("m");
 
     // Calculation Breakdowns
 
     // Left TORA
-    private final SimpleStringProperty leftToraBreakdown = new SimpleStringProperty("N/A");
-    private final SimpleStringProperty leftToraBreakdownHeader = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty leftToraBreakdown = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty leftToraBreakdownHeader = new SimpleStringProperty("N/A");
     // Right TORA
-    private final SimpleStringProperty rightToraBreakdown = new SimpleStringProperty("N/A");
-    private final SimpleStringProperty rightToraBreakdownHeader = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty rightToraBreakdown = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty rightToraBreakdownHeader = new SimpleStringProperty("N/A");
     // Left TODA
-    private final SimpleStringProperty leftTodaBreakdown = new SimpleStringProperty("N/A");
-    private final SimpleStringProperty leftTodaBreakdownHeader = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty leftTodaBreakdown = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty leftTodaBreakdownHeader = new SimpleStringProperty("N/A");
     // Right TODA
-    private final SimpleStringProperty rightTodaBreakdown = new SimpleStringProperty("N/A");
-    private final SimpleStringProperty rightTodaBreakdownHeader = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty rightTodaBreakdown = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty rightTodaBreakdownHeader = new SimpleStringProperty("N/A");
     // Left ASDA
-    private final SimpleStringProperty leftAsdaBreakdown = new SimpleStringProperty("N/A");
-    private final SimpleStringProperty leftAsdaBreakdownHeader = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty leftAsdaBreakdown = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty leftAsdaBreakdownHeader = new SimpleStringProperty("N/A");
     // Right ASDA
-    private final SimpleStringProperty rightAsdaBreakdown = new SimpleStringProperty("N/A");
-    private final SimpleStringProperty rightAsdaBreakdownHeader = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty rightAsdaBreakdown = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty rightAsdaBreakdownHeader = new SimpleStringProperty("N/A");
     // Left LDA
-    private final SimpleStringProperty leftLdaBreakdown = new SimpleStringProperty("N/A");
-    private final SimpleStringProperty leftLdaBreakdownHeader = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty leftLdaBreakdown = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty leftLdaBreakdownHeader = new SimpleStringProperty("N/A");
     // Temp holders
-    private final SimpleStringProperty leftLdaObstacleSlopeCalcBreakdown = new SimpleStringProperty();
-    private final SimpleStringProperty leftLdaObstacleSlopeCalcBreakdownHeader = new SimpleStringProperty();
-    private final SimpleStringProperty leftLdaSubBreakdown = new SimpleStringProperty();
-    private final SimpleStringProperty leftLdaSubBreakdownHeader = new SimpleStringProperty();
+    public final SimpleStringProperty leftLdaObstacleSlopeCalcBreakdown = new SimpleStringProperty();
+    public final SimpleStringProperty leftLdaObstacleSlopeCalcBreakdownHeader = new SimpleStringProperty();
+    public final SimpleStringProperty leftLdaSubBreakdown = new SimpleStringProperty();
+    public final SimpleStringProperty leftLdaSubBreakdownHeader = new SimpleStringProperty();
     // Right LDA
-    private final SimpleStringProperty rightLdaBreakdown = new SimpleStringProperty("N/A");
-    private final SimpleStringProperty rightLdaBreakdownHeader = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty rightLdaBreakdown = new SimpleStringProperty("N/A");
+    public final SimpleStringProperty rightLdaBreakdownHeader = new SimpleStringProperty("N/A");
     // Temp holders
-    private final SimpleStringProperty rightLdaObstacleSlopeCalcBreakdown = new SimpleStringProperty();
-    private final SimpleStringProperty rightLdaObstacleSlopeCalcBreakdownHeader = new SimpleStringProperty();
-    private final SimpleStringProperty rightLdaSubBreakdown = new SimpleStringProperty();
-    private final SimpleStringProperty rightLdaSubBreakdownHeader = new SimpleStringProperty();
+    public final SimpleStringProperty rightLdaObstacleSlopeCalcBreakdown = new SimpleStringProperty();
+    public final SimpleStringProperty rightLdaObstacleSlopeCalcBreakdownHeader = new SimpleStringProperty();
+    public final SimpleStringProperty rightLdaSubBreakdown = new SimpleStringProperty();
+    public final SimpleStringProperty rightLdaSubBreakdownHeader = new SimpleStringProperty();
 
     // TODO: Create header breakdowns to better explain what the numbers are
 
@@ -361,24 +361,22 @@ public class Runway {
             if (directionLeft.get()) {
                 logger.info("Calculate take-off towards for left");
                 calculateTakeOffToward();
-                //calculateTakeOffTowardLeft
-                //calculateLandTowardLeft
+                RunwayCalculations.calculateTakeOffTowardLeft(this);
+                RunwayCalculations.calculateLandTowardLeft(this); // done
             } else {
                 logger.info("Calculate take-off away for left");
                 calculateTakeOffAway();
-                //calculateTakeOffAwayLeft
-                //calculateLandAwayLeft
+                RunwayCalculations.calculateTakeOffAwayLeft(this);
+                RunwayCalculations.calculateLandOverLeft(this); // done
             }
             if (directionRight.get()) {
                 logger.info("Calculate land towards for right");
-                calculateLandTowards();
-                //calculateTakeOffTowardRight
-                //calculateLandTowardRight
+                RunwayCalculations.calculateTakeOffTowardRight(this);
+                RunwayCalculations.calculateLandTowardRight(this); // done
             } else {
                 logger.info("Calculate land over for right");
-                calculateLandOver();
-                //calculateTakeOffAwayRight
-                //calculateLandAwayRight
+                RunwayCalculations.calculateTakeOffAwayRight(this);
+                RunwayCalculations.calculateLandOverRight(this); // done
             }
         } else {
             logger.info("Runway has no obstacle: runway returned to original state");
@@ -489,148 +487,11 @@ public class Runway {
     }
 
     /**
-     * Calculations for when a plane is landing over an obstacle
-     */
-// TODO: Check working
-    public void calculateLandOver() {
-
-        // Calculate Land Over for Left
-
-        var ldaSubtraction = getLdaSubtraction(runwayObstacle.distFromThresholdProperty(), true);
-
-        leftLda.bind(inputLeftLda.subtract(ldaSubtraction));
-
-        // Ensure Declared distance isn't more than original value
-        if (leftLda.get() > inputLeftLda.get()) {
-            leftLda.bind(inputLeftLda);
-            leftLdaBreakdown.bind(
-                    new SimpleStringProperty(
-                            "(Left) Calculated LDA greater than original LDA, original LDA taken as output"
-                    )
-            );
-            leftLdaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
-        } else {
-            leftLdaBreakdown.bind(
-                    new SimpleStringProperty("Left LDA = ")
-                            .concat(inputLeftLda.intValue())
-                            .concat(" - ")
-                            .concat(leftLdaSubBreakdown)
-                            .concat(" = ")
-                            .concat(leftLda)
-            );
-            leftLdaBreakdownHeader.bind(
-                    new SimpleStringProperty("Left LDA = Original left LDA - ")
-                            .concat(leftLdaSubBreakdownHeader)
-            );
-        }
-
-        logger.info("New LDA calculated for landing over an obstacle for runway "+runwayDesignatorLeft.get());
-
-        // Calculate Land Towards for Right
-
-        rightLda.bind(runwayObstacle.distFromOtherThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
-
-        // Ensure Declared distance isn't more than original value
-        if (rightLda.get() > inputRightLda.get()) {
-            rightLda.bind(inputRightLda);
-            rightLdaBreakdown.bind(
-                    new SimpleStringProperty(
-                            "(Right) Calculated LDA greater than original LDA, original LDA taken as output"
-                    )
-            );
-            rightLdaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
-        } else {
-            rightLdaBreakdown.bind(
-                    new SimpleStringProperty("Right LDA = ")
-                            .concat(runwayObstacle.distFromOtherThresholdProperty().intValue())
-                            .concat(" - ")
-                            .concat(MINRESA)
-                            .concat(" - ")
-                            .concat(STRIPEND)
-                            .concat(" = ")
-                            .concat(rightLda.intValue())
-            );
-            rightLdaBreakdownHeader.bind(
-                    new SimpleStringProperty("Right LDA = Obstacle dist from right threshold - Minimum RESA - Stripend")
-            );
-        }
-
-        logger.info("New LDA calculated for landing towards and obstacle for runway "+runwayDesignatorRight.get());
-    }
-
-    /**
-     * Calculations for when a plane is landing towards an obstacle
-     */
-    public void calculateLandTowards() {
-
-        // Calculate Land Towards for Left
-
-        leftLda.bind(runwayObstacle.distFromThresholdProperty().subtract(MINRESA).subtract(STRIPEND));
-
-        // Ensure Declared distance isn't more than original value
-        if (leftLda.get() > inputLeftLda.get()) {
-            leftLda.bind(inputLeftLda);
-            leftLdaBreakdown.bind(
-                    new SimpleStringProperty(
-                            "(Left) Calculated LDA greater than original LDA, original LDA taken as output"
-                    )
-            );
-            leftLdaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
-        } else {
-            leftLdaBreakdown.bind(
-                    new SimpleStringProperty("Left LDA = ")
-                            .concat(runwayObstacle.distFromThresholdProperty().intValue())
-                            .concat(" - ")
-                            .concat(MINRESA).concat(" - ")
-                            .concat(STRIPEND)
-                            .concat(" = ")
-                            .concat(leftLda.intValue())
-            );
-            leftLdaBreakdownHeader.bind(
-                    new SimpleStringProperty("Left LDA = Obstacle dist from left threshold - Minimum RESA - Stripend")
-            );
-        }
-
-        logger.info("New LDA calculated for landing towards and obstacle for runway "+runwayDesignatorLeft.get());
-
-        // Calculate Land Over for Right
-
-        var ldaSubtraction = getLdaSubtraction(runwayObstacle.distFromOtherThresholdProperty(), false);
-
-        rightLda.bind(inputRightLda.subtract(ldaSubtraction));
-
-        // Ensure Declared distance isn't more than original value
-        if (rightLda.get() > inputRightLda.get()) {
-            rightLda.bind(inputRightLda);
-            rightLdaBreakdown.bind(
-                    new SimpleStringProperty(
-                            "(Right) Calculated LDA greater than original LDA, original LDA taken as output"
-                    )
-            );
-            rightLdaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
-        } else {
-            rightLdaBreakdown.bind(
-                    new SimpleStringProperty("Right LDA = ")
-                            .concat(inputRightLda.intValue())
-                            .concat(" - ")
-                            .concat(rightLdaSubBreakdown)
-                            .concat(" = ")
-                            .concat(rightLda.intValue()));
-            rightLdaBreakdownHeader.bind(
-                    new SimpleStringProperty("Right LDA = Original right LDA - ")
-                            .concat(rightLdaSubBreakdownHeader)
-            );
-        }
-        logger.info("New LDA calculated for landing over an obstacle for runway "+runwayDesignatorRight.get());
-
-    }
-
-    /**
      * Calculating the LDA subtraction
      * @param distFromThreshold The correct distance from threshold for the obstacle for the direction
      * @return The calculated subtraction from the LDA
      */
-    private SimpleDoubleProperty getLdaSubtraction(SimpleDoubleProperty distFromThreshold, boolean left) {
+    public SimpleDoubleProperty getLdaSubtraction(SimpleDoubleProperty distFromThreshold, boolean left) {
 
         var obstacleSlopeCalculation = getObstacleSlopeCalculation(left);
 
