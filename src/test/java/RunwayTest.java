@@ -1,4 +1,5 @@
-package comp2211.seg.ProcessDataModel;
+import comp2211.seg.ProcessDataModel.Obstacle;
+import comp2211.seg.ProcessDataModel.Runway;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import org.apache.logging.log4j.LogManager;
