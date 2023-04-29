@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -56,7 +57,7 @@ class RunwayTest {
      * Sets up runways.
      */
     @BeforeAll
-    static void setUpRunways() {
+    public static void setUpRunways() {
         setProperties(
                 "09R",
                 3660,
@@ -133,7 +134,7 @@ class RunwayTest {
      * @param rightLda   the right lda
      * @param runway     the runway
      */
-    static void setProperties(
+    public static void setProperties(
             String designator,
             int leftTora,
             int leftToda,
@@ -161,7 +162,7 @@ class RunwayTest {
      * @param runway   the runway
      * @param obstacle the obstacle
      */
-    void addObstacle(Runway runway, Obstacle obstacle){
+    public void addObstacle(Runway runway, Obstacle obstacle){
         runway.removeObstacle();
         obstacle.lengthProperty().set(0);
         runway.addObstacle(obstacle);
@@ -178,7 +179,7 @@ class RunwayTest {
     @DisplayName("Runway Designators : Check 2nd designator is correctly calculated")
     @ParameterizedTest
     @MethodSource("generateCheckDesignatorTestData")
-    void checkDesignatorTestData(Runway runway, String expectedDesignator) {
+    public void checkDesignatorTestData(Runway runway, String expectedDesignator) {
 
         var expectedNumber = expectedDesignator.substring(0,2);
         var expectedCharacter = expectedDesignator.substring(2);
@@ -208,7 +209,7 @@ class RunwayTest {
     @DisplayName("Landing/ take-off calculations : Recalculate appropriate values")
     @ParameterizedTest
     @MethodSource("generateRecalculateTestData")
-    void recalculateTest(Runway runway,
+    public void recalculateTest(Runway runway,
                          Obstacle obstacleToAdd,
                          double expectedTORALeft,
                          double expectedASDALeft,
@@ -407,5 +408,10 @@ class RunwayTest {
                         "Test: Own Scenario 5"
                 )
         );
+    }
+
+    @Test
+    public void smallTest() {
+        assert false;
     }
 }
