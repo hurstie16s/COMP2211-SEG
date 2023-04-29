@@ -370,11 +370,12 @@ public class Runway {
             if (directionRight.get()) {
                 logger.info("Calculate land towards for right");
                 RunwayCalculations.calculateTakeOffTowardRight(this); // done
-                RunwayCalculations.calculateLandTowardRight(this); // done
-            } else {
-                logger.info("Calculate land over for right");
                 RunwayCalculations.calculateTakeOffAwayRight(this); // done
                 RunwayCalculations.calculateLandOverRight(this); // done
+            } else {
+                logger.info("Calculate land over for right");
+                RunwayCalculations.calculateTakeOffTowardRight(this); // done
+                RunwayCalculations.calculateLandTowardRight(this); // done
             }
         } else {
             logger.info("Runway has no obstacle: runway returned to original state");

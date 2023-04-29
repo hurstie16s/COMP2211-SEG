@@ -14,12 +14,11 @@ public abstract class RunwayCalculations {
     private static final Logger logger = LogManager.getLogger(RunwayCalculations.class);
 
     /**
-     * Calculate take off toward left.
+     * Calculate left-hand runway values for taking off towards an obstacle.
      *
      * @param runway the runway
      */
     public static void calculateTakeOffTowardLeft(Runway runway) {
-        // Calculate left take-off values, taking off towards the obstacle
         runway.leftTora.bind(
                 runway.runwayObstacle.distFromThresholdProperty()
                         .add(runway.dispThresholdLeft)
@@ -150,7 +149,7 @@ public abstract class RunwayCalculations {
     }
 
     /**
-     * Calculate land toward left.
+     * Calculate left-hand runway values for landing towards an obstacle.
      *
      * @param runway the runway
      */
@@ -187,7 +186,7 @@ public abstract class RunwayCalculations {
     }
 
     /**
-     * Calculate take off away left.
+     * Calculate left-hand runway values for taking off away from an obstacle.
      *
      * @param runway the runway
      */
@@ -272,7 +271,7 @@ public abstract class RunwayCalculations {
     }
 
     /**
-     * Calculate land over left.
+     * Calculate left-hand runway values for landing over an obstacle.
      *
      * @param runway the runway
      */
@@ -311,7 +310,7 @@ public abstract class RunwayCalculations {
     }
 
     /**
-     * Calculate take off toward right.
+     * Calculate right-hand runway values for taking off towards an obstacle.
      *
      * @param runway the runway
      */
