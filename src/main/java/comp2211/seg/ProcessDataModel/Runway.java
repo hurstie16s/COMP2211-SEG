@@ -288,6 +288,7 @@ public class Runway {
     }
 
     private void swapLeftRight() {
+
         // Swap all inputs, call recalculate
         SimpleDoubleProperty temp;
 
@@ -503,10 +504,12 @@ public class Runway {
         } else {
             leftLdaBreakdown.bind(
                     new SimpleStringProperty("Left LDA = ")
-                            .concat(inputLeftLda)
+                            .concat(inputLeftLda.intValue())
                             .concat(" - ")
                             .concat(leftLdaSubBreakdown)
-                            .concat(" = ").concat(leftLda));
+                            .concat(" = ")
+                            .concat(leftLda)
+            );
             leftLdaBreakdownHeader.bind(
                     new SimpleStringProperty("Left LDA = Original left LDA - ")
                             .concat(leftLdaSubBreakdownHeader)
@@ -531,13 +534,13 @@ public class Runway {
         } else {
             rightLdaBreakdown.bind(
                     new SimpleStringProperty("Right LDA = ")
-                            .concat(runwayObstacle.distFromOtherThresholdProperty())
+                            .concat(runwayObstacle.distFromOtherThresholdProperty().intValue())
                             .concat(" - ")
                             .concat(MINRESA)
                             .concat(" - ")
                             .concat(STRIPEND)
                             .concat(" = ")
-                            .concat(rightLda)
+                            .concat(rightLda.intValue())
             );
             rightLdaBreakdownHeader.bind(
                     new SimpleStringProperty("Right LDA = Obstacle dist from right threshold - Minimum RESA - Stripend")
@@ -568,12 +571,12 @@ public class Runway {
         } else {
             leftLdaBreakdown.bind(
                     new SimpleStringProperty("Left LDA = ")
-                            .concat(runwayObstacle.distFromThresholdProperty())
+                            .concat(runwayObstacle.distFromThresholdProperty().intValue())
                             .concat(" - ")
                             .concat(MINRESA).concat(" - ")
                             .concat(STRIPEND)
                             .concat(" = ")
-                            .concat(leftLda)
+                            .concat(leftLda.intValue())
             );
             leftLdaBreakdownHeader.bind(
                     new SimpleStringProperty("Left LDA = Obstacle dist from left threshold - Minimum RESA - Stripend")
@@ -600,10 +603,11 @@ public class Runway {
         } else {
             rightLdaBreakdown.bind(
                     new SimpleStringProperty("Right LDA = ")
-                            .concat(inputRightLda)
+                            .concat(inputRightLda.intValue())
                             .concat(" - ")
                             .concat(rightLdaSubBreakdown)
-                            .concat(" = ").concat(rightLda));
+                            .concat(" = ")
+                            .concat(rightLda.intValue()));
             rightLdaBreakdownHeader.bind(
                     new SimpleStringProperty("Right LDA = Original right LDA - ")
                             .concat(rightLdaSubBreakdownHeader)
@@ -656,7 +660,7 @@ public class Runway {
                         )
                 ).then(
                         new SimpleStringProperty("(")
-                                .concat(distFromThreshold)
+                                .concat(distFromThreshold.intValue())
                                 .concat(" + ")
                                 .concat(obstacleSlopCalcBreakdown)
                                 .concat(" + ")
@@ -664,7 +668,7 @@ public class Runway {
                                 .concat(")")
                 ).otherwise(
                         new SimpleStringProperty("(")
-                                .concat(distFromThreshold)
+                                .concat(distFromThreshold.intValue())
                                 .concat(" + ")
                                 .concat(BLASTZONE)
                                 .concat(")")
@@ -734,7 +738,7 @@ public class Runway {
                 )
                         .then(
                                 new SimpleStringProperty("(")
-                                        .concat(runwayObstacle.heightProperty())
+                                        .concat(runwayObstacle.heightProperty().intValue())
                                         .concat(" x ")
                                         .concat(SLOPE)
                                         .concat(")")
@@ -743,7 +747,7 @@ public class Runway {
                                 new SimpleStringProperty("(")
                                         .concat(MINRESA)
                                         .concat("+(")
-                                        .concat(runwayObstacle.lengthProperty())
+                                        .concat(runwayObstacle.lengthProperty().intValue())
                                         .concat(" / ")
                                         .concat(2)
                                         .concat("))")
@@ -795,7 +799,7 @@ public class Runway {
         } else {
             rightToraBreakdown.bind(
                     new SimpleStringProperty("Right TORA = ")
-                            .concat(runwayObstacle.distFromThresholdProperty())
+                            .concat(runwayObstacle.distFromThresholdProperty().intValue())
                             .concat(" - ")
                             .concat(
                                     Bindings.when(
@@ -813,13 +817,13 @@ public class Runway {
                                     )
                             )
                             .concat(" + ")
-                            .concat(dispThresholdLeft)
+                            .concat(dispThresholdLeft.intValue())
                             .concat(" - (")
-                            .concat(runwayObstacle.lengthProperty())
+                            .concat(runwayObstacle.lengthProperty().intValue())
                             .concat(" / ")
                             .concat(2)
                             .concat(") = ")
-                            .concat(rightTora)
+                            .concat(rightTora.intValue())
             );
             rightTodaBreakdownHeader.bind(
                     new SimpleStringProperty("Right TORA = Obstacle dist from left threshold - ")
@@ -841,11 +845,11 @@ public class Runway {
         rightAsda.bind(rightTora.add(stopwayLeft));
         rightAsdaBreakdown.bind(
                 new SimpleStringProperty("Right ASDA = ")
-                        .concat(rightTora)
+                        .concat(rightTora.intValue())
                         .concat(" + ")
-                        .concat(stopwayLeft)
+                        .concat(stopwayLeft.intValue())
                         .concat(" = ")
-                        .concat(rightAsda)
+                        .concat(rightAsda.intValue())
         );
         rightAsdaBreakdownHeader.bind(
                 new SimpleStringProperty("Right ASDA = Right TORA + Left stopway")
@@ -854,11 +858,11 @@ public class Runway {
         rightToda.bind(rightTora.add(clearwayLeft));
         rightTodaBreakdown.bind(
                 new SimpleStringProperty("Right TODA = ")
-                        .concat(rightTora)
+                        .concat(rightTora.intValue())
                         .concat(" + ")
-                        .concat(clearwayLeft)
+                        .concat(clearwayLeft.intValue())
                         .concat(" = ")
-                        .concat(rightToda)
+                        .concat(rightToda.intValue())
         );
         rightTodaBreakdownHeader.bind(
                 new SimpleStringProperty("Right TODA = Right TORA + Left clearway")
@@ -892,11 +896,11 @@ public class Runway {
 
             leftAsdaBreakdown.bind(
                     new SimpleStringProperty("Left ASDA = ")
-                            .concat(leftTora)
+                            .concat(leftTora.intValue())
                             .concat(" + ")
-                            .concat(Bindings.min(distanceFromToraEnd, stopwayRight))
+                            .concat(Math.min(distanceFromToraEnd.intValue(), stopwayRight.intValue()))
                             .concat(" = ")
-                            .concat(leftAsda)
+                            .concat(leftAsda.intValue())
             );
             leftAsdaBreakdownHeader.bind(
                     new SimpleStringProperty("Left ASDA = Left TORA + ")
@@ -913,11 +917,11 @@ public class Runway {
 
             leftTodaBreakdown.bind(
                     new SimpleStringProperty("Left TODA = ")
-                            .concat(leftTora)
+                            .concat(leftTora.intValue())
                             .concat(" + ")
-                            .concat(Bindings.min(distanceFromToraEnd, clearwayRight))
+                            .concat(Math.min(distanceFromToraEnd.intValue(), clearwayRight.intValue()))
                             .concat(" = ")
-                            .concat(leftToda)
+                            .concat(leftToda.intValue())
             );
             leftTodaBreakdownHeader.bind(
                     new SimpleStringProperty("Left TODA = Left TORA + ")
@@ -934,9 +938,9 @@ public class Runway {
 
             leftToraBreakdown.bind(
                     new SimpleStringProperty("Left TORA = ")
-                            .concat(runwayObstacle.distFromThresholdProperty())
+                            .concat(runwayObstacle.distFromThresholdProperty().intValue())
                             .concat(" + ")
-                            .concat(dispThresholdLeft)
+                            .concat(dispThresholdLeft.intValue())
                             .concat( " - ")
                             .concat(Bindings.when(
                                     Bindings.greaterThan(
@@ -945,7 +949,7 @@ public class Runway {
                                     ))
                                     .then(
                                             new SimpleStringProperty("(")
-                                                    .concat(runwayObstacle.heightProperty())
+                                                    .concat(runwayObstacle.heightProperty().intValue())
                                                     .concat(" x ")
                                                     .concat(SLOPE)
                                     )
@@ -953,7 +957,7 @@ public class Runway {
                                             new SimpleStringProperty()
                                                     .concat(MINRESA)
                                                     .concat(" + (")
-                                                    .concat(runwayObstacle.lengthProperty())
+                                                    .concat(runwayObstacle.lengthProperty().intValue())
                                                     .concat(" / ")
                                                     .concat(2)
                                     )
@@ -961,11 +965,12 @@ public class Runway {
                             .concat(") - ")
                             .concat(STRIPEND)
                             .concat(" = ")
-                            .concat(leftTora)
+                            .concat(leftTora.intValue())
             );
 
             leftToraBreakdownHeader.bind(
-                    new SimpleStringProperty("Left TORA = Obstacle dist from left threshold + Left displaced threshold - ")
+                    new SimpleStringProperty(
+                            "Left TORA = Obstacle dist from left threshold + Left displaced threshold - ")
                             .concat(Bindings.when(
                                     Bindings.greaterThan(
                                             runwayObstacle.heightProperty().multiply(SLOPE),
@@ -980,14 +985,14 @@ public class Runway {
             leftAsda.bind(leftTora);
             leftAsdaBreakdown.bind(
                     new SimpleStringProperty("Left ASDA = ")
-                            .concat(leftAsda)
+                            .concat(leftAsda.intValue())
             );
             leftAsdaBreakdownHeader.bind(new SimpleStringProperty("Left ASDA = Left TORA"));
 
             leftToda.bind(leftTora);
             leftTodaBreakdown.bind(
                     new SimpleStringProperty("Left TODA = ")
-                            .concat(leftToda)
+                            .concat(leftToda.intValue())
             );
             leftToraBreakdownHeader.bind(new SimpleStringProperty("Left TODA = Left TORA"));
         }
@@ -1026,11 +1031,11 @@ public class Runway {
 
             rightAsdaBreakdown.bind(
                     new SimpleStringProperty("Right ASDA = ")
-                            .concat(rightTora)
+                            .concat(rightTora.intValue())
                             .concat(" + ")
-                            .concat(Bindings.min(distanceFromToraEnd, stopwayLeft))
+                            .concat(Math.min(distanceFromToraEnd.intValue(), stopwayLeft.intValue()))
                             .concat(" = ")
-                            .concat(rightAsda)
+                            .concat(rightAsda.intValue())
             );
             rightAsdaBreakdownHeader.bind(
                     new SimpleStringProperty("Right ASDA = Right TORA + ")
@@ -1047,11 +1052,11 @@ public class Runway {
 
             rightTodaBreakdown.bind(
                     new SimpleStringProperty("Right TODA = ")
-                            .concat(rightTora)
+                            .concat(rightTora.intValue())
                             .concat(" + ")
-                            .concat(Bindings.min(distanceFromToraEnd, clearwayLeft))
+                            .concat(Math.min(distanceFromToraEnd.intValue(), clearwayLeft.intValue()))
                             .concat(" = ")
-                            .concat(rightToda)
+                            .concat(rightToda.intValue())
             );
             rightTodaBreakdownHeader.bind(
                     new SimpleStringProperty("Right TODA = Right TORA + ")
@@ -1068,9 +1073,9 @@ public class Runway {
 
             rightToraBreakdown.bind(
                     new SimpleStringProperty("Right TORA = ")
-                            .concat(runwayObstacle.distFromOtherThresholdProperty())
+                            .concat(runwayObstacle.distFromOtherThresholdProperty().intValue())
                             .concat(" + ")
-                            .concat(dispThresholdRight)
+                            .concat(dispThresholdRight.intValue())
                             .concat(" - ")
                             .concat(Bindings.when(
                                     Bindings.greaterThan(
@@ -1079,7 +1084,7 @@ public class Runway {
                                     ))
                                     .then(
                                             new SimpleStringProperty("(")
-                                                    .concat(runwayObstacle.heightProperty())
+                                                    .concat(runwayObstacle.heightProperty().intValue())
                                                     .concat(" x ")
                                                     .concat(SLOPE)
                                     )
@@ -1087,7 +1092,7 @@ public class Runway {
                                             new SimpleStringProperty()
                                                     .concat(MINRESA)
                                                     .concat(" + (")
-                                                    .concat(runwayObstacle.lengthProperty())
+                                                    .concat(runwayObstacle.lengthProperty().intValue())
                                                     .concat(" / ")
                                                     .concat(2)
                                     )
@@ -1095,7 +1100,7 @@ public class Runway {
                             .concat(") - ")
                             .concat(STRIPEND)
                             .concat(" = ")
-                            .concat(rightTora)
+                            .concat(rightTora.intValue())
             );
             rightToraBreakdownHeader.bind(
                     new SimpleStringProperty("Right TORA = Obstacle dist from right threshold + Right displaced threshold - ")
@@ -1113,14 +1118,14 @@ public class Runway {
             rightAsda.bind(rightTora);
             rightAsdaBreakdown.bind(
                     new SimpleStringProperty("Right ASDA = ")
-                            .concat(rightAsda)
+                            .concat(rightAsda.intValue())
             );
             rightAsdaBreakdownHeader.bind(new SimpleStringProperty("Right ASDA = Right TORA"));
 
             rightToda.bind(rightTora);
             rightTodaBreakdown.bind(
                     new SimpleStringProperty("Right TODA = ")
-                            .concat(rightToda)
+                            .concat(rightToda.intValue())
             );
             rightTodaBreakdownHeader.bind(new SimpleStringProperty("Right TODA = Right TORA"));
         }
@@ -1141,9 +1146,9 @@ public class Runway {
 
         leftToraBreakdown.bind(
                 new SimpleStringProperty("Left TORA = ")
-                        .concat(inputLeftTora)
+                        .concat(inputLeftTora.intValue())
                         .concat(" - ")
-                        .concat(runwayObstacle.distFromThresholdProperty())
+                        .concat(runwayObstacle.distFromThresholdProperty().intValue())
                         .concat(" - ")
                         .concat(Bindings.when(
                                 Bindings.lessThan(
@@ -1159,13 +1164,13 @@ public class Runway {
                                 )
                         )
                         .concat(" - ")
-                        .concat(dispThresholdRight)
+                        .concat(dispThresholdRight.intValue())
                         .concat(" - (")
-                        .concat(runwayObstacle.lengthProperty())
+                        .concat(runwayObstacle.lengthProperty().intValue())
                         .concat(" / ")
                         .concat(2)
                         .concat(") = ")
-                        .concat(leftTora)
+                        .concat(leftTora.intValue())
         );
 
         leftToraBreakdownHeader.bind(
@@ -1184,22 +1189,22 @@ public class Runway {
         leftAsda.bind(leftTora.add(stopwayRight));
         leftAsdaBreakdown.bind(
                 new SimpleStringProperty("Left ASDA = ")
-                        .concat(leftTora)
+                        .concat(leftTora.intValue())
                         .concat(" + ")
-                        .concat(stopwayRight)
+                        .concat(stopwayRight.intValue())
                         .concat(" = ")
-                        .concat(leftAsda)
+                        .concat(leftAsda.intValue())
         );
         leftAsdaBreakdownHeader.bind(new SimpleStringProperty("Left ASDA = Left TORA - Right stopway"));
 
         leftToda.bind(leftTora.add(clearwayRight));
         leftTodaBreakdown.bind(
                 new SimpleStringProperty("Left TODA = ")
-                        .concat(leftTora)
+                        .concat(leftTora.intValue())
                         .concat(" + ")
-                        .concat(clearwayRight)
+                        .concat(clearwayRight.intValue())
                         .concat(" = ")
-                        .concat(leftToda)
+                        .concat(leftToda.intValue())
         );
         leftTodaBreakdownHeader.bind(new SimpleStringProperty("Left TODA = Left TORA + Right clearway"));
     }
