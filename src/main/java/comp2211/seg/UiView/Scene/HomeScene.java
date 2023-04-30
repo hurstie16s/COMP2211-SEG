@@ -134,6 +134,7 @@ public class HomeScene extends SceneAbstract{
 
     Button startApplication = new Button("Start Application");
     startApplication.setOnMousePressed(this::startApplication);
+    Button importAirportWithObstacle = new Button("Import Airport with Obstacle");
     Button importAirport = new Button("Import Airport");
     Button newAirport = new Button("New Airport");
     //startApplication.setTextFill(Theme.fg);
@@ -141,9 +142,11 @@ public class HomeScene extends SceneAbstract{
     //startApplication.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     startApplication.getStyleClass().add("focusedBG");
     startApplication.getStyleClass().add("font");
-    //importAirport.setTextFill(Theme.fg);
-    importAirport.getStyleClass().add("fg");
-    //importAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    //importAirportWithObstacle.setTextFill(Theme.fg);
+    importAirportWithObstacle.getStyleClass().add("fg");
+    //importAirportWithObstacle.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    importAirportWithObstacle.getStyleClass().add("focusedBG");
+    importAirportWithObstacle.getStyleClass().add("font");
     importAirport.getStyleClass().add("focusedBG");
     importAirport.getStyleClass().add("font");
     //newAirport.setTextFill(Theme.fg);
@@ -152,9 +155,10 @@ public class HomeScene extends SceneAbstract{
     newAirport.getStyleClass().add("focusedBG");
     newAirport.getStyleClass().add("fontsmall");
 
-    //importAirport.setDisable(true);
+    //importAirportWithObstacle.setDisable(true);
     // Import Airport
-    importAirport.setOnAction(e -> importAirportWithObstacleButtonEvent());
+    importAirportWithObstacle.setOnAction(e -> importAirportWithObstacleButtonEvent());
+    importAirport.setOnAction(e -> importAirportNoObsEvent());
 
     newAirport.setDisable(true);
 
@@ -177,7 +181,7 @@ public class HomeScene extends SceneAbstract{
 
     buttons.addColumn(0,airportText,runwayText);
     buttons.addColumn(1,airports, runways, startApplication);
-    buttons.addColumn(2,importAirport);
+    buttons.addColumn(2,importAirportWithObstacle, importAirport);
 
     ColumnConstraints ccx = new ColumnConstraints();
     ccx.setPercentWidth(20);
@@ -193,8 +197,8 @@ public class HomeScene extends SceneAbstract{
     runways.minWidthProperty().bind(airports.widthProperty());
     startApplication.maxWidthProperty().bind(airports.widthProperty());
     startApplication.minWidthProperty().bind(airports.widthProperty());
-    importAirport.maxWidthProperty().bind(airports.widthProperty());
-    importAirport.minWidthProperty().bind(airports.widthProperty());
+    importAirportWithObstacle.maxWidthProperty().bind(airports.widthProperty());
+    importAirportWithObstacle.minWidthProperty().bind(airports.widthProperty());
     HBox buttonsPane = new HBox(buttons);
     VBox buttonsPane2 = new VBox(buttonsPane);
 
