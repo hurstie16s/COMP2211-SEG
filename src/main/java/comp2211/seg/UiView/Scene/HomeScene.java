@@ -106,8 +106,6 @@ public class HomeScene extends SceneAbstract{
         "the runway redeclaration process\n");
     desciption.getStyleClass().addAll("font", "fg");
 
-
-
     //    airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
 //    airports.getStyleClass().add("focusedBG");
 //    airports.getStyleClass().add("font");
@@ -138,6 +136,7 @@ public class HomeScene extends SceneAbstract{
 
 // Add a listener to update the runways ComboBox when a new airport is selected
     airports.valueProperty().addListener((observableValue, oldAirport, newAirport) -> {
+      appWindow.setAirport((Airport) newAirport);
       // Update the options of the runways ComboBox with the runways for the selected airport
       runways.setItems(FXCollections.observableArrayList(((Airport)newAirport).getRunways()));
       // Select the first runway in the new list, if it exists
@@ -146,21 +145,29 @@ public class HomeScene extends SceneAbstract{
       }
     });
 
-// Set the initial value of the airports ComboBox
-    airports.setValue(appWindow.getAirports().get(0));
-
 // Create the runways ComboBox
     runways = new ComboBox();
     runways.getStyleClass().add("focusedBG");
     runways.getStyleClass().add("font");
 
 // Add a listener to update the selected runway in the appWindow when a new runway is selected
-    runways.valueProperty().addListener((observableValue, oldRunway, newRunway) -> {
-      appWindow.setRunway((Runway) newRunway);
+    runways.valueProperty().addListener(new ChangeListener() {
+      @Override
+      public void changed(ObservableValue observableValue, Object o, Object t1) {
+        appWindow.setRunway((Runway) t1);
+        if (! (o == null)) {
+          if (!o.equals(t1)) {
+            appWindow.startHomeScene();
+          }
+        }
+      }
     });
-
+// Set the initial value of the airports ComboBox
+    airports.setValue(appWindow.getAirports().get(0));
 // Set the initial value of the runways ComboBox
-    runways.setValue(appWindow.airport.getRunways());
+    runways.setValue(appWindow.airport.getRunways().get(0));
+
+
 
     Button startApplication = new Button("Start Application");
     startApplication.setOnMousePressed(this::startApplication);
