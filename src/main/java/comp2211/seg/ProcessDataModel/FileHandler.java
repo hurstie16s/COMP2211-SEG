@@ -32,8 +32,9 @@ public abstract class FileHandler {
     private static final Logger logger = LogManager.getLogger(FileHandler.class);
 
     private static final SchemaFactory SCHEMA_FACTORY = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-    private static Validator airportValidator = null;
+    private static Validator airportObstacleValidator = null;
     private static Validator obstacleValidator = null;
+    private static Validator airportValidator = null;
     private static final DocumentBuilderFactory BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
     private static DocumentBuilder builder = null;
 
@@ -304,7 +305,7 @@ public abstract class FileHandler {
 
         // Check given file conforms to the appropriate schema
         // Possibly throw custom exception?
-        if (fileFormatFailed(inputFile, false)) return null;
+        if (fileFormatFailed(inputFile, SchemaType.OBSTACLE)) return null;
         logger.info("File Accepted by schema");
 
         if (builder == null) createBuilder();
@@ -360,20 +361,104 @@ public abstract class FileHandler {
         return obstacle;
     }
 
-    // TODO: Issues resolved - finish airport import
+    public static Airport importAirport(File inputFile) {
+        Airport airport = null;
+
+        // Check given file conforms to the appropriate schema
+        if (fileFormatFailed(inputFile, SchemaType.AIRPORT)) return null;
+        logger.info("File Accepted by schema");
+
+        if (builder == null) createBuilder();
+
+
+        try {
+
+            Document document = builder.parse(inputFile);
+            document.getDocumentElement().normalize();
+
+            // Get Airport Name
+            String airportName = document.getElementsByTagName("name").item(0).getTextContent();
+
+            // Create Airport Object
+            airport = new Airport(airportName);
+            logger.info("Created new airport "+airportName);
+
+            // Get Latitude
+            double latitude = Double.parseDouble(document.getElementsByTagName("Latitude").item(0).getTextContent());
+            airport.setLatitude(latitude);
+            logger.info("Set latitude of "+airportName+" to "+latitude);
+
+            // Get Longitude
+            double longitude = Double.parseDouble(document.getElementsByTagName("Longitude").item(0).getTextContent());
+            airport.setLongitude(longitude);
+            logger.info("Set longitude of "+airportName+" to "+longitude);
+
+            // Get Runways
+            NodeList runways = document.getElementsByTagName("Runways");
+            for (int i = 0; i < runways.getLength(); i++) {
+                Runway runway = new Runway();
+
+                Element runwayToParse = (Element) runways.item(i);
+
+                // Get general Runway properties
+                double resaHeight = Double.parseDouble(runwayToParse.getElementsByTagName("Resa_Height").item(0).getTextContent());
+                runway.setRESAHeight(resaHeight);
+                logger.info("Set RESA Height to "+resaHeight+"m");
+                double resaWidth = Double.parseDouble(runwayToParse.getElementsByTagName("Resa_Width").item(0).getTextContent());
+                runway.setRESAWidth(resaWidth);
+                logger.info("Set RESA width to "+resaWidth+"m");
+
+                // Get Right-hand runway properties
+                logger.info("Importing right-hand runway properties");
+                Element rightProperties = (Element) runwayToParse.getElementsByTagName("Right_Properties").item(0);
+
+                getProperties(rightProperties);
+
+                runway.setRunwayDesignatorRight(designator);
+                runway.setInputRightTora(tora);
+                runway.setInputRightToda(toda);
+                runway.setInputRightAsda(asda);
+                runway.setInputRightLda(lda);
+                //runway.setClearwayRight(clearway);
+                //runway.setStopwayRight(stopway);
+                //runway.setDispThresholdRight(dispThreshold);
+
+                // Get Left-hand runway properties
+                logger.info("Importing left-hand runway properties");
+                Element leftProperties = (Element) runwayToParse.getElementsByTagName("Left_Properties").item(0);
+
+                getProperties(leftProperties);
+
+                runway.setRunwayDesignatorLeft(designator);
+                runway.setInputLeftTora(tora);
+                runway.setInputLeftToda(toda);
+                runway.setInputLeftAsda(asda);
+                runway.setInputLeftLda(lda);
+
+                airport.addRunway(runway);
+            }
+        } catch (NullPointerException | IOException | SAXException e) {
+            // TODO: Split the errors so that they can be better handled
+            logger.error(e.getMessage());
+            logger.warn("Handle Error");
+            // TODO: Handle Error
+        }
+
+        return airport;
+    }
 
     /**
-     * Import airport.
+     * Import airport with obstacles.
      *
      * @param inputFile the file containing data to be imported
      * @return the airport
      */
-    public static Airport importAirport(File inputFile){
+    public static Airport importAirportWithObstacles(File inputFile){
 
         Airport airport = null;
 
         // Check given file conforms to the appropriate schema
-        if (fileFormatFailed(inputFile, true)) return null;
+        if (fileFormatFailed(inputFile, SchemaType.AIRPORT_OBSTACLE)) return null;
         logger.info("File Accepted by schema");
 
         if (builder == null) createBuilder();
@@ -536,21 +621,24 @@ public abstract class FileHandler {
         //logger.info("Displaced threshold = "+dispThreshold);
     }
 
-    private static boolean fileFormatFailed(File file, boolean validateAirport) {
-        if (validateAirport && airportValidator == null) {
-            airportValidator = createSchemaValidator("src/main/resources/XML/AirportOb.xsd");
+    private static boolean fileFormatFailed(File file, SchemaType schemaType) {
+        if (schemaType.equals(SchemaType.AIRPORT_OBSTACLE) && airportObstacleValidator == null) {
+            airportObstacleValidator = createSchemaValidator("src/main/resources/XML/AirportOb.xsd");
             logger.info("Schema validator created for airport");
-        } else if (!validateAirport && obstacleValidator == null) {
+        } else if (schemaType.equals(SchemaType.OBSTACLE) && obstacleValidator == null) {
             obstacleValidator = createSchemaValidator("src/main/resources/XML/Obstacle.xsd");
             logger.info("Schema validator created for obstacle");
+        } else if (schemaType.equals(SchemaType.AIRPORT) && airportValidator == null) {
+            airportValidator = createSchemaValidator("src/main/resources/XML/Airport.xsd");
+            logger.info("Schema validator created for airport");
         }
         // File paths are only hard coded for now to make ease of testing
         try {
             Source testFileSource = new StreamSource(file);
-            if (validateAirport) {
-                airportValidator.validate(testFileSource);
-            } else {
-                obstacleValidator.validate(testFileSource);
+            switch (schemaType) {
+                case AIRPORT_OBSTACLE -> airportObstacleValidator.validate(testFileSource);
+                case OBSTACLE -> obstacleValidator.validate(testFileSource);
+                case AIRPORT -> airportValidator.validate(testFileSource);
             }
         } catch (IOException | SAXException e) {
             logger.error(e.getMessage());
@@ -560,7 +648,7 @@ public abstract class FileHandler {
         }
         logger.info(
                 "File validated for "
-                        + (validateAirport ? "airport" : "obstacle")
+                        + schemaType.label
                         + " import");
         return false;
     }

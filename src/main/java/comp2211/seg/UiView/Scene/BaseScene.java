@@ -329,7 +329,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         exportObstacle.setOnAction(e -> exportObstacleButtonEvent());
 
-        importAirObsButton.setOnAction(e -> importAirportButtonEvent());
+        importAirObsButton.setOnAction(e -> importAirportWithObstacleButtonEvent());
 
         importObstacle.setOnAction(e -> importObstacleButtonEvent());
 

@@ -5,7 +5,6 @@ import comp2211.seg.Controller.Stage.Settings;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.ProcessDataModel.Obstacle;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
@@ -220,11 +219,11 @@ public abstract class SceneAbstract extends Scene {
 
     menu8.setOnAction(e -> help.toggleHelp(this.getClass().getCanonicalName()));
 
-    menuImport1.setOnAction(e -> importAirportButtonEvent());
+    menuImport1.setOnAction(e -> importAirportWithObstacleButtonEvent());
 
     menuImport2.setOnAction(e -> importObstacleButtonEvent());
 
-    // menuImport2.setOnAction(e -> importAirportNoObsEvent());
+    menuImport2.setOnAction(e -> importAirportNoObsEvent());
 
     menu12png.setOnAction(e -> exportTopDownViewButtonEvent("png"));
    // menu12jpg.setOnAction(e -> exportTopDownViewButtonEvent("jpg"));
@@ -404,18 +403,33 @@ public abstract class SceneAbstract extends Scene {
   /**
    * Import airport button event.
    */
-  protected void importAirportButtonEvent() {
+  protected void importAirportWithObstacleButtonEvent() {
     try {
       logger.info("Import airport");
       File file = Objects.requireNonNull(generateImportFileChooser("airport").showOpenDialog(new Stage()));
 
-      Airport airport = Objects.requireNonNull(FileHandler.importAirport(file));
+      Airport airport = Objects.requireNonNull(FileHandler.importAirportWithObstacles(file));
       // Add airport to AppWindow
       logger.info("Sending airport: "+airport.getName()+" to AppWindow");
       appWindow.addAirport(airport);
     } catch (NullPointerException e) {
       logger.warn(e.getMessage());
     }
+
+  }
+
+  protected void importAirportNoObsEvent() {
+      try {
+          logger.info("Import airport");
+          File file = Objects.requireNonNull(generateImportFileChooser("airport").showOpenDialog(new Stage()));
+
+          Airport airport = Objects.requireNonNull(FileHandler.importAirport(file));
+          // Add airport to AppWindow
+          logger.info("Sending airport: "+airport.getName()+" to AppWindow");
+          appWindow.addAirport(airport);
+      } catch (NullPointerException e) {
+          logger.warn(e.getMessage());
+      }
 
   }
 
