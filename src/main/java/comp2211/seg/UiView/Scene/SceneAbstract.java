@@ -224,6 +224,8 @@ public abstract class SceneAbstract extends Scene {
 
     menuImport2.setOnAction(e -> importObstacleButtonEvent());
 
+    // menuImport2.setOnAction(e -> importAirportNoObsEvent());
+
     menu12png.setOnAction(e -> exportTopDownViewButtonEvent("png"));
    // menu12jpg.setOnAction(e -> exportTopDownViewButtonEvent("jpg"));
    // menu12gif.setOnAction(e -> exportTopDownViewButtonEvent("gif"));
