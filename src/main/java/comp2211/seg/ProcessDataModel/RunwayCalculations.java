@@ -421,7 +421,7 @@ public abstract class RunwayCalculations {
                                                     .concat(runway.SLOPE)
                                     )
                                     .otherwise(
-                                            new SimpleStringProperty()
+                                            new SimpleStringProperty("")
                                                     .concat(runway.MINRESA)
                                                     .concat(" + (")
                                                     .concat(runway.runwayObstacle.lengthProperty().intValue())
@@ -548,7 +548,7 @@ public abstract class RunwayCalculations {
                                                     runway.BLASTZONE, runway.STRIPEND.add(runway.MINRESA)
                                             )
                                     ).then(
-                                            new SimpleStringProperty().concat(runway.BLASTZONE)
+                                            new SimpleStringProperty("").concat(runway.BLASTZONE)
                                     ).otherwise(
                                             new SimpleStringProperty("(")
                                                     .concat(runway.STRIPEND)
