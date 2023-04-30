@@ -8,10 +8,12 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * The type Runway calculations.
- *
  */
 public abstract class RunwayCalculations {
 
+    /**
+     * The constant logger.
+     */
     private static final Logger logger = LogManager.getLogger(RunwayCalculations.class);
 
     /**

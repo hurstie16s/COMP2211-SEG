@@ -25,7 +25,10 @@ import java.util.ArrayList;
  */
 public class Runway extends RunwayValues{
 
-    // logger
+    /**
+     * The constant logger.
+     */
+// logger
     private static final Logger logger = LogManager.getLogger(Runway.class);
 
     // Class Variables stored in runway values
@@ -33,6 +36,19 @@ public class Runway extends RunwayValues{
 
     // TODO: Create header breakdowns to better explain what the numbers are
 
+    /**
+     * Instantiates a new Runway.
+     *
+     * @param designators the designators
+     * @param leftTora    the left tora
+     * @param leftToda    the left toda
+     * @param leftLDA     the left lda
+     * @param leftASDA    the left asda
+     * @param rightTora   the right tora
+     * @param rightToda   the right toda
+     * @param rightLDA    the right lda
+     * @param rightASDA   the right asda
+     */
     public Runway(String designators, double leftTora, double leftToda, double leftLDA, double leftASDA, double rightTora, double rightToda, double rightLDA, double rightASDA){
         runwayDesignatorLeft.set(designators.split("/")[0]);
         runwayDesignatorRight.set(designators.split("/")[1]);
@@ -142,6 +158,12 @@ public class Runway extends RunwayValues{
         runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
         runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
     }
+
+    /**
+     * To string string.
+     *
+     * @return the string
+     */
     public String toString(){
         String designators;
         if (dualDirectionRunway.get()) {
@@ -154,7 +176,10 @@ public class Runway extends RunwayValues{
 
     /**
      * Calculates the runway designator for the runway in the opposite direction
+     *
      * @param designator The designator that has been changes, used to calculate the new designator for the runways complement direction
+     * @param left       the left
+     * @return the string
      */
     private String calculateRunwayDesignator(String designator, boolean left) {
         var number = String.valueOf((Integer.parseInt(designator.substring(0,2)) + 18) % 36);
@@ -192,6 +217,9 @@ public class Runway extends RunwayValues{
         return newDesignator;
     }
 
+    /**
+     * Swap left right.
+     */
     private void swapLeftRight() {
 
         // Swap all inputs, call recalculate
@@ -216,7 +244,6 @@ public class Runway extends RunwayValues{
 
         recalculate();
     }
-
 
 
     /**
@@ -392,7 +419,9 @@ public class Runway extends RunwayValues{
 
     /**
      * Calculating the LDA subtraction
+     *
      * @param distFromThreshold The correct distance from threshold for the obstacle for the direction
+     * @param left              the left
      * @return The calculated subtraction from the LDA
      */
     public SimpleDoubleProperty getLdaSubtraction(SimpleDoubleProperty distFromThreshold, boolean left) {
@@ -471,6 +500,8 @@ public class Runway extends RunwayValues{
 
     /**
      * Calculate the slope value for an obstacle
+     *
+     * @param left the left
      * @return The appropriate slope over an obstacle
      */
     private SimpleDoubleProperty getObstacleSlopeCalculation(boolean left) {
@@ -786,6 +817,12 @@ public class Runway extends RunwayValues{
     public boolean isDirectionLeft() {
         return directionLeft.get();
     }
+
+    /**
+     * Is direction right boolean.
+     *
+     * @return the boolean
+     */
     public boolean isDirectionRight() {
         return directionRight.get();
     }
@@ -798,6 +835,12 @@ public class Runway extends RunwayValues{
     public SimpleBooleanProperty directionLeftProperty() {
         return directionLeft;
     }
+
+    /**
+     * Direction right property simple boolean property.
+     *
+     * @return the simple boolean property
+     */
     public SimpleBooleanProperty directionRightProperty() {
         return directionRight;
     }

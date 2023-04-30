@@ -8,20 +8,33 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class Obstacle {
 
-    /** The designator of the obstacle. */
+    /**
+     * The designator of the obstacle.
+     */
     private final SimpleStringProperty obstacleDesignator = new SimpleStringProperty();
 
-    /** The height of the obstacle. */
+    /**
+     * The height of the obstacle.
+     */
     private final SimpleDoubleProperty height = new SimpleDoubleProperty(10);
 
-    /** The width of the obstacle. */
+    /**
+     * The width of the obstacle.
+     */
     private final SimpleDoubleProperty length = new SimpleDoubleProperty(100);
 
-    /** The length of the obstacle. */
+    /**
+     * The length of the obstacle.
+     */
     private final SimpleDoubleProperty width = new SimpleDoubleProperty(60);
 
-    /** The distance of the obstacle from the runway threshold. */
+    /**
+     * The distance of the obstacle from the runway threshold.
+     */
     private final SimpleDoubleProperty distFromThreshold = new SimpleDoubleProperty();
+    /**
+     * The Dist from other threshold.
+     */
     private final SimpleDoubleProperty distFromOtherThreshold = new SimpleDoubleProperty();
 
     /**
@@ -145,6 +158,11 @@ public class Obstacle {
         return distFromOtherThreshold;
     }
 
+    /**
+     * To string string.
+     *
+     * @return the string
+     */
     @Override
     public String toString() {
         return obstacleDesignator.get();

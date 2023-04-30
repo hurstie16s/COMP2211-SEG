@@ -29,24 +29,69 @@ import java.io.IOException;
  * The type File handler.
  */
 public abstract class FileHandler {
+    /**
+     * The constant logger.
+     */
     private static final Logger logger = LogManager.getLogger(FileHandler.class);
 
+    /**
+     * The constant SCHEMA_FACTORY.
+     */
     private static final SchemaFactory SCHEMA_FACTORY = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    /**
+     * The constant airportObstacleValidator.
+     */
     private static Validator airportObstacleValidator = null;
+    /**
+     * The constant obstacleValidator.
+     */
     private static Validator obstacleValidator = null;
+    /**
+     * The constant airportValidator.
+     */
     private static Validator airportValidator = null;
+    /**
+     * The constant BUILDER_FACTORY.
+     */
     private static final DocumentBuilderFactory BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
+    /**
+     * The constant builder.
+     */
     private static DocumentBuilder builder = null;
 
-    // Holding Variables
+    /**
+     * The constant designator.
+     */
+// Holding Variables
     private static String designator;
+    /**
+     * The constant tora.
+     */
     private static double tora;
+    /**
+     * The constant toda.
+     */
     private static double toda;
+    /**
+     * The constant asda.
+     */
     private static double asda;
+    /**
+     * The constant lda.
+     */
     private static double lda;
-    // Check if clearway, stopway and dispThreshold even need to be brought in from XML file
+    /**
+     * The constant clearway.
+     */
+// Check if clearway, stopway and dispThreshold even need to be brought in from XML file
     private static double clearway;
+    /**
+     * The constant stopway.
+     */
     private static double stopway;
+    /**
+     * The constant dispThreshold.
+     */
     private static double dispThreshold;
 
     /**
@@ -153,6 +198,14 @@ public abstract class FileHandler {
         }
     }
 
+    /**
+     * Export airport boolean.
+     *
+     * @param file     the file
+     * @param airport  the airport
+     * @param obstacle the obstacle
+     * @return the boolean
+     */
     public static boolean exportAirport(File file, Airport airport, Obstacle obstacle) {
 
         try {
@@ -237,8 +290,14 @@ public abstract class FileHandler {
     }
 
 
-
-
+    /**
+     * Append element with newline.
+     *
+     * @param parent      the parent
+     * @param elementName the element name
+     * @param textContent the text content
+     * @param document    the document
+     */
     private static void appendElementWithNewline(Element parent, String elementName, String textContent, Document document) {
         Element element = document.createElement(elementName);
         element.appendChild(document.createTextNode(textContent));
@@ -361,6 +420,12 @@ public abstract class FileHandler {
         return obstacle;
     }
 
+    /**
+     * Import airport airport.
+     *
+     * @param inputFile the input file
+     * @return the airport
+     */
     public static Airport importAirport(File inputFile) {
         Airport airport = null;
 
@@ -593,6 +658,11 @@ public abstract class FileHandler {
         return airport;
     }
 
+    /**
+     * Gets properties.
+     *
+     * @param element the element
+     */
     private static void getProperties(Element element) {
 
         designator = element.getElementsByTagName("Designator").item(0).getTextContent();
@@ -621,6 +691,13 @@ public abstract class FileHandler {
         //logger.info("Displaced threshold = "+dispThreshold);
     }
 
+    /**
+     * File format failed boolean.
+     *
+     * @param file       the file
+     * @param schemaType the schema type
+     * @return the boolean
+     */
     private static boolean fileFormatFailed(File file, SchemaType schemaType) {
         if (schemaType.equals(SchemaType.AIRPORT_OBSTACLE) && airportObstacleValidator == null) {
             airportObstacleValidator = createSchemaValidator("src/main/resources/XML/AirportOb.xsd");
@@ -674,6 +751,9 @@ public abstract class FileHandler {
         return validator;
     }
 
+    /**
+     * Create builder.
+     */
     private static void createBuilder() {
         try {
             builder = BUILDER_FACTORY.newDocumentBuilder();
