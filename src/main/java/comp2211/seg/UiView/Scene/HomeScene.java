@@ -1,34 +1,24 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.App;
-import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.Runway;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Set;
-import java.util.function.Consumer;
 
 /**
  * A concrete implementation of the SceneAbstract class representing the home scene of the application.
@@ -144,27 +134,31 @@ public class HomeScene extends SceneAbstract{
 
     Button startApplication = new Button("Start Application");
     startApplication.setOnMousePressed(this::startApplication);
-    Button importAirport = new Button("Import Airport");
+    Button importAirportWithObstacle = new Button("Import Airport with Obstacle");
+    Button importAirportWithoutObs = new Button("Import Airport without Obstacle");
     Button newAirport = new Button("New Airport");
     //startApplication.setTextFill(Theme.fg);
     startApplication.getStyleClass().add("fg");
     //startApplication.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     startApplication.getStyleClass().add("focusedBG");
     startApplication.getStyleClass().add("font");
-    //importAirport.setTextFill(Theme.fg);
-    importAirport.getStyleClass().add("fg");
-    //importAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
-    importAirport.getStyleClass().add("focusedBG");
-    importAirport.getStyleClass().add("font");
+    //importAirportWithObstacle.setTextFill(Theme.fg);
+    importAirportWithObstacle.getStyleClass().add("fg");
+    //importAirportWithObstacle.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    importAirportWithObstacle.getStyleClass().add("focusedBG");
+    importAirportWithObstacle.getStyleClass().add("font");
+    importAirportWithoutObs.getStyleClass().add("focusedBG");
+    importAirportWithoutObs.getStyleClass().add("font");
     //newAirport.setTextFill(Theme.fg);
     newAirport.getStyleClass().add("fg");
     //newAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     newAirport.getStyleClass().add("focusedBG");
     newAirport.getStyleClass().add("fontsmall");
 
-    //importAirport.setDisable(true);
+    //importAirportWithObstacle.setDisable(true);
     // Import Airport
-    importAirport.setOnAction(e -> importAirportButtonEvent());
+    importAirportWithObstacle.setOnAction(e -> importAirportWithObstacleButtonEvent());
+    importAirportWithoutObs.setOnAction(e -> importAirportNoObsEvent());
 
     newAirport.setDisable(true);
 
@@ -187,7 +181,7 @@ public class HomeScene extends SceneAbstract{
 
     buttons.addColumn(0,airportText,runwayText);
     buttons.addColumn(1,airports, runways, startApplication);
-    buttons.addColumn(2,importAirport);
+    buttons.addColumn(2,importAirportWithObstacle, importAirportWithoutObs);
 
     ColumnConstraints ccx = new ColumnConstraints();
     ccx.setPercentWidth(20);
@@ -203,8 +197,8 @@ public class HomeScene extends SceneAbstract{
     runways.minWidthProperty().bind(airports.widthProperty());
     startApplication.maxWidthProperty().bind(airports.widthProperty());
     startApplication.minWidthProperty().bind(airports.widthProperty());
-    importAirport.maxWidthProperty().bind(airports.widthProperty());
-    importAirport.minWidthProperty().bind(airports.widthProperty());
+    importAirportWithObstacle.maxWidthProperty().bind(airports.widthProperty());
+    importAirportWithObstacle.minWidthProperty().bind(airports.widthProperty());
     HBox buttonsPane = new HBox(buttons);
     VBox buttonsPane2 = new VBox(buttonsPane);
 

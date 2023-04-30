@@ -11,8 +11,13 @@ import java.util.ArrayList;
  */
 public class Airport {
 
+    /**
+     * The constant logger.
+     */
     private static final Logger logger = LogManager.getLogger(Airport.class);
-    /** The list of runways at the airport. */
+    /**
+     * The list of runways at the airport.
+     */
     private ArrayList<Runway> runways;
     /**
      * The name of the airport.
@@ -38,6 +43,20 @@ public class Airport {
     }
 
 
+    /**
+     * Instantiates a new Airport.
+     *
+     * @param name        the name
+     * @param designators the designators
+     * @param leftTora    the left tora
+     * @param leftToda    the left toda
+     * @param leftLDA     the left lda
+     * @param leftASDA    the left asda
+     * @param rightTora   the right tora
+     * @param rightToda   the right toda
+     * @param rightLDA    the right lda
+     * @param rightASDA   the right asda
+     */
     public Airport(String name, String designators, double leftTora, double leftToda, double leftLDA, double leftASDA, double rightTora, double rightToda, double rightLDA, double rightASDA) {
 
         runways = new ArrayList<>();
@@ -45,6 +64,11 @@ public class Airport {
         addRunway(new Runway(designators, leftTora, leftToda, leftLDA, leftASDA, rightTora, rightToda, rightLDA, rightASDA));
     }
 
+    /**
+     * To string string.
+     *
+     * @return the string
+     */
     public String toString(){
         return name;
     }

@@ -19,7 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * The type Runway test.
  */
-class RunwayTest {
+public class RunwayTest {
+
+    // TODO: Re-do all tests properly
 
     private static final Logger logger = LogManager.getLogger(RunwayTest.class);
 

@@ -87,9 +87,12 @@ public class AppWindow {
         //Theme.makeDark();
 
         airport = airports.get(0);
+        logger.info("airport: " + airport);
 
         logger.info("gets runway object");
         runway = airport.getRunways().get(0);
+        logger.info("runways of " + airport + " are " + runway);
+        logger.info("runways of " + airport + " are " + runway.getRunwayDesignatorRight());
         // Setup appWindow
         setupStage();
         startHomeScene();
