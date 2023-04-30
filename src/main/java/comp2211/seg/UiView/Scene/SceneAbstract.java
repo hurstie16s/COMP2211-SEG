@@ -148,7 +148,7 @@ public abstract class SceneAbstract extends Scene {
     MenuItem darkStyle = new MenuItem("Dark Theme");
     MenuItem lightStyle = new MenuItem("Light Theme");
     MenuItem blueYellowCBStyle = new MenuItem("Tritanopia Theme");
-    MenuItem redGreenCBStyle = new MenuItem("Deuteranomaly Theme");
+    MenuItem redGreenCBStyle = new MenuItem("Deuteranopia Theme");
     themeMenu.getItems().addAll(darkStyle,lightStyle, blueYellowCBStyle, redGreenCBStyle);
     optionsMenu.getItems().add(themeMenu);
 
