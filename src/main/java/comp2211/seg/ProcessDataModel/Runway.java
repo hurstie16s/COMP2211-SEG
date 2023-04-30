@@ -230,7 +230,7 @@ public class Runway extends RunwayValues{
         runwayObstacle.lengthProperty().set(obstacleToAdd.lengthProperty().get());
         runwayObstacle.widthProperty().set(obstacleToAdd.widthProperty().get());
         runwayObstacle.distFromThresholdProperty().set(obstacleToAdd.distFromThresholdProperty().get());
-        hasRunwayObstacle.set(false); // Listener will call recalculate
+        hasRunwayObstacle.set(true); // Listener will call recalculate
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
         logChange("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
 
