@@ -2,8 +2,6 @@ package comp2211.seg.UiView.Scene.RunwayComponents;
 
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.ProcessDataModel.Obstacle;
-import comp2211.seg.UiView.Scene.InputScene;
-import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.NumberBinding;
@@ -56,12 +54,17 @@ public class Slope extends MeshView {
     /**
      * Adds a triangular prism object to the runway scene.
      *
-     * @param appWindow  the application window
-     * @param y         the height above the runway
-     * @param w         the width of the runway
-     * @param h         the height of the object
-     * @param color     the colour of the object
-     * @param direction the direction the ramp is facing
+     * @param appWindow         the application window
+     * @param x                 the x
+     * @param y                 the height above the runway
+     * @param z                 the z
+     * @param w                 the width of the runway
+     * @param h                 the height of the object
+     * @param color             the colour of the object
+     * @param direction         the direction the ramp is facing
+     * @param scaleFactor       the scale factor
+     * @param scaleFactorHeight the scale factor height
+     * @param scaleFactorDepth  the scale factor depth
      */
     public Slope(AppWindow appWindow, DoubleBinding x, DoubleBinding y, DoubleBinding z, DoubleBinding w, DoubleBinding h, Color color, SimpleBooleanProperty direction, SimpleDoubleProperty scaleFactor, SimpleDoubleProperty scaleFactorHeight, SimpleDoubleProperty scaleFactorDepth){
         this.scaleFactor = scaleFactor;
@@ -75,8 +78,8 @@ public class Slope extends MeshView {
 
         front.bind(y.multiply(scaleFactorHeight).add(w.multiply(scaleFactorHeight).divide(2)));
         back.bind(y.multiply(scaleFactorHeight).subtract(w.multiply(scaleFactorHeight).divide(2)));
-        start.bind((Bindings.when(direction).then(x.add(obstacle.distFromThresholdProperty()).subtract(obstacle.widthProperty().divide(2))).otherwise(x.add(obstacle.distFromThresholdProperty()).add(obstacle.widthProperty().divide(2))).multiply(scaleFactor)));
-        NumberBinding difference = Bindings.when(direction).then(obstacle.heightProperty().multiply(-50).add(obstacle.widthProperty().divide(2))).otherwise(obstacle.heightProperty().multiply(50).subtract(obstacle.widthProperty().divide(2)));
+        start.bind((Bindings.when(direction).then(x.add(obstacle.distFromThresholdProperty()).subtract(obstacle.lengthProperty().divide(2))).otherwise(x.add(obstacle.distFromThresholdProperty()).add(obstacle.lengthProperty().divide(2))).multiply(scaleFactor)));
+        NumberBinding difference = Bindings.when(direction).then(obstacle.heightProperty().multiply(-50).add(obstacle.lengthProperty().divide(2))).otherwise(obstacle.heightProperty().multiply(50).subtract(obstacle.lengthProperty().divide(2)));
         NumberBinding change = start.add(Bindings.when(direction.not()).then(Bindings.when(Bindings.lessThan(240, difference)).then(difference).otherwise(240)).otherwise(Bindings.when(Bindings.greaterThan(-240, difference)).then(difference).otherwise(-240)).multiply(scaleFactor));
         end.bind(Bindings.when(Bindings.lessThan(appWindow.runway.runwayLengthProperty().divide(2).multiply(scaleFactor),change)).then(start).otherwise(Bindings.when(Bindings.greaterThan(appWindow.runway.runwayLengthProperty().divide(-2).multiply(scaleFactor),change)).then(start).otherwise(change)));
         difference.addListener(new ChangeListener<Number>() {
@@ -85,8 +88,8 @@ public class Slope extends MeshView {
                 logger.info(t1);
             }
         });
-        bottom.bind(z.multiply(scaleFactorDepth).multiply(-1));
-        top.bind(h.add(z).multiply(scaleFactorDepth).multiply(-1));
+        bottom.bind(z.multiply(scaleFactorDepth).multiply(-1).subtract(0.1));
+        top.bind(h.add(z).multiply(scaleFactorDepth).multiply(-1).subtract(0.1));
         for (Property prop: new Property[] {
                 front,
                 back,
@@ -111,6 +114,10 @@ public class Slope extends MeshView {
     public void makePrism(float [] coords, int[] faces){
         TriangleMesh mesh = new TriangleMesh();
         mesh.getPoints().addAll(coords);
+        int faceSmoothingGroups[] = {
+                0, 0, 0, 0, 0, 0, 0, 0
+        };
+        mesh.getFaceSmoothingGroups().addAll(faceSmoothingGroups);
         mesh.getFaces().addAll(faces);
         mesh.getTexCoords().setAll(1,1,
                 1,1,
@@ -127,22 +134,42 @@ public class Slope extends MeshView {
      * triangular prism MeshView object with the updated vertices and faces.
      */
     public void redraw(){
-        makePrism(new float[]{
-                start.get(), front.get(), bottom.get(),
-                end.get(), front.get(), bottom.get(),
-                start.get(), front.get(), top.get(),
-                start.get(), back.get(), bottom.get(),
-                end.get(), back.get(), bottom.get(),
-                start.get(), back.get(), top.get()
-        }, new int[]{
-                0, 0, 2, 0, 1, 0,
-                3, 0, 4, 0, 5, 0,
-                0, 0, 4, 0, 3, 0,
-                0, 0, 1, 0, 4, 0,
-                0, 0, 3, 0, 5, 0,
-                0, 0, 5, 0, 2, 0,
-                1, 0, 5, 0, 4, 0,
-                1, 0, 2, 0, 5, 0,
-        });
+        if (!direction.get()) {
+            makePrism(new float[]{
+                    start.get(), front.get(), bottom.get(),
+                    end.get(), front.get(), bottom.get(),
+                    start.get(), front.get(), top.get(),
+                    start.get(), back.get(), bottom.get(),
+                    end.get(), back.get(), bottom.get(),
+                    start.get(), back.get(), top.get()
+            }, new int[]{
+                    2, 0, 0, 0, 1, 0,
+                    4, 0, 3, 0, 5, 0,
+                    4, 0, 0, 0, 3, 0,
+                    1, 0, 0, 0, 4, 0,
+                    3, 0, 0, 0, 5, 0,
+                    5, 0, 0, 0, 2, 0,
+                    5, 0, 1, 0, 4, 0,
+                    2, 0, 1, 0, 5, 0,
+            });
+        }else {
+            makePrism(new float[]{
+                    start.get(), front.get(), bottom.get(),
+                    end.get(), front.get(), bottom.get(),
+                    start.get(), front.get(), top.get(),
+                    start.get(), back.get(), bottom.get(),
+                    end.get(), back.get(), bottom.get(),
+                    start.get(), back.get(), top.get()
+            }, new int[]{
+                    2, 0, 1, 0, 0, 0,
+                    4, 0, 5, 0, 3, 0,
+                    4, 0, 3, 0, 0, 0,
+                    1, 0, 4, 0, 0, 0,
+                    3, 0, 5, 0, 0, 0,
+                    5, 0, 2, 0, 0, 0,
+                    5, 0, 4, 0, 1, 0,
+                    2, 0, 5, 0, 1, 0,
+            });
+        }
     }
 }

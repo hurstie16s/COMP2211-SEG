@@ -3,7 +3,9 @@ package comp2211.seg.UiView.Overlay;
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.UiView.Scene.RunwayScene;
+import comp2211.seg.UiView.Scene.Utilities.CssColorParser;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -15,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 
@@ -24,22 +27,24 @@ import javafx.scene.transform.Rotate;
  */
 public class RunwayLabel extends Group {
     private final RunwayScene scene;
-    private final boolean direction;
-    private final String name;
+    private boolean direction;
+    private String name;
     private Rotate xRotate;
     private Rotate yRotate;
     private Rotate zRotate;
     private Text label;
+
     /**
      * Constructs a new RunwayLabel with the specified name, color, x-offset, y-offset, length, scene, and direction.
      *
-     * @param name      The name of the runway.
-     * @param color     The color of the label and line.
-     * @param xOffset   The x-offset of the label.
-     * @param yOffset   The y-offset of the label.
-     * @param length    The length of the line.
-     * @param scene     The RunwayScene to which the label belongs.
-     * @param direction The direction of the runway.
+     * @param name       The name of the runway.
+     * @param color      The color of the label and line.
+     * @param xOffset    The x-offset of the label.
+     * @param yOffset    The y-offset of the label.
+     * @param length     The length of the line.
+     * @param scene      The RunwayScene to which the label belongs.
+     * @param direction  The direction of the runway.
+     * @param visibility the visibility
      */
     public RunwayLabel(String name, Color color, DoubleBinding xOffset, double yOffset, DoubleBinding length, RunwayScene scene, boolean direction, SimpleBooleanProperty visibility) {
         this.scene = scene;
@@ -56,15 +61,25 @@ public class RunwayLabel extends Group {
 
         Group labelRotateGroup = new Group();
         label = new Text(name);
-        label.textProperty().bind((new SimpleStringProperty(name)).concat(" (").concat(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(length.asString()).otherwise(length.multiply(-1).asString())).concat(scene.appWindow.runway.unitsProperty()).concat(")"));
-        label.setFill(color);
-        label.setFont(Theme.font);
+        length.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                label.textProperty().bind((new SimpleStringProperty(name)).concat(" (").concat(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(Long.toString(Math.round(length.get()))).otherwise(Long.toString(Math.round(length.get()*-1)))).concat(scene.appWindow.runway.unitsProperty()).concat(")"));
+            }
+        });
+        label.textProperty().bind((new SimpleStringProperty(name)).concat(" (").concat(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(Long.toString(Math.round(length.get()))).otherwise(Long.toString(Math.round(length.get()*-1)))).concat(scene.appWindow.runway.unitsProperty()).concat(")"));
+        //label.setFill(Theme.getLabelFg);
+        label.getStyleClass().clear();
+        label.getStyleClass().add("runwaylabelfg");
+        label.setFill(Theme.getLabelFg());
+        //label.setFont(Theme.font);
+        label.getStyleClass().add("font");
         if (direction) {
             label.yProperty().set(label.getBoundsInLocal().getHeight() / 2 + 8);
-            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 + 5);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2);
         } else {
             label.yProperty().set(-5);
-            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 - 5);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 - 10);
         }
 
         labelRotateGroup.getTransforms().addAll(
@@ -86,7 +101,7 @@ public class RunwayLabel extends Group {
         labelRotateGroup.translateYProperty().bind(Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(-0.5 * yOffset));
         labelRotateGroup.translateZProperty().bind(Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(-0.5 * yOffset));
 
-        Node leftHorizontal = makeLineHorizontal(
+        Node leftHorizontal = makeArrow(
             xOffset,
             length.divide(1),
                 (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
@@ -98,14 +113,135 @@ public class RunwayLabel extends Group {
                 xOffset,
                 (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
-                color
+                Theme.getLabelFg()
         );
 
         Group rightVertical = makeLineVertical(
                 xOffset.subtract(length),
                 (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
                 1,
+                Theme.getLabelFg()
+
+        );
+
+        leftHorizontal.getTransforms().add(xRotate);
+        getChildren().addAll(labelRotateGroup, leftHorizontal, leftVertical, rightVertical);
+
+
+
+
+
+        /*
+        Node leftHorizontal = makeLineHorizontal(
+                xOffset,
+                length.divide(2).subtract(new SimpleDoubleProperty(label.getBoundsInLocal().getWidth()/2).divide(scene.scaleFactorProperty())),
+                scene.heightProperty().multiply(0.5*yOffset).multiply(-1),
+                2,
                 color
+        );
+
+        Node rightHorizontal = makeLineHorizontal(
+                xOffset.add(length.divide(2).add(new SimpleDoubleProperty(label.getBoundsInLocal().getWidth()/2).divide(scene.scaleFactorProperty()))),
+                length.divide(2).subtract(new SimpleDoubleProperty(label.getBoundsInLocal().getWidth()/2).divide(scene.scaleFactorProperty())),
+                scene.heightProperty().multiply(0.5*yOffset).multiply(-1),
+                2,
+                color
+
+
+        rightHorizontal.getTransforms().add(xRotate);
+        getChildren().addAll(labelRotateGroup,leftHorizontal,rightHorizontal,leftVertical,rightVertical);
+        );
+         */
+    }    /**
+     * Constructs a new RunwayLabel with the specified name, color, x-offset, y-offset, length, scene, and direction.
+     *
+     * @param color      The color of the label and line.
+     * @param xOffset    The x-offset of the label.
+     * @param yOffset    The y-offset of the label.
+     * @param length     The length of the line.
+     * @param scene      The RunwayScene to which the label belongs.
+     * @param visibility the visibility
+     */
+    public RunwayLabel(Color color, DoubleBinding xOffset, double yOffset, DoubleBinding length, RunwayScene scene, BooleanBinding visibility) {
+        this.scene = scene;
+        this.visibleProperty().bind(visibility);
+        /**
+        visibleProperty().bind
+                (Bindings.and(
+                        Bindings.when(new SimpleBooleanProperty(direction))
+                        .then(Bindings.greaterThanOrEqual(0, length))
+                        .otherwise(Bindings.lessThanOrEqual(0, length)),
+                        visibility));
+         */
+
+        Group labelRotateGroup = new Group();
+        label = new Text();
+
+
+        length.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                label.textProperty().bind(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(Long.toString(Math.round(length.get()))).otherwise(Long.toString(Math.round(length.get()*-1))).concat(scene.appWindow.runway.unitsProperty()));
+            }
+        });
+        label.textProperty().bind(Bindings.when(Bindings.lessThanOrEqual(0, length)).then(Long.toString(Math.round(length.get()))).otherwise(Long.toString(Math.round(length.get()*-1))).concat(scene.appWindow.runway.unitsProperty()));
+        //label.setFill(Theme.getLabelFg());
+        label.getStyleClass().clear();
+        label.getStyleClass().add("runwaylabelfg");
+        //label.setFont(Theme.font);
+        label.getStyleClass().add("font");
+        if (direction) {
+            label.yProperty().set(label.getBoundsInLocal().getHeight() / 2 + 8);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2);
+        } else {
+            label.yProperty().set(-5);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 - 10);
+        }
+
+        labelRotateGroup.getTransforms().addAll(
+                xRotate = new Rotate(0, Rotate.X_AXIS),
+                yRotate = new Rotate(0, Rotate.Y_AXIS),
+                zRotate = new Rotate(0, Rotate.Z_AXIS)
+        );
+        scene.angleXProperty().addListener((observableValue, number, t1) -> {setAngle();});
+        scene.angleYProperty().addListener((observableValue, number, t1) -> {setAngle();});
+        scene.angleZProperty().addListener((observableValue, number, t1) -> {setAngle();});
+        scene.portrait.addListener((observableValue, number, t1) -> {setAngle();});
+
+        labelRotateGroup.getChildren().add(label);
+        if (direction) {
+            labelRotateGroup.translateXProperty().bind(xOffset.multiply(scene.scaleFactorProperty()).add(label.getBoundsInLocal().getWidth() / 2));
+        } else {
+            labelRotateGroup.translateXProperty().bind(xOffset.multiply(scene.scaleFactorProperty()).subtract(label.getBoundsInLocal().getWidth() / 2));
+        }
+        labelRotateGroup.translateYProperty().bind(Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(-0.5 * yOffset));
+        labelRotateGroup.translateZProperty().bind(Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(-0.5 * yOffset));
+
+
+        Node leftHorizontal = makeLineHorizontal(
+            xOffset,
+            length.divide(1),
+                (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
+            2,
+            color
+        );
+
+
+
+        Group leftVertical = makeLineVertical(
+                xOffset,
+                (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
+                1,
+                Theme.getLabelFg()
+
+        );
+
+        Group rightVertical = makeLineVertical(
+                xOffset.subtract(length),
+                (DoubleBinding) Bindings.when(scene.portrait).then(scene.mainPane.widthProperty()).otherwise(scene.mainPane.heightProperty()).multiply(0.5 * yOffset).multiply(-1),
+                1,
+                Theme.getLabelFg()
+
         );
 
         leftHorizontal.getTransforms().add(xRotate);
@@ -137,6 +273,10 @@ public class RunwayLabel extends Group {
         );
          */
     }
+
+    /**
+     * Set angle.
+     */
     public void setAngle(){
 
 
@@ -153,17 +293,18 @@ public class RunwayLabel extends Group {
 
         }
     }
+
     /**
      * Creates a horizontal line in a 3D space, represented by a Box object.
      *
-     * @param start The binding for the starting position of the line on the x-axis.
-     * @param length The binding for the length of the line on the x-axis.
-     * @param height The binding for the height of the line on the y and z-axis.
+     * @param start     The binding for the starting position of the line on the x-axis.
+     * @param length    The binding for the length of the line on the x-axis.
+     * @param height    The binding for the height of the line on the y and z-axis.
      * @param thickness The thickness of the line on the y and z-axis.
-     * @param color The color of the line.
+     * @param color     The color of the line.
      * @return A Box object representing the horizontal line.
      */
-    public Node makeLineHorizontal(DoubleBinding start, DoubleBinding length, DoubleBinding height, double thickness, Color color){
+    public Node makeArrow(DoubleBinding start, DoubleBinding length, DoubleBinding height, double thickness, Color color){
         RunwayArrow arrow = new RunwayArrow(color,scene.scaleFactorProperty(), length,direction);
         arrow.translateXProperty().bind(start.subtract(length).multiply(scene.scaleFactorProperty()));
 
@@ -173,14 +314,40 @@ public class RunwayLabel extends Group {
         arrow.translateZProperty().bind(height);
         return arrow;
     }
+    /**
+     * Creates a horizontal line in a 3D space, represented by a Box object.
+     *
+     * @param start     The binding for the starting position of the line on the x-axis.
+     * @param length    The binding for the length of the line on the x-axis.
+     * @param height    The binding for the height of the line on the y and z-axis.
+     * @param thickness The thickness of the line on the y and z-axis.
+     * @param color     The color of the line.
+     * @return A Box object representing the horizontal line.
+     */
+    public Node makeLineHorizontal(DoubleBinding start, DoubleBinding length, DoubleBinding height, double thickness, Color color){
+        Line line = new Line();
+        line.startXProperty().set(0);
+        line.setStrokeWidth(3);
+        line.endXProperty().bind(length.multiply(scene.scaleFactorProperty()));
+        line.setFill(color);
+        line.setStroke(color);
+
+        line.translateXProperty().bind(start.subtract(length).multiply(scene.scaleFactorProperty()));
+
+        //arrow.labelText= name;
+        //arrow.buildArrowLabel();
+        line.translateYProperty().bind(height);
+        line.translateZProperty().bind(height);
+        return line;
+    }
 
     /**
      * Creates a vertical line in a 3D space, represented by a Group object containing a rotated Box.
      *
-     * @param start The binding for the starting position of the line on the x-axis.
-     * @param height The binding for the height of the line on the y-axis.
+     * @param start     The binding for the starting position of the line on the x-axis.
+     * @param height    The binding for the height of the line on the y-axis.
      * @param thickness The thickness of the line on the x and y-axis.
-     * @param color The color of the line.
+     * @param color     The color of the line.
      * @return A Group object containing a rotated Box representing the vertical line.
      */
     public Group makeLineVertical(DoubleBinding start, DoubleBinding height, double thickness, Color color){

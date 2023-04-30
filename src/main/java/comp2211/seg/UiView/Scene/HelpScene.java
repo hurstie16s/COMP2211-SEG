@@ -1,7 +1,10 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
+import comp2211.seg.Controller.Stage.Theme;
+import comp2211.seg.UiView.Scene.Utilities.CssColorParser;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,15 +18,22 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
+/**
+ * The type Help scene.
+ */
 public class HelpScene extends Scene {
 
     private static final Logger logger = LogManager.getLogger(HelpScene.class);
     private final AppWindow appWindow;
+    /**
+     * The constant visible.
+     */
+    public static SimpleBooleanProperty visible = new SimpleBooleanProperty(false);
     private final VBox root;
-    private boolean visible = true;
 
     /**
      * Constructor to create a SceneAbstract object.
+     *
      * @param root      the root pane of the scene
      * @param appWindow the application window of the scene
      */
@@ -35,6 +45,13 @@ public class HelpScene extends Scene {
         root.setBackground(new Background(new BackgroundFill(Color.rgb(21,21,21,0.8),null,null)));
 
     }
+
+    /**
+     * Make key.
+     *
+     * @param key  the key
+     * @param desc the desc
+     */
     public void makeKey(String key, String desc){
         HBox box = new HBox();
         StackPane imagePane = new StackPane();
@@ -60,6 +77,13 @@ public class HelpScene extends Scene {
         root.getChildren().add(box);
         root.setMaxHeight(24*root.getChildren().size());
     }
+
+    /**
+     * Make colour.
+     *
+     * @param colour the colour
+     * @param desc   the desc
+     */
     public void makeColour(Color colour, String desc){
 
         HBox box = new HBox();
@@ -82,6 +106,12 @@ public class HelpScene extends Scene {
         root.getChildren().add(box);
         root.setMaxHeight(24*root.getChildren().size());
     }
+
+    /**
+     * Make text.
+     *
+     * @param desc the desc
+     */
     public void makeText(String desc){
 
         TextFlow box = new TextFlow();
@@ -95,42 +125,66 @@ public class HelpScene extends Scene {
         root.getChildren().add(box);
         root.setMaxHeight(24*root.getChildren().size());
     }
-    public void toggleHelp(String className){
+
+    /**
+     * Runway labels.
+     */
+    public void runwayLabels() {
+        makeColour(Theme.getRunway(), "Runway(RWY)");
+        makeColour(Theme.getStopway(), "Stopway(SWY)");
+        makeColour(Theme.getClearway(), "Clearway(CWY)");
+        makeColour(Theme.getResa(), "RESA");
+        makeColour(Theme.getLda(), "LDA");
+        makeColour(Theme.getTora(), "TORA");
+        makeColour(Theme.getAsda(), "ASDA");
+        makeColour(Theme.getToda(), "TODA");
+        makeColour(Theme.getObstacle(),"Obstacle");
+        makeColour(Theme.getSlope(), "TOCS/ALS Slope");
+        makeColour(Theme.getStripEnd(), "Strip End");
+        makeColour(Theme.getBlastAllowance(), "Blast Allowance");
+        makeColour(Theme.getCga(), "Cleared & Graded Area");
+        makeColour(Theme.getPhysicalResa(), "Physical Resa");
+
+    }
+
+    /**
+     * Toggle help.
+     *
+     * @param className the class name
+     */
+    public void toggleHelp(String className)  {
         //logger.info(className);
-        if (!visible) {
+        if (!visible.get()) {
             switch (className) {
                 case "comp2211.seg.UiView.Scene.RunwayScene":
-                    makeKey("Esc", "Navigate back to home screen");
-                    makeKey("T", "Toggle between top and side views");
-                    break;
                 case "comp2211.seg.UiView.Scene.RunwaySceneLoader":
+                    makeKey("H", "Toggle the help menu");
                     makeKey("Esc", "Navigate back to home screen");
                     makeKey("T", "Toggle between top and side views");
-                    makeColour(Color.DARKRED,"Obstacle");
-                    makeColour(Color.DARKCYAN,"Approach/Take off Slope");
-                    makeColour(Color.BLUE,"Cleared and graded area");
-                    makeColour(Color.DARKGOLDENROD,"Clearway");
-                    makeColour(Color.VIOLET,"Stopway");
-                    makeColour(Color.SADDLEBROWN,"RESA");
-                    makeColour(Color.GREY,"Runway");
+                    makeKey("W", "Pan view up");
+                    makeKey("S", "Pan view down");
+                    makeKey("A", "Pan view left");
+                    makeKey("D", "Pan view right");
+                    runwayLabels();
                     break;
                 case "comp2211.seg.UiView.Scene.MainScene":
+                    makeKey("H", "Toggle the help menu");
                     makeKey("Esc", "Exit application");
-                    makeColour(Color.DARKRED,"Obstacle");
-                    makeColour(Color.BLUE,"Cleared and graded area");
-                    makeColour(Color.DARKCYAN,"Approach/Take off Slope");
-                    makeColour(Color.DARKGOLDENROD,"Clearway");
-                    makeColour(Color.VIOLET,"Stopway");
-                    makeColour(Color.SADDLEBROWN,"RESA");
-                    makeColour(Color.GREY,"Runway");
-                    makeText("The square in the top left corner shows the scale of the runway (10x100".concat(appWindow.runway.getUnits()).concat(")"));
+                    runwayLabels();
+                    break;
+                case "comp2211.seg.UiView.Scene.BaseScene":
+                    makeKey("H", "Toggle the help menu");
+                    makeKey("Esc", "Navigate back to entry screen");
+                    runwayLabels();
+                    break;
+                case "comp2211.seg.UiView.Scene.HomeScene":
+                    makeKey("Esc", "Exit application");
                     break;
 
             }
         }else {
             root.getChildren().removeAll(root.getChildren());
-            makeKey("H", "Toggle the help menu");
         }
-        visible = !visible;
+        visible.set(visible.not().get());
     }
 }

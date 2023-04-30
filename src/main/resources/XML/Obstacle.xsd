@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="Obstacle" type="ObstacleType"/>
+    <xs:complexType name="ObstacleType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="Obstacle_Designator"/>
+            <xs:element type="xs:double" name="Height"/>
+            <xs:element type="xs:double" name="Length"/>
+            <xs:element type="xs:double" name="Width"/>
+            <xs:element type="xs:string" name="Distance_From_Threshold"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Obstacle>
+    <Obstacle_Designator>VOID</Obstacle_Designator>
+    <Height>0.0</Height>
+    <Length>100.0</Length>
+    <Width>60.0</Width>
+    <Distance_From_Threshold>0.0</Distance_From_Threshold>
+</Obstacle>

@@ -2,12 +2,14 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
+import comp2211.seg.Controller.Stage.Settings;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
-import comp2211.seg.Controller.Stage.Theme;
+import comp2211.seg.ProcessDataModel.Obstacle;
+import comp2211.seg.ProcessDataModel.Runway;
+import comp2211.seg.UiView.Scene.SceneComponents.*;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -15,16 +17,23 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -37,14 +46,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+
+/**
+ * The type Base scene.
+ */
 public class BaseScene extends SceneAbstract implements GlobalVariables{
-    private Button airportButton;
-    private Button obstacleButton;
-    private HBox topbar;
-    private VBox layout;
+
     //logger for BaseScene
     private static final Logger logger = LogManager.getLogger(BaseScene.class);
+    private static TabLayout tabLayout = null;
+    public static ArrayList<TabLayout> tabs = new ArrayList<>();
+    private boolean overlay = false;
 
+    public VBox topView;
+    public Scene scene;
 
 
     /**
@@ -52,35 +67,173 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
      *
      * @param root      the root pane of the scene
      * @param appWindow the application window of the scene
-     * @param width
-     * @param height
+     * @param width     the width
+     * @param height    the height
      */
-    public BaseScene(Pane root, AppWindow appWindow, double width, double height) {
+    public BaseScene(Pane root, AppWindow appWindow, SimpleDoubleProperty width, SimpleDoubleProperty height) {
         super(root, appWindow, width, height);
+        this.scene = root.getScene();
     }
 
     @Override
     public void initialise() {
 
+        setOnKeyPressed((keyEvent -> {
+            switch (keyEvent.getCode()){
+                case H:
+                    help.toggleHelp(this.getClass().getCanonicalName());
+                    break;
+                case ESCAPE:
+                    Platform.runLater(appWindow::startHomeScene);
+            }
+        }));
+        setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                try {
+                    if (mouseEvent.getPickResult().getIntersectedNode().getParent() instanceof TabButton){
+                        TabLayout.oldTabButton = (TabButton) mouseEvent.getPickResult().getIntersectedNode().getParent();
+                        overlay = false;
+                    } else {
+                        TabLayout.oldTabButton = null;
+                    }
+                } catch (Exception e) {
+                    TabLayout.oldTabButton = null;
+                }
+            }
+        });
+        setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (TabLayout.oldTabButton != null && !overlay) {
+                    overlay = true;
+                    for (TabLayout tab:tabs) {
+                        tab.renderOverlay();
+                    }
+                }
+            }
+        });
+        setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (TabLayout.oldTabButton != null) {
+
+                    for (TabLayout tab:tabs) {
+                        tab.clearOverlay();
+                    }
+                    try {
+                        Node p = mouseEvent.getPickResult().getIntersectedNode();
+                        while ((p.getParent() != null) && !((p instanceof TabLayout) || (p instanceof TabButton))) {
+                            p = p.getParent();
+                            logger.info(p.getClass().getName());
+                        }
+                        if (p instanceof TabLayout) {
+                            Parent gp = p.getParent();
+                            while (gp != null) {
+                                if (gp.equals(TabLayout.oldTabButton.tab.getValue())) {
+                                    throw new RuntimeException("Attempted place tab inside itself");
+                                }
+                                gp = gp.getParent();
+                            }
+                            if (TabLayout.oldTabButton != null) {
+                                if ((mouseEvent.getSceneX() - ((TabLayout) p).contents.localToScene(((TabLayout) p).contents.getLayoutBounds()).getMinX()) / ((TabLayout) p).contents.getBoundsInLocal().getWidth() < (2/3.0) &&
+                                        (mouseEvent.getSceneY() - ((TabLayout) p).contents.localToScene(((TabLayout) p).contents.getLayoutBounds()).getMinY()) / ((TabLayout) p).contents.getBoundsInLocal().getHeight() < (2/3.0)) {
+                                    ((TabLayout) p).makeTab(TabLayout.oldTabButton.tab);
+                                } else if ((mouseEvent.getSceneX() - ((TabLayout) p).contents.localToScene(((TabLayout) p).contents.getLayoutBounds()).getMinX()) / ((TabLayout) p).contents.getBoundsInLocal().getWidth() <
+                                        (mouseEvent.getSceneY() - ((TabLayout) p).contents.localToScene(((TabLayout) p).contents.getLayoutBounds()).getMinY()) / ((TabLayout) p).contents.getBoundsInLocal().getHeight()){
+                                    // go Down
+                                    Pane pp = ((Pane) p.getParent());
+                                    int index = pp.getChildren().indexOf(p);
+                                    TabsPaneVertical tabsPane = new TabsPaneVertical((TabLayout) p,TabLayout.oldTabButton);
+                                    if (pp instanceof TabsPaneVertical){
+                                        ((TabsPaneVertical) pp).replace(index, tabsPane);
+                                    } else if (pp instanceof TabsPaneHorizontal) {
+                                        ((TabsPaneHorizontal) pp).replace(index, tabsPane);
+                                    }else {
+                                        pp.getChildren().add(tabsPane);
+
+                                    }
+
+
+                                } else {
+                                    // go Right
+                                    Pane pp = ((Pane) p.getParent());
+                                    int index = pp.getChildren().indexOf(p);
+                                    TabsPaneHorizontal tabsPane = new TabsPaneHorizontal((TabLayout) p,TabLayout.oldTabButton);
+                                    if (pp instanceof TabsPaneVertical){
+                                        ((TabsPaneVertical) pp).replace(index, tabsPane);
+                                    } else if (pp instanceof TabsPaneHorizontal) {
+                                        ((TabsPaneHorizontal) pp).replace(index, tabsPane);
+                                    }else {
+                                        pp.getChildren().add(tabsPane);
+                                    }
+                                }
+
+
+                                TabLayout.oldTabButton.tabLayout.removeTab(TabLayout.oldTabButton);
+                            }
+                        } else if (p instanceof TabButton) {
+                            if (TabLayout.oldTabButton.equals(p)) {
+                                ((TabButton) p).run();
+                            }
+                        }
+                    } catch (Exception ignored) {
+                    }
+                }
+                TabLayout.oldTabButton = null;
+            }
+        });
     }
+
 
     public void build()  {
         super.build();
-        root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+        //root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
+        root.getStyleClass().add("unfocusedBG");
         mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+        if (tabLayout == null) {
+            ArrayList<Pair<String, Pane>> tabs = new ArrayList<>();
+            tabs.add(new Pair<>("Airport Configuration", makeAirportConfig()));
 
-        ArrayList<Pair<String, Pane>> tabs = new ArrayList<>();
-        tabs.add(new Pair<>("Airport Configuration", makeAirportConfig()));
+            tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
+            //tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
+            tabLayout = new TabLayout(tabs, "unfocusedBG", "focusedBG");
 
+            //appWindow.startBaseScene();
+            //tabLayout.tabButtons.get(0).run();
+            //((TabLayout) ((TabsPaneVertical) ((TabsPaneHorizontal) tabLayout.contents.getChildren().get(0)).getChildren().get(0)).getChildren().get(0)).tabButtons.get(1).run();
+        }
+        for (TabLayout tab: tabs) {
+            tab.clearOverlay();
+        }
 
-        tabs.add(new Pair<>("Obstacle Configuration", makeObstacleConfig()));
-        TabLayout tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
-        mainPane.maxHeightProperty().bind(root.heightProperty());
-        mainPane.minHeightProperty().bind(root.heightProperty());
+        mainPane.maxHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
+        mainPane.minHeightProperty().bind(root.heightProperty().subtract(topMenu.heightProperty()));
         mainPane.maxWidthProperty().bind(root.widthProperty());
         mainPane.minWidthProperty().bind(root.widthProperty());
-        mainPane.getChildren().add(tabLayout);
+        TabsPaneVertical tabsPaneVertical = new TabsPaneVertical();
+        tabsPaneVertical.add(tabLayout);
+
+        tabsPaneVertical.maxHeightProperty().bind(mainPane.heightProperty());
+        tabsPaneVertical.minHeightProperty().bind(mainPane.heightProperty());
+        tabsPaneVertical.maxWidthProperty().bind(mainPane.widthProperty());
+        tabsPaneVertical.minWidthProperty().bind(mainPane.widthProperty());
+        mainPane.getChildren().add(tabsPaneVertical);
+        reset();
+        refresh();
+
     }
+
+
+    private Scene getScene() {
+        return this;
+    }
+
+    /**
+     * Make airport config pane.
+     *
+     * @return the pane
+     */
     public Pane makeAirportConfig() {
         //Aleks do stuff here
 
@@ -90,67 +243,149 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         VBox vBoxTable = new VBox();
         VBox.setMargin(vBoxTable,new Insets(150,20,100,20));//Top/Right/Bottom/Left
         //vBoxTable.getChildren().add(makeRunwayGridTable());
-        vBoxTable.getChildren().add(buildTableView(vBoxTable));
+        vBoxTable.getChildren().add(buildTableView());
         vBoxTable.maxWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
         vBoxTable.minWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
 
         //left menu
-        Button airportsTempButton = new Button("Airports");
-        Button runwaysTempButton = new Button("Runways");
-        VBox leftMenu = new VBox(airportsTempButton,runwaysTempButton);
-        VBox.setMargin(airportsTempButton,new Insets(30,20,20,20));
-        VBox.setMargin(runwaysTempButton,new Insets(10,20,20,20));
+        //top
+        ComboBox airportsCombo = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
+        //airportsCombo.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+        airportsCombo.getStyleClass().add("veryfocusedBG");
+        airportsCombo.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                appWindow.setAirport((Airport) t1);
+                if (! (o == null)) {
+                    if (!o.equals(t1)) {
+                        appWindow.startBaseScene();
+                    }
+                }
+            }
+        });
+        airportsCombo.valueProperty().set(appWindow.airport);
+        airportsCombo.getStyleClass().add("font");
+
+        Label airportsLabel = makeLabel("Airport");
+        airportsLabel.getStyleClass().add("font");
+        airportsLabel.setPrefWidth(80);
+        airportsLabel.setAlignment(Pos.CENTER_RIGHT);
+        HBox hBoxAirports = new HBox();
+        hBoxAirports.setAlignment(Pos.CENTER_LEFT);
+        hBoxAirports.getChildren().addAll(airportsLabel,airportsCombo);
+        HBox.setMargin(airportsCombo,new Insets(0,0,0,10));
+
+        //bottom
+
+        ComboBox runwaysCombo = new ComboBox(FXCollections.observableArrayList(appWindow.airport.getRunways())); //FXCollections.observableArrayList(appWindow.airport.getRunways()));
+        //runwaysCombo.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+        runwaysCombo.getStyleClass().add("veryfocusedBG");
+        runwaysCombo.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                appWindow.setRunway((Runway) t1);
+                if (! (o == null)) {
+                    if (!o.equals(t1)) {
+                        appWindow.startBaseScene();
+                    }
+                }
+            }
+        });
+        runwaysCombo.valueProperty().set(appWindow.runway);
+        runwaysCombo.getStyleClass().add("font");
+        Label runwaysLabel = makeLabel("Runway");
+        runwaysLabel.getStyleClass().add("font");
+        runwaysLabel.setPrefWidth(80);
+        runwaysLabel.setAlignment(Pos.CENTER_RIGHT);
+        HBox hBoxRunways = new HBox();
+        hBoxRunways.setAlignment(Pos.CENTER_LEFT);
+        hBoxRunways.getChildren().addAll(runwaysLabel,runwaysCombo);
+        HBox.setMargin(runwaysCombo,new Insets(0,0,0,10));
+        //left menu children
+        VBox leftMenu = new VBox(hBoxAirports,hBoxRunways);
+        VBox.setMargin(hBoxAirports,new Insets(30,20,20,20));
+        VBox.setMargin(hBoxRunways,new Insets(10,20,20,20));
 
         //right menu
         // Create image views for the icons
-        ImageView exportIcon = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/export.png")).toExternalForm()));
-        ImageView importIcon = new ImageView(new Image(Objects.requireNonNull(getClass()
-            .getResource("/images/import.png")).toExternalForm()));
+        ImageView exportIcon1 = new ImageView(new Image(Objects.requireNonNull(getClass()
+            .getResource("/images/exportT.png")).toExternalForm()));
+        ImageView importIcon1 = new ImageView(new Image(Objects.requireNonNull(getClass()
+            .getResource("/images/importT.png")).toExternalForm()));
+        ImageView exportIcon2 = new ImageView(new Image(Objects.requireNonNull(getClass()
+            .getResource("/images/exportT.png")).toExternalForm()));
+        ImageView importIcon2 = new ImageView(new Image(Objects.requireNonNull(getClass()
+            .getResource("/images/importT.png")).toExternalForm()));
 
         // Create the buttons and set their graphics
-        Button exportButton = new Button("Export Airport", exportIcon);
-        Button importButton = new Button("Import Airport", importIcon);
+        Button exportAirObsButton = new Button("Export Airport & Obstacle", exportIcon1);
+        Button importAirObsButton = new Button("Import Airport & Obstacle", importIcon1);
+        Button exportObstacle = new Button("Export Obstacle", exportIcon2);
+        Button importObstacle = new Button("Import Obstacle", importIcon2);
+
 
         //Button events
-        exportButton.setOnAction(e -> {
-            exportButtonEvent();
-        });
+        exportAirObsButton.setOnAction(e -> exportAirportButtonEvent());
+
+        exportObstacle.setOnAction(e -> exportObstacleButtonEvent());
+
+        importAirObsButton.setOnAction(e -> importAirportWithObstacleButtonEvent());
+
+        importObstacle.setOnAction(e -> importObstacleButtonEvent());
+
+
 
         // Set the size of the icon
-        exportIcon.setFitHeight(16);
-        exportIcon.setFitWidth(16);
-        importIcon.setFitHeight(16);
-        importIcon.setFitWidth(16);
+        exportIcon1.setFitHeight(16);
+        exportIcon1.setFitWidth(16);
+        importIcon1.setFitHeight(16);
+        importIcon1.setFitWidth(16);
+        exportIcon2.setFitHeight(16);
+        exportIcon2.setFitWidth(16);
+        importIcon2.setFitHeight(16);
+        importIcon2.setFitWidth(16);
 
-        VBox rightMenu = new VBox(exportButton, importButton);
-        VBox.setMargin(exportButton,new Insets(30,20,20,20));
-        VBox.setMargin(importButton,new Insets(10,20,20,20));
+
+        VBox rightMenuTop = new VBox(exportObstacle, importObstacle);
+        VBox.setMargin(exportObstacle,new Insets(30,20,20,20));
+        VBox.setMargin(importObstacle,new Insets(10,20,20,20));
+      VBox rightMenuBottom = new VBox(exportAirObsButton, importAirObsButton);
+      VBox.setMargin(exportAirObsButton,new Insets(30,20,20,20));
+      VBox.setMargin(importAirObsButton,new Insets(10,20,20,20));
+      HBox rightMenu = new HBox(rightMenuTop,rightMenuBottom);
         //Dark buttons style from css, can be done globally
         List<Button> darkButtons = new ArrayList<>();
-        darkButtons.add(airportsTempButton);
-        darkButtons.add(runwaysTempButton);
-        darkButtons.add(exportButton);
-        darkButtons.add(importButton);
+        darkButtons.add(exportObstacle);
+        darkButtons.add(importObstacle);
+      darkButtons.add(exportAirObsButton);
+      darkButtons.add(importAirObsButton);
+
 
         for (Button button : darkButtons) {
-            button.getStyleClass().add("button-dark");
+            //button.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+            button.getStyleClass().add("focusedBG");
+            button.getStyleClass().add("fg");
+            button.setCursor(Cursor.HAND);
         }
 
         HBox hBoxMenuButtons = new HBox();
         Region region = new Region();
         HBox.setHgrow(region,Priority.ALWAYS);
-        hBoxMenuButtons.getChildren().addAll(leftMenu,region,rightMenu);
+//        hBoxMenuButtons.getChildren().addAll(leftMenu,region,rightMenu);
+        hBoxMenuButtons.getChildren().addAll(leftMenu);
 
         vBoxAirportLayout.getChildren().addAll(hBoxMenuButtons,vBoxTable);
         //return vBox
         return vBoxAirportLayout;
     }
 
-    public void exportButtonEvent() {
+    //exporting the Airport with runways and no objects
+    public void exportAirportNoObsButtonEvent() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose file to export");
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml"));
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName("Airport");
         File file = fileChooser.showSaveDialog(new Stage());
 
         try {
@@ -164,8 +399,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 logger.info(file.getAbsolutePath());
             }
 
-            if (FileHandler.exportAirport(file, appWindow.airport)) {
-                FileHandler.exportAirport(file, appWindow.airport);
+            if (FileHandler.exportAirport(file, appWindow.airport, appWindow.runway.runwayObstacle)) {
+                FileHandler.exportAirport(file, appWindow.airport,appWindow.runway.runwayObstacle);
                 logger.info("Exporting Successful");
             } else {
                 logger.info("Exporting Airport failed");
@@ -177,7 +412,200 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         }
     }
 
-    public TableView<RunwayData> buildTableView(VBox container) {
+    public void exportAirportButtonEvent() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose file to export");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName("AirportWithObstacle");
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        try {
+            if (file == null) {
+                return;
+            }
+
+            if (!file.getName().contains(".xml")) {
+                logger.info("reached");
+                file = new File(file.getAbsolutePath() + ".xml");
+                logger.info(file.getAbsolutePath());
+            }
+
+            if (FileHandler.exportAirportAndOb(file, appWindow.airport, appWindow.runway.runwayObstacle)) {
+                FileHandler.exportAirportAndOb(file, appWindow.airport,appWindow.runway.runwayObstacle);
+                logger.info("Exporting Successful");
+            } else {
+                logger.info("Exporting Airport failed");
+            }
+        } catch (NullPointerException nullPointerException) {
+            logger.info("No airport initiated, hence: " +
+                    "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
+                    "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
+        }
+    }
+
+    public void exportObstacleButtonEvent() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose file to export");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML format(*.xml)","*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName("Obstacle");
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        try {
+            if (file == null) {
+                return;
+            }
+
+            if (!file.getName().contains(".xml")) {
+                logger.info("reached");
+                file = new File(file.getAbsolutePath() + ".xml");
+                logger.info(file.getAbsolutePath());
+            }
+
+            if (FileHandler.exportObstacle(file, appWindow.runway.runwayObstacle)) {
+                FileHandler.exportObstacle(file, appWindow.runway.runwayObstacle);
+                logger.info("Exporting Successful");
+            } else {
+                logger.info("Exporting Obstacle failed");
+            }
+        } catch (NullPointerException nullPointerException) {
+            logger.info("No Obstacle initiated, hence: " +
+                    "Exception in thread \"JavaFX Application Thread\" java.lang.NullPointerException: " +
+                    "Cannot invoke \"comp2211.seg.ProcessDataModel.Airport.toString()\" because \"airport\" is null");
+        }
+    }
+
+
+    /**
+     * Build table view grid pane.
+     *
+     * @return the grid pane
+     */
+    public GridPane buildTableView() {
+
+        GridPane airportData = new GridPane();
+
+        for (int i = 0; i < 10; i++) {
+            ColumnConstraints ccx = new ColumnConstraints();
+            ccx.setPercentWidth(10);
+            airportData.getColumnConstraints().add(ccx);
+        }
+
+        String[] titles = new String[] {"Runway (RWY)","Stopway (SWY)","Clearway (CWY)","RESA","Threshold\nDisplacement","Strip End","Blast\nProtection"};
+        for (int i = 0; i < 7; i++) {
+
+            Label data = makeLabel(titles[i]);
+            data.getStyleClass().add("tableH1");
+            data.setAlignment(Pos.CENTER);
+            data.setTextAlignment(TextAlignment.CENTER);
+            data.setPadding(new Insets(10, 0, 10, 0));
+            if (i==0){
+                GridPane.setColumnSpan(data,2);
+                airportData.add(data,1,0);
+            }else if (i==3){
+                GridPane.setColumnSpan(data,2);
+                airportData.add(data,5,0);
+            }else if (i<3&&i>0){
+                //data.setFont(new Font("Calibri",17));
+                airportData.add(data,i+2,0);
+            }else{
+                GridPane.setRowSpan(data,2);
+                //data.setFont(new Font("Calibri",17));
+                airportData.add(data,i+3,0);
+            }
+
+        }
+        int counter = 0;
+        for (int i = 0; i < 4; i++) {
+            if (i==0 || i==3){
+                var lengthLabel = makeLabel("Length");
+                var widthLabel = makeLabel("Width");
+
+                //lengthLabel.setFont(Theme.fontsmall);
+                lengthLabel.getStyleClass().add("tableH2");
+                lengthLabel.setPadding(new Insets(8, 0, 8 ,0));
+                //widthLabel.setFont(Theme.fontsmall);
+                widthLabel.getStyleClass().add("tableH2");
+                widthLabel.setPadding(new Insets(8, 0, 8 ,0));
+
+                counter += 1;
+                airportData.add(lengthLabel,counter,1);
+                counter += 1;
+                airportData.add(widthLabel,counter,1);
+            }else{
+                var lengthLabel = makeLabel("Length");
+
+                //lengthLabel.setFont(Theme.fontsmall);
+                lengthLabel.getStyleClass().add("tableH2");
+                lengthLabel.setPadding(new Insets(8, 0, 8 ,0));
+
+                counter += 1;
+                airportData.add(lengthLabel,counter,1);
+            }
+
+        }
+        Label desl = makeLabel(appWindow.runway.getRunwayDesignatorLeft());
+        desl.setAlignment(Pos.CENTER);
+        airportData.add(desl,0,2);
+        airportData.add(makeTableCell(appWindow.runway.runwayLengthProperty()),1,2);
+        airportData.add(makeTableCell(appWindow.runway.runwayWidthProperty()),2,2);
+        airportData.add(makeTableCell(appWindow.runway.stopwayLeftProperty()),3,2);
+        airportData.add(makeTableCell(appWindow.runway.clearwayLeftProperty()),4,2);
+        airportData.add(makeTableCell(appWindow.runway.RESAWidthProperty()),5,2);
+        airportData.add(makeTableCell(appWindow.runway.RESAHeightProperty()),6,2);
+        airportData.add(makeTableCell(appWindow.runway.dispThresholdLeftProperty()),7,2);
+        airportData.add(makeTableCell(appWindow.runway.stripEndProperty()),8,2);
+        airportData.add(makeTableCell(new SimpleDoubleProperty(500)),9,2);
+
+        Label desr = makeLabel(appWindow.runway.getRunwayDesignatorRight());
+        desr.setAlignment(Pos.CENTER);
+        airportData.add(desr,0,3);
+        airportData.add(makeTableCell(appWindow.runway.runwayLengthProperty()),1,3);
+        airportData.add(makeTableCell(appWindow.runway.runwayWidthProperty()),2,3);
+        airportData.add(makeTableCell(appWindow.runway.stopwayRightProperty()),3,3);
+        airportData.add(makeTableCell(appWindow.runway.clearwayRightProperty()),4,3);
+        airportData.add(makeTableCell(appWindow.runway.RESAWidthProperty()),5,3);
+        airportData.add(makeTableCell(appWindow.runway.RESAHeightProperty()),6,3);
+        airportData.add(makeTableCell(appWindow.runway.dispThresholdRightProperty()),7,3);
+        airportData.add(makeTableCell(appWindow.runway.stripEndProperty()),8,3);
+        airportData.add(makeTableCell(new SimpleDoubleProperty(500)),9,3);
+        for (Node node:airportData.getChildren()) {
+            if (node instanceof Control) {
+                Control control = (Control) node;
+                control.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                //control.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+                control.getStyleClass().add("fgBorder");
+            }
+            if (node instanceof Pane) {
+                Pane pane = (Pane) node;
+                pane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                //pane.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+                pane.getStyleClass().add("fgBorder");
+            }
+            if (node instanceof TextField){
+                ((TextField) node).setAlignment(Pos.CENTER);
+            }
+            if (node instanceof Label){
+                ((Label) node).setAlignment(Pos.CENTER);
+            }
+        }
+
+        airportData.setAlignment(Pos.CENTER);
+        airportData.setSnapToPixel(false);
+
+
+
+        return airportData;
+    }
+
+    /**
+     * Build table view 2 table view.
+     *
+     * @param container the container
+     * @return the table view
+     */
+    public TableView<RunwayData> buildTableView2(VBox container) {
         TableView<RunwayData> table = new TableView<>();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -251,8 +679,41 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         columns.add(col8);
         columns.add(col9);
         // create an ObservableList of RunwayData objects
-        ObservableList<RunwayData> data = FXCollections.observableArrayList();
-        RunwayData data1 = new RunwayData(
+        ObservableList<RunwayData> runway1Data = FXCollections.observableArrayList();
+        RunwayData leftData = new RunwayData(
+            makeTableCell(appWindow.runway.runwayDesignatorLeftProperty()),
+            makeTableCell(appWindow.runway.runwayLengthProperty()),
+            makeTableCell(appWindow.runway.runwayWidthProperty()),
+            new TextField(""),
+            new TextField(""),
+            makeTableCell(appWindow.runway.stopwayLeftProperty()),
+            new TextField(""),
+            makeTableCell(appWindow.runway.clearwayLeftProperty()),
+            new TextField(""),
+            makeTableCell(appWindow.runway.RESAWidthProperty()),
+            makeTableCell(appWindow.runway.RESAHeightProperty()),
+            makeTableCell(appWindow.runway.dispThresholdLeftProperty()),
+            makeTableCell(appWindow.runway.stripEndProperty()),
+            new TextField("500")
+        );
+
+        RunwayData rightData = new RunwayData(
+            makeTableCell(appWindow.runway.runwayDesignatorRightProperty()),
+            makeTableCell(appWindow.runway.runwayLengthProperty()),
+            makeTableCell(appWindow.runway.runwayWidthProperty()),
+            new TextField(""),
+            new TextField(""),
+            makeTableCell(appWindow.runway.stopwayRightProperty()),
+            new TextField(""),
+            makeTableCell(appWindow.runway.clearwayRightProperty()),
+            new TextField(""),
+            makeTableCell(appWindow.runway.RESAWidthProperty()),
+            makeTableCell(appWindow.runway.RESAHeightProperty()),
+            makeTableCell(appWindow.runway.dispThresholdRightProperty()),
+            makeTableCell(appWindow.runway.stripEndProperty()),
+            new TextField("500")
+        );
+        /*RunwayData data1 = new RunwayData(
             "09L",
             "xxxxm", "xxxxm",
             "xxxxm", "xxxxm",
@@ -271,11 +732,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             "xxxxm", "xxxxm",
             "xxxxm",
             "60m",
-            "300m");
-        data.add(data1);
-        data.add(data2);
+            "300m");*/
+        runway1Data.add(leftData);
+        runway1Data.add(rightData);
 
-        table.setItems(data);
+
+        table.setItems(runway1Data);
 
         table.fixedCellSizeProperty().bind(container.heightProperty()
             .subtract(55).divide(2));//table.getItems().size()));
@@ -299,120 +761,163 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     }
     private <T> TableColumn<RunwayData, T> createColumn(String columnName) {
         TableColumn<RunwayData, T> tableColumn = new TableColumn<>(columnName);
-        tableColumn.setCellFactory(column -> {
-            TableCell<RunwayData, T> cell = new TableCell<RunwayData, T>() {
-                @Override
-                protected void updateItem(T item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        setText(item.toString());
-                    }
-                }
-            };
-            return cell;
-        });
+        //tableColumn.setCellFactory(column -> {
+        //    TableCell<RunwayData, T> cell = new TableCell<RunwayData, T>() {
+        //        @Override
+        //        protected void updateItem(T item, boolean empty) {
+        //            super.updateItem(item, empty);
+        //            if (empty || item == null) {
+        //                setText(null);
+        //            } else {
+        //                setText(item.toString());
+        //            }
+        //        }
+        //    };
+        //    return cell;
+        //});
         return tableColumn;
     }
 
+    /**
+     * Make obstacle config pane.
+     *
+     * @return the pane
+     */
     public Pane makeObstacleConfig(){
-        HBox obstacleLayout = new HBox();
-        VBox leftPane = new VBox();
+        TabsPaneHorizontal obstacleLayout = new TabsPaneHorizontal();
+        TabsPaneVertical leftPane = new TabsPaneVertical();
         makeObstaclePane(leftPane);
-        VBox rightPane = new VBox(makeRunwayTabs());
+        TabsPaneVertical rightPane = new TabsPaneVertical();
+        rightPane.getChildren().add(makeRunwayTabs());
 
-        leftPane.maxWidthProperty().bind(obstacleLayout.widthProperty().subtract(10).divide(2));
-        leftPane.minWidthProperty().bind(obstacleLayout.widthProperty().subtract(10).divide(2));
-        rightPane.maxWidthProperty().bind(obstacleLayout.widthProperty().subtract(10).divide(2));
-        rightPane.minWidthProperty().bind(obstacleLayout.widthProperty().subtract(10).divide(2));
-        leftPane.maxHeightProperty().bind(obstacleLayout.heightProperty().subtract(10));
-        leftPane.minHeightProperty().bind(obstacleLayout.heightProperty().subtract(10));
-        rightPane.maxHeightProperty().bind(obstacleLayout.heightProperty().subtract(10));
-        rightPane.minHeightProperty().bind(obstacleLayout.heightProperty().subtract(10));
 
-        obstacleLayout.getChildren().addAll(leftPane,rightPane);
+        obstacleLayout.getChildren().add(leftPane);
+        new Divider(obstacleLayout);
+        obstacleLayout.getChildren().add(rightPane);
         return obstacleLayout;
     }
-    public void makeObstaclePane(VBox obstaclePane){
-        HBox topHalf = new HBox();
-        topHalf.maxWidthProperty().bind(obstaclePane.widthProperty());
-        topHalf.minWidthProperty().bind(obstaclePane.widthProperty());
-        topHalf.maxHeightProperty().bind(obstaclePane.heightProperty().divide(2));
-        topHalf.minHeightProperty().bind(obstaclePane.heightProperty().divide(2));
 
-        Pane obstacleOptionsPane = new Pane(makeObstacleOptionsPane());
-        obstacleOptionsPane.maxWidthProperty().bind(topHalf.widthProperty().divide(1.5));
-        obstacleOptionsPane.minWidthProperty().bind(topHalf.widthProperty().divide(1.5));
-        obstacleOptionsPane.maxHeightProperty().bind(topHalf.heightProperty());
-        obstacleOptionsPane.minHeightProperty().bind(topHalf.heightProperty());
+    /**
+     * Make obstacle pane.
+     *
+     * @param obstaclePane the obstacle pane
+     */
+    public void makeObstaclePane(TabsPaneVertical obstaclePane){
 
-        Pane changeHistoryPane = new Pane(makeChangeHistoryPane());
-        changeHistoryPane.maxWidthProperty().bind(topHalf.widthProperty().divide(3));
-        changeHistoryPane.minWidthProperty().bind(topHalf.widthProperty().divide(3));
-        changeHistoryPane.maxHeightProperty().bind(topHalf.heightProperty());
-        changeHistoryPane.minHeightProperty().bind(topHalf.heightProperty());
+        TabLayout obstacleOptionsPane = makeObstacleOptionsPane();
+        TabLayout declaredDistancesPane = makeDistancesPane();
+        TabLayout breakDownPane = makeBreakDownPane();
 
-        topHalf.getChildren().addAll(obstacleOptionsPane, changeHistoryPane);
 
-        VBox bottomHalf = new VBox();
-        bottomHalf.maxWidthProperty().bind(obstaclePane.widthProperty());
-        bottomHalf.minWidthProperty().bind(obstaclePane.widthProperty());
-        bottomHalf.maxHeightProperty().bind(obstaclePane.heightProperty().divide(2));
-        bottomHalf.minHeightProperty().bind(obstaclePane.heightProperty().divide(2));
-
-        Pane declaredDistancesPane = new Pane(makeDistancesPane());
-        declaredDistancesPane.maxWidthProperty().bind(bottomHalf.widthProperty());
-        declaredDistancesPane.minWidthProperty().bind(bottomHalf.widthProperty());
-        declaredDistancesPane.maxHeightProperty().bind(bottomHalf.heightProperty().divide(2));
-        declaredDistancesPane.minHeightProperty().bind(bottomHalf.heightProperty().divide(2));
-
-        Pane breakDownPane = new Pane(makeBreakDownPane());
-        breakDownPane.maxWidthProperty().bind(bottomHalf.widthProperty());
-        breakDownPane.minWidthProperty().bind(bottomHalf.widthProperty());
-        breakDownPane.maxHeightProperty().bind(bottomHalf.heightProperty().divide(2));
-        breakDownPane.minHeightProperty().bind(bottomHalf.heightProperty().divide(2));
-
-        bottomHalf.getChildren().addAll(declaredDistancesPane, breakDownPane);
-
-        obstaclePane.getChildren().addAll(topHalf,bottomHalf);
+        obstaclePane.getChildren().add(obstacleOptionsPane);
+        new Divider(obstaclePane);
+        obstaclePane.getChildren().add(declaredDistancesPane);
+        new Divider(obstaclePane);
+        obstaclePane.getChildren().add(breakDownPane);
+        obstaclePane.rebalance();
     }
+    private TabLayout makeObstacleOptionsPane() {
+        // Obstacle preset ComboBox
+        ComboBox obstacleComboBox = new ComboBox(FXCollections.observableArrayList(appWindow.obstaclePresets));
+        //obstacleComboBox.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
+        obstacleComboBox.getStyleClass().addAll("veryfocusedBG", "font");
+        obstacleComboBox.setOnAction(event -> {
+            Object selectedObstacle = obstacleComboBox.getSelectionModel().getSelectedItem();
+            appWindow.runway.addObstacle((Obstacle) selectedObstacle);
+        });
 
-    private Pane makeChangeHistoryPane() {
-        ArrayList<Pair<String, Pane>> changeHistory = new ArrayList<>();
-        ScrollPane history = new ScrollPane(appWindow.runway.changesHistory);
-        history.setFitToWidth(true);
-        history.setPadding(new Insets(16));
-        changeHistory.add(new Pair<>("Change History", new BorderPane(history)));
-        Pane changeHistoryPane = new TabLayout(changeHistory,Theme.focusedBG,Theme.veryfocusedBG);
-        return changeHistoryPane;
-    }
+        obstacleComboBox.valueProperty().set("Default");
 
-    private Pane makeObstacleOptionsPane() {
         ArrayList<Pair<String, Pane>> obstacleOptions = new ArrayList<>();
         GridPane obstacleData = new GridPane();
 
         ColumnConstraints cc1 = new ColumnConstraints();
-        cc1.setPercentWidth(60);
+        cc1.setPercentWidth(17);
+
         ColumnConstraints cc2 = new ColumnConstraints();
-        cc2.setPercentWidth(40);
-        obstacleData.getColumnConstraints().addAll(cc1,cc2);
+        cc2.setPercentWidth(20);
+        ColumnConstraints cc3 = new ColumnConstraints();
+        cc3.setPercentWidth(33);
+        ColumnConstraints cc4 = new ColumnConstraints();
+        cc4.setPercentWidth(30);
+        obstacleData.getColumnConstraints().addAll(cc1,cc2,cc3,cc4);
+        obstacleData.setAlignment(Pos.CENTER_LEFT);
+        obstacleData.setHgap(10);
 
         ArrayList<RowConstraints> rc = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 5; i++) {
 
             RowConstraints rcx = new RowConstraints();
-            rcx.setPercentHeight(100/7);
+            rcx.setPercentHeight(20);
             rc.add(rcx);
         }
         obstacleData.getRowConstraints().addAll(rc);
 
-        obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height"),makeLabel("Length"),makeLabel("Width"),makeLabel("Left Displacement"),makeLabel("Right Displacement"),makeLabel("Currently Active?"));
+        Label pos = makeLabel("Position");
+//        GridPane.setRowSpan(pos,2);
+//        pos.setAlignment(Pos.TOP_CENTER);
+
+        obstacleData.addColumn(0,makeLabel("Preset"),makeLabel("Height (m)"),makeLabel("Length (m)"),makeLabel("Width (m)"),makeLabel("Active?"));
+
+        obstacleData.add(pos, 2,0);
+        obstacleData.add(makeLabel("Top Landing/Take off"), 2,2);
+        obstacleData.add(makeLabel("Bottom Landing/Take off"), 2,3);
+        obstacleData.add(makeButton(appWindow.runway.directionLeftProperty(),"Towards","Away"),3,2);
+        obstacleData.add(makeButton(appWindow.runway.directionRightProperty(),"Away","Towards"),3,3);
+
+        // Obstacle preset dropdown selector
+        obstacleData.add(obstacleComboBox,1,0);
+
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().heightProperty()),1,1);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().lengthProperty()),1,2);
         obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().widthProperty()),1,3);
-        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().distFromThresholdProperty()),1,4);
-        obstacleData.add(makeSpinner(appWindow.runway.getRunwayObstacle().distFromOtherThresholdProperty()),1,5);
+        obstacleData.add(makeButton(appWindow.runway.hasRunwayObstacleProperty(),"Yes","No"),1,4);
+        Slider slider = new Slider();
+        slider.minProperty().bind(appWindow.runway.runwayObstacle.lengthProperty().divide(-2));
+        slider.maxProperty().bind(appWindow.runway.runwayLengthProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)));
+        slider.valueProperty().bindBidirectional(appWindow.runway.runwayObstacle.distFromThresholdProperty());
+        Button leftButton = new Button("<");
+        leftButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+
+                    slider.valueProperty().set(slider.valueProperty().get()-1);
+                } catch (Exception e){}
+            }
+        });
+        Button rightButton = new Button(">");
+        rightButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+
+                    slider.valueProperty().set(slider.valueProperty().get()+1);
+                } catch (Exception e){}
+            }
+        });
+        leftButton.setPadding(new Insets(3));
+        rightButton.setPadding(new Insets(3));
+
+
+        HBox posSlider = new HBox(leftButton,slider,rightButton);
+        posSlider.setAlignment(Pos.CENTER);
+        Node l = makeOutputLabel(appWindow.runway.runwayObstacle.distFromThresholdProperty(),new SimpleBooleanProperty(true),5);
+        Node r = makeOutputLabel(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty(),new SimpleBooleanProperty(true),5);
+
+        VBox posLeft = new VBox(makeOutputLabel(new SimpleStringProperty("Left"),new SimpleBooleanProperty(true),18),l);
+        VBox posRight = new VBox(makeOutputLabel(new SimpleStringProperty("Right"),new SimpleBooleanProperty(true),18),r);
+        posLeft.setAlignment(Pos.CENTER);
+        posLeft.setMinWidth(50);
+        posRight.setAlignment(Pos.CENTER);
+        posRight.setMinWidth(50);
+
+        BorderPane posvals = new BorderPane();
+        posvals.setLeft(posLeft);
+        posvals.setRight(posRight);
+        posvals.setPadding(new Insets(5));
+        obstacleData.add(posSlider,3,0);
+        obstacleData.add(posvals,3,1);
         obstacleData.getChildren().forEach(new Consumer<Node>() {
             @Override
             public void accept(Node node) {
@@ -420,12 +925,58 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             }
         });
 
+        ScrollPane history = new ScrollPane(appWindow.runway.changesHistory);
+        history.setFitToWidth(true);
+        history.setPadding(new Insets(16));
 
         obstacleOptions.add(new Pair<>("Obstacle", obstacleData));
-        Pane obstacleOptionsPane = new TabLayout(obstacleOptions,Theme.focusedBG,Theme.veryfocusedBG);
+        obstacleOptions.add(new Pair<>("Change History", new BorderPane(history)));
+        TabLayout obstacleOptionsPane = new TabLayout(obstacleOptions,"focusedBG","veryfocusedBG");
         return obstacleOptionsPane;
     }
-    private Pane makeDistancesPane() {
+
+    private Node makeOutputLabel(SimpleStringProperty string, SimpleBooleanProperty visibility, int i) {
+        Label data = new Label();
+
+        data.getStyleClass().addAll("fontsmall", "bold"); //Hardcoding this annoying use was easier lol
+        //data.setTextFill(Theme.fg);
+        data.getStyleClass().add("fg");
+        data.setText(String.valueOf(string.getValue()));
+        data.textProperty().bind(Bindings.when(visibility).then(string).otherwise(new
+                SimpleStringProperty("Error")));
+        return data;
+    }
+
+    private Node makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility, int i) {
+        Label data = new Label();
+        //data.setFont(Theme.fontsmall);
+        data.getStyleClass().add("fontsmall");
+        //data.setTextFill(Theme.fg);
+        data.getStyleClass().add("fg");
+        data.setText(String.valueOf(property.getValue()));
+        property.addListener((observableValue, number, t1) -> {
+            if (!t1.equals(number)){
+                if (visibility.get()){
+                    data.textProperty().set(Math.round(property.get())+appWindow.runway.unitsProperty().get());
+                }else {
+                    data.textProperty().set("Error");
+                }
+                logger.info(data.textProperty().get());
+            }
+        });
+        data.textProperty().set(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
+                SimpleStringProperty("Error")).get());
+        data.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                logger.info("clicked " + data.textProperty().get());
+            }
+        });
+        return data;
+
+    }
+
+    private TabLayout makeDistancesPane() {
         GridPane distancesGrid = new GridPane();
         distancesGrid.add(makeLabel("Designator"),1,0);
         distancesGrid.add(makeLabel("TORA"),2,0);
@@ -463,27 +1014,27 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorLeftProperty(),new SimpleBooleanProperty(true)),1,1);
         distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftToraProperty(),new SimpleBooleanProperty(true)),2,1);
         distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftTodaProperty(),new SimpleBooleanProperty(true)),3,1);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftLdaProperty(),new SimpleBooleanProperty(true)),4,1);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftAsdaProperty(),new SimpleBooleanProperty(true)),5,1);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorLeftProperty(),new SimpleBooleanProperty(true)),1,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftAsdaProperty(),new SimpleBooleanProperty(true)),4,1);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputLeftLdaProperty(),new SimpleBooleanProperty(true)),5,1);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorRightProperty(),new SimpleBooleanProperty(true)),1,2);
         distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightToraProperty(),new SimpleBooleanProperty(true)),2,2);
         distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightTodaProperty(),new SimpleBooleanProperty(true)),3,2);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightLdaProperty(),new SimpleBooleanProperty(true)),4,2);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightAsdaProperty(),new SimpleBooleanProperty(true)),5,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightAsdaProperty(),new SimpleBooleanProperty(true)),4,2);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.inputRightLdaProperty(),new SimpleBooleanProperty(true)),5,2);
         distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorLeftProperty(),new SimpleBooleanProperty(true)),1,3);
         distancesGrid.add(makeOutputLabel(appWindow.runway.leftToraProperty(),new SimpleBooleanProperty(true)),2,3);
         distancesGrid.add(makeOutputLabel(appWindow.runway.leftTodaProperty(),new SimpleBooleanProperty(true)),3,3);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.leftLdaProperty(),new SimpleBooleanProperty(true)),4,3);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.leftAsdaProperty(),new SimpleBooleanProperty(true)),5,3);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorLeftProperty(),new SimpleBooleanProperty(true)),1,4);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.leftAsdaProperty(),new SimpleBooleanProperty(true)),4,3);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.leftLdaProperty(),new SimpleBooleanProperty(true)),5,3);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.runwayDesignatorRightProperty(),new SimpleBooleanProperty(true)),1,4);
         distancesGrid.add(makeOutputLabel(appWindow.runway.rightToraProperty(),new SimpleBooleanProperty(true)),2,4);
         distancesGrid.add(makeOutputLabel(appWindow.runway.rightTodaProperty(),new SimpleBooleanProperty(true)),3,4);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.rightLdaProperty(),new SimpleBooleanProperty(true)),4,4);
-        distancesGrid.add(makeOutputLabel(appWindow.runway.rightAsdaProperty(),new SimpleBooleanProperty(true)),5,4);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.rightAsdaProperty(),new SimpleBooleanProperty(true)),4,4);
+        distancesGrid.add(makeOutputLabel(appWindow.runway.rightLdaProperty(),new SimpleBooleanProperty(true)),5,4);
 
         ArrayList<Pair<String, Pane>> declaredDistances = new ArrayList<>();
         declaredDistances.add(new Pair<>("Declared Distances", distancesGrid));
-        Pane declaredDistancesPane = new TabLayout(declaredDistances,Theme.focusedBG,Theme.veryfocusedBG);
+        TabLayout declaredDistancesPane = new TabLayout(declaredDistances,"focusedBG","veryfocusedBG");
         distancesGrid.getChildren().forEach(new Consumer<Node>() {
             @Override
             public void accept(Node node) {
@@ -495,50 +1046,212 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
     private Node makeOutputLabel(SimpleStringProperty runwayDesignatorProperty, SimpleBooleanProperty visibility) {
         Label data = new Label();
-        data.setFont(Theme.font);
-        data.setTextFill(Theme.fg);
+        //data.setFont(Theme.font);
+        data.getStyleClass().add("font");
+        //data.setTextFill(Theme.fg);
+        data.getStyleClass().add("fg");
         data.setText(String.valueOf(runwayDesignatorProperty.getValue()));
         data.textProperty().bind(Bindings.when(visibility).then(runwayDesignatorProperty).otherwise(new
                 SimpleStringProperty("Error")));
         return data;
 
     }
+    private Pane makeOutputLabel(SimpleStringProperty prop1header,SimpleStringProperty prop1,SimpleStringProperty prop2header,SimpleStringProperty prop2) {
 
+        Label dataheader = new Label();
+        //dataheader.setFont(Theme.font);
+        dataheader.getStyleClass().add("font");
+        //dataheader.setTextFill(Theme.fg);
+        dataheader.getStyleClass().add("fg");
+        dataheader.textProperty().bind(prop1header);
+        dataheader.setAlignment(Pos.CENTER_LEFT);
+
+        Label data = new Label();
+        //data.setFont(Theme.font);
+        data.getStyleClass().add("font");
+        //data.setTextFill(Theme.fg);
+        data.getStyleClass().add("fg");
+        data.textProperty().bind(prop1);
+        data.setAlignment(Pos.CENTER_LEFT);
+
+        Label data2header = new Label();
+        //data2header.setFont(Theme.font);
+        data2header.getStyleClass().add("font");
+        //data2header.setTextFill(Theme.fg);
+        data2header.getStyleClass().add("fg");
+        data2header.textProperty().bind(prop2header);
+        data2header.setAlignment(Pos.CENTER_LEFT);
+
+        Label data2 = new Label();
+        //data2.setFont(Theme.font);
+        data2.getStyleClass().add("font");
+        //data2.setTextFill(Theme.fg);
+        data2.getStyleClass().add("fg");
+        data2.textProperty().bind(prop2);
+        data2.setAlignment(Pos.CENTER_LEFT);
+
+        ScrollPane scrollPane = new ScrollPane();
+
+        VBox box = new VBox(dataheader,data,data2header,data2);
+        VBox.setVgrow(data, Priority.ALWAYS);
+        box.setAlignment(Pos.CENTER_LEFT);
+        box.setPadding(new Insets(0,5,0,5));
+
+        scrollPane.setContent(box); // TODO: Finish
+
+        return box;
+
+    }
+
+    /**
+     * Make label label.
+     *
+     * @param string the string
+     * @return the label
+     */
     public Label makeLabel(String string){
         Label label = new Label(string);
-        label.setFont(Theme.font);
-        label.setTextFill(Theme.fg);
+        //label.setFont(Theme.font);
+        label.getStyleClass().addAll("font", "bold");
+        //label.setTextFill(Theme.fg);
+        label.getStyleClass().add("fg");
         return label;
     }
+
+    /**
+     * Make output label label.
+     *
+     * @param property   the property
+     * @param visibility the visibility
+     * @return the label
+     */
     public Label makeOutputLabel(SimpleDoubleProperty property, SimpleBooleanProperty visibility) {
         Label data = new Label();
-        data.setFont(Theme.font);
-        data.setTextFill(Theme.fg);
+        //data.setFont(Theme.font);
+        data.getStyleClass().add("font");
+        //data.setTextFill(Theme.fg);
+        data.getStyleClass().add("fg");
         data.setText(String.valueOf(property.getValue()));
-        data.textProperty().bind(Bindings.when(visibility).then(property.asString().concat(appWindow.runway.unitsProperty())).otherwise(new
+        property.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if (!t1.equals(number)){
+                    data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
+                            SimpleStringProperty("Error")));
+                }
+            }
+        });
+        data.textProperty().bind(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
                 SimpleStringProperty("Error")));
         return data;
     }
 
-    private Pane makeBreakDownPane() {
+    private TabLayout makeBreakDownPane() {
         ArrayList<Pair<String, Pane>> breakDown = new ArrayList<>();
-        breakDown.add(new Pair<>("TORA", new VBox()));
-        breakDown.add(new Pair<>("TODA", new VBox()));
-        breakDown.add(new Pair<>("ASDA", new VBox()));
-        breakDown.add(new Pair<>("LDA", new VBox()));
-        Pane breakDownPane = new TabLayout(breakDown,Theme.focusedBG,Theme.veryfocusedBG);
+        breakDown.add(
+                new Pair<>(
+                        "TORA Maths",
+                        makeOutputLabel(
+                                appWindow.runway.leftToraBreakdownHeaderProperty(),
+                                appWindow.runway.leftToraBreakdownProperty(),
+                                appWindow.runway.rightToraBreakdownHeaderProperty(),
+                                appWindow.runway.rightToraBreakdownProperty()
+                        )
+                )
+        );
+        breakDown.add(
+                new Pair<>(
+                        "TODA Maths",
+                        makeOutputLabel(
+                                appWindow.runway.leftTodaBreakdownHeaderProperty(),
+                                appWindow.runway.leftTodaBreakdownProperty(),
+                                appWindow.runway.rightTodaBreakdownHeaderProperty(),
+                                appWindow.runway.rightTodaBreakdownProperty()
+                        )
+                )
+        );
+        breakDown.add(
+                new Pair<>(
+                        "ASDA Maths",
+                        makeOutputLabel(
+                                appWindow.runway.leftAsdaBreakdownHeaderProperty(),
+                                appWindow.runway.leftAsdaBreakdownProperty(),
+                                appWindow.runway.rightAsdaBreakdownHeaderProperty(),
+                                appWindow.runway.rightAsdaBreakdownProperty()
+                        )
+                )
+        );
+        breakDown.add(
+                new Pair<>(
+                        "LDA Maths",
+                        makeOutputLabel(
+                                appWindow.runway.leftLdaBreakdownHeaderProperty(),
+                                appWindow.runway.leftLdaBreakdownProperty(),
+                                appWindow.runway.rightLdaBreakdownHeaderProperty(),
+                                appWindow.runway.rightLdaBreakdownProperty()
+                        )
+                )
+        );
+        TabLayout breakDownPane = new TabLayout(breakDown,"focusedBG","veryfocusedBG");
+        // TODO: scrollable
         return breakDownPane;
     }
+    private TextField makeTableCell(SimpleDoubleProperty property){
+        TextField textField = new TextField();
+        textField.setAlignment(Pos.CENTER);
+        //textField.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
 
+        textField.getStyleClass().addAll("fgBorder", "font");
+        textField.textProperty().bind(property.asString().concat(Runway.units));
+        textField.editableProperty().set(false);
+        return textField;
+    }
+
+    private TextField makeTableCell(SimpleStringProperty property){
+        TextField textField = new TextField();
+        textField.setAlignment(Pos.CENTER);
+        //textField.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
+        textField.getStyleClass().add("fgBorder");
+        textField.textProperty().set(property.get());
+        textField.editableProperty().set(false);
+        textField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if (!s.equals(t1)){
+                    if (Objects.equals(t1, "")) {
+                        property.set("");
+                    } else {
+                        try {
+                            property.set(t1);
+                        } catch (Exception e) {
+                            displayErrorMessage("Invalid Entry", t1 + " must be a number");
+                            textField.setText(s);
+                        }
+                    }
+                }
+            }
+        });
+        return textField;
+    }
+
+    /**
+     * Make runway tabs pane.
+     *
+     * @return the pane
+     */
     public Pane makeRunwayTabs(){
         ArrayList<Pair<String, Pane>> viewTabs = new ArrayList<>();
-        RunwayScene runwayScene1 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
-        RunwayScene runwayScene2 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
-        runwayScene1.build();
-        runwayScene2.build();
-        runwayScene2.toggleView();
+
+        RunwaySceneLoader runwayScene1 = new RunwaySceneLoader(new Pane(), appWindow,appWindow.getWidth()/2.0,appWindow.getHeight()/2.0);
+        RunwaySceneLoader runwayScene2 = new RunwaySceneLoader(new Pane(), appWindow,appWindow.getWidth()/2.0,appWindow.getHeight()/2.0);
+        runwayScene1.buildmenulessalt();
+        runwayScene2.buildmenulessalt();
+        runwayScene2.scene.toggleView();
+
+
+
         VBox dualView = new VBox(runwayScene1.getRoot(),runwayScene2.getRoot());
-        for (RunwayScene scene: new RunwayScene[] {runwayScene1,runwayScene2}) {
+        for (RunwaySceneLoader scene: new RunwaySceneLoader[] {runwayScene1,runwayScene2}) {
             scene.root.maxWidthProperty().bind(dualView.widthProperty());
             scene.root.minWidthProperty().bind(dualView.widthProperty());
             scene.root.maxHeightProperty().bind(dualView.heightProperty().divide(2));
@@ -546,49 +1259,69 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         }
 
-        RunwayScene runwayScene3 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
-        runwayScene3.build();
-        runwayScene3.angleXProperty().set(180);
-        runwayScene3.angleYProperty().set(0);
-        runwayScene3.angleZProperty().set(-90);
-        VBox topView = new VBox(runwayScene3.getRoot());
-        runwayScene3.portrait.set(true);
+        RunwaySceneLoader runwayScene3 = new RunwaySceneLoader(new Pane(), appWindow,appWindow.getWidth()/2.0,appWindow.getHeight()/2.0);
+        runwayScene3.buildmenulessalt();
+        if (Settings.portrait.get()) {
+            runwayScene3.scene.angleXProperty().set(180);
+            runwayScene3.scene.angleYProperty().set(0);
+            runwayScene3.scene.angleZProperty().set(-90);
+            runwayScene3.scene.portrait.set(true);
+        }
+        topView = new VBox(runwayScene3.getRoot());
 
         runwayScene3.root.maxWidthProperty().bind(topView.widthProperty());
         runwayScene3.root.minWidthProperty().bind(topView.widthProperty());
         runwayScene3.root.maxHeightProperty().bind(topView.heightProperty());
         runwayScene3.root.minHeightProperty().bind(topView.heightProperty());
 
-        RunwayScene runwayScene4 = new RunwayScene(new Pane(), appWindow,appWindow.getWidth()/4.0,appWindow.getHeight()/4.0,false);
-        runwayScene4.build();
-        runwayScene4.angleYProperty().set(90);
-        runwayScene4.angleXProperty().set(90);
+        RunwaySceneLoader runwayScene4 = new RunwaySceneLoader(new Pane(), appWindow,appWindow.getWidth()/2.0,appWindow.getHeight()/2.0);
+        runwayScene4.buildmenulessalt();
+        if (Settings.portrait.get()) {
+            runwayScene4.scene.angleYProperty().set(90);
+            runwayScene4.scene.angleXProperty().set(90);
+            runwayScene4.scene.portrait.set(true);
+        }else {
+            runwayScene4.scene.toggleView();
+        }
         VBox sideView = new VBox(runwayScene4.getRoot());
-        runwayScene4.portrait.set(true);
 
         runwayScene4.root.maxWidthProperty().bind(sideView.widthProperty());
         runwayScene4.root.minWidthProperty().bind(sideView.widthProperty());
         runwayScene4.root.maxHeightProperty().bind(sideView.heightProperty());
         runwayScene4.root.minHeightProperty().bind(sideView.heightProperty());
 
-        dualView.setOnMousePressed((e) -> appWindow.startRunwayScene());
+        runwayScene1.getRoot().setOnMousePressed((e) -> appWindow.startRunwayScene());
+        runwayScene2.getRoot().setOnMousePressed((e) -> appWindow.startRunwaySceneRotated());
         topView.setOnMousePressed((e) -> appWindow.startRunwayScene());
-        sideView.setOnMousePressed((e) -> appWindow.startRunwayScene());
+        sideView.setOnMousePressed((e) -> appWindow.startRunwaySceneRotated());
 
 
+        refreshables.add(runwayScene1);
+        refreshables.add(runwayScene2);
+        refreshables.add(runwayScene3);
+        refreshables.add(runwayScene4);
 
         viewTabs.add(new Pair<>("Both Views", dualView));
         viewTabs.add(new Pair<>("Side-On Views", sideView));
         viewTabs.add(new Pair<>("Top-Down Views", topView));
-        TabLayout viewPane = new TabLayout(viewTabs,Theme.focusedBG,Theme.veryfocusedBG);
+        TabLayout viewPane = new TabLayout(viewTabs,"focusedBG","veryfocusedBG");
         return viewPane;
     }
 
+    /**
+     * Make spinner spinner.
+     *
+     * @param binding the binding
+     * @return the spinner
+     */
     public Spinner makeSpinner(SimpleDoubleProperty binding){
         Spinner spinner = new Spinner();
         SpinnerValueFactory<Double> svf = new SpinnerValueFactory.DoubleSpinnerValueFactory(0,999999999,binding.get());
         spinner.setValueFactory(svf);
         spinner.editableProperty().set(true);
+        spinner.getStyleClass().add("font");
+        spinner.getEditor().setStyle("-fx-padding: 4px 10px 4px 10px;");
+
 
         spinner.getEditor().textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -608,7 +1341,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         binding.addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                spinner.getEditor().setText(Double.toString(t1.doubleValue()));
+                if (Double.parseDouble(spinner.getEditor().textProperty().get()) != t1.doubleValue()) {
+                    spinner.getEditor().setText(Double.toString(t1.doubleValue()));
+                }
             }
         });
 
@@ -628,5 +1363,87 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    /**
+     * Creates a new Button with the specified label and adds it to the given parent Pane.
+     *
+     * @param property the property
+     * @param label1   the label to use for the first Button.
+     * @param label2   the label to use for the second Button.
+     * @return the created Button Node.
+     */
+    public Node makeButton(SimpleBooleanProperty property, String label1, String label2) {
+        HBox segment = new HBox();
+        ToggleButton button = new ToggleButton(label1);
+        ToggleButton button2 = new ToggleButton(label2);
+
+        button.getStyleClass().add("font");
+        button.getStyleClass().add("toggleButtonNotFocused");
+        button2.getStyleClass().add("font");
+        button2.getStyleClass().add("toggleButtonFocused");
+        segment.getChildren().addAll(button,button2);
+
+        button.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (button2.selectedProperty().get() == t1){
+                    button2.selectedProperty().set(!t1);
+                }
+                if (t1) {
+                    property.set(true);
+
+                    button.getStyleClass().remove("toggleButtonNotFocused");
+                    button.getStyleClass().add("toggleButtonFocused");
+
+                    button2.getStyleClass().remove("toggleButtonFocused");
+                    button2.getStyleClass().add("toggleButtonNotFocused");
+                } else {
+                    button.getStyleClass().remove("toggleButtonFocused");
+                    button.getStyleClass().add("toggleButtonNotFocused");
+
+                    button2.getStyleClass().remove("toggleButtonNotFocused");
+                    button2.getStyleClass().add("toggleButtonFocused");
+                }
+            }
+        });
+        button2.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if (button.selectedProperty().get() == t1){
+                    button.selectedProperty().set(!t1);
+                }
+                if (t1) {
+                    property.set(false);
+
+                    button.getStyleClass().remove("toggleButtonFocused");
+                    button.getStyleClass().add("toggleButtonNotFocused");
+
+                    button2.getStyleClass().remove("toggleButtonNotFocused");
+                    button2.getStyleClass().add("toggleButtonFocused");
+
+                } else {
+                    button.getStyleClass().remove("toggleButtonNotFocused");
+                    button.getStyleClass().add("toggleButtonFocused");
+
+                    button2.getStyleClass().remove("toggleButtonFocused");
+                    button2.getStyleClass().add("toggleButtonNotFocused");
+                }
+            }
+        });
+        button.minWidthProperty().bind(segment.widthProperty().divide(2).subtract(8));
+        button.maxWidthProperty().bind(segment.widthProperty().divide(2).subtract(8));
+        button2.minWidthProperty().bind(segment.widthProperty().divide(2).subtract(8));
+        button2.maxWidthProperty().bind(segment.widthProperty().divide(2).subtract(8));
+        button.minHeightProperty().bind(segment.heightProperty().subtract(12));
+        button.maxHeightProperty().bind(segment.heightProperty().subtract(12));
+        button2.minHeightProperty().bind(segment.heightProperty().subtract(12));
+        button2.maxHeightProperty().bind(segment.heightProperty().subtract(12));
+
+        button.selectedProperty().set(property.get());
+        button2.selectedProperty().set(!property.get());
+        segment.setPadding(new Insets(4,0,4,0));
+        return segment;
+    }
+
 
 }

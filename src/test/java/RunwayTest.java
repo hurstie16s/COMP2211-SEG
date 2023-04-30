@@ -1,10 +1,13 @@
-package comp2211.seg.ProcessDataModel;
+import comp2211.seg.ProcessDataModel.Obstacle;
+import comp2211.seg.ProcessDataModel.Runway;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -13,7 +16,12 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class RunwayTest {
+/**
+ * The type Runway test.
+ */
+public class RunwayTest {
+
+    // TODO: Re-do all tests properly
 
     private static final Logger logger = LogManager.getLogger(RunwayTest.class);
 
@@ -21,17 +29,37 @@ class RunwayTest {
     //TODO: Re-work tests to handle left and right
 
 
-    // 09R and 27L
+    /**
+     * The constant runway1.
+     */
+// 09R and 27L
     static Runway runway1 = new Runway();
-    // 09L and 27R
+    /**
+     * The constant runway2.
+     */
+// 09L and 27R
     static Runway runway2 = new Runway();
-    // 07R and 25L
+    /**
+     * The constant runway3.
+     */
+// 07R and 25L
     static Runway runway3 = new Runway();
-    // 19C and 01C
+    /**
+     * The constant runway4.
+     */
+// 16L and 34R
     static Runway runway4 = new Runway();
+    /**
+     * The constant runway5.
+     */
+// 04C and 22C
+    static Runway runway5 = new Runway();
 
+    /**
+     * Sets up runways.
+     */
     @BeforeAll
-    static void setUpRunways() {
+    public static void setUpRunways() {
         setProperties(
                 "09R",
                 3660,
@@ -68,9 +96,47 @@ class RunwayTest {
                 2080,
                 runway3
         );
+        setProperties(
+                "16L",
+                1953,
+                2152,
+                1953,
+                1953,
+                1953,
+                2091,
+                1953,
+                1953,
+                runway4
+        );
+        setProperties(
+                "04C",
+                968,
+                968,
+                968,
+                968,
+                968,
+                968,
+                968,
+                968,
+                runway5
+        );
     }
 
-    static void setProperties(
+    /**
+     * Sets properties.
+     *
+     * @param designator the designator
+     * @param leftTora   the left tora
+     * @param leftToda   the left toda
+     * @param leftAsda   the left asda
+     * @param leftLda    the left lda
+     * @param rightTora  the right tora
+     * @param rightToda  the right toda
+     * @param rightAsda  the right asda
+     * @param rightLda   the right lda
+     * @param runway     the runway
+     */
+    public static void setProperties(
             String designator,
             int leftTora,
             int leftToda,
@@ -91,31 +157,61 @@ class RunwayTest {
         runway.inputRightAsdaProperty().bind(new SimpleDoubleProperty(rightAsda));
         runway.inputRightLdaProperty().bind(new SimpleDoubleProperty(rightLda));
     }
-    void addObstacle(Runway runway, Obstacle obstacle){
+
+    /**
+     * Add obstacle.
+     *
+     * @param runway   the runway
+     * @param obstacle the obstacle
+     */
+    public void addObstacle(Runway runway, Obstacle obstacle){
         runway.removeObstacle();
+        obstacle.lengthProperty().set(0);
         runway.addObstacle(obstacle);
     }
 
     // Unit Tests
 
+    /**
+     * Check designator test data.
+     *
+     * @param runway             the runway
+     * @param expectedDesignator the expected designator
+     */
     @DisplayName("Runway Designators : Check 2nd designator is correctly calculated")
     @ParameterizedTest
     @MethodSource("generateCheckDesignatorTestData")
-    void checkDesignatorTestData(Runway runway, String expectedDesignator) {
+    public void checkDesignatorTestData(Runway runway, String expectedDesignator) {
 
         var expectedNumber = expectedDesignator.substring(0,2);
         var expectedCharacter = expectedDesignator.substring(2);
+
 
         assertEquals(expectedNumber, runway.getRunwayDesignatorRight().substring(0,2), "Number for runway designator incorrect");
         assertEquals(expectedCharacter, runway.getRunwayDesignatorRight().substring(2), "Character for runway designator incorrect");
         assertEquals(expectedDesignator, runway.getRunwayDesignatorRight(), "Runway designator incorrect");
     }
 
-    //TODO: Write Test
+    /**
+     * Recalculate test.
+     *
+     * @param runway            the runway
+     * @param obstacleToAdd     the obstacle to add
+     * @param expectedTORALeft  the expected tora left
+     * @param expectedASDALeft  the expected asda left
+     * @param expectedTODALeft  the expected toda left
+     * @param expectedLDALeft   the expected lda left
+     * @param expectedTORARight the expected tora right
+     * @param expectedASDARight the expected asda right
+     * @param expectedTODARight the expected toda right
+     * @param expectedLDARight  the expected lda right
+     * @param message           the message
+     */
+//TODO: Write Test
     @DisplayName("Landing/ take-off calculations : Recalculate appropriate values")
     @ParameterizedTest
     @MethodSource("generateRecalculateTestData")
-    void recalculateTest(Runway runway,
+    public void recalculateTest(Runway runway,
                          Obstacle obstacleToAdd,
                          double expectedTORALeft,
                          double expectedASDALeft,
@@ -145,20 +241,52 @@ class RunwayTest {
 
     // Test Data Generation
 
-    // Obstacles defined in given scenario's
-    static Obstacle obstacle1 = new Obstacle("ob1", 12, -50, 3645);
-    static Obstacle obstacle2 = new Obstacle("ob2", 25, 2853, 500);
-    static Obstacle obstacle3 = new Obstacle("ob3", 15, 150, 3203);
-    static Obstacle obstacle4 = new Obstacle("ob4", 20, 3546, 50);
-    static Obstacle obstacle5 = new Obstacle("ob5", 14, 80, 2082);
-    static Obstacle obstacle6 = new Obstacle("ob6", 11, 2285, -123);
+    /**
+     * The constant obstacle1.
+     */
+// Obstacles defined in given scenario's
+    static Obstacle obstacle1 = new Obstacle("ob1", 12, -50);
+    /**
+     * The Obstacle 2.
+     */
+    static Obstacle obstacle2 = new Obstacle("ob2", 25, 2853);
+    /**
+     * The Obstacle 3.
+     */
+    static Obstacle obstacle3 = new Obstacle("ob3", 15, 150);
+    /**
+     * The Obstacle 4.
+     */
+    static Obstacle obstacle4 = new Obstacle("ob4", 20, 3546);
+    /**
+     * The Obstacle 5.
+     */
+    static Obstacle obstacle5 = new Obstacle("ob5", 14, 80);
+    /**
+     * The Obstacle 6.
+     */
+    static Obstacle obstacle6 = new Obstacle("ob6", 11, 2285);
+    /**
+     * The Obstacle 7.
+     */
+    static Obstacle obstacle7 = new Obstacle("ob7", 13, 976);
+    /**
+     * The Obstacle 8.
+     */
+    static Obstacle obstacle8 = new Obstacle("ob8", 17, 0);
+    /**
+     * The Obstacle 9.
+     */
+    static Obstacle obstacle9 = new Obstacle("ob9", 8, 484);
 
     //TODO: Change generation to fit new tests
     private static Stream<Arguments> generateCheckDesignatorTestData() {
         return Stream.of(
                 Arguments.of(runway1, "27L"),
                 Arguments.of(runway2, "27R"),
-                Arguments.of(runway3, "25L")
+                Arguments.of(runway3, "25L"),
+                Arguments.of(runway4, "34R"),
+                Arguments.of(runway5, "22C")
         );
     }
     //TODO: Generate test data for recalculate
@@ -213,7 +341,7 @@ class RunwayTest {
                         3353,
                         3353,
                         3431,
-                        2774,
+                        2775,
                         "Test: Given Scenario 4"
                 ),
                 Arguments.of(
@@ -241,7 +369,51 @@ class RunwayTest {
                         2866,
                         1593,
                         "Test: Own Scenario 2"
+                ),
+                Arguments.of(
+                        runway4,
+                        obstacle7,
+                        477,
+                        477,
+                        676,
+                        267,
+                        267,
+                        267,
+                        267,
+                        677,
+                        "Test: Own Scenario 3"
+                ),
+                Arguments.of(
+                        runway4,
+                        obstacle8,
+                        1453,
+                        1453,
+                        1652,
+                        1043,
+                        1043,
+                        1043,
+                        1043,
+                        1653,
+                        "Test: Own Scenario 4"
+                ),
+                Arguments.of(
+                        runway5,
+                        obstacle9,
+                        -16,
+                        -16,
+                        -16,
+                        -16,
+                        24,
+                        24,
+                        24,
+                        184,
+                        "Test: Own Scenario 5"
                 )
         );
+    }
+
+    @Test
+    public void smallTest() {
+        assert false;
     }
 }
