@@ -135,7 +135,7 @@ public class HomeScene extends SceneAbstract{
     Button startApplication = new Button("Start Application");
     startApplication.setOnMousePressed(this::startApplication);
     Button importAirportWithObstacle = new Button("Import Airport with Obstacle");
-    Button importAirport = new Button("Import Airport");
+    Button importAirportWithoutObs = new Button("Import Airport without Obstacle");
     Button newAirport = new Button("New Airport");
     //startApplication.setTextFill(Theme.fg);
     startApplication.getStyleClass().add("fg");
@@ -147,8 +147,8 @@ public class HomeScene extends SceneAbstract{
     //importAirportWithObstacle.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     importAirportWithObstacle.getStyleClass().add("focusedBG");
     importAirportWithObstacle.getStyleClass().add("font");
-    importAirport.getStyleClass().add("focusedBG");
-    importAirport.getStyleClass().add("font");
+    importAirportWithoutObs.getStyleClass().add("focusedBG");
+    importAirportWithoutObs.getStyleClass().add("font");
     //newAirport.setTextFill(Theme.fg);
     newAirport.getStyleClass().add("fg");
     //newAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
@@ -158,7 +158,7 @@ public class HomeScene extends SceneAbstract{
     //importAirportWithObstacle.setDisable(true);
     // Import Airport
     importAirportWithObstacle.setOnAction(e -> importAirportWithObstacleButtonEvent());
-    importAirport.setOnAction(e -> importAirportNoObsEvent());
+    importAirportWithoutObs.setOnAction(e -> importAirportNoObsEvent());
 
     newAirport.setDisable(true);
 
@@ -181,7 +181,7 @@ public class HomeScene extends SceneAbstract{
 
     buttons.addColumn(0,airportText,runwayText);
     buttons.addColumn(1,airports, runways, startApplication);
-    buttons.addColumn(2,importAirportWithObstacle, importAirport);
+    buttons.addColumn(2,importAirportWithObstacle, importAirportWithoutObs);
 
     ColumnConstraints ccx = new ColumnConstraints();
     ccx.setPercentWidth(20);
