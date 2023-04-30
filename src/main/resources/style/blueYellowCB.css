@@ -158,10 +158,6 @@
     -fx-font-weight: 700;
 }
 
-.runway-background {
-    -fx-background-image: url("../images/grass.jpg");
-    -fx-background-size: cover;
-}
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
