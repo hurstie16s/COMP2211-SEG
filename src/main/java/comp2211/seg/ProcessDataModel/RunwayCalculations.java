@@ -50,7 +50,7 @@ public abstract class RunwayCalculations {
 
             runway.leftAsdaBreakdown.bind(
                     new SimpleStringProperty("Left ASDA = ")
-                            .concat(runway.leftTora.intValue())
+                            .concat (runway.leftTora.intValue())
                             .concat(" + ")
                             .concat(Math.min(distanceFromToraEnd.intValue(), runway.stopwayRight.intValue()))
                             .concat(" = ")

@@ -161,8 +161,9 @@ public abstract class SceneAbstract extends Scene {
 
     Menu menu4 = new Menu("Import from XML");
 
-    MenuItem menu9 = new MenuItem("Import Airport & Obstacle...");
-    MenuItem menu10 = new MenuItem("Import Obstacle...");
+    MenuItem menuImport1 = new MenuItem("Import Airport & Obstacle...");
+    MenuItem menuImport2 = new MenuItem("Import Obstacle...");
+    MenuItem menuImport3 = new MenuItem("Import Airport without Obstacle...");
 
     Menu menu5 = new Menu("Export to XML");
     MenuItem menu6 = new MenuItem("Export Obstacle...");
@@ -186,7 +187,7 @@ public abstract class SceneAbstract extends Scene {
     } else {
       fileMenu.getItems().addAll(menu4);
     }
-    menu4.getItems().addAll(menu9, menu10);
+    menu4.getItems().addAll(menuImport1, menuImport2, menuImport3);
     menu5.getItems().addAll(menu7, menu15, menu6);
 
       menu12.getItems().addAll(menu12png);//, menu12jpg, menu12gif);
@@ -219,9 +220,9 @@ public abstract class SceneAbstract extends Scene {
 
     menu8.setOnAction(e -> help.toggleHelp(this.getClass().getCanonicalName()));
 
-    menu9.setOnAction(e -> importAirportButtonEvent());
+    menuImport1.setOnAction(e -> importAirportButtonEvent());
 
-    menu10.setOnAction(e -> importObstacleButtonEvent());
+    menuImport2.setOnAction(e -> importObstacleButtonEvent());
 
     menu12png.setOnAction(e -> exportTopDownViewButtonEvent("png"));
    // menu12jpg.setOnAction(e -> exportTopDownViewButtonEvent("jpg"));
