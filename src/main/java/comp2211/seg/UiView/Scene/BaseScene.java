@@ -1090,10 +1090,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         data2.textProperty().bind(prop2);
         data2.setAlignment(Pos.CENTER_LEFT);
 
+        ScrollPane scrollPane = new ScrollPane();
+
         VBox box = new VBox(dataheader,data,data2header,data2);
         VBox.setVgrow(data, Priority.ALWAYS);
         box.setAlignment(Pos.CENTER_LEFT);
         box.setPadding(new Insets(0,5,0,5));
+
+        scrollPane.setContent(box); // TODO: Finish
 
         return box;
 
@@ -1189,6 +1193,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 )
         );
         TabLayout breakDownPane = new TabLayout(breakDown,"focusedBG","veryfocusedBG");
+        // TODO: scrollable
         return breakDownPane;
     }
     private TextField makeTableCell(SimpleDoubleProperty property){
