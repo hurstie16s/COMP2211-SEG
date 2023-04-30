@@ -109,7 +109,27 @@ public class Runway extends RunwayValues{
         stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
         //direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
-        slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2)).greaterThan(runwayObstacle.lengthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2))).otherwise(runwayObstacle.lengthProperty().divide(2).add(240)));
+        slopeLength.bind(
+                Bindings.when(
+                        runwayObstacle.heightProperty()
+                                .multiply(SLOPE)
+                                .subtract(runwayObstacle.lengthProperty()
+                                        .divide(2))
+                                .greaterThan(
+                                        runwayObstacle.lengthProperty()
+                                                .divide(2)
+                                                .add(240)))
+                        .then(
+                                runwayObstacle.heightProperty()
+                                        .multiply(SLOPE)
+                                        .subtract(runwayObstacle.lengthProperty()
+                                                .divide(2)))
+                        .otherwise(
+                                runwayObstacle.lengthProperty()
+                                        .divide(2)
+                                        .add(240)
+                        )
+        );
         //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
 
         runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
@@ -122,9 +142,9 @@ public class Runway extends RunwayValues{
         runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
         runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
     }
-    public String toString(boolean dual){
+    public String toString(){
         String designators;
-        if (dual) {
+        if (dualDirectionRunway.get()) {
             designators = runwayDesignatorLeft.concat("/").concat(runwayDesignatorRight).get();
         } else {
             designators = runwayDesignatorLeft.get();

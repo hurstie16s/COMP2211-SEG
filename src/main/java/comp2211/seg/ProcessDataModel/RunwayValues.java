@@ -127,4 +127,7 @@ public abstract class RunwayValues {
     public final SimpleStringProperty rightLdaSubBreakdown = new SimpleStringProperty();
     public final SimpleStringProperty rightLdaSubBreakdownHeader = new SimpleStringProperty();
 
+
+    public final SimpleBooleanProperty dualDirectionRunway = new SimpleBooleanProperty(true);
+
 }
