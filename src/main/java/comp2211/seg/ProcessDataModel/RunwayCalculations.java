@@ -153,7 +153,7 @@ public abstract class RunwayCalculations {
                     new SimpleStringProperty("Left TODA = ")
                             .concat(runway.leftToda.intValue())
             );
-            runway.leftToraBreakdownHeader.bind(new SimpleStringProperty("Left TODA = Left TORA"));
+            runway.leftTodaBreakdownHeader.bind(new SimpleStringProperty("Left TODA = Left TORA"));
         }
 
     }

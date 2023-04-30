@@ -1620,7 +1620,7 @@ public class Runway extends RunwayValues{
      * @return the simple string property
      */
     public SimpleStringProperty leftTodaBreakdownHeaderProperty() {
-        return leftToraBreakdownHeader;
+        return leftTodaBreakdownHeader;
     }
 
     /**
