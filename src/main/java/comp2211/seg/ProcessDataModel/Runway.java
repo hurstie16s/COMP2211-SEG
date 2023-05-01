@@ -581,28 +581,17 @@ public class Runway extends RunwayValues{
      * @param change text to be displayed in change history tab
      */
     public void logChange(String change) {
-        changeHistory.add(change);
-        Label changeLabel = new Label(change);
-        changeLabel.setMaxWidth(changesHistory.getWidth());
-        changeLabel.setMaxHeight(40);
-        changeLabel.setWrapText(true);
-        changeLabel.setTextFill(Theme.unfocusedBG);
-        changeLabel.setBackground(new Background(new BackgroundFill(Theme.extremelyfocusedBG, new CornerRadii(3), Insets.EMPTY)));
-        double newLabelHeight = changeLabel.getHeight();
-        ObservableList<Node> children = changesHistory.getChildren();
-        for (Node child : children) {
-            double currentY = child.getLayoutY();
-            child.setLayoutY(currentY + 40);
-        }
-        changeLabel.setLayoutY(0);
-        children.add(0, changeLabel);
+        changeHistory.add(0, change);
+        //Platform.runLater(() -> changesHistory.setItems(FXCollections.observableArrayList(changeHistory)));
     }
 
 
 
-
-
     // Getters
+
+    public ArrayList<String> getChangeHistory() {
+        return changeHistory;
+    }
 
     /**
      * Gets input right tora.

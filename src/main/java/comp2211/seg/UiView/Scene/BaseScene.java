@@ -925,7 +925,14 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             }
         });
 
-        ScrollPane history = new ScrollPane(appWindow.runway.changesHistory);
+
+        ListView<String> historyListView = new ListView<>();
+        historyListView.getStyleClass().add("veryfocusedBG");
+        ObservableList<String> historyItems = FXCollections.observableArrayList(appWindow.runway.getChangeHistory());
+        historyListView.setItems(historyItems);
+
+
+        ScrollPane history = new ScrollPane(historyListView);
         history.setFitToWidth(true);
         history.setPadding(new Insets(16));
 
@@ -934,6 +941,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         TabLayout obstacleOptionsPane = new TabLayout(obstacleOptions,"focusedBG","veryfocusedBG");
         return obstacleOptionsPane;
     }
+
+
 
     private Node makeOutputLabel(SimpleStringProperty string, SimpleBooleanProperty visibility, int i) {
         Label data = new Label();
