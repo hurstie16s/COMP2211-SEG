@@ -64,49 +64,49 @@
     -fx-fill: #ffffff;
 }
 .grass {
-    -fx-background-color: #CFCFCF;
+    -fx-background-color: #BFBFBF;
 }
 .obstacle {
-    -fx-background-color: #D73E41;
+    -fx-background-color: #ff0000;
 }
 .slope {
     -fx-background-color: #ecfdec;
 }
 .cga {
-    -fx-background-color: #688189;
+    -fx-background-color: #003E43;
 }
 .clearway {
-    -fx-background-color: #FF5C61;
+    -fx-background-color: #366F78;
 }
 .stopway {
-    -fx-background-color: #FFA6B0;
+    -fx-background-color: #82CEDE;
 }
 .physicalResa {
-    -fx-background-color: #C499A5;
+    -fx-background-color: #51A5B2;
 }
 .runway {
     -fx-background-color: #A5A5A5;
 }
 .toda {
-    -fx-background-color: #1BBCCC;
+    -fx-background-color: #1EC3D4;
 }
 .tora {
-    -fx-background-color: #1BBCCC;
+    -fx-background-color: #1EC3D4;
 }
 .asda {
-    -fx-background-color: #1BBCCC;
+    -fx-background-color: #1EC3D4;
 }
 .lda {
-    -fx-background-color: #1BBCCC;
+    -fx-background-color: #1EC3D4;
 }
 .resa {
-    -fx-background-color: #8E1628;
+    -fx-background-color: #843033;
 }
 .stripend {
-    -fx-background-color: #EA445E;
+    -fx-background-color: #CA676F;
 }
 .blastallowance {
-    -fx-background-color: #20304E;
+    -fx-background-color: #E7C0CF;
 }
 
 
@@ -158,14 +158,6 @@
     -fx-font-weight: 700;
 }
 
-.home-background {
-    -fx-background-image: url("../images/heathrowRunway.jpg");
-    -fx-background-size: cover;
-}
-.runway-background {
-    -fx-background-image: url("../images/grass.jpg");
-    -fx-background-size: cover;
-}
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
 }

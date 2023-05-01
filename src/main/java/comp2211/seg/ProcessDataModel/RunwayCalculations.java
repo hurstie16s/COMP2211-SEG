@@ -11,6 +11,9 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class RunwayCalculations {
 
+    /**
+     * The constant logger.
+     */
     private static final Logger logger = LogManager.getLogger(RunwayCalculations.class);
 
     /**
@@ -49,7 +52,7 @@ public abstract class RunwayCalculations {
 
             runway.leftAsdaBreakdown.bind(
                     new SimpleStringProperty("Left ASDA = ")
-                            .concat(runway.leftTora.intValue())
+                            .concat (runway.leftTora.intValue())
                             .concat(" + ")
                             .concat(Math.min(distanceFromToraEnd.intValue(), runway.stopwayRight.intValue()))
                             .concat(" = ")
@@ -107,7 +110,7 @@ public abstract class RunwayCalculations {
                                                     .concat(runway.SLOPE)
                                     )
                                     .otherwise(
-                                            new SimpleStringProperty()
+                                            new SimpleStringProperty("")
                                                     .concat(runway.MINRESA)
                                                     .concat(" + (")
                                                     .concat(runway.runwayObstacle.lengthProperty().intValue())
@@ -152,7 +155,7 @@ public abstract class RunwayCalculations {
                     new SimpleStringProperty("Left TODA = ")
                             .concat(runway.leftToda.intValue())
             );
-            runway.leftToraBreakdownHeader.bind(new SimpleStringProperty("Left TODA = Left TORA"));
+            runway.leftTodaBreakdownHeader.bind(new SimpleStringProperty("Left TODA = Left TORA"));
         }
 
     }
@@ -420,7 +423,7 @@ public abstract class RunwayCalculations {
                                                     .concat(runway.SLOPE)
                                     )
                                     .otherwise(
-                                            new SimpleStringProperty()
+                                            new SimpleStringProperty("")
                                                     .concat(runway.MINRESA)
                                                     .concat(" + (")
                                                     .concat(runway.runwayObstacle.lengthProperty().intValue())
@@ -547,7 +550,7 @@ public abstract class RunwayCalculations {
                                                     runway.BLASTZONE, runway.STRIPEND.add(runway.MINRESA)
                                             )
                                     ).then(
-                                            new SimpleStringProperty().concat(runway.BLASTZONE)
+                                            new SimpleStringProperty("").concat(runway.BLASTZONE)
                                     ).otherwise(
                                             new SimpleStringProperty("(")
                                                     .concat(runway.STRIPEND)

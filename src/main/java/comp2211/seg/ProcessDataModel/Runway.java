@@ -23,131 +23,32 @@ import java.util.ArrayList;
  * Represents a runway object, containing various properties such as length, width, and designator, as well as methods
  * for calculating takeoff and landing distances based on these properties.
  */
-public class Runway {
+public class Runway extends RunwayValues{
 
-    // logger
+    /**
+     * The constant logger.
+     */
+// logger
     private static final Logger logger = LogManager.getLogger(Runway.class);
 
-    /**
-     * The Changes history.
-     */
-// changes history pane
-    public Pane changesHistory = new Pane();
-    private final ArrayList<String> changeHistory = new ArrayList<>();
+    // Class Variables stored in runway values
 
-    // Runway dimensions and properties
-    public final SimpleDoubleProperty clearwayLeft = new SimpleDoubleProperty(500);
-    public final SimpleDoubleProperty clearwayRight = new SimpleDoubleProperty(500);
-    public final SimpleDoubleProperty clearwayHeight = new SimpleDoubleProperty(150);
-    public final SimpleDoubleProperty stopwayLeft = new SimpleDoubleProperty(150);
-    public final SimpleDoubleProperty stopwayRight = new SimpleDoubleProperty(150);
-    public final SimpleDoubleProperty stripEnd = new SimpleDoubleProperty(60);
-    public final SimpleDoubleProperty RESAWidth = new SimpleDoubleProperty(240);
-    public final SimpleDoubleProperty RESAHeight = new SimpleDoubleProperty(90);
-
-    //Inputs
-
-    /*
-    A runway designator consists of a two-digit number,
-    which is the whole number nearest to one tenth of the magnetic North
-    when viewed from the direction of approach. For example,
-    if the azimuth of the centre-line is 153 then the runway designator will be 15
-    followed by either L C or R to differentiate between parallel runways
-     */
-    public final SimpleStringProperty runwayDesignatorLeft = new SimpleStringProperty("00L");
-    public final SimpleStringProperty runwayDesignatorRight = new SimpleStringProperty("18R");
-    public SimpleDoubleProperty inputRightTora = new SimpleDoubleProperty(1000);
-    public SimpleDoubleProperty inputRightToda = new SimpleDoubleProperty(1500);
-    public SimpleDoubleProperty inputRightAsda = new SimpleDoubleProperty(1150);
-    public SimpleDoubleProperty inputRightLda = new SimpleDoubleProperty(1000);
-    public SimpleDoubleProperty inputLeftTora = new SimpleDoubleProperty(1000);
-    public SimpleDoubleProperty inputLeftToda = new SimpleDoubleProperty(1500);
-    public SimpleDoubleProperty inputLeftAsda = new SimpleDoubleProperty(1150);
-    public SimpleDoubleProperty inputLeftLda = new SimpleDoubleProperty(900);
-    public final SimpleDoubleProperty rightTora = new SimpleDoubleProperty(0);
-    public final SimpleDoubleProperty rightToda = new SimpleDoubleProperty(0);
-    public final SimpleDoubleProperty rightAsda = new SimpleDoubleProperty(0);
-    public final SimpleDoubleProperty rightLda = new SimpleDoubleProperty(0);
-    public final SimpleDoubleProperty leftTora = new SimpleDoubleProperty(0);
-    public final SimpleDoubleProperty leftToda = new SimpleDoubleProperty(0);
-    public final SimpleDoubleProperty leftAsda = new SimpleDoubleProperty(0);
-    public final SimpleDoubleProperty leftLda = new SimpleDoubleProperty(0);
-    public final SimpleDoubleProperty dispThresholdLeft = new SimpleDoubleProperty(0);
-    public final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(60);
-
-
-    /**
-     * The Runway obstacle.
-     */
-    public Obstacle runwayObstacle = new Obstacle("One", 10,0);
-
-    public final SimpleBooleanProperty landingMode = new SimpleBooleanProperty(true);
-
-    public final SimpleBooleanProperty directionLeft = new SimpleBooleanProperty(true);
-    public final SimpleBooleanProperty directionRight = new SimpleBooleanProperty(true);
-    public final SimpleBooleanProperty leftTakeOff = new SimpleBooleanProperty(false);
-    public final SimpleBooleanProperty leftLand = new SimpleBooleanProperty(false);
-    public final SimpleBooleanProperty rightTakeOff = new SimpleBooleanProperty(false);
-    public final SimpleBooleanProperty rightLand = new SimpleBooleanProperty(false);
-
-    // End of Inputs
-
-
-
-    // Typical values, may become variable down the line
-    // Constants
-    public final SimpleDoubleProperty MINRESA = new SimpleDoubleProperty(240);
-    public final SimpleDoubleProperty STRIPEND = new SimpleDoubleProperty(60);
-    public final SimpleDoubleProperty BLASTZONE = new SimpleDoubleProperty(500);
-    public final SimpleDoubleProperty SLOPE = new SimpleDoubleProperty(50);
-    public final SimpleDoubleProperty STOPWAYMIN = new SimpleDoubleProperty(0);
-    public final SimpleDoubleProperty slopeLength = new SimpleDoubleProperty(50);
-
-    // Runway dimensions
-    public final SimpleDoubleProperty runwayLength = new SimpleDoubleProperty(1000);
-    public final SimpleDoubleProperty runwayWidth = new SimpleDoubleProperty(60);
-    public final SimpleBooleanProperty hasRunwayObstacle = new SimpleBooleanProperty(false);
-    public static final SimpleStringProperty units = new SimpleStringProperty("m");
-
-    // Calculation Breakdowns
-
-    // Left TORA
-    public final SimpleStringProperty leftToraBreakdown = new SimpleStringProperty("N/A");
-    public final SimpleStringProperty leftToraBreakdownHeader = new SimpleStringProperty("N/A");
-    // Right TORA
-    public final SimpleStringProperty rightToraBreakdown = new SimpleStringProperty("N/A");
-    public final SimpleStringProperty rightToraBreakdownHeader = new SimpleStringProperty("N/A");
-    // Left TODA
-    public final SimpleStringProperty leftTodaBreakdown = new SimpleStringProperty("N/A");
-    public final SimpleStringProperty leftTodaBreakdownHeader = new SimpleStringProperty("N/A");
-    // Right TODA
-    public final SimpleStringProperty rightTodaBreakdown = new SimpleStringProperty("N/A");
-    public final SimpleStringProperty rightTodaBreakdownHeader = new SimpleStringProperty("N/A");
-    // Left ASDA
-    public final SimpleStringProperty leftAsdaBreakdown = new SimpleStringProperty("N/A");
-    public final SimpleStringProperty leftAsdaBreakdownHeader = new SimpleStringProperty("N/A");
-    // Right ASDA
-    public final SimpleStringProperty rightAsdaBreakdown = new SimpleStringProperty("N/A");
-    public final SimpleStringProperty rightAsdaBreakdownHeader = new SimpleStringProperty("N/A");
-    // Left LDA
-    public final SimpleStringProperty leftLdaBreakdown = new SimpleStringProperty("N/A");
-    public final SimpleStringProperty leftLdaBreakdownHeader = new SimpleStringProperty("N/A");
-    // Temp holders
-    public final SimpleStringProperty leftLdaObstacleSlopeCalcBreakdown = new SimpleStringProperty();
-    public final SimpleStringProperty leftLdaObstacleSlopeCalcBreakdownHeader = new SimpleStringProperty();
-    public final SimpleStringProperty leftLdaSubBreakdown = new SimpleStringProperty();
-    public final SimpleStringProperty leftLdaSubBreakdownHeader = new SimpleStringProperty();
-    // Right LDA
-    public final SimpleStringProperty rightLdaBreakdown = new SimpleStringProperty("N/A");
-    public final SimpleStringProperty rightLdaBreakdownHeader = new SimpleStringProperty("N/A");
-    // Temp holders
-    public final SimpleStringProperty rightLdaObstacleSlopeCalcBreakdown = new SimpleStringProperty();
-    public final SimpleStringProperty rightLdaObstacleSlopeCalcBreakdownHeader = new SimpleStringProperty();
-    public final SimpleStringProperty rightLdaSubBreakdown = new SimpleStringProperty();
-    public final SimpleStringProperty rightLdaSubBreakdownHeader = new SimpleStringProperty();
 
     // TODO: Create header breakdowns to better explain what the numbers are
 
+    /**
+     * Instantiates a new Runway.
+     *
+     * @param designators the designators
+     * @param leftTora    the left tora
+     * @param leftToda    the left toda
+     * @param leftLDA     the left lda
+     * @param leftASDA    the left asda
+     * @param rightTora   the right tora
+     * @param rightToda   the right toda
+     * @param rightLDA    the right lda
+     * @param rightASDA   the right asda
+     */
     public Runway(String designators, double leftTora, double leftToda, double leftLDA, double leftASDA, double rightTora, double rightToda, double rightLDA, double rightASDA){
         runwayDesignatorLeft.set(designators.split("/")[0]);
         runwayDesignatorRight.set(designators.split("/")[1]);
@@ -224,7 +125,27 @@ public class Runway {
         stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
         //direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
-        slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2)).greaterThan(runwayObstacle.lengthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2))).otherwise(runwayObstacle.lengthProperty().divide(2).add(240)));
+        slopeLength.bind(
+                Bindings.when(
+                        runwayObstacle.heightProperty()
+                                .multiply(SLOPE)
+                                .subtract(runwayObstacle.lengthProperty()
+                                        .divide(2))
+                                .greaterThan(
+                                        runwayObstacle.lengthProperty()
+                                                .divide(2)
+                                                .add(240)))
+                        .then(
+                                runwayObstacle.heightProperty()
+                                        .multiply(SLOPE)
+                                        .subtract(runwayObstacle.lengthProperty()
+                                                .divide(2)))
+                        .otherwise(
+                                runwayObstacle.lengthProperty()
+                                        .divide(2)
+                                        .add(240)
+                        )
+        );
         //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
 
         runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
@@ -237,9 +158,15 @@ public class Runway {
         runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
         runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
     }
-    public String toString(boolean dual){
+
+    /**
+     * To string string.
+     *
+     * @return the string
+     */
+    public String toString(){
         String designators;
-        if (dual) {
+        if (dualDirectionRunway.get()) {
             designators = runwayDesignatorLeft.concat("/").concat(runwayDesignatorRight).get();
         } else {
             designators = runwayDesignatorLeft.get();
@@ -249,9 +176,12 @@ public class Runway {
 
     /**
      * Calculates the runway designator for the runway in the opposite direction
+     *
      * @param designator The designator that has been changes, used to calculate the new designator for the runways complement direction
+     * @param left       the left
+     * @return the string
      */
-    private String calculateRunwayDesignator(String designator, boolean left) {
+    public String calculateRunwayDesignator(String designator, boolean left) {
         var number = String.valueOf((Integer.parseInt(designator.substring(0,2)) + 18) % 36);
         if (number.length() == 1) {
             number = "0"+number;
@@ -287,6 +217,9 @@ public class Runway {
         return newDesignator;
     }
 
+    /**
+     * Swap left right.
+     */
     private void swapLeftRight() {
 
         // Swap all inputs, call recalculate
@@ -313,7 +246,6 @@ public class Runway {
     }
 
 
-
     /**
      * Adds an obstacle to the list of obstacles on the runway.
      *
@@ -324,8 +256,12 @@ public class Runway {
         runwayObstacle.heightProperty().set(obstacleToAdd.heightProperty().get());
         runwayObstacle.lengthProperty().set(obstacleToAdd.lengthProperty().get());
         runwayObstacle.widthProperty().set(obstacleToAdd.widthProperty().get());
-        runwayObstacle.distFromThresholdProperty().set(obstacleToAdd.distFromThresholdProperty().get());
-        hasRunwayObstacle.set(false); // Listener will call recalculate
+        //runwayObstacle.distFromThresholdProperty().set(obstacleToAdd.distFromThresholdProperty().get());
+        runwayObstacle.distFromThresholdProperty().set(runwayLength.get()/2);
+        //Aleks - ^ replaced with default setting which place obstacle in the middle.
+
+        //hasRunwayObstacle.set(true); // Listener will call recalculate
+        //Aleks - ^ removed as it is not needed at all here. Visibility is triggered by yes/no button.
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
         logChange("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
 
@@ -487,7 +423,9 @@ public class Runway {
 
     /**
      * Calculating the LDA subtraction
+     *
      * @param distFromThreshold The correct distance from threshold for the obstacle for the direction
+     * @param left              the left
      * @return The calculated subtraction from the LDA
      */
     public SimpleDoubleProperty getLdaSubtraction(SimpleDoubleProperty distFromThreshold, boolean left) {
@@ -566,6 +504,8 @@ public class Runway {
 
     /**
      * Calculate the slope value for an obstacle
+     *
+     * @param left the left
      * @return The appropriate slope over an obstacle
      */
     private SimpleDoubleProperty getObstacleSlopeCalculation(boolean left) {
@@ -881,6 +821,12 @@ public class Runway {
     public boolean isDirectionLeft() {
         return directionLeft.get();
     }
+
+    /**
+     * Is direction right boolean.
+     *
+     * @return the boolean
+     */
     public boolean isDirectionRight() {
         return directionRight.get();
     }
@@ -893,6 +839,12 @@ public class Runway {
     public SimpleBooleanProperty directionLeftProperty() {
         return directionLeft;
     }
+
+    /**
+     * Direction right property simple boolean property.
+     *
+     * @return the simple boolean property
+     */
     public SimpleBooleanProperty directionRightProperty() {
         return directionRight;
     }
@@ -1715,7 +1667,7 @@ public class Runway {
      * @return the simple string property
      */
     public SimpleStringProperty leftTodaBreakdownHeaderProperty() {
-        return leftToraBreakdownHeader;
+        return leftTodaBreakdownHeader;
     }
 
     /**

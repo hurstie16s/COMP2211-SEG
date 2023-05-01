@@ -1,34 +1,24 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.App;
-import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.Runway;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Set;
-import java.util.function.Consumer;
 
 /**
  * A concrete implementation of the SceneAbstract class representing the home scene of the application.
@@ -51,6 +41,7 @@ public class HomeScene extends SceneAbstract{
   protected TextField nameEntry;
   private ComboBox airports;
   private ComboBox runways;
+
 
   /**
    * Constructor to create a HomeScene object.
@@ -99,15 +90,11 @@ public class HomeScene extends SceneAbstract{
     super.build();
     logger.info("building");
 
-
-
-
     nameEntry = new TextField();
     nameEntry.setPromptText("new airport name");
     nameEntry.setStyle("-fx-prompt-text-fill: gray;");
     VBox centrePane = new VBox();
     centrePane.setAlignment(Pos.CENTER);
-
 
     Text title = new Text("Runway Redeclaration Aid\n");
     title.getStyleClass().addAll("fontbig", "bold", "fg");
@@ -116,22 +103,29 @@ public class HomeScene extends SceneAbstract{
         "the runway redeclaration process\n");
     desciption.getStyleClass().addAll("font", "fg");
 
-
-
     airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
     airports.getStyleClass().add("focusedBG");
     airports.getStyleClass().add("font");
-    airports.valueProperty().addListener((observableValue, o, t1) -> appWindow.setAirport((Airport) t1));
-    airports.valueProperty().set(appWindow.airport);
+// Add a listener to update the runways ComboBox when a new airport is selected
+    airports.valueProperty().addListener((observableValue, oldAirport, newAirport) -> {
+      appWindow.setAirport((Airport) newAirport);
 
-
+      // Update the options of the runways ComboBox with the runways for the selected airport
+      runways.setItems(FXCollections.observableArrayList(((Airport)newAirport).getRunways()));
+      // Select the first runway in the new list, if it exists
+      if (!((Airport)newAirport).getRunways().isEmpty()) {
+        runways.setValue(((Airport)newAirport).getRunways().get(0));
+      }
+    });
+    // Create the runways ComboBox
     runways = new ComboBox(FXCollections.observableArrayList(appWindow.airport.getRunways()));
-    //runways.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     runways.getStyleClass().add("focusedBG");
     runways.getStyleClass().add("font");
+// Add a listener to update the selected runway in the appWindow when a new runway is selected
     runways.valueProperty().addListener(new ChangeListener() {
       @Override
       public void changed(ObservableValue observableValue, Object o, Object t1) {
+        logger.info("changed runway: "+ t1);
         appWindow.setRunway((Runway) t1);
         if (! (o == null)) {
           if (!o.equals(t1)) {
@@ -140,31 +134,41 @@ public class HomeScene extends SceneAbstract{
         }
       }
     });
-    runways.valueProperty().set(appWindow.runway);
+// Set the initial value of the airports ComboBox
+    //airports.setValue(appWindow.getAirports().get(0));
+    airports.setValue(appWindow.airport);
+// Set the initial value of the runways ComboBox
+    runways.setValue(appWindow.runway);
+
+
 
     Button startApplication = new Button("Start Application");
     startApplication.setOnMousePressed(this::startApplication);
-    Button importAirport = new Button("Import Airport");
+    Button importAirportWithObstacle = new Button("Import Airport with Obstacle");
+    Button importAirportWithoutObs = new Button("Import Airport without Obstacle");
     Button newAirport = new Button("New Airport");
     //startApplication.setTextFill(Theme.fg);
     startApplication.getStyleClass().add("fg");
     //startApplication.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     startApplication.getStyleClass().add("focusedBG");
     startApplication.getStyleClass().add("font");
-    //importAirport.setTextFill(Theme.fg);
-    importAirport.getStyleClass().add("fg");
-    //importAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
-    importAirport.getStyleClass().add("focusedBG");
-    importAirport.getStyleClass().add("font");
+    //importAirportWithObstacle.setTextFill(Theme.fg);
+    importAirportWithObstacle.getStyleClass().add("fg");
+    //importAirportWithObstacle.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
+    importAirportWithObstacle.getStyleClass().add("focusedBG");
+    importAirportWithObstacle.getStyleClass().add("font");
+    importAirportWithoutObs.getStyleClass().add("focusedBG");
+    importAirportWithoutObs.getStyleClass().add("font");
     //newAirport.setTextFill(Theme.fg);
     newAirport.getStyleClass().add("fg");
     //newAirport.setBackground(new Background(new BackgroundFill(Theme.focusedBG,null,null)));
     newAirport.getStyleClass().add("focusedBG");
     newAirport.getStyleClass().add("fontsmall");
 
-    //importAirport.setDisable(true);
+    //importAirportWithObstacle.setDisable(true);
     // Import Airport
-    importAirport.setOnAction(e -> importAirportButtonEvent());
+    importAirportWithObstacle.setOnAction(e -> importAirportWithObstacleButtonEvent());
+    importAirportWithoutObs.setOnAction(e -> importAirportNoObsEvent());
 
     newAirport.setDisable(true);
 
@@ -182,12 +186,11 @@ public class HomeScene extends SceneAbstract{
     //runwayText.setTextFill(Theme.fgBright);
     runwayText.getStyleClass().add("fgBright");
 
-
     GridPane buttons = new GridPane();
 
     buttons.addColumn(0,airportText,runwayText);
     buttons.addColumn(1,airports, runways, startApplication);
-    buttons.addColumn(2,importAirport);
+    buttons.addColumn(2,importAirportWithObstacle, importAirportWithoutObs);
 
     ColumnConstraints ccx = new ColumnConstraints();
     ccx.setPercentWidth(20);
@@ -203,8 +206,10 @@ public class HomeScene extends SceneAbstract{
     runways.minWidthProperty().bind(airports.widthProperty());
     startApplication.maxWidthProperty().bind(airports.widthProperty());
     startApplication.minWidthProperty().bind(airports.widthProperty());
-    importAirport.maxWidthProperty().bind(airports.widthProperty());
-    importAirport.minWidthProperty().bind(airports.widthProperty());
+    importAirportWithObstacle.maxWidthProperty().bind(airports.widthProperty());
+    importAirportWithObstacle.minWidthProperty().bind(airports.widthProperty());
+    importAirportWithoutObs.maxWidthProperty().bind(airports.widthProperty());
+    importAirportWithoutObs.minWidthProperty().bind(airports.widthProperty());
     HBox buttonsPane = new HBox(buttons);
     VBox buttonsPane2 = new VBox(buttonsPane);
 
@@ -216,9 +221,6 @@ public class HomeScene extends SceneAbstract{
     VBox.setVgrow(buttonsPane,Priority.NEVER);
     buttonsPane2.fillWidthProperty().set(false);
     buttonsPane2.setAlignment(Pos.CENTER);
-
-
-
 
     Label projectInfo = new Label(
             "Josh Douglas " +

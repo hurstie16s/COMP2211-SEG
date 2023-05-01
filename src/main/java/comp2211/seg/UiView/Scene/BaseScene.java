@@ -61,6 +61,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
     public VBox topView;
     public Scene scene;
 
+    private ComboBox airports;
+    private ComboBox runways;
+
 
     /**
      * Constructor to create a SceneAbstract object.
@@ -185,9 +188,9 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         });
     }
 
-
     public void build()  {
         super.build();
+        logger.info("building");
         //root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
         root.getStyleClass().add("unfocusedBG");
         mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
@@ -236,6 +239,46 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
      */
     public Pane makeAirportConfig() {
         //Aleks do stuff here
+        logger.info("makes airport config");
+        //left menu
+        //top
+        airports = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
+        airports.getStyleClass().add("veryfocusedBG");
+        airports.getStyleClass().add("font");
+// Add a listener to update the runways ComboBox when a new airport is selected
+        airports.valueProperty().addListener((observableValue, oldAirport, newAirport) -> {
+            appWindow.setAirport((Airport) newAirport);
+
+            // Update the options of the runways ComboBox with the runways for the selected airport
+            runways.setItems(FXCollections.observableArrayList(((Airport)newAirport).getRunways()));
+            // Select the first runway in the new list, if it exists
+            if (!((Airport)newAirport).getRunways().isEmpty()) {
+                runways.setValue(((Airport)newAirport).getRunways().get(0));
+            }
+        });
+        // Create the runways ComboBox
+        runways = new ComboBox(FXCollections.observableArrayList(appWindow.airport.getRunways()));
+        runways.getStyleClass().add("veryfocusedBG");
+        runways.getStyleClass().add("font");
+// Add a listener to update the selected runway in the appWindow when a new runway is selected
+        runways.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object o, Object t1) {
+                logger.info("changed runway: "+ t1);
+                appWindow.setRunway((Runway) t1);
+                if (! (o == null)) {
+                    if (!o.equals(t1)) {
+                        tabLayout = null;
+                        appWindow.startBaseScene();
+                    }
+                }
+            }
+        });
+        // Set the initial value of the airports ComboBox
+        //airports.setValue(appWindow.getAirports().get(0));
+        airports.setValue(appWindow.airport);
+// Set the initial value of the runways ComboBox
+        runways.setValue(appWindow.runway);
 
         //main vBox
         VBox vBoxAirportLayout = new VBox();
@@ -247,60 +290,23 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         vBoxTable.maxWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
         vBoxTable.minWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
 
-        //left menu
-        //top
-        ComboBox airportsCombo = new ComboBox(FXCollections.observableArrayList(appWindow.getAirports()));
-        //airportsCombo.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
-        airportsCombo.getStyleClass().add("veryfocusedBG");
-        airportsCombo.valueProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                appWindow.setAirport((Airport) t1);
-                if (! (o == null)) {
-                    if (!o.equals(t1)) {
-                        appWindow.startBaseScene();
-                    }
-                }
-            }
-        });
-        airportsCombo.valueProperty().set(appWindow.airport);
-        airportsCombo.getStyleClass().add("font");
-
         Label airportsLabel = makeLabel("Airport");
         airportsLabel.getStyleClass().add("font");
         airportsLabel.setPrefWidth(80);
         airportsLabel.setAlignment(Pos.CENTER_RIGHT);
         HBox hBoxAirports = new HBox();
         hBoxAirports.setAlignment(Pos.CENTER_LEFT);
-        hBoxAirports.getChildren().addAll(airportsLabel,airportsCombo);
-        HBox.setMargin(airportsCombo,new Insets(0,0,0,10));
+        hBoxAirports.getChildren().addAll(airportsLabel,airports);
+        HBox.setMargin(airports,new Insets(0,0,0,10));
 
-        //bottom
-
-        ComboBox runwaysCombo = new ComboBox(FXCollections.observableArrayList(appWindow.airport.getRunways())); //FXCollections.observableArrayList(appWindow.airport.getRunways()));
-        //runwaysCombo.setBackground(new Background(new BackgroundFill(Theme.veryfocusedBG,null,null)));
-        runwaysCombo.getStyleClass().add("veryfocusedBG");
-        runwaysCombo.valueProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                appWindow.setRunway((Runway) t1);
-                if (! (o == null)) {
-                    if (!o.equals(t1)) {
-                        appWindow.startBaseScene();
-                    }
-                }
-            }
-        });
-        runwaysCombo.valueProperty().set(appWindow.runway);
-        runwaysCombo.getStyleClass().add("font");
         Label runwaysLabel = makeLabel("Runway");
         runwaysLabel.getStyleClass().add("font");
         runwaysLabel.setPrefWidth(80);
         runwaysLabel.setAlignment(Pos.CENTER_RIGHT);
         HBox hBoxRunways = new HBox();
         hBoxRunways.setAlignment(Pos.CENTER_LEFT);
-        hBoxRunways.getChildren().addAll(runwaysLabel,runwaysCombo);
-        HBox.setMargin(runwaysCombo,new Insets(0,0,0,10));
+        hBoxRunways.getChildren().addAll(runwaysLabel,runways);
+        HBox.setMargin(runways,new Insets(0,0,0,10));
         //left menu children
         VBox leftMenu = new VBox(hBoxAirports,hBoxRunways);
         VBox.setMargin(hBoxAirports,new Insets(30,20,20,20));
@@ -329,7 +335,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         exportObstacle.setOnAction(e -> exportObstacleButtonEvent());
 
-        importAirObsButton.setOnAction(e -> importAirportButtonEvent());
+        importAirObsButton.setOnAction(e -> importAirportWithObstacleButtonEvent());
 
         importObstacle.setOnAction(e -> importObstacleButtonEvent());
 
@@ -1064,6 +1070,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //dataheader.setTextFill(Theme.fg);
         dataheader.getStyleClass().add("fg");
         dataheader.textProperty().bind(prop1header);
+        dataheader.setAlignment(Pos.CENTER_LEFT);
 
         Label data = new Label();
         //data.setFont(Theme.font);
@@ -1071,6 +1078,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //data.setTextFill(Theme.fg);
         data.getStyleClass().add("fg");
         data.textProperty().bind(prop1);
+        data.setAlignment(Pos.CENTER_LEFT);
 
         Label data2header = new Label();
         //data2header.setFont(Theme.font);
@@ -1078,6 +1086,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //data2header.setTextFill(Theme.fg);
         data2header.getStyleClass().add("fg");
         data2header.textProperty().bind(prop2header);
+        data2header.setAlignment(Pos.CENTER_LEFT);
 
         Label data2 = new Label();
         //data2.setFont(Theme.font);
@@ -1085,10 +1094,16 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //data2.setTextFill(Theme.fg);
         data2.getStyleClass().add("fg");
         data2.textProperty().bind(prop2);
+        data2.setAlignment(Pos.CENTER_LEFT);
+
+        ScrollPane scrollPane = new ScrollPane();
 
         VBox box = new VBox(dataheader,data,data2header,data2);
         VBox.setVgrow(data, Priority.ALWAYS);
-        box.setAlignment(Pos.CENTER);
+        box.setAlignment(Pos.CENTER_LEFT);
+        box.setPadding(new Insets(0,5,0,5));
+
+        scrollPane.setContent(box); // TODO: Finish
 
         return box;
 
@@ -1184,6 +1199,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
                 )
         );
         TabLayout breakDownPane = new TabLayout(breakDown,"focusedBG","veryfocusedBG");
+        // TODO: scrollable
         return breakDownPane;
     }
     private TextField makeTableCell(SimpleDoubleProperty property){

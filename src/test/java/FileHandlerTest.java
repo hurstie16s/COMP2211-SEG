@@ -1,5 +1,3 @@
-package comp2211.seg.ProcessDataModel;
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
