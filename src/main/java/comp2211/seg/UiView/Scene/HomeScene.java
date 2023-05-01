@@ -41,6 +41,8 @@ public class HomeScene extends SceneAbstract{
   protected TextField nameEntry;
   private ComboBox airports;
   private ComboBox runways;
+  public Runway runway;
+  public Airport airport;
 
   /**
    * Constructor to create a HomeScene object.
@@ -134,9 +136,12 @@ public class HomeScene extends SceneAbstract{
     airports.getStyleClass().add("focusedBG");
     airports.getStyleClass().add("font");
 
+
+
 // Add a listener to update the runways ComboBox when a new airport is selected
     airports.valueProperty().addListener((observableValue, oldAirport, newAirport) -> {
       appWindow.setAirport((Airport) newAirport);
+
       // Update the options of the runways ComboBox with the runways for the selected airport
       runways.setItems(FXCollections.observableArrayList(((Airport)newAirport).getRunways()));
       // Select the first runway in the new list, if it exists
@@ -145,8 +150,9 @@ public class HomeScene extends SceneAbstract{
       }
     });
 
-// Create the runways ComboBox
-    runways = new ComboBox();
+
+    // Create the runways ComboBox
+    runways = new ComboBox(FXCollections.observableArrayList(appWindow.airport.getRunways()));
     runways.getStyleClass().add("focusedBG");
     runways.getStyleClass().add("font");
 
@@ -154,6 +160,7 @@ public class HomeScene extends SceneAbstract{
     runways.valueProperty().addListener(new ChangeListener() {
       @Override
       public void changed(ObservableValue observableValue, Object o, Object t1) {
+        logger.info("changed runway: "+ t1);
         appWindow.setRunway((Runway) t1);
         if (! (o == null)) {
           if (!o.equals(t1)) {
@@ -163,9 +170,10 @@ public class HomeScene extends SceneAbstract{
       }
     });
 // Set the initial value of the airports ComboBox
-    airports.setValue(appWindow.getAirports().get(0));
+    //airports.setValue(appWindow.getAirports().get(0));
+    airports.setValue(appWindow.airport);
 // Set the initial value of the runways ComboBox
-    runways.setValue(appWindow.airport.getRunways().get(0));
+    runways.setValue(appWindow.runway);
 
 
 

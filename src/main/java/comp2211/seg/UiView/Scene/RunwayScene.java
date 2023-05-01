@@ -309,7 +309,7 @@ public class RunwayScene extends SceneAbstract {
       // Parse the color value from the .obstacle class in the current stylesheet
 
     PhongMaterial material = new PhongMaterial();
-    logger.info("making runway with colour " + Theme.getRunway().toString());
+    logger.info("making runway " + appWindow.runway + " of " + appWindow.airport);
     material.setDiffuseColor(Theme.getRunway());
 
     //import these from runway somehow
