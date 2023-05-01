@@ -256,8 +256,12 @@ public class Runway extends RunwayValues{
         runwayObstacle.heightProperty().set(obstacleToAdd.heightProperty().get());
         runwayObstacle.lengthProperty().set(obstacleToAdd.lengthProperty().get());
         runwayObstacle.widthProperty().set(obstacleToAdd.widthProperty().get());
-        runwayObstacle.distFromThresholdProperty().set(obstacleToAdd.distFromThresholdProperty().get());
-        hasRunwayObstacle.set(true); // Listener will call recalculate
+        //runwayObstacle.distFromThresholdProperty().set(obstacleToAdd.distFromThresholdProperty().get());
+        runwayObstacle.distFromThresholdProperty().set(runwayLength.get()/2);
+        //Aleks - ^ replaced with default setting which place obstacle in the middle.
+
+        //hasRunwayObstacle.set(true); // Listener will call recalculate
+        //Aleks - ^ removed as it is not needed at all here. Visibility is triggered by yes/no button.
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
         logChange("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
 
