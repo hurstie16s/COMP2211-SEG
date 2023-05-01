@@ -295,25 +295,30 @@ public class Runway extends RunwayValues{
             logger.info("Runway has obstacle: calculation methods will be called");
             if (directionLeft.get()) {
                 logger.info("Calculate take-off towards for left");
+                logChange("Calculate take-off towards for left");
                 RunwayCalculations.calculateTakeOffTowardLeft(this); // done
                 RunwayCalculations.calculateLandTowardLeft(this); // done
             } else {
                 logger.info("Calculate take-off away for left");
+                logChange("Calculate take-off away for left");
                 RunwayCalculations.calculateTakeOffAwayLeft(this); // done
                 RunwayCalculations.calculateLandOverLeft(this); // done
             }
             if (directionRight.get()) {
                 logger.info("Calculate land towards for right");
+                logChange("Calculate land towards for right");
                 RunwayCalculations.calculateTakeOffTowardRight(this); // done
                 RunwayCalculations.calculateTakeOffAwayRight(this); // done
                 RunwayCalculations.calculateLandOverRight(this); // done
             } else {
                 logger.info("Calculate land over for right");
+                logChange("Calculate land over for right");
                 RunwayCalculations.calculateTakeOffTowardRight(this); // done
                 RunwayCalculations.calculateLandTowardRight(this); // done
             }
         } else {
             logger.info("Runway has no obstacle: runway returned to original state");
+            logChange("Runway obstacle inactive");
         }
     }
 
@@ -583,8 +588,12 @@ public class Runway extends RunwayValues{
      * @param change text to be displayed in change history tab
      */
     public void logChange(String change) {
-        changeHistory.add(0, change);
-        //Platform.runLater(() -> changesHistory.setItems(FXCollections.observableArrayList(changeHistory)));
+        if (changeHistory.isEmpty()) {
+            changeHistory.add(0, change);
+        }
+        else if (!change.equals(changeHistory.get(0))) {
+            changeHistory.add(0, change);
+        }
     }
 
 
