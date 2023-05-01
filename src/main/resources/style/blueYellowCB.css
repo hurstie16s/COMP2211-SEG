@@ -269,4 +269,8 @@
     -fx-background-color: transparent;
 }
 
+.list-cell {
+    -fx-control-inner-background: #e8e8e8;
+}
+
 

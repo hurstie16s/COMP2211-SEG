@@ -930,6 +930,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         historyListView.getStyleClass().add("veryfocusedBG");
         historyListView.getStyleClass().add("fg");
         historyListView.setPadding(new Insets(10));
+        historyListView.setFocusTraversable(false);
 
         historyListView.itemsProperty().bind(appWindow.runway.getChangeHistoryProperty());
 
