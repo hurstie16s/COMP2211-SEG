@@ -180,7 +180,7 @@ public class Runway extends RunwayValues{
      * @param left       the left
      * @return the string
      */
-    private String calculateRunwayDesignator(String designator, boolean left) {
+    public String calculateRunwayDesignator(String designator, boolean left) {
         var number = String.valueOf((Integer.parseInt(designator.substring(0,2)) + 18) % 36);
         if (number.length() == 1) {
             number = "0"+number;
@@ -255,8 +255,12 @@ public class Runway extends RunwayValues{
         runwayObstacle.heightProperty().set(obstacleToAdd.heightProperty().get());
         runwayObstacle.lengthProperty().set(obstacleToAdd.lengthProperty().get());
         runwayObstacle.widthProperty().set(obstacleToAdd.widthProperty().get());
-        runwayObstacle.distFromThresholdProperty().set(obstacleToAdd.distFromThresholdProperty().get());
-        hasRunwayObstacle.set(true); // Listener will call recalculate
+        //runwayObstacle.distFromThresholdProperty().set(obstacleToAdd.distFromThresholdProperty().get());
+        runwayObstacle.distFromThresholdProperty().set(runwayLength.get()/2);
+        //Aleks - ^ replaced with default setting which place obstacle in the middle.
+
+        //hasRunwayObstacle.set(true); // Listener will call recalculate
+        //Aleks - ^ removed as it is not needed at all here. Visibility is triggered by yes/no button.
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
         logChange("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
 
