@@ -181,36 +181,50 @@ public class Runway extends RunwayValues{
      * @return the string
      */
     public String calculateRunwayDesignator(String designator, boolean left) {
-        var number = String.valueOf((Integer.parseInt(designator.substring(0,2)) + 18) % 36);
-        if (number.length() == 1) {
-            number = "0"+number;
-        }
-        var character = designator.substring(2);
-
-        var newCharacter = "";
-        switch (character) {
-            case "R":  newCharacter = "L"; break;
-            case "L": newCharacter = "R"; break;
-            case "C": newCharacter = "C"; break;
-            case "" : break;
-            default: {
-                newCharacter = "ERROR";
-                logger.error("Incorrect initial character"); break;
+        String newDesignator;
+        try {
+            var number = String.valueOf((Integer.parseInt(designator.substring(0, 2)) + 18) % 36);
+            if (number.length() == 1) {
+                number = "0" + number;
             }
-        }
+            var character = designator.substring(2);
 
-        var newDesignator = number + newCharacter;
-
-        logger.info("Runway Designators: "+designator+", "+newDesignator);
-
-        if ((Integer.parseInt(number) < 18 && left) || (Integer.parseInt(number) > 18 && !left)) {
-            try {
-                // This will cascade and correct the other designator
-                return designator;
-            } finally {
-                // TODO : Swap left and right
-                swapLeftRight();
+            var newCharacter = "";
+            switch (character) {
+                case "R":
+                    newCharacter = "L";
+                    break;
+                case "L":
+                    newCharacter = "R";
+                    break;
+                case "C":
+                    newCharacter = "C";
+                    break;
+                case "":
+                    break;
+                default: {
+                    //newCharacter = "ERROR";
+                    logger.error("Incorrect initial character");
+                    return "ERROR";
+                }
             }
+
+            newDesignator = number + newCharacter;
+
+            logger.info("Runway Designators: " + designator + ", " + newDesignator);
+
+            if ((Integer.parseInt(number) < 18 && left) || (Integer.parseInt(number) > 18 && !left)) {
+                try {
+                    // This will cascade and correct the other designator
+                    return designator;
+                } finally {
+                    // TODO : Swap left and right
+                    swapLeftRight();
+                }
+            }
+        } catch (NumberFormatException e) {
+            logger.warn(e.getMessage());
+            newDesignator = "ERROR";
         }
 
         return newDesignator;

@@ -164,22 +164,6 @@ public class RunwayTest {
     }
 
     // Unit Tests
-    /*
-    Cases:
-    where (XX<YY) {
-        XXL/? -> XXL/YYR
-        XXR/? -> XXR/YYL
-        XXC/? -> XXC/YYC
-        XX/? -> XX/YY
-    }
-    where (XX>YY) {
-        XXL/(YY?)R -> YYR/XXL
-        XXR/(YY?)L -> YYL/XXR
-        XXC/(YY?)C -> YYC/XXC
-        XX/(YY?) -> YY/XX
-    }
-    XX
-     */
     @DisplayName("Re-designator test 09R/27L: form XXR/YYL where XX < YY")
     @Test
     public void designatorXXRYYLTest() {
@@ -271,6 +255,16 @@ public class RunwayTest {
         assertEquals(expectedOutput, actualOutput, "Designator incorrectly calculated");
     }
 
+    @DisplayName("Re-designator test, error handling, Character is not L R C or \"\"")
+    @Test
+    public void designatorErrorCaseTest() {
+        String expectedOutput = "ERROR/ERROR";
+        var runway = new Runway();
+        runway.runwayDesignatorLeft.set("09A");
+        String actualOutput = runway.toString();
+        assertEquals(expectedOutput, actualOutput, "Designator incorrectly calculated");
+    }
+
     // TODO: Write Tests
     /*
     Tests
@@ -284,6 +278,12 @@ public class RunwayTest {
     R4 O8
     R5 O9
      */
+
+    @DisplayName("Runway Recalculation test: Runway 2 (09L27R), Obstacle 1")
+    @Test
+    public void runwayRecalculationTestR2O1() {
+
+    }
 
     /**
      * The constant obstacle1.
