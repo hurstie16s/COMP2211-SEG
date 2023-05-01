@@ -254,7 +254,7 @@ public class AppWindow {
         temp.setInputRightLda(this.runway.getInputRightLda());
         temp.setInputRightAsda(this.runway.getInputRightAsda());
 
-        //if(!(runway == null)) {
+        if(!(runway == null)) {
             this.runway.setRunwayDesignatorLeft(runway.getRunwayDesignatorLeft());
             this.runway.setRunwayDesignatorRight(runway.getRunwayDesignatorRight());
             this.runway.setInputLeftTora(runway.getInputLeftTora());
@@ -277,7 +277,7 @@ public class AppWindow {
             runway.setInputRightToda(temp.getInputRightToda());
             runway.setInputRightLda(temp.getInputRightLda());
             runway.setInputRightAsda(temp.getInputRightAsda());
-        //}
+        }
     }
 
     /**
