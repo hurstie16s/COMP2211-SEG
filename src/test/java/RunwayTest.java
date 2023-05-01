@@ -28,7 +28,6 @@ public class RunwayTest {
     //TODO: Test Rew-calculate
     //TODO: Re-work tests to handle left and right
 
-
     /**
      * The constant runway1.
      */
@@ -171,25 +170,40 @@ public class RunwayTest {
     }
 
     // Unit Tests
-
-    /**
-     * Check designator test data.
-     *
-     * @param runway             the runway
-     * @param expectedDesignator the expected designator
+    /*
+    Cases:
+    where (XX<YY) {
+        XXL/? -> XXL/YYR
+        XXR/? -> XXR/YYL
+        XXC/? -> XXC/YYC
+        XX/? -> XX/YY
+    }
+    where (XX>YY) {
+        XXL/(YY?)R -> YYR/XXL
+        XXR/(YY?)L -> YYL/XXR
+        XXC/(YY?)C -> YYC/XXC
+        XX/(YY?) -> YY/XX
+    }
+    XX
      */
-    @DisplayName("Runway Designators : Check 2nd designator is correctly calculated")
-    @ParameterizedTest
-    @MethodSource("generateCheckDesignatorTestData")
-    public void checkDesignatorTestData(Runway runway, String expectedDesignator) {
+    @DisplayName("Re-designator test 09R/27L: form XXR/YYL where XX < YY")
+    @Test
+    public void designatorTestXXRYYL() {
+        String expectedOutput = "09R/27L";
+        var runway = new Runway();
+        runway.runwayDesignatorLeft.set("09R");
+        String actualOutput = runway.toString();
+        assertEquals(expectedOutput, actualOutput, "Designator incorrectly calculated");
+    }
 
-        var expectedNumber = expectedDesignator.substring(0,2);
-        var expectedCharacter = expectedDesignator.substring(2);
-
-
-        assertEquals(expectedNumber, runway.getRunwayDesignatorRight().substring(0,2), "Number for runway designator incorrect");
-        assertEquals(expectedCharacter, runway.getRunwayDesignatorRight().substring(2), "Character for runway designator incorrect");
-        assertEquals(expectedDesignator, runway.getRunwayDesignatorRight(), "Runway designator incorrect");
+    @DisplayName("Re-designator test 09R/27L: form XXR/YYL where XX < YY")
+    @Test
+    public void designatorTestXXLYYR() {
+        String expectedOutput = "09L/27R";
+        var runway = new Runway();
+        runway.runwayDesignatorLeft.set("09L");
+        String actualOutput = runway.toString();
+        assertEquals(expectedOutput, actualOutput, "Designator incorrectly calculated");
     }
 
     /**

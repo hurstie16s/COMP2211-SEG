@@ -181,7 +181,7 @@ public class Runway extends RunwayValues{
      * @param left       the left
      * @return the string
      */
-    private String calculateRunwayDesignator(String designator, boolean left) {
+    public String calculateRunwayDesignator(String designator, boolean left) {
         var number = String.valueOf((Integer.parseInt(designator.substring(0,2)) + 18) % 36);
         if (number.length() == 1) {
             number = "0"+number;
