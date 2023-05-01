@@ -3,11 +3,9 @@ package comp2211.seg.ProcessDataModel;
 import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -93,6 +91,7 @@ public class Runway extends RunwayValues{
 
         recalculate();
         validityChecks();
+        logChange("Runway Initialised");
 
         runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
         runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
@@ -296,25 +295,30 @@ public class Runway extends RunwayValues{
             logger.info("Runway has obstacle: calculation methods will be called");
             if (directionLeft.get()) {
                 logger.info("Calculate take-off towards for left");
+                logChange("Calculate take-off towards for left");
                 RunwayCalculations.calculateTakeOffTowardLeft(this); // done
                 RunwayCalculations.calculateLandTowardLeft(this); // done
             } else {
                 logger.info("Calculate take-off away for left");
+                logChange("Calculate take-off away for left");
                 RunwayCalculations.calculateTakeOffAwayLeft(this); // done
                 RunwayCalculations.calculateLandOverLeft(this); // done
             }
             if (directionRight.get()) {
                 logger.info("Calculate land towards for right");
+                logChange("Calculate land towards for right");
                 RunwayCalculations.calculateTakeOffTowardRight(this); // done
                 RunwayCalculations.calculateTakeOffAwayRight(this); // done
                 RunwayCalculations.calculateLandOverRight(this); // done
             } else {
                 logger.info("Calculate land over for right");
+                logChange("Calculate land over for right");
                 RunwayCalculations.calculateTakeOffTowardRight(this); // done
                 RunwayCalculations.calculateLandTowardRight(this); // done
             }
         } else {
             logger.info("Runway has no obstacle: runway returned to original state");
+            logChange("Runway obstacle inactive");
         }
     }
 
@@ -584,26 +588,35 @@ public class Runway extends RunwayValues{
      * @param change text to be displayed in change history tab
      */
     public void logChange(String change) {
-        changeHistory.add(change);
-        Label changeLabel = new Label(change);
-        changeLabel.setMaxWidth(changesHistory.getWidth());
-        changeLabel.setMaxHeight(40);
-        changeLabel.setWrapText(true);
-        double newLabelHeight = changeLabel.getHeight();
-        ObservableList<Node> children = changesHistory.getChildren();
-        for (Node child : children) {
-            double currentY = child.getLayoutY();
-            child.setLayoutY(currentY + 40);
+        if (changeHistory.isEmpty()) {
+            changeHistory.add(0, change);
         }
-        changeLabel.setLayoutY(0);
-        children.add(0, changeLabel);
+        else if (!change.equals(changeHistory.get(0))) {
+            changeHistory.add(0, change);
+        }
     }
 
 
 
-
-
     // Getters
+
+    /**
+     * Gets input right tora.
+     *
+     * @return the input right tora
+     */
+    public ObservableList<String> getChangeHistory() {
+        return changeHistory;
+    }
+
+    /**
+     * Gets input right tora.
+     *
+     * @return the input right tora
+     */
+    public SimpleListProperty<String> getChangeHistoryProperty(){
+        return changeHistoryProperty;
+    }
 
     /**
      * Gets input right tora.
