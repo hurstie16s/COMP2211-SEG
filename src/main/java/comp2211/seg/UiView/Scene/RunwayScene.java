@@ -1,10 +1,10 @@
 package comp2211.seg.UiView.Scene;
-
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.UiView.Overlay.RunwayLabel;
 import comp2211.seg.UiView.Scene.RunwayComponents.ClearedGradedArea;
 import comp2211.seg.UiView.Scene.RunwayComponents.Slope;
+import comp2211.seg.UiView.Scene.Utilities.CssColorParser;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
@@ -13,23 +13,30 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.AmbientLight;
-import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.scene.transform.Rotate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Objects;
+
+
 
 /**
  * RunwayScene class represents the runway scene of the airport
@@ -58,7 +65,7 @@ public class RunwayScene extends SceneAbstract {
     /**
      * The camera used to view the runway scene.
      */
-    public PerspectiveCamera camera;
+    public Camera camera;
     /**
      * The Background.
      */
@@ -151,7 +158,7 @@ public class RunwayScene extends SceneAbstract {
      * @param depthBuffer the depth buffer
      */
     public RunwayScene(Pane root, AppWindow appWindow, double width, double height, boolean depthBuffer) {
-    super(root, appWindow, width, height, depthBuffer);
+    super(root, appWindow, new SimpleDoubleProperty(width), new SimpleDoubleProperty(height), depthBuffer);
     this.width = width;
     this.height = height;
 
@@ -168,7 +175,7 @@ public class RunwayScene extends SceneAbstract {
     setOnKeyPressed((keyEvent -> {
       switch (keyEvent.getCode()){
         case ESCAPE:
-          appWindow.startBaseSceneObstacle();
+          appWindow.startBaseScene();
           break;
         case W:
           group.translateYProperty().set(group.getTranslateY()-10);
@@ -197,10 +204,8 @@ public class RunwayScene extends SceneAbstract {
       angley = angleZProperty.get();
     });
     setOnMouseDragged(event ->{
-      if (!sideProperty.get()) {
-        angleXProperty.set(Math.min(Math.max(anglex + y - event.getSceneY(), -90), 0));
-        angleZProperty.set(angley - x + event.getSceneX());
-      }
+      angleXProperty.set(Math.min(Math.max(anglex + y - event.getSceneY(), -90), 0));
+      angleZProperty.set(angley - x + event.getSceneX());
     });
     setOnScroll(event -> mainPane.translateZProperty().set(mainPane.getTranslateZ()-event.getDeltaY()));
   }
@@ -258,25 +263,55 @@ public class RunwayScene extends SceneAbstract {
      * Make scale.
      */
     public void makeScale(){
-    double length = 200;
-    addCuboid(appWindow.runway.runwayLengthProperty().divide(2).add(appWindow.runway.clearwayLeftProperty()).subtract(new SimpleDoubleProperty(length+20).divide(2)),
-            new SimpleDoubleProperty(100).add(5),
-            (DoubleBinding) Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).subtract(20).divide(-2).divide(scaleFactorDepth),
-            new SimpleDoubleProperty(length).add(0),
-            new SimpleDoubleProperty(2).divide(scaleFactorHeight),
-            new SimpleDoubleProperty(2).divide(scaleFactorDepth),
-            Color.WHITE
-    );
+      Line line = new Line();
+      line.startXProperty().set(0);
+      Label sclabel = new Label();
+      VBox scale = new VBox(line,sclabel);
 
-  }
+      double total = (Math.abs(Math.sin(Math.toRadians(angleZProperty.get()))/ scaleFactor.get()) + Math.abs(Math.cos(Math.toRadians(angleZProperty.get()))/ scaleFactorHeight.get()));
+      double sf = 100 * Math.pow(2, Math.floor(Math.log(0.004 * total) / Math.log(2)));
+      double length = sf * (Math.abs(Math.sin(Math.toRadians(angleZProperty.get()))* scaleFactor.get()) + Math.abs(Math.cos(Math.toRadians(angleZProperty.get()))* scaleFactorHeight.get()));
+      line.endXProperty().set(length);
+      sclabel.setText(Double.toString(sf));
+      ChangeListener scaleCalc = new ChangeListener<Number>() {
+        @Override
+        public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+          double total = (Math.abs(Math.sin(Math.toRadians(angleZProperty.get()))/ scaleFactor.get()) + Math.abs(Math.cos(Math.toRadians(angleZProperty.get()))/ scaleFactorHeight.get()));
+          double sf = 100 * Math.pow(2, Math.floor(Math.log(0.004 * total * widthProperty().get()) / Math.log(2)));
+          double length = sf * (Math.abs(Math.sin(Math.toRadians(angleZProperty.get()))* scaleFactor.get()) + Math.abs(Math.cos(Math.toRadians(angleZProperty.get()))* scaleFactorHeight.get()));
+          line.endXProperty().set(length);
+          sclabel.setText(Double.toString(sf));
+
+
+        }
+      };
+
+      appWindow.currentScene.topMenu.getChildren().add(scale);
+
+      scaleFactor.addListener(scaleCalc);
+      scaleFactorHeight.addListener(scaleCalc);
+      addCuboid(appWindow.runway.runwayLengthProperty().divide(2).add(appWindow.runway.clearwayLeftProperty()).subtract(new SimpleDoubleProperty(length+20).divide(2)),
+              new SimpleDoubleProperty(100).add(5),
+              (DoubleBinding) Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).subtract(20).divide(-2).divide(scaleFactorDepth),
+              new SimpleDoubleProperty(length).add(0),
+              new SimpleDoubleProperty(2).divide(scaleFactorHeight),
+              new SimpleDoubleProperty(2).divide(scaleFactorDepth),
+              Color.WHITE
+      );
+
+    }
 
     /**
      * Creates a 3D box representing the runway, textured with
      * an image of a runway.
      */
     public void makeRunway() {
+      // Parse the color value from the .obstacle class in the current stylesheet
+
     PhongMaterial material = new PhongMaterial();
-    material.setDiffuseColor(Theme.runway);
+    logger.info("making runway with colour " + Theme.getRunway().toString());
+    material.setDiffuseColor(Theme.getRunway());
+
     //import these from runway somehow
     Box box = new Box(0,0,runwayOffset.get());
     box.widthProperty().bind(appWindow.runway.runwayLengthProperty().multiply(scaleFactor));
@@ -286,22 +321,6 @@ public class RunwayScene extends SceneAbstract {
     box.setMaterial(material);
 
     group.getChildren().add(box);
-    /*
-    try {
-      material = new PhongMaterial();
-      material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/runway.png")).toExternalForm()));
-      //import these from runway somehow
-      Box overlay = new Box(0,0,0);
-      overlay.widthProperty().bind(appWindow.runway.runwayLengthProperty().multiply(scaleFactor));
-      overlay.heightProperty().bind(appWindow.runway.runwayWidthProperty().multiply(scaleFactorHeight));
-      overlay.setMaterial(material);
-      overlay.translateZProperty().set(1);
-      group.getChildren().add(overlay);
-
-    }catch (Exception e){
-      logger.error(e);
-    }
-     */
   }
 
 
@@ -330,16 +349,42 @@ public class RunwayScene extends SceneAbstract {
   }
 
     /**
+     * Configures the camera by adding ambient light, creating a perspective camera,
+     * and setting up rotations for the group.
+     * Binds angle properties to corresponding rotate angles.
+     */
+    public void configureCameraAlt() {
+    AmbientLight light = new AmbientLight();
+    light.setLightOn(true);
+    group.getChildren().add(light);
+    camera = new ParallelCamera();
+    setCamera(camera);
+    Rotate xRotate;
+    Rotate yRotate;
+    Rotate zRotate;
+
+    group.getTransforms().addAll(
+        xRotate = new Rotate(0,Rotate.X_AXIS),
+        yRotate = new Rotate(0,Rotate.Y_AXIS),
+        zRotate = new Rotate(0,Rotate.Z_AXIS)
+    );
+    xRotate.angleProperty().bind(angleXProperty);
+    yRotate.angleProperty().bind(angleYProperty);
+    zRotate.angleProperty().bind(angleZProperty);
+  }
+
+    /**
      * Creates a background box, adds a phong material and sets it to the group.
      */
     public void makeBackground() {
-    background = new Box(width,height,0);
+
+    background = new Box(widthProperty().get(),heightProperty().get(),0);
     PhongMaterial material = new PhongMaterial();
-//material.setDiffuseMap(new Image(Objects.requireNonNull(getClass().getResource("/images/grass.jpg")).toExternalForm()));
-    material.setDiffuseColor(Theme.grass);
+    material.setDiffuseColor(Theme.getGrass());
+
     background.setMaterial(material);
-    background.widthProperty().bind((DoubleBinding) Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()));
-    background.heightProperty().bind((DoubleBinding) Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()));
+    background.widthProperty().bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()));
+    background.heightProperty().bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()));
     background.translateXProperty().bind(appWindow.runway.clearwayLeftProperty().add(appWindow.runway.clearwayRightProperty()).add(appWindow.runway.runwayLengthProperty()).divide(2)
             .subtract(appWindow.runway.clearwayLeftProperty().add(appWindow.runway.runwayLengthProperty().divide(2))).multiply(scaleFactor));
     background.setTranslateZ(2.1);
@@ -347,32 +392,28 @@ public class RunwayScene extends SceneAbstract {
   }
   public void buildmenuless(){
     super.buildmenuless();
-    setFill(Theme.bgRunway);
+    //setFill(Theme.bgRunway);
+    root.getStyleClass().clear();
+    mainPane.getStyleClass().clear();
+    root.getStyleClass().add("transparent");
+    mainPane.getStyleClass().add("transparent");
     logger.info("building");
     configureCamera();
     render();
-    root.widthProperty().addListener(new ChangeListener<Number>() {
-      @Override
-      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-        mainPane.setMinWidth((Double) t1);
-        mainPane.setMaxWidth((Double) t1);
-        group.translateXProperty().set(group.translateXProperty().get()+((double) t1 - (double) number)/2);
-      }
-    });
-    root.heightProperty().addListener(new ChangeListener<Number>() {
-      @Override
-      public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-        mainPane.setMinHeight((Double) t1);
-        mainPane.setMaxHeight((Double) t1);
-        group.translateYProperty().set(group.translateYProperty().get()+((double) t1 - (double) number)/2);
 
-      }
-    });
+
+
+    mainPane.maxWidthProperty().bind(root.widthProperty());
+    mainPane.minWidthProperty().bind(root.widthProperty());
+    mainPane.maxHeightProperty().bind(root.heightProperty());
+    mainPane.minHeightProperty().bind(root.heightProperty());
+
     root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-    scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+    scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.getMINRESA()*2+300)));
     scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));
     mainPane.getChildren().add(group);
+
 
     addListeners();
   }
@@ -383,9 +424,14 @@ public class RunwayScene extends SceneAbstract {
      */
     public void buildmenulessalt(){
     super.buildmenuless();
-    setFill(Theme.bgRunway);
+      //setFill(Theme.bgRunway);
+    getRoot().getStyleClass().add("transparent");
+    root.getStyleClass().clear();
+    mainPane.getStyleClass().clear();
+    root.getStyleClass().add("transparent");
+    mainPane.getStyleClass().add("transparent");
     logger.info("building");
-    configureCamera();
+    configureCameraAlt();
     render();
 
     mainPane.maxWidthProperty().bind(root.widthProperty());
@@ -394,7 +440,7 @@ public class RunwayScene extends SceneAbstract {
     mainPane.minHeightProperty().bind(root.heightProperty());
     root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-    scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+    scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.getMINRESA()*2+300)));
     scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));
     mainPane.getChildren().add(group);
 
@@ -409,7 +455,11 @@ public class RunwayScene extends SceneAbstract {
   @Override
   public void build() {
     super.build();
-    setFill(Theme.bgRunway);
+    //setFill(Theme.bgRunway);
+    root.getStyleClass().clear();
+    mainPane.getStyleClass().clear();
+    root.getStyleClass().add("transparent");
+    mainPane.getStyleClass().add("transparent");
     logger.info("building");
     configureCamera();
     render();
@@ -419,7 +469,7 @@ public class RunwayScene extends SceneAbstract {
     mainPane.minHeightProperty().bind(root.heightProperty());
     root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
     mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-    scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+    scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.getMINRESA()*2+300)));
     scaleFactorHeight.bind(Bindings.when(portrait).then(mainPane.widthProperty()).otherwise(mainPane.heightProperty()).divide(420));
     mainPane.getChildren().add(group);
 
@@ -442,6 +492,8 @@ public class RunwayScene extends SceneAbstract {
     appWindow.runway.runwayObstacle.widthProperty().addListener(refresh);
     appWindow.runway.runwayObstacle.heightProperty().addListener(refresh);
     appWindow.runway.runwayObstacle.distFromThresholdProperty().addListener(refresh);
+    appWindow.runway.directionLeftProperty().addListener(refresh);
+    appWindow.runway.directionRightProperty().addListener(refresh);
   }
 
     /**
@@ -536,12 +588,17 @@ public class RunwayScene extends SceneAbstract {
     });
     rwyDir.textProperty().set(designator.getValue().substring(0,2));
     rwyLabel.textProperty().set(designator.getValue().substring(2));
-    rwyDir.setFont(Theme.font);
-    rwyDir.setFill(Theme.labelfg);
-    rwyLabel.setFont(Theme.font);
-    rwyLabel.setFill(Theme.labelfg);
+    //rwyDir.setFont(Theme.font);
+      rwyDir.getStyleClass().add("font");
+    //rwyDir.setFill(Theme.labelfg);
+      rwyDir.getStyleClass().add("labelfg");
+    //rwyLabel.setFont(Theme.font);
+      rwyLabel.getStyleClass().add("font");
+    //rwyLabel.setFill(Theme.labelfg);
+      rwyLabel.getStyleClass().add("labelfg");
     Text bars = new Text("\n||||| |||||");
-    bars.setFill(Theme.labelfg);
+    //bars.setFill(Theme.labelfg);
+      bars.getStyleClass().add("labelfg");
     TextFlow data = new TextFlow(rwyDir,new Text("\n"),rwyLabel,bars);
     data.setTextAlignment(TextAlignment.CENTER);
     return data;
@@ -550,17 +607,18 @@ public class RunwayScene extends SceneAbstract {
     /**
      * Renders an obstacle as a cuboid and a slope, and adds them to the 3D scene.
      */
-    public void renderObstacle(){
+    public void renderObstacle() {
 
-    Box obstacleView = addCuboid(
-            appWindow.runway.runwayLengthProperty().divide(-2).add(appWindow.runway.runwayObstacle.distFromThresholdProperty()),
-            new SimpleDoubleProperty(0).multiply(1),
-            appWindow.runway.runwayObstacle.heightProperty().multiply(1),
-            appWindow.runway.runwayObstacle.lengthProperty().multiply(1),
-            appWindow.runway.runwayObstacle.widthProperty().multiply(1),
-            appWindow.runway.runwayObstacle.heightProperty().multiply(1),
-            Theme.obstacle
-            );
+      // Render the obstacle using the retrieved color value
+      Box obstacleView = addCuboid(
+          appWindow.runway.runwayLengthProperty().divide(-2).add(appWindow.runway.runwayObstacle.distFromThresholdProperty()),
+          new SimpleDoubleProperty(0).multiply(1),
+          appWindow.runway.runwayObstacle.heightProperty().multiply(1),
+          appWindow.runway.runwayObstacle.lengthProperty().multiply(1),
+          appWindow.runway.runwayObstacle.widthProperty().multiply(1),
+          appWindow.runway.runwayObstacle.heightProperty().multiply(1),
+          Theme.getObstacle()
+      );
     obstacleView.visibleProperty().bind(appWindow.runway.hasRunwayObstacleProperty());
 
     group.getChildren().add(new Slope(
@@ -570,8 +628,21 @@ public class RunwayScene extends SceneAbstract {
             new SimpleDoubleProperty(0).multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             appWindow.runway.runwayObstacle.heightProperty().multiply(1),
-            Theme.slope,
-            appWindow.runway.directionProperty(),
+            Theme.getSlope(),
+            appWindow.runway.directionLeftProperty(),
+            scaleFactor,
+            scaleFactorHeight,
+            scaleFactorDepth
+    ));
+    group.getChildren().add(new Slope(
+            appWindow,
+            appWindow.runway.runwayLengthProperty().divide(-2),
+            new SimpleDoubleProperty(0).multiply(1),
+            new SimpleDoubleProperty(0).multiply(1),
+            appWindow.runway.runwayWidthProperty().multiply(1),
+            appWindow.runway.runwayObstacle.heightProperty().multiply(1),
+            Theme.getSlope(),
+            appWindow.runway.directionRightProperty(),
             scaleFactor,
             scaleFactorHeight,
             scaleFactorDepth
@@ -593,7 +664,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.clearwayRightProperty().multiply(1),
             appWindow.runway.clearwayHeightProperty().multiply(1),
             new SimpleDoubleProperty(9.9).multiply(1),
-            Theme.clearway);
+            Theme.getClearway());
 
     //Clearway Left
     addCuboid(
@@ -603,8 +674,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.clearwayLeftProperty().multiply(1),
             appWindow.runway.clearwayHeightProperty().multiply(1),
             new SimpleDoubleProperty(9.9).multiply(1),
-            Theme.clearway);
-
+            Theme.getClearway());
 
 
     //RESA Right
@@ -615,7 +685,8 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.RESAWidthProperty().multiply(1),
             appWindow.runway.RESAHeightProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            Theme.physicalResa);
+            Theme.getPhysicalResa());
+
 
     //RESA Left
     addCuboid(
@@ -625,7 +696,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.RESAWidthProperty().multiply(1),
             appWindow.runway.RESAHeightProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            Theme.physicalResa);
+            Theme.getPhysicalResa());
 
     //Stopway Left
     addCuboid(
@@ -635,7 +706,8 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.stopwayLeftProperty().multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            Theme.stopway);
+            Theme.getStopway());
+
 
     //Stopway Right
     addCuboid(
@@ -645,7 +717,8 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.stopwayRightProperty().multiply(1),
             appWindow.runway.runwayWidthProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
-            Theme.stopway);
+            Theme.getStopway());
+
 
   }
 
@@ -656,14 +729,13 @@ public class RunwayScene extends SceneAbstract {
     refresh.set(refresh.not().get());
     if (refresh.get()){
       //appWindow.currentScene.getWindow().setWidth(getWidth()-0.0001);
-      scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).add(0.00001).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
+      scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).add(0.0001).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.getMINRESA()*2+300)));
     }else {
       //appWindow.currentScene.getWindow().setWidth(getWidth()+0.0001);
-      scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).subtract(0.00001).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.clearwayLeftProperty()).add(appWindow.runway.clearwayRightProperty())));
-
-
+      scaleFactor.bind(Bindings.when(portrait).then(mainPane.heightProperty()).otherwise(mainPane.widthProperty()).subtract(0.0001).divide(appWindow.runway.runwayLengthProperty().add(appWindow.runway.getMINRESA()*2+300)));
     }
   }
+
 
     /**
      * Creates the Cleared and Graded Area (CGA) and adds it to the 3D group.
@@ -677,7 +749,7 @@ public class RunwayScene extends SceneAbstract {
     public void makeCGA(boolean filled){
 
     //Cleared and graded area
-    ClearedGradedArea cga = new ClearedGradedArea(group,filled);
+    ClearedGradedArea cga = new ClearedGradedArea(group,filled,this); //added scene for stylesheet
     cga.leftProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract( appWindow.runway.stopwayLeftProperty()).subtract(appWindow.runway.stripEndProperty()).multiply(scaleFactor));
     cga.leftStartProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).multiply(scaleFactor));
     cga.leftEndProperty().bind(appWindow.runway.runwayLengthProperty().multiply(-0.5).add(150).multiply(scaleFactor));
@@ -688,6 +760,34 @@ public class RunwayScene extends SceneAbstract {
     cga.outerHeightProperty().bind(scaleFactorHeight.multiply(-105));
     cga.setTranslateZ(2);
     group.getChildren().add(cga);
+  }
+
+  public void makeAlignButton(){
+    Button button = new Button("Align");
+    Image image = new Image(Objects.requireNonNull(getClass().getResource("/images/compass.png")).toExternalForm());
+    ImageView imageView = new ImageView(image);
+    imageView.setFitWidth(50);
+    imageView.setFitHeight(50);
+    imageView.rotateProperty().bind(angleZProperty.subtract(Double.parseDouble(appWindow.runway.runwayDesignatorLeftProperty().getValue().substring(0,2))*10+90));
+    VBox gui = new VBox(button, imageView);
+
+    //Region region = new Region();
+    //HBox box = new HBox(region,gui);
+    HBox box = new HBox(gui);
+    //HBox.setHgrow(region,Priority.ALWAYS);
+    box.setAlignment(Pos.CENTER_LEFT);
+    appWindow.currentScene.topMenu.getChildren().add(box);
+
+
+    button.setOnMouseClicked(new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent mouseEvent) {
+
+        angleXProperty.set(0);
+        angleYProperty.set(0);
+        angleZProperty.set(Double.parseDouble(appWindow.runway.runwayDesignatorLeftProperty().getValue().substring(0,2))*10+90);
+      }
+    });
   }
 
     /**
@@ -708,30 +808,42 @@ public class RunwayScene extends SceneAbstract {
      */
     public void buildLabels() {
     Pane labelPane = new Pane();
+
     //Lengths and xOffsets need binding to back-end variables, work hasn't been done yet so constants used
-    DoubleBinding leftDisplacementT = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(Bindings.when(appWindow.runway.directionProperty().not().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(appWindow.runway.getBLASTZONE())).otherwise(0));
-    DoubleBinding leftDisplacementL = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()).add(Bindings.when(appWindow.runway.directionProperty().not().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(appWindow.runway.slopeLengthProperty())).otherwise(0));
-    DoubleBinding rightDisplacementT = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(Bindings.when(appWindow.runway.directionProperty().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(appWindow.runway.getBLASTZONE())).otherwise(0));
-    DoubleBinding rightDisplacementL = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()).subtract(Bindings.when(appWindow.runway.directionProperty().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(appWindow.runway.slopeLengthProperty())).otherwise(0));
+    DoubleBinding leftDisplacementO = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()).add(Bindings.when(appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).subtract(appWindow.runway.dispThresholdLeftProperty())).otherwise(0));
+    DoubleBinding leftDisplacementT = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(Bindings.when(appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).subtract(appWindow.runway.dispThresholdLeftProperty()).add(appWindow.runway.BLASTZONEProperty()).add(appWindow.runway.dispThresholdLeftProperty())).otherwise(0));
+    DoubleBinding leftDisplacementL = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()).add(Bindings.when(appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(Bindings.max(appWindow.runway.slopeLengthProperty(),appWindow.runway.stripEndProperty().add(appWindow.runway.RESAWidthProperty()))).subtract(appWindow.runway.dispThresholdLeftProperty())).otherwise(0));
+    DoubleBinding rightDisplacementO = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()).subtract(Bindings.when(appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2))).otherwise(0));
+    DoubleBinding rightDisplacementT = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(Bindings.when(appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(appWindow.runway.BLASTZONEProperty()).add(appWindow.runway.dispThresholdRightProperty())).otherwise(0));
+    DoubleBinding rightDisplacementL = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()).subtract(Bindings.when(appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(Bindings.max(appWindow.runway.slopeLengthProperty(),appWindow.runway.stripEndProperty().add(appWindow.runway.RESAWidthProperty())))).otherwise(0));
 
     //RunwayArrow TODARightLabel = new RunwayArrowRight("TODA", Color.RED, scaleFactor, 100, 25, 3000);
-    RunwayLabel TODALeftLabel = new RunwayLabel("TODA", Theme.toda, leftDisplacementT,
-            0.9, appWindow.runway.leftTodaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
-    RunwayLabel ASDALeftLabel = new RunwayLabel("ASDA", Theme.asda, leftDisplacementT,
-            0.7, appWindow.runway.leftAsdaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
-    RunwayLabel TORALeftLabel = new RunwayLabel("TORA", Theme.tora, leftDisplacementT,
-            0.5, appWindow.runway.leftToraProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
-    RunwayLabel LDALeftLabel = new RunwayLabel("LDA", Theme.lda, leftDisplacementL,
-            0.3, appWindow.runway.leftLdaProperty().multiply(-1),this,true, appWindow.runway.leftLandProperty());
-    RunwayLabel TODARightLabel = new RunwayLabel("TODA", Theme.toda, rightDisplacementT,
-            -0.9, appWindow.runway.rightTodaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
-    RunwayLabel ASDARightLabel = new RunwayLabel("ASDA", Theme.asda, rightDisplacementT,
-            -0.7, appWindow.runway.rightAsdaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
-    RunwayLabel TORARightLabel = new RunwayLabel("TORA", Theme.tora, rightDisplacementT,
-            -0.5, appWindow.runway.rightToraProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
-    RunwayLabel LDARightLabel = new RunwayLabel("LDA", Theme.lda, rightDisplacementL,
-            -0.3, appWindow.runway.rightLdaProperty().multiply(1),this,false, appWindow.runway.rightLandProperty());
+    RunwayLabel TODALeftLabel = new RunwayLabel("TODA", Theme.getToda(), leftDisplacementT,
+            0.95, appWindow.runway.leftTodaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
+    RunwayLabel ASDALeftLabel = new RunwayLabel("ASDA", Theme.getAsda(), leftDisplacementT,
+            0.8, appWindow.runway.leftAsdaProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
+    RunwayLabel TORALeftLabel = new RunwayLabel("TORA", Theme.getTora(), leftDisplacementT,
+            0.65, appWindow.runway.leftToraProperty().multiply(-1),this,true, appWindow.runway.leftTakeOffProperty());
+    RunwayLabel LDALeftLabel = new RunwayLabel("LDA", Theme.getLda(), leftDisplacementL,
+            0.5, appWindow.runway.leftLdaProperty().multiply(-1),this,true, appWindow.runway.leftLandProperty());
+    RunwayLabel TODARightLabel = new RunwayLabel("TODA", Theme.getToda(), rightDisplacementT,
+            -0.95, appWindow.runway.rightTodaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
+    RunwayLabel ASDARightLabel = new RunwayLabel("ASDA", Theme.getAsda(), rightDisplacementT,
+            -0.8, appWindow.runway.rightAsdaProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
+    RunwayLabel TORARightLabel = new RunwayLabel("TORA", Theme.getTora(), rightDisplacementT,
+            -0.65, appWindow.runway.rightToraProperty().multiply(1),this,false, appWindow.runway.rightTakeOffProperty());
+    RunwayLabel LDARightLabel = new RunwayLabel("LDA", Theme.getLda(), rightDisplacementL,
+            -0.5, appWindow.runway.rightLdaProperty().multiply(1),this,false, appWindow.runway.rightLandProperty());
     group.getChildren().addAll(TODARightLabel, ASDARightLabel, TORARightLabel, LDARightLabel, TODALeftLabel, ASDALeftLabel, TORALeftLabel, LDALeftLabel);
+
+    RunwayLabel resaLeft = new RunwayLabel(Theme.getResa(),leftDisplacementO,0.15,appWindow.runway.RESAWidthProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel stripendLeft = new RunwayLabel(Theme.getStripEnd(),leftDisplacementO.add(appWindow.runway.RESAWidthProperty()),0.25,appWindow.runway.stripEndProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel blastAllowanceLeft = new RunwayLabel(Theme.getBlastAllowance(),leftDisplacementO.add(0),0.35,appWindow.runway.BLASTZONEProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel resaRight = new RunwayLabel(Theme.getResa(),rightDisplacementO,-0.15,appWindow.runway.RESAWidthProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightLandProperty()));
+    RunwayLabel stripendRight = new RunwayLabel(Theme.getStripEnd(),rightDisplacementO.subtract(appWindow.runway.RESAWidthProperty()),-0.25,appWindow.runway.stripEndProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightLandProperty()));
+    RunwayLabel blastAllowanceRight = new RunwayLabel(Theme.getBlastAllowance(),rightDisplacementO.add(0),-0.35,appWindow.runway.BLASTZONEProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightTakeOffProperty()));
+
+    group.getChildren().addAll(resaLeft, stripendLeft, blastAllowanceLeft, resaRight, stripendRight, blastAllowanceRight);
 
     TextField lx = new TextField();
     lx.textProperty().addListener(new ChangeListener<String>() {

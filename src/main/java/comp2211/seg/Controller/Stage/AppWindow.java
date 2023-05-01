@@ -2,18 +2,25 @@ package comp2211.seg.Controller.Stage;
 
 import comp2211.seg.App;
 import comp2211.seg.Controller.Interfaces.AirportsData;
-import comp2211.seg.Controller.Interfaces.GlobalVariables;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.Obstacle;
 import comp2211.seg.ProcessDataModel.Runway;
 import comp2211.seg.UiView.Scene.*;
+import comp2211.seg.UiView.Scene.Utilities.CssColorParser;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.w3c.dom.css.CSSRuleList;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -25,12 +32,12 @@ public class AppWindow {
     private static final Logger logger = LogManager.getLogger(AppWindow.class);
 
     private final Stage stage;
-    private final int width;
-    private final int height;
+    private SimpleDoubleProperty width = new SimpleDoubleProperty(1280);
+    private SimpleDoubleProperty height = new SimpleDoubleProperty(720);
     /**
      * The Current scene.
      */
-    public SceneAbstract currentScene;
+    public static SceneAbstract currentScene;
     private final ArrayList<Airport> airports;
     private Scene scene;
 
@@ -51,6 +58,14 @@ public class AppWindow {
      * The Obstacle presets.
      */
     public final ArrayList<Obstacle> obstaclePresets;
+    public static SimpleStringProperty pathToStyle = new SimpleStringProperty("/style/darkStyle.css");
+    public Theme theme;
+    private ArrayList<Color> cssDarkColors;
+    private ArrayList<Color> cssLightColors;
+
+    private ArrayList<Color> cssBlueYellowCBColors;
+
+    private ArrayList<Color> cssRedGreenCBColors;
 
     /**
      * Constructs an AppWindow object with the specified stage, width, and height.
@@ -61,22 +76,101 @@ public class AppWindow {
      */
     public AppWindow(Stage stage, int width, int height) {
         this.stage = stage;
-        this.width = width;
-        this.height = height;
+        this.width.set(width);
+        this.height.set(height);
+        setupResources("/style/darkStyle.css","/style/lightStyle.css", "/style/blueYellowCB.css", "/style/redGreenCB.css");
+
+
         airports = AirportsData.getAirports();
         obstaclePresets = new ArrayList<>();
         obstaclePresetSetup();
-        Theme.makeDark();
+        //Theme.makeDark();
 
         airport = airports.get(0);
+        logger.info("airport: " + airport);
 
         logger.info("gets runway object");
         runway = airport.getRunways().get(0);
+        logger.info("runways of " + airport + " are " + runway);
+        logger.info("runways of " + airport + " are " + runway.getRunwayDesignatorRight());
         // Setup appWindow
         setupStage();
         startHomeScene();
         //startMainScene();
         //startRunwayScene();
+    }
+    /**
+     * Sets up the resources for the application.
+     */
+    private void setupResources(String styleDark, String styleLight, String styleBlueYellowCB, String styleRedGreenCB) {
+        logger.info("Getting stylesheets rules...");
+        CSSRuleList cssRuleList1;
+        try {
+            cssRuleList1 = CssColorParser.getCssRules(styleDark);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        CSSRuleList cssRuleList2;
+        try {
+            cssRuleList2 = CssColorParser.getCssRules(styleLight);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        CSSRuleList cssRuleList3;
+        try {
+            cssRuleList3 = CssColorParser.getCssRules(styleBlueYellowCB);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        CSSRuleList cssRuleList4;
+        try {
+            cssRuleList4 = CssColorParser.getCssRules(styleRedGreenCB);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        ArrayList<String> cssClasses = new ArrayList<>();
+        cssClasses.add(".labelfg");
+        cssClasses.add(".runway");
+        cssClasses.add(".grass");
+        cssClasses.add(".obstacle");
+        cssClasses.add(".slope");
+        cssClasses.add(".clearway");
+        cssClasses.add(".stopway");
+        cssClasses.add(".lda");
+        cssClasses.add(".tora");
+        cssClasses.add(".asda");
+        cssClasses.add(".toda");
+        cssClasses.add(".resa");
+        cssClasses.add(".cga");
+        cssClasses.add(".stripend");
+        cssClasses.add(".blastallowance");
+        cssClasses.add(".physicalResa");
+        ArrayList<String> cssPrefixes = new ArrayList<>();
+        cssPrefixes.add("-fx-text-fill:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssPrefixes.add("-fx-background-color:");
+        cssDarkColors = CssColorParser.getCssColors(cssRuleList1,cssClasses,cssPrefixes);
+        cssLightColors = CssColorParser.getCssColors(cssRuleList2,cssClasses,cssPrefixes);
+        cssBlueYellowCBColors = CssColorParser.getCssColors(cssRuleList3,cssClasses,cssPrefixes);
+        cssRedGreenCBColors = CssColorParser.getCssColors(cssRuleList4,cssClasses,cssPrefixes);
+        theme = new Theme();
+        logger.info("Setting theme colors...");
+        assert cssDarkColors != null;
+        //set default
+        theme.setThemeColors(cssDarkColors);
     }
 
     /**
@@ -115,6 +209,7 @@ public class AppWindow {
     }
 
     private void obstaclePresetSetup() {
+
         obstaclePresets.add(new Obstacle("Airbus A320-200", 11.76, 0));
         obstaclePresets.get(0).lengthProperty().set(37.57);
         obstaclePresets.get(0).widthProperty().set(35.8);
@@ -136,6 +231,9 @@ public class AppWindow {
         obstaclePresets.add(new Obstacle("Maintenance truck", 3, 0));
         obstaclePresets.get(6).lengthProperty().set(6);
         obstaclePresets.get(6).widthProperty().set(2.5);
+        obstaclePresets.add(new Obstacle("Default", 5, 0));
+        obstaclePresets.get(7).lengthProperty().set(100.0);
+        obstaclePresets.get(7).widthProperty().set(60.0);
     }
 
     /**
@@ -180,20 +278,21 @@ public class AppWindow {
     }
 
     /**
-     * Loads any required resources for the application.
-     */
-    private void setupResources() {
-        logger.info("Loading resources"); //no resources used atm i.e. CSS/FXML
-    }
-
-    /**
      * Sets up the primary stage of the application.
      */
     public void setupStage() {
         stage.setTitle("Runway tool");
-        stage.setMinWidth(width);
-        stage.setMinHeight(height);
         stage.setOnCloseRequest(ev -> App.getInstance().shutdown());
+
+    }
+    public void reloadScene(){
+        if (currentScene instanceof HomeScene){
+            startHomeScene();
+        }else if (currentScene instanceof BaseScene){
+            startBaseScene();
+        }  else if (currentScene instanceof RunwayScene || currentScene instanceof RunwaySceneLoader){
+            startRunwayScene();
+        }
     }
 
     /**
@@ -211,15 +310,17 @@ public class AppWindow {
      * Start base scene.
      */
     public void startBaseScene() {
-        loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
+        loadScene(new BaseScene(new Pane(),this, width,height));
     }
 
     /**
      * Starts the runway scene.
      */
     public void startRunwayScene() {
-        loadScene(new RunwayScene(new Pane(),this,getWidth(),getHeight(),true));
-        //loadScene(new RunwaySceneLoader(new Pane(),this,getWidth(),getHeight()));
+        //loadScene(new RunwayScene(new Pane(),this,getWidth(),getHeight(),true));
+        //((RunwayScene) currentScene).makeAlignButton();
+        loadScene(new RunwaySceneLoader(new Pane(),this, width,height));
+        ((RunwaySceneLoader) currentScene).scene.makeAlignButton();
     }
 
     /**
@@ -227,11 +328,9 @@ public class AppWindow {
      */
     public void startRunwaySceneRotated() {
         startRunwayScene();
-        try {
-
+        if (currentScene instanceof RunwayScene){
             ((RunwayScene) currentScene).toggleView();
-        }catch (Exception e){
-
+        } else if (currentScene instanceof RunwaySceneLoader) {
             ((RunwaySceneLoader) currentScene).scene.toggleView();
         }
     }
@@ -242,15 +341,14 @@ public class AppWindow {
      * @param newScene the scene to load
      */
     public void loadScene(SceneAbstract newScene) {
-        // Cleanup remains of the previous scene
-        cleanup();
+
         // Create the new scene and set it up
         newScene.build();
         currentScene = newScene;
-        stage.setScene(currentScene);
-        Theme.retheme(currentScene);
-        currentScene.makeHelp(false);
+        currentScene.getRoot().getStylesheets().add(pathToStyle.get());
 
+        stage.setScene(currentScene);
+        currentScene.makeHelp(false);
         // Initialise the scene when ready
         Platform.runLater(() -> currentScene.initialise());
     }
@@ -264,31 +362,6 @@ public class AppWindow {
         return stage;
     }
 
-    /**
-     * Gets the width of the application's window.
-     *
-     * @return the width of the application's window
-     */
-    public int getWidth() {
-        return width;
-    }
-
-    /**
-     * Gets the height of the application's window.
-     *
-     * @return the height of the application's window
-     */
-    public int getHeight() {
-        return height;
-    }
-
-    /**
-     * Cleans up the remains of the previous scene.
-     */
-    public void cleanup(){
-        //clear listeners
-        //root.getChildren().removeAll(root.getChildren());
-    }
 
     /**
      * Gets airports.
@@ -299,11 +372,43 @@ public class AppWindow {
         return airports;
     }
 
+
     /**
-     * Start base scene obstacle.
+     * Cleans up the remains of the previous scene.
      */
-    public void startBaseSceneObstacle() {
-        loadScene(new BaseScene(new Pane(),this, getWidth(),getHeight()));
-        ((BaseScene) currentScene).selectObstacleMenu(1);
+    public void cleanup(){
+        //clear listeners
+        stage.setScene(null);
+    }
+
+    public void setStyle(String pathToStyle,String style) {
+
+        if(!(pathToStyle.equals(this.pathToStyle.get()))) {
+
+            logger.info("theme changed to "+ pathToStyle);
+            this.pathToStyle.set(pathToStyle);
+            if (style.equals("d")) {
+                theme.setThemeColors(cssDarkColors);
+            } else if (style.equals("e")) {
+                theme.setThemeColors(cssRedGreenCBColors);
+            } else if (style.equals("f")) {
+                theme.setThemeColors(cssBlueYellowCBColors);
+            } else {
+                theme.setThemeColors(cssLightColors);
+            }
+            // Cleanup remains of the previous scene
+            //cleanup();
+            //this.loadScene(currentScene);
+            reloadScene();
+        } else {
+            logger.info(pathToStyle + " is current style");
+        }
+    }
+
+    public double getWidth() {
+        return width.get();
+    }
+    public double getHeight() {
+        return height.get();
     }
 }

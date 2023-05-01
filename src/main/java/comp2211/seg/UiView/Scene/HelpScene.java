@@ -2,6 +2,7 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Theme;
+import comp2211.seg.UiView.Scene.Utilities.CssColorParser;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Scene;
@@ -128,21 +129,22 @@ public class HelpScene extends Scene {
     /**
      * Runway labels.
      */
-    public void runwayLabels(){
+    public void runwayLabels() {
+        makeColour(Theme.getRunway(), "Runway(RWY)");
+        makeColour(Theme.getStopway(), "Stopway(SWY)");
+        makeColour(Theme.getClearway(), "Clearway(CWY)");
+        makeColour(Theme.getResa(), "RESA");
+        makeColour(Theme.getLda(), "LDA");
+        makeColour(Theme.getTora(), "TORA");
+        makeColour(Theme.getAsda(), "ASDA");
+        makeColour(Theme.getToda(), "TODA");
+        makeColour(Theme.getObstacle(),"Obstacle");
+        makeColour(Theme.getSlope(), "TOCS/ALS Slope");
+        makeColour(Theme.getStripEnd(), "Strip End");
+        makeColour(Theme.getBlastAllowance(), "Blast Allowance");
+        makeColour(Theme.getCga(), "Cleared & Graded Area");
+        makeColour(Theme.getPhysicalResa(), "Physical Resa");
 
-        makeColour(Theme.lda,"LDA");
-        makeColour(Theme.tora,"TORA");
-        makeColour(Theme.asda,"ASDA");
-        makeColour(Theme.toda,"TODA");
-        makeColour(Theme.obstacle,"Obstacle");
-        makeColour(Theme.resa,"RESA");
-        makeColour(Theme.stripend,"Strip End");
-        makeColour(Theme.blastallowance,"Blast Allowance");
-        makeColour(Theme.runway,"Runway");
-        makeColour(Theme.cga,"Cleared & Graded Area");
-        makeColour(Theme.stopway,"Stopway");
-        makeColour(Theme.clearway,"Clearway");
-        makeColour(Theme.physicalResa,"Physical Resa");
     }
 
     /**
@@ -150,7 +152,7 @@ public class HelpScene extends Scene {
      *
      * @param className the class name
      */
-    public void toggleHelp(String className){
+    public void toggleHelp(String className)  {
         //logger.info(className);
         if (!visible.get()) {
             switch (className) {
