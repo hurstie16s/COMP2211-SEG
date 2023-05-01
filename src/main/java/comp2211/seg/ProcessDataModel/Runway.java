@@ -295,6 +295,7 @@ public class Runway extends RunwayValues{
      */
     public void recalculate(){
 
+        validityChecks();
         logger.info("Recalculating runway values");
         rightTora.bind(inputRightTora);
         rightToda.bind(inputRightToda);
@@ -345,9 +346,9 @@ public class Runway extends RunwayValues{
         leftLand.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftLda,0),
                 Bindings.lessThanOrEqual(inputLeftLda,inputLeftTora))
         );
-        rightTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora),Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda)));
-        rightLand.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightLda,0),
-                Bindings.lessThanOrEqual(inputRightLda,inputRightTora))
+        rightTakeOff.bind(Bindings.and(Bindings.and(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora),Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda)),dualDirectionRunway));
+        rightLand.bind(Bindings.and(Bindings.and(Bindings.greaterThanOrEqual(inputRightLda,0),
+                Bindings.lessThanOrEqual(inputRightLda,inputRightTora)),dualDirectionRunway)
         );
     }
 

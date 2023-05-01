@@ -288,7 +288,7 @@ public class RunwayScene extends SceneAbstract {
         }
       };
 
-      appWindow.currentScene.topMenu.getChildren().add(scale);
+      //appWindow.currentScene.topMenu.getChildren().add(scale);
 
       scaleFactor.addListener(scaleCalc);
       scaleFactorHeight.addListener(scaleCalc);
