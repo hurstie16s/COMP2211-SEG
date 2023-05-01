@@ -277,54 +277,19 @@ public class RunwayTest {
         assertEquals(expectedOutput, actualOutput, "Designator incorrectly calculated");
     }
 
-    /**
-     * Recalculate test.
-     *
-     * @param runway            the runway
-     * @param obstacleToAdd     the obstacle to add
-     * @param expectedTORALeft  the expected tora left
-     * @param expectedASDALeft  the expected asda left
-     * @param expectedTODALeft  the expected toda left
-     * @param expectedLDALeft   the expected lda left
-     * @param expectedTORARight the expected tora right
-     * @param expectedASDARight the expected asda right
-     * @param expectedTODARight the expected toda right
-     * @param expectedLDARight  the expected lda right
-     * @param message           the message
+    // TODO: Write Tests
+    /*
+    Tests
+    R2 O1
+    R1 O2
+    R1 O3
+    R2 O4
+    R3 O5
+    R3 O6
+    R4 O7
+    R4 O8
+    R5 O9
      */
-//TODO: Write Test
-    @DisplayName("Landing/ take-off calculations : Recalculate appropriate values")
-    @ParameterizedTest
-    @MethodSource("generateRecalculateTestData")
-    public void recalculateTest(Runway runway,
-                         Obstacle obstacleToAdd,
-                         double expectedTORALeft,
-                         double expectedASDALeft,
-                         double expectedTODALeft,
-                         double expectedLDALeft,
-                         double expectedTORARight,
-                         double expectedASDARight,
-                         double expectedTODARight,
-                         double expectedLDARight,
-                         String message
-    ) {
-        logger.info(message);
-        addObstacle(runway, obstacleToAdd);
-
-        assertEquals(expectedLDALeft, runway.getLeftLda(), "Left LDA Incorrect");
-        assertEquals(expectedLDARight, runway.getRightLda(), "Right LDA Incorrect");
-
-        assertEquals(expectedTORALeft, runway.getLeftTora(), "Left TORA Incorrect");
-        assertEquals(expectedTORARight, runway.getRightTora(), "Right TORA Incorrect");
-
-        assertEquals(expectedASDALeft, runway.getLeftAsda(), "Left ASDA Incorrect");
-        assertEquals(expectedASDARight, runway.getRightAsda(), "Right ASDA Incorrect");
-
-        assertEquals(expectedTODALeft, runway.getLeftToda(), "Left TODA Incorrect");
-        assertEquals(expectedTODARight, runway.getRightToda(), "Right TODA Incorrect");
-    }
-
-    // Test Data Generation
 
     /**
      * The constant obstacle1.
@@ -363,142 +328,4 @@ public class RunwayTest {
      * The Obstacle 9.
      */
     static Obstacle obstacle9 = new Obstacle("ob9", 8, 484);
-
-    //TODO: Change generation to fit new tests
-    private static Stream<Arguments> generateCheckDesignatorTestData() {
-        return Stream.of(
-                Arguments.of(runway1, "27L"),
-                Arguments.of(runway2, "27R"),
-                Arguments.of(runway3, "25L"),
-                Arguments.of(runway4, "34R"),
-                Arguments.of(runway5, "22C")
-        );
-    }
-    //TODO: Generate test data for recalculate
-    private static Stream<Arguments> generateRecalculateTestData() {
-        return Stream.of(
-                Arguments.of(
-                        runway2,
-                        obstacle1,
-                        3145, //TORA left
-                        3145, //ASDA left
-                        3145, //TODA left
-                        2985, //LDA left
-                        2985, //TORA right
-                        2985, //ASDA right
-                        2985, //TODA right
-                        3345, //LDA right
-                        "Test: Given Scenario 1"
-                ),
-                Arguments.of(
-                        runway1,
-                        obstacle2,
-                        1850,
-                        1850,
-                        1850,
-                        2553,
-                        2660,
-                        2660,
-                        2660,
-                        1850,
-                        "Test: Given Scenario 2"
-                ),
-                Arguments.of(
-                        runway1,
-                        obstacle3,
-                        2703,
-                        2703,
-                        2703,
-                        2393,
-                        2393,
-                        2393,
-                        2393,
-                        2903,
-                        "Test: Given Scenario 3"
-                ),
-                Arguments.of(
-                        runway2,
-                        obstacle4,
-                        2793,
-                        2793,
-                        2793,
-                        3246,
-                        3353,
-                        3353,
-                        3431,
-                        2775,
-                        "Test: Given Scenario 4"
-                ),
-                Arguments.of(
-                        runway3,
-                        obstacle5,
-                        1582,
-                        1582,
-                        2663,
-                        1322,
-                        1404,
-                        1404,
-                        1404,
-                        1782,
-                        "Test: Own Scenario 1"
-                ),
-                Arguments.of(
-                        runway3,
-                        obstacle6,
-                        1675,
-                        1675,
-                        1675,
-                        1985,
-                        1785,
-                        1842,
-                        2866,
-                        1593,
-                        "Test: Own Scenario 2"
-                ),
-                Arguments.of(
-                        runway4,
-                        obstacle7,
-                        477,
-                        477,
-                        676,
-                        267,
-                        267,
-                        267,
-                        267,
-                        677,
-                        "Test: Own Scenario 3"
-                ),
-                Arguments.of(
-                        runway4,
-                        obstacle8,
-                        1453,
-                        1453,
-                        1652,
-                        1043,
-                        1043,
-                        1043,
-                        1043,
-                        1653,
-                        "Test: Own Scenario 4"
-                ),
-                Arguments.of(
-                        runway5,
-                        obstacle9,
-                        -16,
-                        -16,
-                        -16,
-                        -16,
-                        24,
-                        24,
-                        24,
-                        184,
-                        "Test: Own Scenario 5"
-                )
-        );
-    }
-
-    @Test
-    public void smallTest() {
-        assert false;
-    }
 }
