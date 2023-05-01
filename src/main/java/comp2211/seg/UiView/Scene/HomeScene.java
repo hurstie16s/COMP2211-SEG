@@ -41,8 +41,7 @@ public class HomeScene extends SceneAbstract{
   protected TextField nameEntry;
   private ComboBox airports;
   private ComboBox runways;
-  public Runway runway;
-  public Airport airport;
+
 
   /**
    * Constructor to create a HomeScene object.
