@@ -3,10 +3,7 @@ package comp2211.seg.ProcessDataModel;
 import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -94,6 +91,7 @@ public class Runway extends RunwayValues{
 
         recalculate();
         validityChecks();
+        logChange("Runway Initialised");
 
         runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
         runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
@@ -589,8 +587,22 @@ public class Runway extends RunwayValues{
 
     // Getters
 
-    public ArrayList<String> getChangeHistory() {
+    /**
+     * Gets input right tora.
+     *
+     * @return the input right tora
+     */
+    public ObservableList<String> getChangeHistory() {
         return changeHistory;
+    }
+
+    /**
+     * Gets input right tora.
+     *
+     * @return the input right tora
+     */
+    public SimpleListProperty<String> getChangeHistoryProperty(){
+        return changeHistoryProperty;
     }
 
     /**

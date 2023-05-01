@@ -928,9 +928,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         ListView<String> historyListView = new ListView<>();
         historyListView.getStyleClass().add("veryfocusedBG");
-        ObservableList<String> historyItems = FXCollections.observableArrayList(appWindow.runway.getChangeHistory());
-        historyListView.setItems(historyItems);
+        historyListView.getStyleClass().add("fg");
+        historyListView.setPadding(new Insets(10));
 
+        historyListView.itemsProperty().bind(appWindow.runway.getChangeHistoryProperty());
 
         ScrollPane history = new ScrollPane(historyListView);
         history.setFitToWidth(true);
