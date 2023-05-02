@@ -60,16 +60,16 @@ public class RunwaySceneLoader extends SceneAbstract{
                     appWindow.startBaseScene();
                     break;
                 case W,UP:
-                    scene.group.translateYProperty().set(scene.group.getTranslateY()-10);
-                    break;
-                case A,LEFT:
-                    scene.group.translateXProperty().set(scene.group.getTranslateX()-10);
-                    break;
-                case S,DOWN:
                     scene.group.translateYProperty().set(scene.group.getTranslateY()+10);
                     break;
-                case D,RIGHT:
+                case A,LEFT:
                     scene.group.translateXProperty().set(scene.group.getTranslateX()+10);
+                    break;
+                case S,DOWN:
+                    scene.group.translateYProperty().set(scene.group.getTranslateY()-10);
+                    break;
+                case D,RIGHT:
+                    scene.group.translateXProperty().set(scene.group.getTranslateX()-10);
                     break;
                 case T:
                     scene.toggleView();
