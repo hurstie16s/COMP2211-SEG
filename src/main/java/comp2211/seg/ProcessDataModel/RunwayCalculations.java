@@ -364,7 +364,8 @@ public abstract class RunwayCalculations {
                                 Bindings.max(
                                         runway.runwayObstacle.heightProperty().multiply(runway.SLOPE),
                                         runway.MINRESA.add(runway.runwayObstacle.lengthProperty().divide(2))))
-                        .subtract(runway.STRIPEND),
+                        .subtract(runway.STRIPEND)
+                        .add(runway.dispThresholdLeft.subtract(runway.dispThresholdRight)),
                 0
         ));
 
@@ -546,7 +547,7 @@ public abstract class RunwayCalculations {
                                         runway.BLASTZONE,
                                         runway.STRIPEND.add(runway.MINRESA)
                                 ))
-                        .add(runway.dispThresholdRight)
+                        .add(runway.dispThresholdLeft.subtract(runway.dispThresholdRight))
                         .subtract(runway.runwayObstacle.lengthProperty().divide(2)),
                 0
         ));
