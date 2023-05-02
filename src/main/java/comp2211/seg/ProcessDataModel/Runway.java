@@ -15,6 +15,11 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.*;
+import java.awt.*;
+
+
+
 import java.util.ArrayList;
 
 /**
@@ -91,7 +96,7 @@ public class Runway extends RunwayValues{
 
         recalculate();
         validityChecks();
-        logChange("Runway Initialised");
+        logChange("Runway Initialised", Boolean.FALSE);
 
         runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
         runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
@@ -276,7 +281,7 @@ public class Runway extends RunwayValues{
         //hasRunwayObstacle.set(true); // Listener will call recalculate
         //Aleks - ^ removed as it is not needed at all here. Visibility is triggered by yes/no button.
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
-        logChange("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
+        logChange("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get(), Boolean.TRUE);
 
     }
 
@@ -287,7 +292,7 @@ public class Runway extends RunwayValues{
         hasRunwayObstacle.set(false);
         logger.info("Removed Obstacle from runway " + runwayDesignatorLeft.get());
         logger.info("Return runway to original state");
-        logChange("Removed Obstacle from runway " + runwayDesignatorLeft.get());
+        logChange("Removed Obstacle from runway " + runwayDesignatorLeft.get(), Boolean.TRUE);
     }
 
     /**
@@ -308,32 +313,34 @@ public class Runway extends RunwayValues{
 
         if (hasRunwayObstacle.get()) {
             logger.info("Runway has obstacle: calculation methods will be called");
+            String change = ("Runway " + this.toString() + " recalculated; take-off/landing " + (directionLeft.get() ? "towards" : "away") + " for top, take-off/landing " + (directionRight.get() ? "away" : "towards") + " for bottom");
+            logChange(change, Boolean.TRUE);
             if (directionLeft.get()) {
                 logger.info("Calculate take-off towards for left");
-                logChange("Calculate take-off towards for left");
+                //logChange("Calculate take-off towards for left", Boolean.TRUE);
                 RunwayCalculations.calculateTakeOffTowardLeft(this); // done
                 RunwayCalculations.calculateLandTowardLeft(this); // done
             } else {
                 logger.info("Calculate take-off away for left");
-                logChange("Calculate take-off away for left");
+                //logChange("Calculate take-off away for left", Boolean.TRUE);
                 RunwayCalculations.calculateTakeOffAwayLeft(this); // done
                 RunwayCalculations.calculateLandOverLeft(this); // done
             }
             if (directionRight.get()) {
                 logger.info("Calculate land towards for right");
-                logChange("Calculate land towards for right");
+                //logChange("Calculate land towards for right", Boolean.TRUE);
                 RunwayCalculations.calculateTakeOffTowardRight(this); // done
                 RunwayCalculations.calculateTakeOffAwayRight(this); // done
                 RunwayCalculations.calculateLandOverRight(this); // done
             } else {
                 logger.info("Calculate land over for right");
-                logChange("Calculate land over for right");
+                //logChange("Calculate land over for right", Boolean.TRUE);
                 RunwayCalculations.calculateTakeOffTowardRight(this); // done
                 RunwayCalculations.calculateLandTowardRight(this); // done
             }
         } else {
             logger.info("Runway has no obstacle: runway returned to original state");
-            logChange("Runway obstacle inactive");
+            logChange("Runway obstacle inactive", Boolean.FALSE);
         }
     }
 
@@ -602,12 +609,22 @@ public class Runway extends RunwayValues{
      *
      * @param change text to be displayed in change history tab
      */
-    public void logChange(String change) {
-        if (changeHistory.isEmpty()) {
+    public void logChange(String change, Boolean show) {
+        if (changeHistory.isEmpty() || !change.equals(changeHistory.get(0))) {
             changeHistory.add(0, change);
-        }
-        else if (!change.equals(changeHistory.get(0))) {
-            changeHistory.add(0, change);
+            if (SystemTray.isSupported() && show) {
+                SystemTray tray = SystemTray.getSystemTray();
+                Image image = new ImageIcon(getClass().getResource("/images/compass.png")).getImage(); // set icon image
+                TrayIcon trayIcon = new TrayIcon(image, "Runway Tool"); // create tray icon
+                trayIcon.setImageAutoSize(true);
+                trayIcon.setToolTip("New change: " + change);
+                try {
+                    tray.add(trayIcon);
+                    //JOptionPane.showMessageDialog(null, "New change: " + change, "Runway Tool", JOptionPane.INFORMATION_MESSAGE);
+                } catch (AWTException e) {
+                    System.err.println(e);
+                }
+            }
         }
     }
 
