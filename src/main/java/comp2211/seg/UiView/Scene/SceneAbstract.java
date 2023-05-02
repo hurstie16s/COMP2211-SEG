@@ -84,7 +84,7 @@ public abstract class SceneAbstract extends Scene {
   public SceneAbstract(Pane root, AppWindow appWindow, SimpleDoubleProperty width, SimpleDoubleProperty height) {
     super(root, width.get(), height.get(), Color.BLACK);
 
-    logger.info(Double.toString(appWindow.getWidth()) + " " + Double.toString(appWindow.getHeight()));
+    logger.info(appWindow.getWidth() + " " + appWindow.getHeight());
     this.root = root;
     width.bind(root.widthProperty());
     height.bind(root.heightProperty());
@@ -103,7 +103,7 @@ public abstract class SceneAbstract extends Scene {
    */
   public SceneAbstract(Pane root, AppWindow appWindow, SimpleDoubleProperty width, SimpleDoubleProperty height, boolean depthBuffer) {
     super(root, width.get(), height.get(), depthBuffer, SceneAntialiasing.BALANCED);
-    logger.info(Double.toString(appWindow.getWidth()) + " " + Double.toString(appWindow.getHeight()));
+    logger.info(appWindow.getWidth() + " " + appWindow.getHeight());
     this.root = root;
     width.bind(root.widthProperty());
     height.bind(root.heightProperty());

@@ -577,14 +577,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         airportData.add(makeTableCell(appWindow.runway.stripEndProperty()),8,3);
         airportData.add(makeTableCell(new SimpleDoubleProperty(500)),9,3);
         for (Node node:airportData.getChildren()) {
-            if (node instanceof Control) {
-                Control control = (Control) node;
+            if (node instanceof Control control) {
                 control.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 //control.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
                 control.getStyleClass().add("fgBorder");
             }
-            if (node instanceof Pane) {
-                Pane pane = (Pane) node;
+            if (node instanceof Pane pane) {
                 pane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 //pane.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
                 pane.getStyleClass().add("fgBorder");

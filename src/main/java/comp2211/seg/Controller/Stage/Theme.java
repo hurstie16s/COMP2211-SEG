@@ -128,7 +128,7 @@ public class Theme {
     //static public Font fontsmall =Font.font("Calibri", 16);
 
     public Theme() {
-      this.themeColors = new ArrayList<>();
+      themeColors = new ArrayList<>();
       themeColors.add(labelfg);
       themeColors.add(runway);
       themeColors.add(grass);

@@ -313,7 +313,7 @@ public class Runway extends RunwayValues{
 
         if (hasRunwayObstacle.get()) {
             logger.info("Runway has obstacle: calculation methods will be called");
-            String change = ("Runway " + this.toString() + " recalculated; take-off/landing " + (directionLeft.get() ? "towards" : "away") + " for top, take-off/landing " + (directionRight.get() ? "away" : "towards") + " for bottom");
+            String change = ("Runway " + this + " recalculated; take-off/landing " + (directionLeft.get() ? "towards" : "away") + " for top, take-off/landing " + (directionRight.get() ? "away" : "towards") + " for bottom");
             logChange(change, Boolean.TRUE);
             if (directionLeft.get()) {
                 logger.info("Calculate take-off towards for left");
@@ -2306,7 +2306,7 @@ public class Runway extends RunwayValues{
      * @param units the units
      */
     public void setUnits(String units) {
-        this.units.set(units);
+        RunwayValues.units.set(units);
     }
 
 

@@ -32,10 +32,10 @@ public class RunwayLabel extends Group {
     private final RunwayScene scene;
     private boolean direction;
     private String name;
-    private Rotate xRotate;
-    private Rotate yRotate;
-    private Rotate zRotate;
-    private Text label;
+    private final Rotate xRotate;
+    private final Rotate yRotate;
+    private final Rotate zRotate;
+    private final Text label;
 
     /**
      * Constructs a new RunwayLabel with the specified name, color, x-offset, y-offset, length, scene, and direction.

@@ -125,6 +125,8 @@ public class RunwaySceneLoader extends SceneAbstract{
 
         subScene.widthProperty().bind(root.widthProperty());
         subScene.heightProperty().bind(root.heightProperty());
+        subScene.cameraProperty().get().translateZProperty().set(-500);
+
     }
     public void buildmenuless(){
         super.buildmenuless();
