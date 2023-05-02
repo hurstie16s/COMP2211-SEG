@@ -1120,8 +1120,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         box.setPadding(new Insets(0,5,0,5));
 
         scrollPane.setContent(box); // TODO: Finish
-
-        return box;
+        Pane pane = new Pane(scrollPane);
+        scrollPane.maxHeightProperty().bind(pane.heightProperty());
+        scrollPane.minHeightProperty().bind(pane.heightProperty());
+        scrollPane.maxWidthProperty().bind(pane.widthProperty());
+        scrollPane.minWidthProperty().bind(pane.widthProperty());
+        return pane;
 
     }
 
