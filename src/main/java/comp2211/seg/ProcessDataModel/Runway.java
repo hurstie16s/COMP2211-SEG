@@ -532,17 +532,24 @@ public class Runway extends RunwayValues{
         obstacleSlopeCalculation
                 .bind(Bindings
                         .when(Bindings
-                                .greaterThan(runwayObstacle.heightProperty()
-                                        .multiply(SLOPE),MINRESA
-                                        .add(runwayObstacle.lengthProperty()
-                                                .divide(2))))
+                                .greaterThan(
+                                        runwayObstacle.heightProperty()
+                                                .multiply(SLOPE)
+                                                .subtract(
+                                                        runwayLengthProperty().divide(2)
+                                                ),
+                                        MINRESA
+                                        )
+                        )
                         .then(runwayObstacle
                                 .heightProperty()
-                                .multiply(SLOPE))
-                        .otherwise(MINRESA
-                                .add(runwayObstacle
-                                        .lengthProperty()
-                                        .divide(2))));
+                                .multiply(SLOPE)
+                                .subtract(
+                                        runwayLengthProperty().divide(2)
+                                )
+                        )
+                        .otherwise(MINRESA)
+                );
 
         logger.info("Obstacle Slop Calculation: "+obstacleSlopeCalculation.get());
 
