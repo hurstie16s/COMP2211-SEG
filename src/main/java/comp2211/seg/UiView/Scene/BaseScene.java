@@ -202,6 +202,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             //tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
             tabLayout = new TabLayout(tabs, "unfocusedBG", "focusedBG");
 
+
             //appWindow.startBaseScene();
             //tabLayout.tabButtons.get(0).run();
             //((TabLayout) ((TabsPaneVertical) ((TabsPaneHorizontal) tabLayout.contents.getChildren().get(0)).getChildren().get(0)).getChildren().get(0)).tabButtons.get(1).run();
@@ -284,11 +285,10 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         VBox vBoxAirportLayout = new VBox();
         //table
         VBox vBoxTable = new VBox();
-        VBox.setMargin(vBoxTable,new Insets(150,20,100,20));//Top/Right/Bottom/Left
+        //VBox.setMargin(vBoxTable,new Insets(150,20,100,20));//Top/Right/Bottom/Left
+        vBoxTable.setAlignment(Pos.CENTER);
         //vBoxTable.getChildren().add(makeRunwayGridTable());
         vBoxTable.getChildren().add(buildTableView());
-        vBoxTable.maxWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
-        vBoxTable.minWidthProperty().bind(vBoxAirportLayout.widthProperty().subtract(40));
 
         Label airportsLabel = makeLabel("Airport");
         airportsLabel.getStyleClass().add("font");
@@ -867,9 +867,13 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         obstacleData.add(pos, 2,0);
         obstacleData.add(makeLabel("Top Landing/Take off"), 2,2);
-        obstacleData.add(makeLabel("Bottom Landing/Take off"), 2,3);
+        Label bottom = makeLabel("Bottom Landing/Take off");
+        bottom.visibleProperty().bind(appWindow.runway.dualDirectionRunway);
+        obstacleData.add(bottom, 2,3);
         obstacleData.add(makeButton(appWindow.runway.directionLeftProperty(),"Towards","Away"),3,2);
-        obstacleData.add(makeButton(appWindow.runway.directionRightProperty(),"Away","Towards"),3,3);
+        Node rightDirection = makeButton(appWindow.runway.directionRightProperty(),"Away","Towards");
+        rightDirection.visibleProperty().bind(appWindow.runway.dualDirectionRunway);
+        obstacleData.add(rightDirection,3,3);
 
         // Obstacle preset dropdown selector
         obstacleData.add(obstacleComboBox,1,0);
@@ -943,6 +947,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         ScrollPane history = new ScrollPane(historyListView);
         history.setFitToWidth(true);
         history.setPadding(new Insets(16));
+        history.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        history.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         obstacleOptions.add(new Pair<>("Obstacle", obstacleData));
         obstacleOptions.add(new Pair<>("Change History", new BorderPane(history)));

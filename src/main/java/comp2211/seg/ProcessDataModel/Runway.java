@@ -15,6 +15,11 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.*;
+import java.awt.*;
+
+
+
 import java.util.ArrayList;
 
 /**
@@ -91,7 +96,7 @@ public class Runway extends RunwayValues{
 
         recalculate();
         validityChecks();
-        logChange("Runway Initialised");
+        logChange("Runway Initialised", Boolean.FALSE);
 
         runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
         runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
@@ -181,36 +186,50 @@ public class Runway extends RunwayValues{
      * @return the string
      */
     public String calculateRunwayDesignator(String designator, boolean left) {
-        var number = String.valueOf((Integer.parseInt(designator.substring(0,2)) + 18) % 36);
-        if (number.length() == 1) {
-            number = "0"+number;
-        }
-        var character = designator.substring(2);
-
-        var newCharacter = "";
-        switch (character) {
-            case "R":  newCharacter = "L"; break;
-            case "L": newCharacter = "R"; break;
-            case "C": newCharacter = "C"; break;
-            case "" : break;
-            default: {
-                newCharacter = "ERROR";
-                logger.error("Incorrect initial character"); break;
+        String newDesignator;
+        try {
+            var number = String.valueOf((Integer.parseInt(designator.substring(0, 2)) + 18) % 36);
+            if (number.length() == 1) {
+                number = "0" + number;
             }
-        }
+            var character = designator.substring(2);
 
-        var newDesignator = number + newCharacter;
-
-        logger.info("Runway Designators: "+designator+", "+newDesignator);
-
-        if ((Integer.parseInt(number) < 18 && left) || (Integer.parseInt(number) > 18 && !left)) {
-            try {
-                // This will cascade and correct the other designator
-                return designator;
-            } finally {
-                // TODO : Swap left and right
-                swapLeftRight();
+            var newCharacter = "";
+            switch (character) {
+                case "R":
+                    newCharacter = "L";
+                    break;
+                case "L":
+                    newCharacter = "R";
+                    break;
+                case "C":
+                    newCharacter = "C";
+                    break;
+                case "":
+                    break;
+                default: {
+                    //newCharacter = "ERROR";
+                    logger.error("Incorrect initial character");
+                    return "ERROR";
+                }
             }
+
+            newDesignator = number + newCharacter;
+
+            logger.info("Runway Designators: " + designator + ", " + newDesignator);
+
+            if ((Integer.parseInt(number) < 18 && left) || (Integer.parseInt(number) > 18 && !left)) {
+                try {
+                    // This will cascade and correct the other designator
+                    return designator;
+                } finally {
+                    // TODO : Swap left and right
+                    swapLeftRight();
+                }
+            }
+        } catch (NumberFormatException e) {
+            logger.warn(e.getMessage());
+            newDesignator = "ERROR";
         }
 
         return newDesignator;
@@ -262,7 +281,7 @@ public class Runway extends RunwayValues{
         //hasRunwayObstacle.set(true); // Listener will call recalculate
         //Aleks - ^ removed as it is not needed at all here. Visibility is triggered by yes/no button.
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
-        logChange("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
+        logChange("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get(), Boolean.TRUE);
 
     }
 
@@ -273,7 +292,7 @@ public class Runway extends RunwayValues{
         hasRunwayObstacle.set(false);
         logger.info("Removed Obstacle from runway " + runwayDesignatorLeft.get());
         logger.info("Return runway to original state");
-        logChange("Removed Obstacle from runway " + runwayDesignatorLeft.get());
+        logChange("Removed Obstacle from runway " + runwayDesignatorLeft.get(), Boolean.TRUE);
     }
 
     /**
@@ -281,6 +300,7 @@ public class Runway extends RunwayValues{
      */
     public void recalculate(){
 
+        validityChecks();
         logger.info("Recalculating runway values");
         rightTora.bind(inputRightTora);
         rightToda.bind(inputRightToda);
@@ -293,32 +313,34 @@ public class Runway extends RunwayValues{
 
         if (hasRunwayObstacle.get()) {
             logger.info("Runway has obstacle: calculation methods will be called");
+            String change = ("Runway " + this.toString() + " recalculated; take-off/landing " + (directionLeft.get() ? "towards" : "away") + " for top, take-off/landing " + (directionRight.get() ? "away" : "towards") + " for bottom");
+            logChange(change, Boolean.TRUE);
             if (directionLeft.get()) {
                 logger.info("Calculate take-off towards for left");
-                logChange("Calculate take-off towards for left");
+                //logChange("Calculate take-off towards for left", Boolean.TRUE);
                 RunwayCalculations.calculateTakeOffTowardLeft(this); // done
                 RunwayCalculations.calculateLandTowardLeft(this); // done
             } else {
                 logger.info("Calculate take-off away for left");
-                logChange("Calculate take-off away for left");
+                //logChange("Calculate take-off away for left", Boolean.TRUE);
                 RunwayCalculations.calculateTakeOffAwayLeft(this); // done
                 RunwayCalculations.calculateLandOverLeft(this); // done
             }
             if (directionRight.get()) {
                 logger.info("Calculate land towards for right");
-                logChange("Calculate land towards for right");
+                //logChange("Calculate land towards for right", Boolean.TRUE);
                 RunwayCalculations.calculateTakeOffTowardRight(this); // done
                 RunwayCalculations.calculateTakeOffAwayRight(this); // done
                 RunwayCalculations.calculateLandOverRight(this); // done
             } else {
                 logger.info("Calculate land over for right");
-                logChange("Calculate land over for right");
+                //logChange("Calculate land over for right", Boolean.TRUE);
                 RunwayCalculations.calculateTakeOffTowardRight(this); // done
                 RunwayCalculations.calculateLandTowardRight(this); // done
             }
         } else {
             logger.info("Runway has no obstacle: runway returned to original state");
-            logChange("Runway obstacle inactive");
+            logChange("Runway obstacle inactive", Boolean.FALSE);
         }
     }
 
@@ -331,9 +353,9 @@ public class Runway extends RunwayValues{
         leftLand.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftLda,0),
                 Bindings.lessThanOrEqual(inputLeftLda,inputLeftTora))
         );
-        rightTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora),Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda)));
-        rightLand.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightLda,0),
-                Bindings.lessThanOrEqual(inputRightLda,inputRightTora))
+        rightTakeOff.bind(Bindings.and(Bindings.and(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora),Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda)),dualDirectionRunway));
+        rightLand.bind(Bindings.and(Bindings.and(Bindings.greaterThanOrEqual(inputRightLda,0),
+                Bindings.lessThanOrEqual(inputRightLda,inputRightTora)),dualDirectionRunway)
         );
     }
 
@@ -442,8 +464,20 @@ public class Runway extends RunwayValues{
                         Bindings.greaterThan(
                                 distFromThreshold
                                         .add(obstacleSlopeCalculation)
-                                        .add(STRIPEND),BLASTZONE.add(distFromThreshold))).then(distFromThreshold
-                        .add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE.add(distFromThreshold)));
+                                        .add(STRIPEND),
+                                BLASTZONE.add(distFromThreshold)
+                        )
+                )
+                        .then(
+                                distFromThreshold
+                                        .add(obstacleSlopeCalculation)
+                                        .add(STRIPEND)
+                        ).otherwise(
+                                BLASTZONE.add(distFromThreshold)
+                        )
+        );
+
+        // TODO breakdowns
 
         SimpleStringProperty ldaSubBreakdown = left ? leftLdaSubBreakdownProperty() : rightLdaSubBreakdownProperty();
 
@@ -512,22 +546,19 @@ public class Runway extends RunwayValues{
      * @param left the left
      * @return The appropriate slope over an obstacle
      */
-    private SimpleDoubleProperty getObstacleSlopeCalculation(boolean left) {
+    public SimpleDoubleProperty getObstacleSlopeCalculation(boolean left) {
         var obstacleSlopeCalculation = new SimpleDoubleProperty();
         obstacleSlopeCalculation
-                .bind(Bindings
-                        .when(Bindings
-                                .greaterThan(runwayObstacle.heightProperty()
-                                        .multiply(SLOPE),MINRESA
-                                        .add(runwayObstacle.lengthProperty()
-                                                .divide(2))))
-                        .then(runwayObstacle
-                                .heightProperty()
-                                .multiply(SLOPE))
-                        .otherwise(MINRESA
-                                .add(runwayObstacle
-                                        .lengthProperty()
-                                        .divide(2))));
+                .bind(
+                        Bindings.max(
+                                runwayObstacle.heightProperty()
+                                        .multiply(SLOPE)
+                                        .subtract(
+                                                runwayLengthProperty().divide(2)
+                                        ),
+                                MINRESA
+                        )
+                );
 
         logger.info("Obstacle Slop Calculation: "+obstacleSlopeCalculation.get());
 
@@ -587,12 +618,22 @@ public class Runway extends RunwayValues{
      *
      * @param change text to be displayed in change history tab
      */
-    public void logChange(String change) {
-        if (changeHistory.isEmpty()) {
+    public void logChange(String change, Boolean show) {
+        if (changeHistory.isEmpty() || !change.equals(changeHistory.get(0))) {
             changeHistory.add(0, change);
-        }
-        else if (!change.equals(changeHistory.get(0))) {
-            changeHistory.add(0, change);
+            if (SystemTray.isSupported() && show) {
+                SystemTray tray = SystemTray.getSystemTray();
+                Image image = new ImageIcon(getClass().getResource("/images/compass.png")).getImage(); // set icon image
+                TrayIcon trayIcon = new TrayIcon(image, "Runway Tool"); // create tray icon
+                trayIcon.setImageAutoSize(true);
+                trayIcon.setToolTip("New change: " + change);
+                try {
+                    tray.add(trayIcon);
+                    //JOptionPane.showMessageDialog(null, "New change: " + change, "Runway Tool", JOptionPane.INFORMATION_MESSAGE);
+                } catch (AWTException e) {
+                    System.err.println(e);
+                }
+            }
         }
     }
 

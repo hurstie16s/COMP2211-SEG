@@ -288,7 +288,7 @@ public class RunwayScene extends SceneAbstract {
         }
       };
 
-      appWindow.currentScene.topMenu.getChildren().add(scale);
+      //appWindow.currentScene.topMenu.getChildren().add(scale);
 
       scaleFactor.addListener(scaleCalc);
       scaleFactorHeight.addListener(scaleCalc);
@@ -426,7 +426,7 @@ public class RunwayScene extends SceneAbstract {
      */
     public void buildmenulessalt(){
     super.buildmenuless();
-      //setFill(Theme.bgRunway);
+    //setFill(Theme.getRunway());
     getRoot().getStyleClass().add("transparent");
     root.getStyleClass().clear();
     mainPane.getStyleClass().clear();
@@ -814,10 +814,12 @@ public class RunwayScene extends SceneAbstract {
     //Lengths and xOffsets need binding to back-end variables, work hasn't been done yet so constants used
     DoubleBinding leftDisplacementO = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()).add(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).subtract(appWindow.runway.dispThresholdLeftProperty()));
     DoubleBinding leftDisplacementT = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(Bindings.when(appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).subtract(appWindow.runway.dispThresholdLeftProperty()).add(appWindow.runway.BLASTZONEProperty()).add(appWindow.runway.dispThresholdLeftProperty())).otherwise(0));
-    DoubleBinding leftDisplacementL = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()).add(Bindings.when(appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(Bindings.max(appWindow.runway.slopeLengthProperty(),appWindow.runway.stripEndProperty().add(appWindow.runway.BLASTZONEProperty()))).subtract(appWindow.runway.dispThresholdLeftProperty())).otherwise(0));
+    DoubleBinding leftDisplacementL = appWindow.runway.runwayLengthProperty().multiply(-0.5).add(appWindow.runway.dispThresholdLeftProperty()).add(Bindings.when(appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(Bindings.max(appWindow.runway.BLASTZONEProperty(),appWindow.runway.stripEndProperty().add(Bindings.max(appWindow.runway.RESAWidthProperty(),appWindow.runway.slopeLengthProperty())))).subtract(appWindow.runway.dispThresholdLeftProperty())).otherwise(0));
     DoubleBinding rightDisplacementO = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()).subtract(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)));
     DoubleBinding rightDisplacementT = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(Bindings.when(appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(appWindow.runway.BLASTZONEProperty()).add(appWindow.runway.dispThresholdRightProperty())).otherwise(0));
-    DoubleBinding rightDisplacementL = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()).subtract(Bindings.when(appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(Bindings.max(appWindow.runway.slopeLengthProperty(),appWindow.runway.stripEndProperty().add(appWindow.runway.BLASTZONEProperty())))).otherwise(0));
+    DoubleBinding rightDisplacementL = appWindow.runway.runwayLengthProperty().multiply(0.5).subtract(appWindow.runway.dispThresholdRightProperty()).subtract(Bindings.when(appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty())).then(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)).add(Bindings.max(appWindow.runway.BLASTZONEProperty(),appWindow.runway.stripEndProperty().add(Bindings.max(appWindow.runway.RESAWidthProperty(),appWindow.runway.slopeLengthProperty()))))).otherwise(0));
+
+    DoubleBinding slopeLength = (DoubleBinding) Bindings.max(appWindow.runway.runwayObstacle.heightProperty().multiply(50).subtract(appWindow.runway.runwayObstacle.lengthProperty().divide(2)), new SimpleDoubleProperty(240));
 
     //RunwayArrow TODARightLabel = new RunwayArrowRight("TODA", Color.RED, scaleFactor, 100, 25, 3000);
     RunwayLabel TODALeftLabel = new RunwayLabel("TODA", Theme.getToda(), leftDisplacementT,
@@ -839,19 +841,21 @@ public class RunwayScene extends SceneAbstract {
     group.getChildren().addAll(TODARightLabel, ASDARightLabel, TORARightLabel, LDARightLabel, TODALeftLabel, ASDALeftLabel, TORALeftLabel, LDALeftLabel);
 
     RunwayLabel resaLeft = new RunwayLabel(Theme.getResa(),leftDisplacementO,0.15,appWindow.runway.RESAWidthProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
-    RunwayLabel stripendLeft = new RunwayLabel(Theme.getStripEnd(),leftDisplacementO.add(Bindings.max(appWindow.runway.BLASTZONEProperty(),appWindow.runway.slopeLength)),0.25,appWindow.runway.stripEndProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel stripendLeft = new RunwayLabel(Theme.getStripEnd(),leftDisplacementO.add(Bindings.max(slopeLength,appWindow.runway.RESAWidthProperty())),0.25,appWindow.runway.stripEndProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
     RunwayLabel blastAllowanceLeft = new RunwayLabel(Theme.getBlastAllowance(),leftDisplacementO.add(0),0.35,appWindow.runway.BLASTZONEProperty().multiply(-1),this,appWindow.runway.directionLeftProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
-    RunwayLabel resaLeft2 = new RunwayLabel(Theme.getResa(),leftDisplacementO,-0.15,appWindow.runway.RESAWidthProperty().multiply(-1),this,appWindow.runway.directionRightProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
-    RunwayLabel stripendLeft2 = new RunwayLabel(Theme.getStripEnd(),leftDisplacementO.add(Bindings.max(appWindow.runway.BLASTZONEProperty(),appWindow.runway.slopeLength)),-0.25,appWindow.runway.stripEndProperty().multiply(-1),this,appWindow.runway.directionRightProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
-    RunwayLabel blastAllowanceLeft2 = new RunwayLabel(Theme.getBlastAllowance(),leftDisplacementO.add(0),-0.35,appWindow.runway.BLASTZONEProperty().multiply(-1),this,appWindow.runway.directionRightProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel resaRight2 = new RunwayLabel(Theme.getResa(),leftDisplacementO,-0.15,appWindow.runway.RESAWidthProperty().multiply(-1),this,appWindow.runway.directionRightProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel stripendRight2 = new RunwayLabel(Theme.getStripEnd(),leftDisplacementO.add(appWindow.runway.RESAWidthProperty()),-0.25,appWindow.runway.stripEndProperty().multiply(-1),this,appWindow.runway.directionRightProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightLandProperty()));
+    RunwayLabel stripendRight2Slope = new RunwayLabel(Theme.getStripEnd(),leftDisplacementO.add(slopeLength),-0.25,appWindow.runway.stripEndProperty().multiply(-1),this,appWindow.runway.directionRightProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightLandProperty()).and(Bindings.greaterThan(slopeLength,appWindow.runway.RESAWidthProperty())));
+    RunwayLabel blastAllowanceRight2 = new RunwayLabel(Theme.getBlastAllowance(),leftDisplacementO.add(0),-0.35,appWindow.runway.BLASTZONEProperty().multiply(-1),this,appWindow.runway.directionRightProperty().not().and(appWindow.runway.hasRunwayObstacleProperty()));
     RunwayLabel resaRight = new RunwayLabel(Theme.getResa(),rightDisplacementO,-0.15,appWindow.runway.RESAWidthProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightLandProperty()));
-    RunwayLabel stripendRight = new RunwayLabel(Theme.getStripEnd(),rightDisplacementO.subtract(Bindings.max(appWindow.runway.BLASTZONEProperty(),appWindow.runway.slopeLength)),-0.25,appWindow.runway.stripEndProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightLandProperty()));
+    RunwayLabel stripendRight = new RunwayLabel(Theme.getStripEnd(),rightDisplacementO.subtract(Bindings.max(slopeLength,appWindow.runway.RESAWidthProperty())),-0.25,appWindow.runway.stripEndProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightLandProperty()));
     RunwayLabel blastAllowanceRight = new RunwayLabel(Theme.getBlastAllowance(),rightDisplacementO.add(0),-0.35,appWindow.runway.BLASTZONEProperty().add(0),this,appWindow.runway.directionRightProperty().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightTakeOffProperty()));
-    RunwayLabel resaRight2 = new RunwayLabel(Theme.getResa(),rightDisplacementO,0.15,appWindow.runway.RESAWidthProperty().add(0),this,appWindow.runway.directionLeftProperty().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightLandProperty()));
-    RunwayLabel stripendRight2 = new RunwayLabel(Theme.getStripEnd(),rightDisplacementO.subtract(Bindings.max(appWindow.runway.BLASTZONEProperty(),appWindow.runway.slopeLength)),0.25,appWindow.runway.stripEndProperty().add(0),this,appWindow.runway.directionLeftProperty().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightLandProperty()));
-    RunwayLabel blastAllowanceRight2 = new RunwayLabel(Theme.getBlastAllowance(),rightDisplacementO.add(0),0.35,appWindow.runway.BLASTZONEProperty().add(0),this,appWindow.runway.directionLeftProperty().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightTakeOffProperty()));
+    RunwayLabel resaLeft2 = new RunwayLabel(Theme.getResa(),rightDisplacementO,0.15,appWindow.runway.RESAWidthProperty().add(0),this,appWindow.runway.directionLeftProperty().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightLandProperty()));
+    RunwayLabel stripendLeft2 = new RunwayLabel(Theme.getStripEnd(),rightDisplacementO.subtract(appWindow.runway.RESAWidthProperty()),0.25,appWindow.runway.stripEndProperty().add(0),this,appWindow.runway.directionLeftProperty().and(appWindow.runway.hasRunwayObstacleProperty()));
+    RunwayLabel stripendLeft2Slope = new RunwayLabel(Theme.getStripEnd(),rightDisplacementO.subtract(slopeLength),0.25,appWindow.runway.stripEndProperty().add(0),this,appWindow.runway.directionLeftProperty().and(appWindow.runway.hasRunwayObstacleProperty()).and(Bindings.greaterThan(slopeLength,appWindow.runway.RESAWidthProperty())));
+    RunwayLabel blastAllowanceLeft2 = new RunwayLabel(Theme.getBlastAllowance(),rightDisplacementO.add(0),0.35,appWindow.runway.BLASTZONEProperty().add(0),this,appWindow.runway.directionLeftProperty().and(appWindow.runway.hasRunwayObstacleProperty()).and(appWindow.runway.rightTakeOffProperty()));
 
-    group.getChildren().addAll(resaLeft, stripendLeft, blastAllowanceLeft, resaRight, stripendRight, blastAllowanceRight, resaLeft2, stripendLeft2, blastAllowanceLeft2, resaRight2, stripendRight2, blastAllowanceRight2);
+    group.getChildren().addAll(resaLeft, stripendLeft, blastAllowanceLeft, resaRight, stripendRight, blastAllowanceRight, resaLeft2, stripendLeft2, blastAllowanceLeft2, resaRight2, stripendRight2, blastAllowanceRight2, stripendLeft2Slope, stripendRight2Slope);
 
     TextField lx = new TextField();
     lx.textProperty().addListener(new ChangeListener<String>() {

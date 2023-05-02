@@ -6,13 +6,23 @@ import comp2211.seg.UiView.Scene.RunwayComponents.Sub;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /**
  * The type Runway scene loader.
@@ -52,17 +62,17 @@ public class RunwaySceneLoader extends SceneAbstract{
                 case ESCAPE:
                     appWindow.startBaseScene();
                     break;
-                case W:
-                    scene.group.translateYProperty().set(scene.group.getTranslateY()-10);
-                    break;
-                case A:
-                    scene.group.translateXProperty().set(scene.group.getTranslateX()-10);
-                    break;
-                case S:
+                case W,UP,NUMPAD8:
                     scene.group.translateYProperty().set(scene.group.getTranslateY()+10);
                     break;
-                case D:
+                case A,LEFT,NUMPAD4:
                     scene.group.translateXProperty().set(scene.group.getTranslateX()+10);
+                    break;
+                case S,DOWN,NUMPAD2:
+                    scene.group.translateYProperty().set(scene.group.getTranslateY()-10);
+                    break;
+                case D,RIGHT,NUMPAD6:
+                    scene.group.translateXProperty().set(scene.group.getTranslateX()-10);
                     break;
                 case T:
                     scene.toggleView();
@@ -128,37 +138,117 @@ public class RunwaySceneLoader extends SceneAbstract{
         scene.root.maxHeightProperty().bind(root.heightProperty());
         scene.root.minHeightProperty().bind(root.heightProperty());
     }
-    public void buildmenulessalt(){
+//    public void buildmenulessalt(){
+//        super.buildmenuless();
+//        type = "buildmenulessalt";
+//        Pane runwayPane = new Pane();
+//        Pane subPane = new Pane();
+//
+//        scene = new RunwayScene(runwayPane,appWindow, root.widthProperty().get(), root.heightProperty().get(),false);
+//        scene.buildmenulessalt();
+//        scene.initialise();
+//        subScene = new Sub(subPane, root.getWidth(), root.getHeight());
+//        subPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+//        subPane.getStylesheets().add(AppWindow.pathToStyle.get());
+//        runwayPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+//        getRoot().getStyleClass().add("transparent");
+//        root.getStyleClass().add("sky");
+//        mainPane.getStyleClass().add("transparent");
+//        subPane.getChildren().add(runwayPane);
+//        root.getChildren().removeAll(root.getChildren());
+//        root.getChildren().add(subScene);
+//
+//        root.getChildren().add(mainPane);
+//        subScene.widthProperty().bind(root.widthProperty());
+//        subScene.heightProperty().bind(root.heightProperty());
+//
+//        scene.root.maxWidthProperty().bind(root.widthProperty());
+//        scene.root.minWidthProperty().bind(root.widthProperty());
+//        scene.root.maxHeightProperty().bind(root.heightProperty());
+//        scene.root.minHeightProperty().bind(root.heightProperty());
+//    }
+public void buildmenulessalt(){
+    super.buildmenuless();
+    type = "buildmenulessalt";
+    Pane runwayPane = new Pane();
+    Pane subPane = new Pane();
+
+    scene = new RunwayScene(runwayPane,appWindow, root.widthProperty().get(), root.heightProperty().get(),false);
+    scene.buildmenulessalt();
+    scene.initialise();
+    subScene = new Sub(subPane, root.getWidth(), root.getHeight());
+    subPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+    subPane.getStylesheets().add(AppWindow.pathToStyle.get());
+    runwayPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+    getRoot().getStyleClass().add("transparent");
+    root.getStyleClass().add("sky");
+    mainPane.getStyleClass().add("transparent");
+    subPane.getChildren().add(runwayPane);
+    root.getChildren().removeAll(root.getChildren());
+    root.getChildren().add(subScene);
+
+    // Create a StackPane to overlay the subScene with the icon
+    StackPane stackPane = new StackPane();
+    stackPane.getChildren().addAll(subScene);
+
+    // Load the icon from the resources folder
+    //Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/fullScreen")));
+    ImageView fullScreen = new ImageView(new Image(Objects.requireNonNull(getClass()
+        .getResource("/images/fullScreen.png")).toExternalForm()));
+
+    fullScreen.setOnMouseEntered(event -> {
+        fullScreen.setCursor(Cursor.HAND);
+    });
+
+    // Set the default cursor when the mouse leaves the ImageView
+    fullScreen.setOnMouseExited(event -> {
+        fullScreen.setCursor(Cursor.DEFAULT);
+    });
+
+    // Create an ImageView of the icon and add it to the StackPane
+    //ImageView iconView = new ImageView(icon);
+    fullScreen.setFitHeight(25); // adjust the height and width to your liking
+    fullScreen.setFitWidth(25);
+    fullScreen.setPreserveRatio(true);
+    StackPane.setAlignment(fullScreen, Pos.TOP_RIGHT); // align the icon to the top right corner
+    StackPane.setMargin(fullScreen, new Insets(10));
+    stackPane.getChildren().addAll(fullScreen);
+
+    root.getChildren().add(stackPane);
+    subScene.widthProperty().bind(root.widthProperty());
+    subScene.heightProperty().bind(root.heightProperty());
+
+    scene.root.maxWidthProperty().bind(root.widthProperty());
+    scene.root.minWidthProperty().bind(root.widthProperty());
+    scene.root.maxHeightProperty().bind(root.heightProperty());
+    scene.root.minHeightProperty().bind(root.heightProperty());
+}
+
+    public void buildwithTime() {
         super.buildmenuless();
-        type = "buildmenulessalt";
-        Pane runwayPane = new Pane();
-        Pane subPane = new Pane();
+        Text text = new Text();
+        LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+        String formattedDate = currentDate.format(DateTimeFormatter.ofPattern("EEE, MMM d"));
+        String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("hh:mm a"));
+        text.setText(formattedDate + "\n" + formattedTime);
 
-        scene = new RunwayScene(runwayPane,appWindow, root.widthProperty().get(), root.heightProperty().get(),false);
-        scene.buildmenulessalt();
+        //text.getStyleClass().addAll("fontbig","bold");
+        text.setFill(Color.RED);
+        text.setFont(Font.font("Times New Roman", 20));
+
+
+        var vBox = new VBox(text);
+        //Pane timePaneTransparent = new Pane(vBox);
+        scene = new RunwayScene(new Pane(vBox),appWindow, root.getWidth(), root.getHeight(),false);
+        scene.buildmenuless();
         scene.initialise();
-        subScene = new Sub(subPane, root.getWidth(), root.getHeight());
-        subPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-        subPane.getStylesheets().add(AppWindow.pathToStyle.get());
-        runwayPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-        getRoot().getStyleClass().add("transparent");
-        root.getStyleClass().add("sky");
-        mainPane.getStyleClass().add("transparent");
-        subPane.getChildren().add(runwayPane);
-        root.getChildren().removeAll(root.getChildren());
-        root.getChildren().add(subScene);
-
-        root.getChildren().add(mainPane);
-        subScene.widthProperty().bind(root.widthProperty());
-        subScene.heightProperty().bind(root.heightProperty());
-
+        mainPane.getChildren().addAll(scene.getRoot());
 
         scene.root.maxWidthProperty().bind(root.widthProperty());
         scene.root.minWidthProperty().bind(root.widthProperty());
         scene.root.maxHeightProperty().bind(root.heightProperty());
         scene.root.minHeightProperty().bind(root.heightProperty());
-
-
     }
 
     public void reset(){
