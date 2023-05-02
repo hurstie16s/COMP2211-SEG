@@ -307,7 +307,7 @@ public abstract class RunwayCalculations {
                                                         Bindings.max(
                                                                 runway.runwayObstacle.heightProperty()
                                                                         .multiply(runway.SLOPE)
-                                                                        .subtract(runway.runwayLengthProperty().divide(2)),
+                                                                        .subtract(runway.runwayObstacle.lengthProperty().divide(2)),
                                                                 runway.MINRESA // always choosing this?
                                                         )
                                                 )
