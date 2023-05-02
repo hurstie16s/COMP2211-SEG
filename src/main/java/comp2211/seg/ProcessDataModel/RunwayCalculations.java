@@ -307,8 +307,8 @@ public abstract class RunwayCalculations {
                                                         Bindings.max(
                                                                 runway.runwayObstacle.heightProperty()
                                                                         .multiply(runway.SLOPE)
-                                                                        .subtract(runway.runwayLengthProperty().divide(2)),
-                                                                runway.MINRESA
+                                                                        .subtract(runway.runwayObstacle.lengthProperty().divide(2)),
+                                                                runway.MINRESA // always choosing this?
                                                         )
                                                 )
                                                 .add(runway.STRIPEND),
@@ -637,7 +637,7 @@ public abstract class RunwayCalculations {
      */
     public static void calculateLandOverRight(Runway runway) {
         // Calculate Land Over for Right
-
+        // TODO : Issue here, fix URGENT
         runway.rightLda.bind(
                 Bindings.max(
                         runway.inputRightLda.subtract(
@@ -645,10 +645,12 @@ public abstract class RunwayCalculations {
                                         runway.runwayObstacle.distFromOtherThresholdProperty()
                                                 .add(
                                                         Bindings.max(
-                                                                runway.runwayObstacle.heightProperty()
-                                                                        .multiply(runway.SLOPE)
+                                                                (
+                                                                        runway.runwayObstacle.heightProperty()
+                                                                                .multiply(50)
+                                                                )
                                                                         .subtract(
-                                                                                runway.runwayLength.divide(2)
+                                                                                runway.runwayObstacle.lengthProperty().divide(2)
                                                                         ),
                                                                 runway.MINRESA
                                                         )
@@ -672,11 +674,70 @@ public abstract class RunwayCalculations {
             );
             runway.rightLdaBreakdownHeader.bind(new SimpleStringProperty("N/A"));
         } else {
+            runway.rightLdaObstacleSlopeCalcBreakdown.bind(
+                    Bindings.when(
+                            Bindings.greaterThan(
+                                    (
+                                            runway.runwayObstacle.heightProperty()
+                                                    .multiply(50)
+                                    )
+                                            .subtract(
+                                                    runway.runwayObstacle.lengthProperty().divide(2)
+                                                            .divide(2)
+                                            )
+                                    , runway.MINRESA
+                            )
+                    ).then(
+                           new SimpleStringProperty("(")
+                                   .concat(runway.runwayObstacle.heightProperty())
+                                   .concat(" x 50 - (")
+                                   .concat(runway.runwayObstacle.lengthProperty().divide(2).intValue())
+                                   .concat(" / 2)")
+                    ).otherwise(
+                            new SimpleStringProperty("")
+                                    .concat(runway.MINRESA)
+                    )
+            );
             runway.rightLdaBreakdown.bind(
                     new SimpleStringProperty("Right LDA = ")
                             .concat(runway.inputRightLda.intValue())
                             .concat(" - ")
-                            .concat(runway.rightLdaSubBreakdown)
+                            .concat(
+                                    Bindings.when(
+                                            Bindings.greaterThan(
+                                                    runway.runwayObstacle.distFromOtherThresholdProperty()
+                                                            .add(
+                                                                    Bindings.max(
+                                                                            (
+                                                                                    runway.runwayObstacle.heightProperty()
+                                                                                            .multiply(50)
+                                                                            )
+                                                                                    .subtract(
+                                                                                            runway.runwayLengthProperty().divide(2)
+                                                                                    ),
+                                                                            runway.MINRESA // always choosing this???
+                                                                    )
+                                                            )
+                                                            .add(runway.STRIPEND),
+                                                    runway.BLASTZONE
+                                                            .add(runway.runwayObstacle.distFromOtherThresholdProperty())
+                                            )
+                                    ).then(
+                                            new SimpleStringProperty("(")
+                                                    .concat(runway.runwayObstacle.distFromOtherThresholdProperty().intValue())
+                                                    .concat(" + ")
+                                                    .concat(runway.rightLdaObstacleSlopeCalcBreakdown)
+                                                    .concat(" + ")
+                                                    .concat(runway.STRIPEND)
+                                                    .concat(")")
+                                    ).otherwise(
+                                            new SimpleStringProperty("(")
+                                                    .concat(runway.BLASTZONE)
+                                                    .concat(" + ")
+                                                    .concat(runway.runwayObstacle.distFromOtherThresholdProperty().intValue())
+                                                    .concat(")")
+                                    )
+                            )
                             .concat(" = ")
                             .concat(runway.rightLda.intValue()));
             runway.rightLdaBreakdownHeader.bind(
