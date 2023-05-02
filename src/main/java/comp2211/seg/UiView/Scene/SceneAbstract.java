@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +24,8 @@ import org.apache.logging.log4j.Logger;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
@@ -470,6 +473,18 @@ public abstract class SceneAbstract extends Scene {
       runwayScene.scene.portrait.set(true);
     }
     runwayScene.scene.root.getStyleClass().add("sky");
+
+    // Add timestamp to scene
+    LocalDateTime now = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd" + "\n" + "HH:mm:ss");
+    String timestamp = now.format(formatter);
+    Text timestampText = new Text(timestamp);
+
+    timestampText.setX(20);
+    timestampText.setY(40);
+    timestampText.getStyleClass().add("font");
+    runwayScene.scene.root.getChildren().add(timestampText);
+
     WritableImage image = runwayScene.scene.root.snapshot(null,null);
     exportImage(format,image);
   }
@@ -490,6 +505,18 @@ public abstract class SceneAbstract extends Scene {
       runwayScene.scene.toggleView();
     }
     runwayScene.scene.root.getStyleClass().add("sky");
+
+    // Add timestamp to scene
+    LocalDateTime now = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd" + "\n" + "HH:mm:ss");
+    String timestamp = now.format(formatter);
+    Text timestampText = new Text(timestamp);
+
+    timestampText.setX(20);
+    timestampText.setY(40);
+    timestampText.getStyleClass().add("font");
+    runwayScene.scene.root.getChildren().add(timestampText);
+
     WritableImage image = runwayScene.scene.root.snapshot(null, null);
     exportImage(format, image);
   }
