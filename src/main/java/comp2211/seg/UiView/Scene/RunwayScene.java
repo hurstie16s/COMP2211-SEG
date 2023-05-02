@@ -565,18 +565,16 @@ public class RunwayScene extends SceneAbstract {
     appWindow.runway.runwayWidth.addListener(new ChangeListener<Number>() {
       @Override
       public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-        rwyDir.setFont(new Font(appWindow.runway.runwayWidth.get()*4/rwyDir.getBoundsInLocal().getWidth()));
-        rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*2/rwyLabel.getBoundsInLocal().getWidth()));
-        bars.setFont(new Font(appWindow.runway.runwayWidth.get()*5/bars.getBoundsInLocal().getWidth()));
+        rwyDir.setFont(new Font(appWindow.runway.runwayWidth.get()*5/rwyDir.getBoundsInLocal().getWidth()));
+        rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*3/rwyLabel.getBoundsInLocal().getWidth()));
+        bars.setFont(new Font(appWindow.runway.runwayWidth.get()*8/bars.getBoundsInLocal().getWidth()));
 
       }
     });
-    rwyDir.setFont(new Font(appWindow.runway.runwayWidth.get()*4/rwyDir.getBoundsInLocal().getWidth()));
-    rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*2/rwyLabel.getBoundsInLocal().getWidth()));
-    bars.setFont(new Font(appWindow.runway.runwayWidth.get()*5/bars.getBoundsInLocal().getWidth()));
+    rwyDir.setFont(new Font(appWindow.runway.runwayWidth.get()*5/rwyDir.getBoundsInLocal().getWidth()));
+    rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*3/rwyLabel.getBoundsInLocal().getWidth()));
+    bars.setFont(new Font(appWindow.runway.runwayWidth.get()*8/bars.getBoundsInLocal().getWidth()));
 
-    //bars.setFill(Theme.labelfg);
-    bars.getStyleClass().add("labelfg");
     TextFlow data = new TextFlow(rwyDir,new Text("\n"),rwyLabel,bars);
     data.setTextAlignment(TextAlignment.CENTER);
     return data;
