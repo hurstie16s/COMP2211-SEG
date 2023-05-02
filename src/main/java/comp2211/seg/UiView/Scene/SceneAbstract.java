@@ -247,6 +247,7 @@ public abstract class SceneAbstract extends Scene {
     redGreenCBStyle.setOnAction(e -> appWindow.setStyle("/style/redGreenCB.css","e"));
 
     //Here you can type...
+
     String info = "Hello Josh .. ";
     guide.setOnAction(e-> this.displayInfo(info));
 
