@@ -202,6 +202,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             //tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
             tabLayout = new TabLayout(tabs, "unfocusedBG", "focusedBG");
 
+
             //appWindow.startBaseScene();
             //tabLayout.tabButtons.get(0).run();
             //((TabLayout) ((TabsPaneVertical) ((TabsPaneHorizontal) tabLayout.contents.getChildren().get(0)).getChildren().get(0)).getChildren().get(0)).tabButtons.get(1).run();

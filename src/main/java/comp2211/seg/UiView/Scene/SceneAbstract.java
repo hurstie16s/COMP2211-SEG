@@ -469,6 +469,7 @@ public abstract class SceneAbstract extends Scene {
       runwayScene.scene.angleZProperty().set(-90);
       runwayScene.scene.portrait.set(true);
     }
+    runwayScene.scene.root.getStyleClass().add("sky");
     WritableImage image = runwayScene.scene.root.snapshot(null,null);
     exportImage(format,image);
   }
@@ -488,6 +489,7 @@ public abstract class SceneAbstract extends Scene {
     } else {
       runwayScene.scene.toggleView();
     }
+    runwayScene.scene.root.getStyleClass().add("sky");
     WritableImage image = runwayScene.scene.root.snapshot(null, null);
     exportImage(format, image);
   }
