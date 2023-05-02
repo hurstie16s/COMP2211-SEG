@@ -248,8 +248,13 @@ public abstract class SceneAbstract extends Scene {
 
     //Here you can type...
 
+    String title = "Application Guidance";
     String info = "Hello Josh .. ";
-    guide.setOnAction(e-> this.displayInfo(info));
+
+    //guide.setOnAction(e-> displayInfo(info));
+
+    //alternative
+    guide.setOnAction(e -> displayInfoMessage(title,info));
 
   }
 
@@ -599,5 +604,12 @@ public abstract class SceneAbstract extends Scene {
     popup.show(this.getWindow(), x, y);
   }
 
-
+  //alternative
+  private void displayInfoMessage(String title, String message) {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
+  }
 }
