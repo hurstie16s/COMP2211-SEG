@@ -666,6 +666,7 @@ public abstract class RunwayCalculations {
                                                 .add(runway.runwayObstacle.distFromOtherThresholdProperty())
                                 )
                         ).subtract(runway.runwayObstacle.lengthProperty().divide(2))
+                                .add(runway.dispThresholdLeft.subtract(runway.dispThresholdRight))
                         ,0
                 )
         );
