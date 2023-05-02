@@ -92,7 +92,6 @@ public class AppWindow {
         logger.info("gets runway object");
         runway = airport.getRunways().get(0);
         logger.info("runways of " + airport + " are " + runway);
-        logger.info("runways of " + airport + " are " + runway.getRunwayDesignatorRight());
         // Setup appWindow
         setupStage();
         startHomeScene();
@@ -242,6 +241,7 @@ public class AppWindow {
      * @param runway the runway
      */
     public void setRunway(Runway runway){
+        logger.info("set Runway with: " + runway);
         Runway temp = new Runway();
         temp.setRunwayDesignatorLeft(this.runway.getRunwayDesignatorLeft());
         temp.setRunwayDesignatorRight(this.runway.getRunwayDesignatorRight());
@@ -254,27 +254,30 @@ public class AppWindow {
         temp.setInputRightLda(this.runway.getInputRightLda());
         temp.setInputRightAsda(this.runway.getInputRightAsda());
 
-        this.runway.setRunwayDesignatorLeft(runway.getRunwayDesignatorLeft());
-        this.runway.setRunwayDesignatorRight(runway.getRunwayDesignatorRight());
-        this.runway.setInputLeftTora(runway.getInputLeftTora());
-        this.runway.setInputLeftToda(runway.getInputLeftToda());
-        this.runway.setInputLeftLda(runway.getInputLeftLda());
-        this.runway.setInputLeftAsda(runway.getInputLeftAsda());
-        this.runway.setInputRightTora(runway.getInputRightTora());
-        this.runway.setInputRightToda(runway.getInputRightToda());
-        this.runway.setInputRightLda(runway.getInputRightLda());
-        this.runway.setInputRightAsda(runway.getInputRightAsda());
+        if(!(runway == null)) {
+            this.runway.setRunwayDesignatorLeft(runway.getRunwayDesignatorLeft());
+            this.runway.setRunwayDesignatorRight(runway.getRunwayDesignatorRight());
+            this.runway.setInputLeftTora(runway.getInputLeftTora());
+            this.runway.setInputLeftToda(runway.getInputLeftToda());
+            this.runway.setInputLeftLda(runway.getInputLeftLda());
+            this.runway.setInputLeftAsda(runway.getInputLeftAsda());
+            this.runway.setInputRightTora(runway.getInputRightTora());
+            this.runway.setInputRightToda(runway.getInputRightToda());
+            this.runway.setInputRightLda(runway.getInputRightLda());
+            this.runway.setInputRightAsda(runway.getInputRightAsda());
 
-        runway.setRunwayDesignatorLeft(temp.getRunwayDesignatorLeft());
-        runway.setRunwayDesignatorRight(temp.getRunwayDesignatorRight());
-        runway.setInputLeftTora(temp.getInputLeftTora());
-        runway.setInputLeftToda(temp.getInputLeftToda());
-        runway.setInputLeftLda(temp.getInputLeftLda());
-        runway.setInputLeftAsda(temp.getInputLeftAsda());
-        runway.setInputRightTora(temp.getInputRightTora());
-        runway.setInputRightToda(temp.getInputRightToda());
-        runway.setInputRightLda(temp.getInputRightLda());
-        runway.setInputRightAsda(temp.getInputRightAsda());
+
+            runway.setRunwayDesignatorLeft(temp.getRunwayDesignatorLeft());
+            runway.setRunwayDesignatorRight(temp.getRunwayDesignatorRight());
+            runway.setInputLeftTora(temp.getInputLeftTora());
+            runway.setInputLeftToda(temp.getInputLeftToda());
+            runway.setInputLeftLda(temp.getInputLeftLda());
+            runway.setInputLeftAsda(temp.getInputLeftAsda());
+            runway.setInputRightTora(temp.getInputRightTora());
+            runway.setInputRightToda(temp.getInputRightToda());
+            runway.setInputRightLda(temp.getInputRightLda());
+            runway.setInputRightAsda(temp.getInputRightAsda());
+        }
     }
 
     /**

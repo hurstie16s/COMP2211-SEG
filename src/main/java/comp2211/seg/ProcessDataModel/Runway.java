@@ -3,11 +3,9 @@ package comp2211.seg.ProcessDataModel;
 import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -93,6 +91,7 @@ public class Runway extends RunwayValues{
 
         recalculate();
         validityChecks();
+        logChange("Runway Initialised");
 
         runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
         runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
@@ -181,37 +180,51 @@ public class Runway extends RunwayValues{
      * @param left       the left
      * @return the string
      */
-    private String calculateRunwayDesignator(String designator, boolean left) {
-        var number = String.valueOf((Integer.parseInt(designator.substring(0,2)) + 18) % 36);
-        if (number.length() == 1) {
-            number = "0"+number;
-        }
-        var character = designator.substring(2);
-
-        var newCharacter = "";
-        switch (character) {
-            case "R":  newCharacter = "L"; break;
-            case "L": newCharacter = "R"; break;
-            case "C": newCharacter = "C"; break;
-            case "" : break;
-            default: {
-                newCharacter = "ERROR";
-                logger.error("Incorrect initial character"); break;
+    public String calculateRunwayDesignator(String designator, boolean left) {
+        String newDesignator;
+        try {
+            var number = String.valueOf((Integer.parseInt(designator.substring(0, 2)) + 18) % 36);
+            if (number.length() == 1) {
+                number = "0" + number;
             }
-        }
+            var character = designator.substring(2);
 
-        var newDesignator = number + newCharacter;
-
-        logger.info("Runway Designators: "+designator+", "+newDesignator);
-
-        if ((Integer.parseInt(number) < 18 && left) || (Integer.parseInt(number) > 18 && !left)) {
-            try {
-                // This will cascade and correct the other designator
-                return designator;
-            } finally {
-                // TODO : Swap left and right
-                swapLeftRight();
+            var newCharacter = "";
+            switch (character) {
+                case "R":
+                    newCharacter = "L";
+                    break;
+                case "L":
+                    newCharacter = "R";
+                    break;
+                case "C":
+                    newCharacter = "C";
+                    break;
+                case "":
+                    break;
+                default: {
+                    //newCharacter = "ERROR";
+                    logger.error("Incorrect initial character");
+                    return "ERROR";
+                }
             }
+
+            newDesignator = number + newCharacter;
+
+            logger.info("Runway Designators: " + designator + ", " + newDesignator);
+
+            if ((Integer.parseInt(number) < 18 && left) || (Integer.parseInt(number) > 18 && !left)) {
+                try {
+                    // This will cascade and correct the other designator
+                    return designator;
+                } finally {
+                    // TODO : Swap left and right
+                    swapLeftRight();
+                }
+            }
+        } catch (NumberFormatException e) {
+            logger.warn(e.getMessage());
+            newDesignator = "ERROR";
         }
 
         return newDesignator;
@@ -256,8 +269,12 @@ public class Runway extends RunwayValues{
         runwayObstacle.heightProperty().set(obstacleToAdd.heightProperty().get());
         runwayObstacle.lengthProperty().set(obstacleToAdd.lengthProperty().get());
         runwayObstacle.widthProperty().set(obstacleToAdd.widthProperty().get());
-        runwayObstacle.distFromThresholdProperty().set(obstacleToAdd.distFromThresholdProperty().get());
-        hasRunwayObstacle.set(true); // Listener will call recalculate
+        //runwayObstacle.distFromThresholdProperty().set(obstacleToAdd.distFromThresholdProperty().get());
+        runwayObstacle.distFromThresholdProperty().set(runwayLength.get()/2);
+        //Aleks - ^ replaced with default setting which place obstacle in the middle.
+
+        //hasRunwayObstacle.set(true); // Listener will call recalculate
+        //Aleks - ^ removed as it is not needed at all here. Visibility is triggered by yes/no button.
         logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
         logChange("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
 
@@ -278,6 +295,7 @@ public class Runway extends RunwayValues{
      */
     public void recalculate(){
 
+        validityChecks();
         logger.info("Recalculating runway values");
         rightTora.bind(inputRightTora);
         rightToda.bind(inputRightToda);
@@ -292,25 +310,30 @@ public class Runway extends RunwayValues{
             logger.info("Runway has obstacle: calculation methods will be called");
             if (directionLeft.get()) {
                 logger.info("Calculate take-off towards for left");
+                logChange("Calculate take-off towards for left");
                 RunwayCalculations.calculateTakeOffTowardLeft(this); // done
                 RunwayCalculations.calculateLandTowardLeft(this); // done
             } else {
                 logger.info("Calculate take-off away for left");
+                logChange("Calculate take-off away for left");
                 RunwayCalculations.calculateTakeOffAwayLeft(this); // done
                 RunwayCalculations.calculateLandOverLeft(this); // done
             }
             if (directionRight.get()) {
                 logger.info("Calculate land towards for right");
+                logChange("Calculate land towards for right");
                 RunwayCalculations.calculateTakeOffTowardRight(this); // done
                 RunwayCalculations.calculateTakeOffAwayRight(this); // done
                 RunwayCalculations.calculateLandOverRight(this); // done
             } else {
                 logger.info("Calculate land over for right");
+                logChange("Calculate land over for right");
                 RunwayCalculations.calculateTakeOffTowardRight(this); // done
                 RunwayCalculations.calculateLandTowardRight(this); // done
             }
         } else {
             logger.info("Runway has no obstacle: runway returned to original state");
+            logChange("Runway obstacle inactive");
         }
     }
 
@@ -323,9 +346,9 @@ public class Runway extends RunwayValues{
         leftLand.bind(Bindings.and(Bindings.greaterThanOrEqual(inputLeftLda,0),
                 Bindings.lessThanOrEqual(inputLeftLda,inputLeftTora))
         );
-        rightTakeOff.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora),Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda)));
-        rightLand.bind(Bindings.and(Bindings.greaterThanOrEqual(inputRightLda,0),
-                Bindings.lessThanOrEqual(inputRightLda,inputRightTora))
+        rightTakeOff.bind(Bindings.and(Bindings.and(Bindings.greaterThanOrEqual(inputRightAsda,inputRightTora),Bindings.greaterThanOrEqual(inputRightToda,inputRightAsda)),dualDirectionRunway));
+        rightLand.bind(Bindings.and(Bindings.and(Bindings.greaterThanOrEqual(inputRightLda,0),
+                Bindings.lessThanOrEqual(inputRightLda,inputRightTora)),dualDirectionRunway)
         );
     }
 
@@ -580,26 +603,35 @@ public class Runway extends RunwayValues{
      * @param change text to be displayed in change history tab
      */
     public void logChange(String change) {
-        changeHistory.add(change);
-        Label changeLabel = new Label(change);
-        changeLabel.setMaxWidth(changesHistory.getWidth());
-        changeLabel.setMaxHeight(40);
-        changeLabel.setWrapText(true);
-        double newLabelHeight = changeLabel.getHeight();
-        ObservableList<Node> children = changesHistory.getChildren();
-        for (Node child : children) {
-            double currentY = child.getLayoutY();
-            child.setLayoutY(currentY + 40);
+        if (changeHistory.isEmpty()) {
+            changeHistory.add(0, change);
         }
-        changeLabel.setLayoutY(0);
-        children.add(0, changeLabel);
+        else if (!change.equals(changeHistory.get(0))) {
+            changeHistory.add(0, change);
+        }
     }
 
 
 
-
-
     // Getters
+
+    /**
+     * Gets input right tora.
+     *
+     * @return the input right tora
+     */
+    public ObservableList<String> getChangeHistory() {
+        return changeHistory;
+    }
+
+    /**
+     * Gets input right tora.
+     *
+     * @return the input right tora
+     */
+    public SimpleListProperty<String> getChangeHistoryProperty(){
+        return changeHistoryProperty;
+    }
 
     /**
      * Gets input right tora.

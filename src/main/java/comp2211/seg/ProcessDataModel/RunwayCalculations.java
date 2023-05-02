@@ -110,7 +110,7 @@ public abstract class RunwayCalculations {
                                                     .concat(runway.SLOPE)
                                     )
                                     .otherwise(
-                                            new SimpleStringProperty()
+                                            new SimpleStringProperty("")
                                                     .concat(runway.MINRESA)
                                                     .concat(" + (")
                                                     .concat(runway.runwayObstacle.lengthProperty().intValue())

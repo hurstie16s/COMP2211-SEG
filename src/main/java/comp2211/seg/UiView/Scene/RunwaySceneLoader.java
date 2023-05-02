@@ -8,11 +8,18 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * The type Runway scene loader.
@@ -157,8 +164,32 @@ public class RunwaySceneLoader extends SceneAbstract{
         scene.root.minWidthProperty().bind(root.widthProperty());
         scene.root.maxHeightProperty().bind(root.heightProperty());
         scene.root.minHeightProperty().bind(root.heightProperty());
+    }
+    public void buildwithTime() {
+        super.buildmenuless();
+        Text text = new Text();
+        LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+        String formattedDate = currentDate.format(DateTimeFormatter.ofPattern("EEE, MMM d"));
+        String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("hh:mm a"));
+        text.setText(formattedDate + "\n" + formattedTime);
+
+        //text.getStyleClass().addAll("fontbig","bold");
+        text.setFill(Color.RED);
+        text.setFont(Font.font("Times New Roman", 20));
 
 
+        var vBox = new VBox(text);
+        //Pane timePaneTransparent = new Pane(vBox);
+        scene = new RunwayScene(new Pane(vBox),appWindow, root.getWidth(), root.getHeight(),false);
+        scene.buildmenuless();
+        scene.initialise();
+        mainPane.getChildren().addAll(scene.getRoot());
+
+        scene.root.maxWidthProperty().bind(root.widthProperty());
+        scene.root.minWidthProperty().bind(root.widthProperty());
+        scene.root.maxHeightProperty().bind(root.heightProperty());
+        scene.root.minHeightProperty().bind(root.heightProperty());
     }
 
     public void reset(){

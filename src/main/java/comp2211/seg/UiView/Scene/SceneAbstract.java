@@ -148,7 +148,7 @@ public abstract class SceneAbstract extends Scene {
     MenuItem darkStyle = new MenuItem("Dark Theme");
     MenuItem lightStyle = new MenuItem("Light Theme");
     MenuItem blueYellowCBStyle = new MenuItem("Tritanopia Theme");
-    MenuItem redGreenCBStyle = new MenuItem("Deuteranomaly Theme");
+    MenuItem redGreenCBStyle = new MenuItem("Deuteranopia Theme");
     themeMenu.getItems().addAll(darkStyle,lightStyle, blueYellowCBStyle, redGreenCBStyle);
     optionsMenu.getItems().add(themeMenu);
 
@@ -170,16 +170,17 @@ public abstract class SceneAbstract extends Scene {
     MenuItem menu15 = new MenuItem("Export Airport...");
 
     //Aleks exporting image:
-    Menu menu11 = new Menu("Export to Image");
-    Menu menu12 = new Menu("Export Top-down View...");
-    Menu menu13 = new Menu("Export Side-on View...");
-    //Alex formats:
-    MenuItem menu12png = new MenuItem("PNG");
-    MenuItem menu12jpg = new MenuItem("jpg");
-    MenuItem menu12gif = new MenuItem("gif");
-    MenuItem menu13png = new MenuItem("PNG");
-    MenuItem menu13jpg = new MenuItem("jpg");
-    MenuItem menu13gif = new MenuItem("gif");
+    Menu menu11 = new Menu("Export to PNG Image");
+    MenuItem menu12 = new MenuItem("Export Top-down View");
+    MenuItem menu13 = new MenuItem("Export Side-on View");
+    menu11.getItems().addAll(menu12, menu13);
+    //Aleks formats:
+//    MenuItem menu12png = new MenuItem("PNG");
+//    MenuItem menu12jpg = new MenuItem("jpg");
+//    MenuItem menu12gif = new MenuItem("gif");
+//    MenuItem menu13png = new MenuItem("PNG");
+//    MenuItem menu13jpg = new MenuItem("jpg");
+//    MenuItem menu13gif = new MenuItem("gif");
 
     if(!(this instanceof HomeScene)) {
       fileMenu.getItems().addAll(menu4, menu5, menu11); //Alex add menu11 to File menu
@@ -189,9 +190,9 @@ public abstract class SceneAbstract extends Scene {
     menu4.getItems().addAll(menuImport1, menuImport2, menuImport3);
     menu5.getItems().addAll(menu7, menu15, menu6);
 
-      menu12.getItems().addAll(menu12png);//, menu12jpg, menu12gif);
-      menu13.getItems().addAll(menu13png);//, menu13jpg, menu13gif);
-      menu11.getItems().addAll(menu12, menu13);
+      //menu12.getItems().addAll(menu12png);//, menu12jpg, menu12gif);
+      //menu13.getItems().addAll(menu13png);//, menu13jpg, menu13gif);
+
 
 
     MenuBar menuBar = new MenuBar();
@@ -223,12 +224,12 @@ public abstract class SceneAbstract extends Scene {
 
     menuImport2.setOnAction(e -> importObstacleButtonEvent());
 
-    menuImport2.setOnAction(e -> importAirportNoObsEvent());
+    menuImport3.setOnAction(e -> importAirportNoObsEvent());
 
-    menu12png.setOnAction(e -> exportTopDownViewButtonEvent("png"));
+    menu12.setOnAction(e -> exportTopDownViewButtonEvent("png"));
    // menu12jpg.setOnAction(e -> exportTopDownViewButtonEvent("jpg"));
    // menu12gif.setOnAction(e -> exportTopDownViewButtonEvent("gif"));
-    menu13png.setOnAction(e -> exportSideViewButtonEvent("png"));
+    menu13.setOnAction(e -> exportSideViewButtonEvent("png"));
    // menu13jpg.setOnAction(e -> exportSideViewButtonEvent("jpg"));
    // menu13gif.setOnAction(e -> exportTopDownViewButtonEvent("gif"));
     darkStyle.setOnAction(e -> appWindow.setStyle("/style/darkStyle.css","d"));
@@ -460,7 +461,8 @@ public abstract class SceneAbstract extends Scene {
     double outputWidth = 1280;
     double outputHeight = 720;
     RunwaySceneLoader runwayScene = new RunwaySceneLoader(new Pane(), appWindow,outputWidth,outputHeight);
-    runwayScene.buildmenulessalt();
+    //runwayScene.buildmenulessalt();
+    runwayScene.buildwithTime();
     if (Settings.portrait.get()) {
       runwayScene.scene.angleXProperty().set(180);
       runwayScene.scene.angleYProperty().set(0);
@@ -499,7 +501,8 @@ public abstract class SceneAbstract extends Scene {
     double outputWidth = 1280;
     double outputHeight = 720;
     RunwaySceneLoader runwayScene = new RunwaySceneLoader(new Pane(), appWindow,outputWidth,outputHeight);
-    runwayScene.buildmenulessalt();
+    //runwayScene.buildmenulessalt();
+    runwayScene.buildwithTime();
     if (Settings.portrait.get()) {
       runwayScene.scene.angleYProperty().set(90);
       runwayScene.scene.angleXProperty().set(90);

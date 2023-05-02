@@ -2,7 +2,10 @@ package comp2211.seg.ProcessDataModel;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
@@ -20,7 +23,8 @@ public abstract class RunwayValues {
     /**
      * The Change history.
      */
-    public final ArrayList<String> changeHistory = new ArrayList<>();
+    public ObservableList<String> changeHistory = FXCollections.observableArrayList();
+    public final SimpleListProperty<String> changeHistoryProperty = new SimpleListProperty<>(changeHistory);
 
     /**
      * The Clearway left.
@@ -343,6 +347,6 @@ public abstract class RunwayValues {
     /**
      * The Dual direction runway.
      */
-    public final SimpleBooleanProperty dualDirectionRunway = new SimpleBooleanProperty(true);
+    public final SimpleBooleanProperty dualDirectionRunway = new SimpleBooleanProperty(false);
 
 }
