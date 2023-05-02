@@ -7,14 +7,18 @@ import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.ProcessDataModel.Obstacle;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,8 +26,11 @@ import org.apache.logging.log4j.Logger;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * This abstract class serves as a template for all JavaFX scenes.
@@ -155,8 +162,10 @@ public abstract class SceneAbstract extends Scene {
 
     Menu helpMenu = new Menu("Help");
 
-    MenuItem menu8 = new MenuItem("Help menu");
-    helpMenu.getItems().add(menu8);
+    MenuItem menu8 = new MenuItem("Help Menu Overlay");
+    MenuItem guide = new MenuItem("Application Guidance");
+
+    helpMenu.getItems().addAll(guide,menu8);
 
     Menu menu4 = new Menu("Import from XML");
 
@@ -190,9 +199,9 @@ public abstract class SceneAbstract extends Scene {
     menu4.getItems().addAll(menuImport1, menuImport2, menuImport3);
     menu5.getItems().addAll(menu7, menu15, menu6);
 
-      //menu12.getItems().addAll(menu12png);//, menu12jpg, menu12gif);
-      //menu13.getItems().addAll(menu13png);//, menu13jpg, menu13gif);
-
+//      menu12.getItems().addAll(menu12png);//, menu12jpg, menu12gif);
+//      menu13.getItems().addAll(menu13png);//, menu13jpg, menu13gif);
+//      menu11.getItems().addAll(menu12, menu13);
 
 
     MenuBar menuBar = new MenuBar();
@@ -236,6 +245,21 @@ public abstract class SceneAbstract extends Scene {
     lightStyle.setOnAction(e -> appWindow.setStyle("/style/lightStyle.css","l"));
     blueYellowCBStyle.setOnAction(e -> appWindow.setStyle("/style/blueYellowCB.css","f"));
     redGreenCBStyle.setOnAction(e -> appWindow.setStyle("/style/redGreenCB.css","e"));
+
+    //Here you can type...
+
+    String title = "Application Guidance";
+    String info = "This is a brief explanation of key features of the software. \n\nThe 'Aiport Configuration' tab allows you to switch " +
+            "airports and runways and see the physical properties of the runways such as the runway length. \n\nThe " +
+            "'Obstacle Configuration' tab allows you to understand how an obstacle will affect the declared distances " +
+            "of the runway. Key features include:\n" +
+            "• Full-screen the top-down and side-on views by clicking on them\n" +
+            "• Re-arrange tabs to suit your preferences by dragging the tab header to a new location";
+
+    //guide.setOnAction(e-> displayInfo(info));
+
+    //alternative
+    guide.setOnAction(e -> displayInfoMessage(title,info));
 
   }
 
@@ -456,7 +480,6 @@ public abstract class SceneAbstract extends Scene {
    * Export Top-down View button event
    */
   protected void exportTopDownViewButtonEvent(String format) {
-
     logger.info("exporting TopDownView ... ");
     double outputWidth = 1280;
     double outputHeight = 720;
@@ -469,70 +492,97 @@ public abstract class SceneAbstract extends Scene {
       runwayScene.scene.angleZProperty().set(-90);
       runwayScene.scene.portrait.set(true);
     }
+    runwayScene.scene.root.getStyleClass().add("sky");
 
-    //runwayScene.scene.root.maxWidthProperty().set(outputWidth);
-    //runwayScene.scene.root.minWidthProperty().set(outputWidth);
-    //runwayScene.scene.root.maxHeightProperty().set(outputHeight);
-    //runwayScene.scene.root.minHeightProperty().set(outputHeight);
+    // Add timestamp to scene
+    LocalDateTime now = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd" + "\n" + "HH:mm:ss");
+    String timestamp = now.format(formatter);
+    Text timestampText = new Text(timestamp);
 
+    timestampText.setX(20);
+    timestampText.setY(40);
+    timestampText.getStyleClass().add("font");
+    runwayScene.scene.root.getChildren().add(timestampText);
 
     WritableImage image = runwayScene.scene.root.snapshot(null,null);
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Export top-down view");
-    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase() + " format(*." + format + ")","*." + format);
-    fileChooser.getExtensionFilters().add(extFilter);
-    fileChooser.setInitialFileName("Top_down_View");
-    File file = fileChooser.showSaveDialog(new Stage());
-
-    try {
-      ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
-      logger.info("image exported");
-    } catch (IOException e) {
-      logger.error(e);
-    }
-
+    exportImage(format,image);
   }
   /**
    * Export Top-down View button event
    */
   protected void exportSideViewButtonEvent(String format) {
-
     logger.info("exporting SideView ... ");
     double outputWidth = 1280;
     double outputHeight = 720;
-    RunwaySceneLoader runwayScene = new RunwaySceneLoader(new Pane(), appWindow,outputWidth,outputHeight);
-    //runwayScene.buildmenulessalt();
-    runwayScene.buildwithTime();
+    RunwaySceneLoader runwayScene = new RunwaySceneLoader(new Pane(), appWindow, outputWidth, outputHeight);
+    runwayScene.buildmenulessalt();
     if (Settings.portrait.get()) {
       runwayScene.scene.angleYProperty().set(90);
       runwayScene.scene.angleXProperty().set(90);
       runwayScene.scene.portrait.set(true);
-    }else {
+    } else {
       runwayScene.scene.toggleView();
     }
+    runwayScene.scene.root.getStyleClass().add("sky");
 
-    //runwayScene.scene.root.maxWidthProperty().set(outputWidth);
-    //runwayScene.scene.root.minWidthProperty().set(outputWidth);
-    //runwayScene.scene.root.maxHeightProperty().set(outputHeight);
-    //runwayScene.scene.root.minHeightProperty().set(outputHeight);
+    // Add timestamp to scene
+    LocalDateTime now = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd" + "\n" + "HH:mm:ss");
+    String timestamp = now.format(formatter);
+    Text timestampText = new Text(timestamp);
 
+    timestampText.setX(20);
+    timestampText.setY(40);
+    timestampText.getStyleClass().add("font");
+    runwayScene.scene.root.getChildren().add(timestampText);
 
-    WritableImage image = runwayScene.scene.root.snapshot(null,null);
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Export side view");
-    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase() + " format(*." + format + ")","*." + format);
-    fileChooser.getExtensionFilters().add(extFilter);
-    fileChooser.setInitialFileName("Side_View");
-    File file = fileChooser.showSaveDialog(new Stage());
-
-    try {
-      ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
-      logger.info("image exported");
-    } catch (IOException e) {
-      logger.error(e);
-    }
-
+    WritableImage image = runwayScene.scene.root.snapshot(null, null);
+    exportImage(format, image);
   }
+
+  protected void exportImage(String format, WritableImage image) {
+
+    // Create an ImageView to display the preview image
+    ImageView preview = new ImageView(image);
+    preview.setPreserveRatio(true);
+    preview.setFitWidth(600);
+
+    // Create a dialog to display the preview
+    Dialog<Void> previewDialog = new Dialog<>();
+    previewDialog.setTitle("Preview");
+    previewDialog.getDialogPane().setContent(preview);
+
+    // Add a "Export" button to the dialog
+    ButtonType exportButtonType = new ButtonType("Export", ButtonBar.ButtonData.OK_DONE);
+    previewDialog.getDialogPane().getButtonTypes().add(exportButtonType);
+
+    // Add a "Cancel" button to the dialog
+    previewDialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+    // Show the preview dialog and wait for a button to be clicked
+    Optional result = previewDialog.showAndWait();
+
+    // If the "Export" button was clicked, save the image to a file
+    if (result.isPresent()) {
+      if (result.get() == exportButtonType) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export side view");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase() + " format(*." + format + ")", "*." + format);
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName("Side_View");
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        try {
+          ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
+          logger.info("image exported");
+        } catch (IOException e) {
+          logger.error(e);
+        }
+      }
+    }
+  }
+
 
   private FileChooser generateImportFileChooser(String item) {
     FileChooser fileChooser = new FileChooser();
@@ -542,5 +592,42 @@ public abstract class SceneAbstract extends Scene {
     return fileChooser;
   }
 
+  public void displayInfo(String msg) {
+    // create the popup window
+    Popup popup = new Popup();
+    Label label = new Label(msg);
+    label.setStyle("-fx-background-color: white; -fx-padding: 10px;");
+    popup.getContent().add(label);
+    popup.setAutoHide(true); // close popup when user clicks outside of it
 
+    // calculate the position of the popup
+    Bounds bounds = this.getRoot().getBoundsInLocal();
+    double x = this.getWindow().getX() + bounds.getMinX() + 100;
+    double y = this.getWindow().getY() + bounds.getMinY() + 100;
+
+    // show the popup
+    popup.show(this.getWindow(), x, y);
+  }
+
+  //alternative
+  private void displayInfoMessage(String title, String message) {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+
+    // Create a Label to display the long message
+    Label label = new Label(message);
+    label.setWrapText(true);
+
+    // Set the preferred width and height of the Label
+    label.setPrefSize(400, 200);
+
+    // Wrap the Label in a VBox
+    VBox vbox = new VBox(label);
+
+    // Set the VBox as the content of the alert dialog
+    alert.getDialogPane().setContent(vbox);
+    alert.showAndWait();
+  }
 }

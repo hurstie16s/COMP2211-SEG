@@ -10,9 +10,12 @@ import comp2211.seg.UiView.Scene.Utilities.CssColorParser;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Bounds;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -414,4 +417,6 @@ public class AppWindow {
     public double getHeight() {
         return height.get();
     }
+
+
 }
