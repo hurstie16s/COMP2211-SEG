@@ -263,44 +263,9 @@ public class RunwayScene extends SceneAbstract {
      * Make scale.
      */
     public void makeScale(){
-      Line line = new Line();
-      line.startXProperty().set(0);
-      Label sclabel = new Label();
-      VBox scale = new VBox(line,sclabel);
-
-      double total = (Math.abs(Math.sin(Math.toRadians(angleZProperty.get()))/ scaleFactor.get()) + Math.abs(Math.cos(Math.toRadians(angleZProperty.get()))/ scaleFactorHeight.get()));
-      double sf = 100 * Math.pow(2, Math.floor(Math.log(0.004 * total) / Math.log(2)));
-      double length = sf * (Math.abs(Math.sin(Math.toRadians(angleZProperty.get()))* scaleFactor.get()) + Math.abs(Math.cos(Math.toRadians(angleZProperty.get()))* scaleFactorHeight.get()));
-      length = 1000;
-      line.endXProperty().bind(scaleFactor.multiply(length));
-      sclabel.setText(Double.toString(sf));
-      ChangeListener scaleCalc = new ChangeListener<Number>() {
-        @Override
-        public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-          double total = (Math.abs(Math.sin(Math.toRadians(angleZProperty.get()))/ scaleFactor.get()) + Math.abs(Math.cos(Math.toRadians(angleZProperty.get()))/ scaleFactorHeight.get()));
-          double sf = 100 * Math.pow(2, Math.floor(Math.log(0.004 * total * widthProperty().get()) / Math.log(2)));
-          double length = sf * (Math.abs(Math.sin(Math.toRadians(angleZProperty.get()))* scaleFactor.get()) + Math.abs(Math.cos(Math.toRadians(angleZProperty.get()))* scaleFactorHeight.get()));
-          length = 1000;
-          line.endXProperty().bind(scaleFactor.multiply(length));
-          sclabel.setText(Double.toString(length));
-
-
-        }
-      };
-
-      //appWindow.currentScene.topMenu.getChildren().add(scale);
-
-      scaleFactor.addListener(scaleCalc);
-      scaleFactorHeight.addListener(scaleCalc);
-      addCuboid(appWindow.runway.runwayLengthProperty().divide(2).add(appWindow.runway.clearwayLeftProperty()).subtract(new SimpleDoubleProperty(length+20).divide(2)),
-              new SimpleDoubleProperty(30).add(5),
-              new SimpleDoubleProperty(0).add(1),
-              new SimpleDoubleProperty(length).add(0),
-              new SimpleDoubleProperty(2).divide(scaleFactorHeight),
-              new SimpleDoubleProperty(2).divide(scaleFactorDepth),
-              Color.WHITE
-      );
-
+      double length = 500;
+      RunwayLabel scale = new RunwayLabel(Color.WHITE,appWindow.runway.runwayLengthProperty().divide(2),0.15,new SimpleDoubleProperty(length).add(0),this,new SimpleBooleanProperty(false).not());
+      group.getChildren().add(scale);
     }
 
     /**

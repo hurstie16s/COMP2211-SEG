@@ -210,9 +210,11 @@ public void buildmenulessalt(){
     fullScreen.setFitHeight(25); // adjust the height and width to your liking
     fullScreen.setFitWidth(25);
     fullScreen.setPreserveRatio(true);
+    fullScreen.setPickOnBounds(false);
     StackPane.setAlignment(fullScreen, Pos.TOP_RIGHT); // align the icon to the top right corner
     StackPane.setMargin(fullScreen, new Insets(10));
     stackPane.getChildren().addAll(fullScreen);
+
 
     root.getChildren().add(stackPane);
     subScene.widthProperty().bind(root.widthProperty());
