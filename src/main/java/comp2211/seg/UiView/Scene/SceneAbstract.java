@@ -7,6 +7,7 @@ import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.ProcessDataModel.Obstacle;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
@@ -17,6 +18,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -161,7 +163,9 @@ public abstract class SceneAbstract extends Scene {
     Menu helpMenu = new Menu("Help");
 
     MenuItem menu8 = new MenuItem("Help menu");
-    helpMenu.getItems().add(menu8);
+    MenuItem guide = new MenuItem("Application Guidance");
+
+    helpMenu.getItems().addAll(guide,menu8);
 
     Menu menu4 = new Menu("Import from XML");
 
@@ -241,6 +245,16 @@ public abstract class SceneAbstract extends Scene {
     lightStyle.setOnAction(e -> appWindow.setStyle("/style/lightStyle.css","l"));
     blueYellowCBStyle.setOnAction(e -> appWindow.setStyle("/style/blueYellowCB.css","f"));
     redGreenCBStyle.setOnAction(e -> appWindow.setStyle("/style/redGreenCB.css","e"));
+
+    //Here you can type...
+
+    String title = "Application Guidance";
+    String info = "Hello Josh .. ";
+
+    //guide.setOnAction(e-> displayInfo(info));
+
+    //alternative
+    guide.setOnAction(e -> displayInfoMessage(title,info));
 
   }
 
@@ -573,5 +587,29 @@ public abstract class SceneAbstract extends Scene {
     return fileChooser;
   }
 
+  public void displayInfo(String msg) {
+    // create the popup window
+    Popup popup = new Popup();
+    Label label = new Label(msg);
+    label.setStyle("-fx-background-color: white; -fx-padding: 10px;");
+    popup.getContent().add(label);
+    popup.setAutoHide(true); // close popup when user clicks outside of it
 
+    // calculate the position of the popup
+    Bounds bounds = this.getRoot().getBoundsInLocal();
+    double x = this.getWindow().getX() + bounds.getMinX() + 100;
+    double y = this.getWindow().getY() + bounds.getMinY() + 100;
+
+    // show the popup
+    popup.show(this.getWindow(), x, y);
+  }
+
+  //alternative
+  private void displayInfoMessage(String title, String message) {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
+  }
 }
