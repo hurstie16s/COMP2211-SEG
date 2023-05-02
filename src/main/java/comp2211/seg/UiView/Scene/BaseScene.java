@@ -202,6 +202,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             //tabLayout = new TabLayout(tabs,Theme.unfocusedBG,Theme.focusedBG);
             tabLayout = new TabLayout(tabs, "unfocusedBG", "focusedBG");
 
+
             //appWindow.startBaseScene();
             //tabLayout.tabButtons.get(0).run();
             //((TabLayout) ((TabsPaneVertical) ((TabsPaneHorizontal) tabLayout.contents.getChildren().get(0)).getChildren().get(0)).getChildren().get(0)).tabButtons.get(1).run();
@@ -284,6 +285,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         VBox vBoxAirportLayout = new VBox();
         //table
         VBox vBoxTable = new VBox();
+        //VBox.setMargin(vBoxTable,new Insets(150,20,100,20));//Top/Right/Bottom/Left
         vBoxTable.setAlignment(Pos.CENTER);
         //vBoxTable.getChildren().add(makeRunwayGridTable());
         vBoxTable.getChildren().add(buildTableView());

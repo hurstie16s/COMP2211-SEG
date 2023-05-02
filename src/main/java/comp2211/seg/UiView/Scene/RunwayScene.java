@@ -426,7 +426,7 @@ public class RunwayScene extends SceneAbstract {
      */
     public void buildmenulessalt(){
     super.buildmenuless();
-      //setFill(Theme.bgRunway);
+    //setFill(Theme.getRunway());
     getRoot().getStyleClass().add("transparent");
     root.getStyleClass().clear();
     mainPane.getStyleClass().clear();

@@ -159,7 +159,6 @@ public class RunwaySceneLoader extends SceneAbstract{
         subScene.widthProperty().bind(root.widthProperty());
         subScene.heightProperty().bind(root.heightProperty());
 
-
         scene.root.maxWidthProperty().bind(root.widthProperty());
         scene.root.minWidthProperty().bind(root.widthProperty());
         scene.root.maxHeightProperty().bind(root.heightProperty());
