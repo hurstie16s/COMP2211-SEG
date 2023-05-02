@@ -945,6 +945,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         ScrollPane history = new ScrollPane(historyListView);
         history.setFitToWidth(true);
         history.setPadding(new Insets(16));
+        history.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        history.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         obstacleOptions.add(new Pair<>("Obstacle", obstacleData));
         obstacleOptions.add(new Pair<>("Change History", new BorderPane(history)));
