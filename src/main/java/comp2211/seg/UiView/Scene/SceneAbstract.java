@@ -162,7 +162,7 @@ public abstract class SceneAbstract extends Scene {
 
     Menu helpMenu = new Menu("Help");
 
-    MenuItem menu8 = new MenuItem("Help menu");
+    MenuItem menu8 = new MenuItem("Help Menu Overlay");
     MenuItem guide = new MenuItem("Application Guidance");
 
     helpMenu.getItems().addAll(guide,menu8);
@@ -249,7 +249,12 @@ public abstract class SceneAbstract extends Scene {
     //Here you can type...
 
     String title = "Application Guidance";
-    String info = "Hello Josh .. ";
+    String info = "This is a brief explanation of key features of the software. \n\nThe 'Aiport Configuration' tab allows you to switch " +
+            "airports and runways and see the physical properties of the runways such as the runway length. \n\nThe " +
+            "'Obstacle Configuration' tab allows you to understand how an obstacle will affect the declared distances " +
+            "of the runway. Key features include:\n" +
+            "• Full-screen the top-down and side-on views by clicking on them\n" +
+            "• Re-arrange tabs to suit your preferences by dragging the tab header to a new location";
 
     //guide.setOnAction(e-> displayInfo(info));
 
@@ -610,6 +615,19 @@ public abstract class SceneAbstract extends Scene {
     alert.setTitle(title);
     alert.setHeaderText(null);
     alert.setContentText(message);
+
+    // Create a Label to display the long message
+    Label label = new Label(message);
+    label.setWrapText(true);
+
+    // Set the preferred width and height of the Label
+    label.setPrefSize(400, 200);
+
+    // Wrap the Label in a VBox
+    VBox vbox = new VBox(label);
+
+    // Set the VBox as the content of the alert dialog
+    alert.getDialogPane().setContent(vbox);
     alert.showAndWait();
   }
 }
