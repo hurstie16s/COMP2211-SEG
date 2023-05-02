@@ -18,7 +18,7 @@ public class Airport {
     /**
      * The list of runways at the airport.
      */
-    private ArrayList<Runway> runways;
+    private final ArrayList<Runway> runways;
     /**
      * The name of the airport.
      */

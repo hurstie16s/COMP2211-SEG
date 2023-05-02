@@ -2,6 +2,7 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Settings;
+import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.ProcessDataModel.Obstacle;
@@ -84,7 +85,7 @@ public abstract class SceneAbstract extends Scene {
   public SceneAbstract(Pane root, AppWindow appWindow, SimpleDoubleProperty width, SimpleDoubleProperty height) {
     super(root, width.get(), height.get(), Color.BLACK);
 
-    logger.info(Double.toString(appWindow.getWidth()) + " " + Double.toString(appWindow.getHeight()));
+    logger.info(appWindow.getWidth() + " " + appWindow.getHeight());
     this.root = root;
     width.bind(root.widthProperty());
     height.bind(root.heightProperty());
@@ -103,7 +104,7 @@ public abstract class SceneAbstract extends Scene {
    */
   public SceneAbstract(Pane root, AppWindow appWindow, SimpleDoubleProperty width, SimpleDoubleProperty height, boolean depthBuffer) {
     super(root, width.get(), height.get(), depthBuffer, SceneAntialiasing.BALANCED);
-    logger.info(Double.toString(appWindow.getWidth()) + " " + Double.toString(appWindow.getHeight()));
+    logger.info(appWindow.getWidth() + " " + appWindow.getHeight());
     this.root = root;
     width.bind(root.widthProperty());
     height.bind(root.heightProperty());
@@ -162,7 +163,7 @@ public abstract class SceneAbstract extends Scene {
 
     Menu helpMenu = new Menu("Help");
 
-    MenuItem menu8 = new MenuItem("Help menu");
+    MenuItem menu8 = new MenuItem("Help Menu Overlay");
     MenuItem guide = new MenuItem("Application Guidance");
 
     helpMenu.getItems().addAll(guide,menu8);
@@ -248,8 +249,18 @@ public abstract class SceneAbstract extends Scene {
 
     //Here you can type...
 
-    String info = "Hello Josh .. ";
-    guide.setOnAction(e-> this.displayInfo(info));
+    String title = "Application Guidance";
+    String info = "This is a brief explanation of key features of the software. \n\nThe 'Aiport Configuration' tab allows you to switch " +
+            "airports and runways and see the physical properties of the runways such as the runway length. \n\nThe " +
+            "'Obstacle Configuration' tab allows you to understand how an obstacle will affect the declared distances " +
+            "of the runway. Key features include:\n" +
+            "• Full-screen the top-down and side-on views by clicking on them\n" +
+            "• Re-arrange tabs to suit your preferences by dragging the tab header to a new location";
+
+    //guide.setOnAction(e-> displayInfo(info));
+
+    //alternative
+    guide.setOnAction(e -> displayInfoMessage(title,info));
 
   }
 
@@ -493,6 +504,7 @@ public abstract class SceneAbstract extends Scene {
     timestampText.setX(20);
     timestampText.setY(40);
     timestampText.getStyleClass().add("font");
+    timestampText.setFill(Theme.getLabelFg());
     runwayScene.scene.root.getChildren().add(timestampText);
 
     WritableImage image = runwayScene.scene.root.snapshot(null,null);
@@ -525,6 +537,7 @@ public abstract class SceneAbstract extends Scene {
     timestampText.setX(20);
     timestampText.setY(40);
     timestampText.getStyleClass().add("font");
+    timestampText.setFill(Theme.getLabelFg());
     runwayScene.scene.root.getChildren().add(timestampText);
 
     WritableImage image = runwayScene.scene.root.snapshot(null, null);
@@ -560,7 +573,7 @@ public abstract class SceneAbstract extends Scene {
         fileChooser.setTitle("Export side view");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase() + " format(*." + format + ")", "*." + format);
         fileChooser.getExtensionFilters().add(extFilter);
-        fileChooser.setInitialFileName("Side_View");
+        fileChooser.setInitialFileName("runway image");
         File file = fileChooser.showSaveDialog(new Stage());
 
         try {
@@ -599,5 +612,25 @@ public abstract class SceneAbstract extends Scene {
     popup.show(this.getWindow(), x, y);
   }
 
+  //alternative
+  private void displayInfoMessage(String title, String message) {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
 
+    // Create a Label to display the long message
+    Label label = new Label(message);
+    label.setWrapText(true);
+
+    // Set the preferred width and height of the Label
+    label.setPrefSize(400, 200);
+
+    // Wrap the Label in a VBox
+    VBox vbox = new VBox(label);
+
+    // Set the VBox as the content of the alert dialog
+    alert.getDialogPane().setContent(vbox);
+    alert.showAndWait();
+  }
 }

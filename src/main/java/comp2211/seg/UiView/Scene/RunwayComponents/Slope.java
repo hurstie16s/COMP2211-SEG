@@ -114,7 +114,7 @@ public class Slope extends MeshView {
     public void makePrism(float [] coords, int[] faces){
         TriangleMesh mesh = new TriangleMesh();
         mesh.getPoints().addAll(coords);
-        int faceSmoothingGroups[] = {
+        int[] faceSmoothingGroups = {
                 0, 0, 0, 0, 0, 0, 0, 0
         };
         mesh.getFaceSmoothingGroups().addAll(faceSmoothingGroups);
