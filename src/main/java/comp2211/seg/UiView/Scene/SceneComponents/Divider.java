@@ -13,9 +13,15 @@ import javafx.scene.shape.Line;
 public class Divider extends Line {
     double x;
     double y;
-    double size1;
-    double size2;
+    public SimpleDoubleProperty offset = new SimpleDoubleProperty(0);
+    public double offsetold;
+    public Pane below = new Pane();
+    public Pane above = new Pane();
     public Divider(Pane pane) {
+        below.maxHeightProperty().set(1000);
+        above.maxHeightProperty().set(1000);
+        below.maxWidthProperty().set(1000);
+        above.maxWidthProperty().set(1000);
         setFill(Color.TRANSPARENT);
         setStroke(Color.TRANSPARENT);
         setStrokeWidth(10);
@@ -24,50 +30,24 @@ public class Divider extends Line {
             endYProperty().bind(pane.heightProperty());
             setOnMousePressed(event -> {
                 x = event.getSceneX();
-                size1 = ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).widthProperty().get();
-                size2 = ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).widthProperty().get();
+                offsetold = offset.get();
             });
             setOnMouseDragged(event ->{
-                if (size2 - x + event.getSceneX() > 40 && size1 + x - event.getSceneX() > 40) {
-                    if (((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).minWidthProperty().isBound()) {
-                        ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).minWidthProperty().unbind();
-                    }
-                    if (((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).minWidthProperty().isBound()) {
-                        ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).minWidthProperty().unbind();
-                    }
-                    if (((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).maxWidthProperty().isBound()) {
-                        ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).maxWidthProperty().unbind();
-                    }
-                    if (((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).maxWidthProperty().isBound()) {
-                        ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).maxWidthProperty().unbind();
-                    }
-                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).minWidthProperty().bind(new SimpleDoubleProperty(size1 + x - event.getSceneX()));
-                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).maxWidthProperty().bind(new SimpleDoubleProperty(size1 + x - event.getSceneX()));
-                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).minWidthProperty().bind(new SimpleDoubleProperty(size2 - x + event.getSceneX()));
-                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).maxWidthProperty().bind(new SimpleDoubleProperty(size2 - x + event.getSceneX()));
-
-                    AppWindow.currentScene.refresh();
+                if ((offsetold - event.getSceneX() + x > offset.get() && below.maxWidthProperty().get()>50) || (offsetold - event.getSceneX() + x < offset.get() && above.maxWidthProperty().get()>50)){
+                    offset.set(offsetold - event.getSceneX() + x);
                 }
-
-
             });
         } else if (pane instanceof VBox) {
             startXProperty().set(0);
             endXProperty().bind(pane.widthProperty());
             setOnMousePressed(event -> {
                 y = event.getSceneY();
-                size1 = ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)+1)).heightProperty().get();
-                size2 = ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this)-1)).heightProperty().get();
+                offsetold = offset.get();
             });
             setOnMouseDragged(event ->{
-                if (size1 + y - event.getSceneY() > 40 && size2 - y + event.getSceneY() > 40) {
-                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).minHeightProperty().bind(new SimpleDoubleProperty(size1 + y - event.getSceneY()));
-                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) + 1)).maxHeightProperty().bind(new SimpleDoubleProperty(size1 + y - event.getSceneY()));
-                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).minHeightProperty().bind(new SimpleDoubleProperty(size2 - y + event.getSceneY()));
-                    ((Pane) pane.getChildren().get(pane.getChildren().indexOf(this) - 1)).maxHeightProperty().bind(new SimpleDoubleProperty(size2 - y + event.getSceneY()));
-                    AppWindow.currentScene.refresh();
+                if ((offsetold - event.getSceneY() + y > offset.get() && below.maxHeightProperty().get()>50) || (offsetold - event.getSceneY() + y < offset.get() && above.maxHeightProperty().get()>50)){
+                    offset.set(offsetold - event.getSceneY() + y);
                 }
-
             });
         } else {
             throw new RuntimeException("Unknown parent");
@@ -75,5 +55,13 @@ public class Divider extends Line {
 
 
         pane.getChildren().add(this);
+    }
+
+    public void setBelow(Pane below) {
+        this.below = below;
+    }
+
+    public void setAbove(Pane above) {
+        this.above = above;
     }
 }
