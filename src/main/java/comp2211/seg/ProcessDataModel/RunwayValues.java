@@ -347,6 +347,6 @@ public abstract class RunwayValues {
     /**
      * The Dual direction runway.
      */
-    public final SimpleBooleanProperty dualDirectionRunway = new SimpleBooleanProperty(false);
+    public final SimpleBooleanProperty dualDirectionRunway = new SimpleBooleanProperty(true);
 
 }
