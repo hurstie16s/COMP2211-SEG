@@ -162,10 +162,7 @@
     -fx-background-image: url("../images/heathrowRunway.jpg");
     -fx-background-size: cover;
 }
-.runway-background {
-    -fx-background-image: url("../images/grass.jpg");
-    -fx-background-size: cover;
-}
+
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
