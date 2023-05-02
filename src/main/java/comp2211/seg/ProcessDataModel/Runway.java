@@ -464,8 +464,20 @@ public class Runway extends RunwayValues{
                         Bindings.greaterThan(
                                 distFromThreshold
                                         .add(obstacleSlopeCalculation)
-                                        .add(STRIPEND),BLASTZONE.add(distFromThreshold))).then(distFromThreshold
-                        .add(obstacleSlopeCalculation).add(STRIPEND)).otherwise(BLASTZONE.add(distFromThreshold)));
+                                        .add(STRIPEND),
+                                BLASTZONE.add(distFromThreshold)
+                        )
+                )
+                        .then(
+                                distFromThreshold
+                                        .add(obstacleSlopeCalculation)
+                                        .add(STRIPEND)
+                        ).otherwise(
+                                BLASTZONE.add(distFromThreshold)
+                        )
+        );
+
+        // TODO breakdowns
 
         SimpleStringProperty ldaSubBreakdown = left ? leftLdaSubBreakdownProperty() : rightLdaSubBreakdownProperty();
 
@@ -534,7 +546,7 @@ public class Runway extends RunwayValues{
      * @param left the left
      * @return The appropriate slope over an obstacle
      */
-    private SimpleDoubleProperty getObstacleSlopeCalculation(boolean left) {
+    public SimpleDoubleProperty getObstacleSlopeCalculation(boolean left) {
         var obstacleSlopeCalculation = new SimpleDoubleProperty();
         obstacleSlopeCalculation
                 .bind(

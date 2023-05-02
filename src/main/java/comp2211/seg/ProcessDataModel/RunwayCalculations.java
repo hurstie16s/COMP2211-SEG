@@ -297,10 +297,27 @@ public abstract class RunwayCalculations {
      */
     public static void calculateLandOverLeft(Runway runway) {
         // Calculate Land Over for Left
-
-        var ldaSubtraction = runway.getLdaSubtraction(runway.runwayObstacle.distFromThresholdProperty(), true);
-
-        runway.leftLda.bind(Bindings.max(runway.inputLeftLda.subtract(ldaSubtraction),0));
+        // check doesnt need subbing from inputLda
+        runway.leftLda.bind(
+                Bindings.max(
+                        runway.inputLeftLda.subtract(
+                                Bindings.max(
+                                        runway.runwayObstacle.distFromThresholdProperty()
+                                                .add(
+                                                        Bindings.max(
+                                                                runway.runwayObstacle.heightProperty()
+                                                                        .multiply(runway.SLOPE)
+                                                                        .subtract(runway.runwayLengthProperty().divide(2)),
+                                                                runway.MINRESA
+                                                        )
+                                                )
+                                                .add(runway.STRIPEND),
+                                        runway.BLASTZONE.add(runway.runwayObstacle.distFromThresholdProperty())
+                                )
+                        ),
+                        0
+                )
+        );
 
         // Ensure Declared distance isn't more than original value
         if (runway.leftLda.get() > runway.inputLeftLda.get()) {
@@ -621,9 +638,29 @@ public abstract class RunwayCalculations {
     public static void calculateLandOverRight(Runway runway) {
         // Calculate Land Over for Right
 
-        var ldaSubtraction = runway.getLdaSubtraction(runway.runwayObstacle.distFromOtherThresholdProperty(), false);
-
-        runway.rightLda.bind(Bindings.max(runway.inputRightLda.subtract(ldaSubtraction),0));
+        runway.rightLda.bind(
+                Bindings.max(
+                        runway.inputRightLda.subtract(
+                                Bindings.max(
+                                        runway.runwayObstacle.distFromOtherThresholdProperty()
+                                                .add(
+                                                        Bindings.max(
+                                                                runway.runwayObstacle.heightProperty()
+                                                                        .multiply(runway.SLOPE)
+                                                                        .subtract(
+                                                                                runway.runwayLength.divide(2)
+                                                                        ),
+                                                                runway.MINRESA
+                                                        )
+                                                )
+                                                .add(runway.STRIPEND),
+                                        runway.BLASTZONE
+                                                .add(runway.runwayObstacle.distFromOtherThresholdProperty())
+                                )
+                        )
+                        ,0
+                )
+        );
 
         // Ensure Declared distance isn't more than original value
         if (runway.rightLda.get() > runway.inputRightLda.get()) {
