@@ -33,7 +33,7 @@ public class Divider extends Line {
                 offsetold = offset.get();
             });
             setOnMouseDragged(event ->{
-                if ((offsetold - event.getSceneX() + x > offset.get() && below.maxWidthProperty().get()>50) || (offsetold - event.getSceneX() + x < offset.get() && above.maxWidthProperty().get()>50)){
+                if ((offsetold - event.getSceneX() + x > offset.get() && below.maxWidthProperty().get()>300) || (offsetold - event.getSceneX() + x < offset.get() && above.maxWidthProperty().get()>300)){
                     offset.set(offsetold - event.getSceneX() + x);
                 }
             });
@@ -45,7 +45,7 @@ public class Divider extends Line {
                 offsetold = offset.get();
             });
             setOnMouseDragged(event ->{
-                if ((offsetold - event.getSceneY() + y > offset.get() && below.maxHeightProperty().get()>50) || (offsetold - event.getSceneY() + y < offset.get() && above.maxHeightProperty().get()>50)){
+                if ((offsetold - event.getSceneY() + y > offset.get() && below.maxHeightProperty().get()>100) || (offsetold - event.getSceneY() + y < offset.get() && above.maxHeightProperty().get()>100)){
                     offset.set(offsetold - event.getSceneY() + y);
                 }
             });

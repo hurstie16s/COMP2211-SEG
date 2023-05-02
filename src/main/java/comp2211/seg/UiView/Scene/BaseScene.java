@@ -1398,6 +1398,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         HBox segment = new HBox();
         ToggleButton button = new ToggleButton(label1);
         ToggleButton button2 = new ToggleButton(label2);
+        button.setPadding(new Insets(0));
+        button2.setPadding(new Insets(0));
 
         button.getStyleClass().add("font");
         button.getStyleClass().add("toggleButtonNotFocused");

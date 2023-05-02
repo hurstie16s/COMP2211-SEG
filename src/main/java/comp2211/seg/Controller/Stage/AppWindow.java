@@ -82,7 +82,8 @@ public class AppWindow {
         this.width.set(width);
         this.height.set(height);
         setupResources("/style/darkStyle.css","/style/lightStyle.css", "/style/blueYellowCB.css", "/style/redGreenCB.css");
-
+        stage.minWidthProperty().set(960);
+        stage.minHeightProperty().set(640);
 
         airports = AirportsData.getAirports();
         obstaclePresets = new ArrayList<>();
