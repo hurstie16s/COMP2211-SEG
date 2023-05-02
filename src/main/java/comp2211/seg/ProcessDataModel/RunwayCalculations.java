@@ -498,6 +498,7 @@ public abstract class RunwayCalculations {
                         runway.runwayObstacle.distFromOtherThresholdProperty()
                                 .subtract(runway.MINRESA)
                                 .subtract(runway.STRIPEND)
+                                .subtract(runway.runwayObstacle.lengthProperty().divide(2))
                         ,0
                 )
         );
@@ -545,7 +546,7 @@ public abstract class RunwayCalculations {
                                         runway.BLASTZONE,
                                         runway.STRIPEND.add(runway.MINRESA)
                                 ))
-                        .add(runway.dispThresholdLeft)
+                        .add(runway.dispThresholdLeft.subtract(runway.dispThresholdRight))
                         .subtract(runway.runwayObstacle.lengthProperty().divide(2)),
                 0
         ));
