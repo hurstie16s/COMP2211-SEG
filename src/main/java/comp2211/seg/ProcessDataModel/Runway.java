@@ -537,25 +537,15 @@ public class Runway extends RunwayValues{
     private SimpleDoubleProperty getObstacleSlopeCalculation(boolean left) {
         var obstacleSlopeCalculation = new SimpleDoubleProperty();
         obstacleSlopeCalculation
-                .bind(Bindings
-                        .when(Bindings
-                                .greaterThan(
-                                        runwayObstacle.heightProperty()
-                                                .multiply(SLOPE)
-                                                .subtract(
-                                                        runwayLengthProperty().divide(2)
-                                                ),
-                                        MINRESA
-                                        )
+                .bind(
+                        Bindings.max(
+                                runwayObstacle.heightProperty()
+                                        .multiply(SLOPE)
+                                        .subtract(
+                                                runwayLengthProperty().divide(2)
+                                        ),
+                                MINRESA
                         )
-                        .then(runwayObstacle
-                                .heightProperty()
-                                .multiply(SLOPE)
-                                .subtract(
-                                        runwayLengthProperty().divide(2)
-                                )
-                        )
-                        .otherwise(MINRESA)
                 );
 
         logger.info("Obstacle Slop Calculation: "+obstacleSlopeCalculation.get());
