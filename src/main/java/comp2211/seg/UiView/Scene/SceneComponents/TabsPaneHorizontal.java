@@ -110,32 +110,38 @@ public class TabsPaneHorizontal extends  HBox{
         rebalance();
     }
     public void rebalance(){
-        int total = 0;
-        for (Node child: getChildren()){
 
-            if (!(child instanceof Divider)){
-                total += 1;
-            }
-        }
-        for (Node child: getChildren()){
-            if (child instanceof TabLayout){
-                ((TabLayout) child).maxWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide(total));
-                ((TabLayout) child).minWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide(total));
 
-                ((TabLayout) child).maxHeightProperty().bind(heightProperty());
-                ((TabLayout) child).minHeightProperty().bind(heightProperty());
-            } else if ((child instanceof TabsPaneVertical)){
-                ((TabsPaneVertical) child).maxWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide(total));
-                ((TabsPaneVertical) child).minWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide(total));
+        for (int i = 0; i < getChildren().size(); i++) {
+            if (i%2==0){
+                if (i == 0 && getChildren().size() > 1){
+                    ((Pane) getChildren().get(i)).maxWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide((getChildren().size()+1)/2)
+                            .subtract(((Divider) getChildren().get(i+1)).offset));
+                    ((Pane) getChildren().get(i)).minWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide((getChildren().size()+1)/2)
+                            .subtract(((Divider) getChildren().get(i+1)).offset));
+                    ((Divider) getChildren().get(i+1)).setBelow((Pane) getChildren().get(i));
+                } else if (i == 0) {
+                    ((Pane) getChildren().get(i)).maxWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide((getChildren().size()+1)/2));
+                    ((Pane) getChildren().get(i)).minWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide((getChildren().size()+1)/2));
+                } else if (i == getChildren().size()-1) {
+                    ((Pane) getChildren().get(i)).maxWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide((getChildren().size()+1)/2)
+                            .add(((Divider) getChildren().get(i-1)).offset));
+                    ((Pane) getChildren().get(i)).minWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide((getChildren().size()+1)/2)
+                            .add(((Divider) getChildren().get(i-1)).offset));
 
-                ((TabsPaneVertical) child).maxHeightProperty().bind(heightProperty());
-                ((TabsPaneVertical) child).minHeightProperty().bind(heightProperty());
-            } else if ((child instanceof TabsPaneHorizontal)){
-                ((TabsPaneHorizontal) child).maxWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide(total));
-                ((TabsPaneHorizontal) child).minWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide(total));
-
-                ((TabsPaneHorizontal) child).maxHeightProperty().bind(heightProperty());
-                ((TabsPaneHorizontal) child).minHeightProperty().bind(heightProperty());
+                    ((Divider) getChildren().get(i-1)).setAbove((Pane) getChildren().get(i));
+                } else {
+                    ((Pane) getChildren().get(i)).maxWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide((getChildren().size()+1)/2)
+                            .subtract(((Divider) getChildren().get(i+1)).offset)
+                            .add(((Divider) getChildren().get(i-1)).offset));
+                    ((Pane) getChildren().get(i)).minWidthProperty().bind(widthProperty().subtract((getChildren().size()-1) * 5).divide((getChildren().size()+1)/2)
+                            .subtract(((Divider) getChildren().get(i+1)).offset)
+                            .add(((Divider) getChildren().get(i-1)).offset));
+                    ((Divider) getChildren().get(i+1)).setBelow((Pane) getChildren().get(i));
+                    ((Divider) getChildren().get(i-1)).setAbove((Pane) getChildren().get(i));
+                }
+                ((Pane) getChildren().get(i)).maxHeightProperty().bind(heightProperty());
+                ((Pane) getChildren().get(i)).minHeightProperty().bind(heightProperty());
             }
         }
     }
