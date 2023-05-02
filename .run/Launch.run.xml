@@ -13,6 +13,7 @@
               <option value="clean" />
               <option value="compile" />
               <option value="install" />
+              <option value="test" />
               <option value="javafx:run" />
             </list>
           </option>

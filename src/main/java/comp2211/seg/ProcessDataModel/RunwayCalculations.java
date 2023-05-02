@@ -170,8 +170,11 @@ public abstract class RunwayCalculations {
 
         runway.leftLda.bind(
                 Bindings.max(
-                runway.runwayObstacle.distFromThresholdProperty().subtract(runway.MINRESA).subtract(runway.STRIPEND),
-                0
+                        runway.runwayObstacle.distFromThresholdProperty()
+                                .subtract(runway.MINRESA)
+                                .subtract(runway.STRIPEND)
+                                .subtract(runway.runwayObstacle.lengthProperty().divide(2)),
+                        0
                 )
         );
 
@@ -659,7 +662,7 @@ public abstract class RunwayCalculations {
                                         runway.BLASTZONE
                                                 .add(runway.runwayObstacle.distFromOtherThresholdProperty())
                                 )
-                        )
+                        ).subtract(runway.runwayObstacle.lengthProperty().divide(2))
                         ,0
                 )
         );

@@ -623,7 +623,7 @@ public class Runway extends RunwayValues{
             changeHistory.add(0, change);
             if (SystemTray.isSupported() && show) {
                 SystemTray tray = SystemTray.getSystemTray();
-                Image image = new ImageIcon(getClass().getResource("/images/compass.png")).getImage(); // set icon image
+                Image image = new ImageIcon(getClass().getResource("/images/NotificationIcon.png")).getImage(); // set icon image
                 TrayIcon trayIcon = new TrayIcon(image, "Runway Tool"); // create tray icon
                 trayIcon.setImageAutoSize(true);
                 trayIcon.setToolTip("New change: " + change);
