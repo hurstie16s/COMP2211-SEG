@@ -6,7 +6,9 @@ import comp2211.seg.UiView.Scene.RunwayComponents.Sub;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.control.Label;
@@ -194,12 +196,22 @@ public void buildmenulessalt(){
     ImageView fullScreen = new ImageView(new Image(Objects.requireNonNull(getClass()
         .getResource("/images/fullScreen.png")).toExternalForm()));
 
+    fullScreen.setOnMouseEntered(event -> {
+        fullScreen.setCursor(Cursor.HAND);
+    });
+
+    // Set the default cursor when the mouse leaves the ImageView
+    fullScreen.setOnMouseExited(event -> {
+        fullScreen.setCursor(Cursor.DEFAULT);
+    });
+
     // Create an ImageView of the icon and add it to the StackPane
     //ImageView iconView = new ImageView(icon);
-    fullScreen.setFitHeight(20); // adjust the height and width to your liking
-    fullScreen.setFitWidth(20);
+    fullScreen.setFitHeight(25); // adjust the height and width to your liking
+    fullScreen.setFitWidth(25);
     fullScreen.setPreserveRatio(true);
     StackPane.setAlignment(fullScreen, Pos.TOP_RIGHT); // align the icon to the top right corner
+    StackPane.setMargin(fullScreen, new Insets(10));
     stackPane.getChildren().addAll(fullScreen);
 
     root.getChildren().add(stackPane);
