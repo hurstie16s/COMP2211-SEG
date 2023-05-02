@@ -226,6 +226,13 @@ public void buildmenulessalt(){
     scene.root.minWidthProperty().bind(root.widthProperty());
     scene.root.maxHeightProperty().bind(root.heightProperty());
     scene.root.minHeightProperty().bind(root.heightProperty());
+
+    Pane overlay = new Pane();
+    overlay.maxWidthProperty().bind(root.widthProperty());
+    overlay.minWidthProperty().bind(root.widthProperty());
+    overlay.maxHeightProperty().bind(root.heightProperty());
+    overlay.minHeightProperty().bind(root.heightProperty());
+    root.getChildren().add(overlay);
 }
 
     public void buildwithTime() {

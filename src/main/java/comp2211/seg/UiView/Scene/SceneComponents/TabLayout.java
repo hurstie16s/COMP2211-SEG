@@ -127,6 +127,7 @@ public class TabLayout extends VBox {
         }
     }
     public void renderOverlay(){
+        /*
         Polygon bottom = new Polygon();
         bottom.getPoints().addAll(
                 0.0,contents.heightProperty().get(),
@@ -164,10 +165,15 @@ public class TabLayout extends VBox {
         contents.getChildren().add(side);
         contents.getChildren().add(center);
         contents.getChildren().add(currentContent);
+
+         */
     }
     public void clearOverlay(){
+        /*
         while (contents.getChildren().size()>1){
             contents.getChildren().remove(0);
         }
+
+         */
     }
 }
