@@ -53,7 +53,7 @@ public class RunwayLabel extends Group {
         this.scene = scene;
         this.direction = direction;
         this.name = name;
-        this.visibleProperty().bind(visibility);
+        this.visibleProperty().bind(visibility.and(Bindings.when(new SimpleBooleanProperty(direction)).then(Bindings.lessThan(length,0)).otherwise(Bindings.greaterThan(length,0))));
         /**
         visibleProperty().bind
                 (Bindings.and(
