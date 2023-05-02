@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -24,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * This abstract class serves as a template for all JavaFX scenes.
@@ -455,7 +457,6 @@ public abstract class SceneAbstract extends Scene {
    * Export Top-down View button event
    */
   protected void exportTopDownViewButtonEvent(String format) {
-
     logger.info("exporting TopDownView ... ");
     double outputWidth = 1280;
     double outputHeight = 720;
@@ -467,69 +468,71 @@ public abstract class SceneAbstract extends Scene {
       runwayScene.scene.angleZProperty().set(-90);
       runwayScene.scene.portrait.set(true);
     }
-
-    //runwayScene.scene.root.maxWidthProperty().set(outputWidth);
-    //runwayScene.scene.root.minWidthProperty().set(outputWidth);
-    //runwayScene.scene.root.maxHeightProperty().set(outputHeight);
-    //runwayScene.scene.root.minHeightProperty().set(outputHeight);
-
-
     WritableImage image = runwayScene.scene.root.snapshot(null,null);
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Export top-down view");
-    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase() + " format(*." + format + ")","*." + format);
-    fileChooser.getExtensionFilters().add(extFilter);
-    fileChooser.setInitialFileName("Top_down_View");
-    File file = fileChooser.showSaveDialog(new Stage());
-
-    try {
-      ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
-      logger.info("image exported");
-    } catch (IOException e) {
-      logger.error(e);
-    }
-
+    exportImage(format,image);
   }
   /**
    * Export Top-down View button event
    */
   protected void exportSideViewButtonEvent(String format) {
-
     logger.info("exporting SideView ... ");
     double outputWidth = 1280;
     double outputHeight = 720;
-    RunwaySceneLoader runwayScene = new RunwaySceneLoader(new Pane(), appWindow,outputWidth,outputHeight);
+    RunwaySceneLoader runwayScene = new RunwaySceneLoader(new Pane(), appWindow, outputWidth, outputHeight);
     runwayScene.buildmenulessalt();
     if (Settings.portrait.get()) {
       runwayScene.scene.angleYProperty().set(90);
       runwayScene.scene.angleXProperty().set(90);
       runwayScene.scene.portrait.set(true);
-    }else {
+    } else {
       runwayScene.scene.toggleView();
     }
-
-    //runwayScene.scene.root.maxWidthProperty().set(outputWidth);
-    //runwayScene.scene.root.minWidthProperty().set(outputWidth);
-    //runwayScene.scene.root.maxHeightProperty().set(outputHeight);
-    //runwayScene.scene.root.minHeightProperty().set(outputHeight);
-
-
-    WritableImage image = runwayScene.scene.root.snapshot(null,null);
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Export side view");
-    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase() + " format(*." + format + ")","*." + format);
-    fileChooser.getExtensionFilters().add(extFilter);
-    fileChooser.setInitialFileName("Side_View");
-    File file = fileChooser.showSaveDialog(new Stage());
-
-    try {
-      ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
-      logger.info("image exported");
-    } catch (IOException e) {
-      logger.error(e);
-    }
-
+    WritableImage image = runwayScene.scene.root.snapshot(null, null);
+    exportImage(format, image);
   }
+
+  protected void exportImage(String format, WritableImage image) {
+
+    // Create an ImageView to display the preview image
+    ImageView preview = new ImageView(image);
+    preview.setPreserveRatio(true);
+    preview.setFitWidth(600);
+
+    // Create a dialog to display the preview
+    Dialog<Void> previewDialog = new Dialog<>();
+    previewDialog.setTitle("Preview");
+    previewDialog.getDialogPane().setContent(preview);
+
+    // Add a "Export" button to the dialog
+    ButtonType exportButtonType = new ButtonType("Export", ButtonBar.ButtonData.OK_DONE);
+    previewDialog.getDialogPane().getButtonTypes().add(exportButtonType);
+
+    // Add a "Cancel" button to the dialog
+    previewDialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+    // Show the preview dialog and wait for a button to be clicked
+    Optional result = previewDialog.showAndWait();
+
+    // If the "Export" button was clicked, save the image to a file
+    if (result.isPresent()) {
+      if (result.get() == exportButtonType) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export side view");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase() + " format(*." + format + ")", "*." + format);
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName("Side_View");
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        try {
+          ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
+          logger.info("image exported");
+        } catch (IOException e) {
+          logger.error(e);
+        }
+      }
+    }
+  }
+
 
   private FileChooser generateImportFileChooser(String item) {
     FileChooser fileChooser = new FileChooser();

@@ -13,6 +13,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 /**
  * The type Runway scene loader.
@@ -151,7 +152,6 @@ public class RunwaySceneLoader extends SceneAbstract{
         root.getChildren().add(mainPane);
         subScene.widthProperty().bind(root.widthProperty());
         subScene.heightProperty().bind(root.heightProperty());
-
 
         scene.root.maxWidthProperty().bind(root.widthProperty());
         scene.root.minWidthProperty().bind(root.widthProperty());
