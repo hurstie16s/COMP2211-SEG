@@ -500,6 +500,7 @@ public abstract class RunwayCalculations {
                                 .subtract(runway.MINRESA)
                                 .subtract(runway.STRIPEND)
                                 .subtract(runway.runwayObstacle.lengthProperty().divide(2))
+                                .add(runway.dispThresholdLeft.subtract(runway.dispThresholdRight))
                         ,0
                 )
         );
