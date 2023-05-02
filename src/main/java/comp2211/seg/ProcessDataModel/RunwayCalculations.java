@@ -662,7 +662,7 @@ public abstract class RunwayCalculations {
                                         runway.BLASTZONE
                                                 .add(runway.runwayObstacle.distFromOtherThresholdProperty())
                                 )
-                        )
+                        ).subtract(runway.runwayObstacle.lengthProperty().divide(2))
                         ,0
                 )
         );
