@@ -358,64 +358,55 @@ public abstract class FileHandler {
      * @param inputFile the file containing data to be imported
      * @return the imported obstacle
      */
-    public static Obstacle importObstacle(File inputFile) {
+    public static Obstacle importObstacle(File inputFile) throws Exception {
 
         Obstacle obstacle = null;
 
         // Check given file conforms to the appropriate schema
         // Possibly throw custom exception?
-        if (fileFormatFailed(inputFile, SchemaType.OBSTACLE)) return null;
+        if (fileFormatFailed(inputFile, SchemaType.OBSTACLE)) throw new SchemaFailedException(inputFile.getName(), SchemaType.OBSTACLE);
         logger.info("File Accepted by schema");
 
         if (builder == null) createBuilder();
 
-        try {
+        Document document = builder.parse(inputFile);
+        document.getDocumentElement().normalize();
 
-            Document document = builder.parse(inputFile);
-            document.getDocumentElement().normalize();
+        logger.info("Importing Obstacle");
+        String obstacleDesignator = document
+                .getElementsByTagName("Obstacle_Designator")
+                .item(0)
+                .getTextContent();
+        logger.info("Designator = "+obstacleDesignator);
+        double height = Double.parseDouble(
+                document
+                        .getElementsByTagName("Height")
+                        .item(0)
+                        .getTextContent());
+        logger.info("Height = "+height);
+        double length = Double.parseDouble(
+                document
+                        .getElementsByTagName("Length")
+                        .item(0)
+                        .getTextContent());
+        logger.info("Length = "+length);
+        double width = Double.parseDouble(
+                document
+                        .getElementsByTagName("Width")
+                        .item(0)
+                        .getTextContent());
+        logger.info("Width = "+width);
+        double distFromThreshold = Double.parseDouble(
+                document
+                        .getElementsByTagName("Distance_From_Threshold")
+                        .item(0)
+                        .getTextContent());
+        logger.info("Distance from threshold = "+distFromThreshold);
 
-            logger.info("Importing Obstacle");
-            String obstacleDesignator = document
-                    .getElementsByTagName("Obstacle_Designator")
-                    .item(0)
-                    .getTextContent();
-            logger.info("Designator = "+obstacleDesignator);
-            double height = Double.parseDouble(
-                    document
-                            .getElementsByTagName("Height")
-                            .item(0)
-                            .getTextContent());
-            logger.info("Height = "+height);
-            double length = Double.parseDouble(
-                    document
-                            .getElementsByTagName("Length")
-                            .item(0)
-                            .getTextContent());
-            logger.info("Length = "+length);
-            double width = Double.parseDouble(
-                    document
-                            .getElementsByTagName("Width")
-                            .item(0)
-                            .getTextContent());
-            logger.info("Width = "+width);
-            double distFromThreshold = Double.parseDouble(
-                    document
-                            .getElementsByTagName("Distance_From_Threshold")
-                            .item(0)
-                            .getTextContent());
-            logger.info("Distance from threshold = "+distFromThreshold);
-
-            obstacle = new Obstacle(obstacleDesignator, height, distFromThreshold);
-            obstacle.lengthProperty().set(length);
-            obstacle.widthProperty().set(width);
-            logger.info("Obstacle Created");
-
-        } catch (NullPointerException | IOException | SAXException e) {
-            // TODO: Split the errors so that they can be better handled
-            logger.error(e.getMessage());
-            logger.warn("Handle Error");
-            // TODO: Handle Error
-        }
+        obstacle = new Obstacle(obstacleDesignator, height, distFromThreshold);
+        obstacle.lengthProperty().set(length);
+        obstacle.widthProperty().set(width);
+        logger.info("Obstacle Created");
 
         return obstacle;
     }
@@ -426,94 +417,85 @@ public abstract class FileHandler {
      * @param inputFile the input file
      * @return the airport
      */
-    public static Airport importAirport(File inputFile) {
+    public static Airport importAirport(File inputFile) throws Exception {
         Airport airport = null;
 
         // Check given file conforms to the appropriate schema
-        if (fileFormatFailed(inputFile, SchemaType.AIRPORT)) return null;
+        if (fileFormatFailed(inputFile, SchemaType.AIRPORT)) throw new SchemaFailedException(inputFile.getName(), SchemaType.OBSTACLE);
         logger.info("File Accepted by schema");
 
         if (builder == null) createBuilder();
 
+        Document document = builder.parse(inputFile);
+        document.getDocumentElement().normalize();
 
-        try {
+        // Get Airport Name
+        String airportName = document.getElementsByTagName("name").item(0).getTextContent();
 
-            Document document = builder.parse(inputFile);
-            document.getDocumentElement().normalize();
+        // Create Airport Object
+        airport = new Airport(airportName);
+        logger.info("Created new airport "+airportName);
 
-            // Get Airport Name
-            String airportName = document.getElementsByTagName("name").item(0).getTextContent();
+        // Get Latitude
+        double latitude = Double.parseDouble(document.getElementsByTagName("Latitude").item(0).getTextContent());
+        airport.setLatitude(latitude);
+        logger.info("Set latitude of "+airportName+" to "+latitude);
 
-            // Create Airport Object
-            airport = new Airport(airportName);
-            logger.info("Created new airport "+airportName);
+        // Get Longitude
+        double longitude = Double.parseDouble(document.getElementsByTagName("Longitude").item(0).getTextContent());
+        airport.setLongitude(longitude);
+        logger.info("Set longitude of "+airportName+" to "+longitude);
 
-            // Get Latitude
-            double latitude = Double.parseDouble(document.getElementsByTagName("Latitude").item(0).getTextContent());
-            airport.setLatitude(latitude);
-            logger.info("Set latitude of "+airportName+" to "+latitude);
+        // Get Runways
+        NodeList runways = document.getElementsByTagName("Runways");
+        for (int i = 0; i < runways.getLength(); i++) {
+            Runway runway = new Runway();
 
-            // Get Longitude
-            double longitude = Double.parseDouble(document.getElementsByTagName("Longitude").item(0).getTextContent());
-            airport.setLongitude(longitude);
-            logger.info("Set longitude of "+airportName+" to "+longitude);
+            Element runwayToParse = (Element) runways.item(i);
 
-            // Get Runways
-            NodeList runways = document.getElementsByTagName("Runways");
-            for (int i = 0; i < runways.getLength(); i++) {
-                Runway runway = new Runway();
+            // Get general Runway properties
+            double resaHeight = Double.parseDouble(runwayToParse.getElementsByTagName("Resa_Height").item(0).getTextContent());
+            runway.setRESAHeight(resaHeight);
+            logger.info("Set RESA Height to "+resaHeight+"m");
+            double resaWidth = Double.parseDouble(runwayToParse.getElementsByTagName("Resa_Width").item(0).getTextContent());
+            runway.setRESAWidth(resaWidth);
+            logger.info("Set RESA width to "+resaWidth+"m");
 
-                Element runwayToParse = (Element) runways.item(i);
+            boolean dualDirection = Boolean.parseBoolean(
+                    runwayToParse.getElementsByTagName("Dual_Direction").item(0).getTextContent()
+            );
+            runway.dualDirectionRunway.set(dualDirection);
 
-                // Get general Runway properties
-                double resaHeight = Double.parseDouble(runwayToParse.getElementsByTagName("Resa_Height").item(0).getTextContent());
-                runway.setRESAHeight(resaHeight);
-                logger.info("Set RESA Height to "+resaHeight+"m");
-                double resaWidth = Double.parseDouble(runwayToParse.getElementsByTagName("Resa_Width").item(0).getTextContent());
-                runway.setRESAWidth(resaWidth);
-                logger.info("Set RESA width to "+resaWidth+"m");
+            if (dualDirection) {
+                // Get Right-hand runway properties
+                logger.info("Importing right-hand runway properties");
+                Element rightProperties = (Element) runwayToParse.getElementsByTagName("Right_Properties").item(0);
 
-                boolean dualDirection = Boolean.parseBoolean(
-                        runwayToParse.getElementsByTagName("Dual_Direction").item(0).getTextContent()
-                );
-                runway.dualDirectionRunway.set(dualDirection);
+                getProperties(rightProperties);
 
-                if (dualDirection) {
-                    // Get Right-hand runway properties
-                    logger.info("Importing right-hand runway properties");
-                    Element rightProperties = (Element) runwayToParse.getElementsByTagName("Right_Properties").item(0);
-
-                    getProperties(rightProperties);
-
-                    runway.setRunwayDesignatorRight(designator);
-                    runway.setInputRightTora(tora);
-                    runway.setInputRightToda(toda);
-                    runway.setInputRightAsda(asda);
-                    runway.setInputRightLda(lda);
-                    //runway.setClearwayRight(clearway);
-                    //runway.setStopwayRight(stopway);
-                    //runway.setDispThresholdRight(dispThreshold);
-                }
-
-                // Get Left-hand runway properties
-                logger.info("Importing left-hand runway properties");
-                Element leftProperties = (Element) runwayToParse.getElementsByTagName("Left_Properties").item(0);
-
-                getProperties(leftProperties);
-
-                runway.setRunwayDesignatorLeft(designator);
-                runway.setInputLeftTora(tora);
-                runway.setInputLeftToda(toda);
-                runway.setInputLeftAsda(asda);
-                runway.setInputLeftLda(lda);
-
-                airport.addRunway(runway);
+                runway.setRunwayDesignatorRight(designator);
+                runway.setInputRightTora(tora);
+                runway.setInputRightToda(toda);
+                runway.setInputRightAsda(asda);
+                runway.setInputRightLda(lda);
+                //runway.setClearwayRight(clearway);
+                //runway.setStopwayRight(stopway);
+                //runway.setDispThresholdRight(dispThreshold);
             }
-        } catch (NullPointerException | IOException | SAXException e) {
-            // TODO: Split the errors so that they can be better handled
-            logger.error(e.getMessage());
-            logger.warn("Handle Error");
-            // TODO: Handle Error
+
+            // Get Left-hand runway properties
+            logger.info("Importing left-hand runway properties");
+            Element leftProperties = (Element) runwayToParse.getElementsByTagName("Left_Properties").item(0);
+
+            getProperties(leftProperties);
+
+            runway.setRunwayDesignatorLeft(designator);
+            runway.setInputLeftTora(tora);
+            runway.setInputLeftToda(toda);
+            runway.setInputLeftAsda(asda);
+            runway.setInputLeftLda(lda);
+
+            airport.addRunway(runway);
         }
 
         return airport;
@@ -525,149 +507,140 @@ public abstract class FileHandler {
      * @param inputFile the file containing data to be imported
      * @return the airport
      */
-    public static Airport importAirportWithObstacles(File inputFile){
+    public static Airport importAirportWithObstacles(File inputFile) throws Exception {
 
         Airport airport = null;
 
         // Check given file conforms to the appropriate schema
-        if (fileFormatFailed(inputFile, SchemaType.AIRPORT_OBSTACLE)) return null;
+        if (fileFormatFailed(inputFile, SchemaType.AIRPORT_OBSTACLE)) throw new SchemaFailedException(inputFile.getName(), SchemaType.OBSTACLE);
         logger.info("File Accepted by schema");
 
         if (builder == null) createBuilder();
 
+        Document document = builder.parse(inputFile);
+        document.getDocumentElement().normalize();
 
-        try {
+        // Get Airport Name
+        String airportName = document.getElementsByTagName("name").item(0).getTextContent();
 
-            Document document = builder.parse(inputFile);
-            document.getDocumentElement().normalize();
+        // Create Airport Object
+        airport = new Airport(airportName);
+        logger.info("Created new airport "+airportName);
 
-            // Get Airport Name
-            String airportName = document.getElementsByTagName("name").item(0).getTextContent();
+        // Get Latitude
+        double latitude = Double.parseDouble(document.getElementsByTagName("Latitude").item(0).getTextContent());
+        airport.setLatitude(latitude);
+        logger.info("Set latitude of "+airportName+" to "+latitude);
 
-            // Create Airport Object
-            airport = new Airport(airportName);
-            logger.info("Created new airport "+airportName);
+        // Get Longitude
+        double longitude = Double.parseDouble(document.getElementsByTagName("Longitude").item(0).getTextContent());
+        airport.setLongitude(longitude);
+        logger.info("Set longitude of "+airportName+" to "+longitude);
 
-            // Get Latitude
-            double latitude = Double.parseDouble(document.getElementsByTagName("Latitude").item(0).getTextContent());
-            airport.setLatitude(latitude);
-            logger.info("Set latitude of "+airportName+" to "+latitude);
+        // Get Runways
+        NodeList runways = document.getElementsByTagName("Runways");
+        for (int i = 0; i < runways.getLength(); i++) {
+            Runway runway = new Runway();
 
-            // Get Longitude
-            double longitude = Double.parseDouble(document.getElementsByTagName("Longitude").item(0).getTextContent());
-            airport.setLongitude(longitude);
-            logger.info("Set longitude of "+airportName+" to "+longitude);
+            Element runwayToParse = (Element) runways.item(i);
 
-            // Get Runways
-            NodeList runways = document.getElementsByTagName("Runways");
-            for (int i = 0; i < runways.getLength(); i++) {
-                Runway runway = new Runway();
+            // Get general Runway properties
+            double resaHeight = Double.parseDouble(runwayToParse.getElementsByTagName("Resa_Height").item(0).getTextContent());
+            runway.setRESAHeight(resaHeight);
+            logger.info("Set RESA Height to "+resaHeight+"m");
+            double resaWidth = Double.parseDouble(runwayToParse.getElementsByTagName("Resa_Width").item(0).getTextContent());
+            runway.setRESAWidth(resaWidth);
+            logger.info("Set RESA width to "+resaWidth+"m");
 
-                Element runwayToParse = (Element) runways.item(i);
+            boolean dualDirection = Boolean.parseBoolean(
+                    runwayToParse.getElementsByTagName("Dual_Direction").item(0).getTextContent()
+            );
+            runway.dualDirectionRunway.set(dualDirection);
 
-                // Get general Runway properties
-                double resaHeight = Double.parseDouble(runwayToParse.getElementsByTagName("Resa_Height").item(0).getTextContent());
-                runway.setRESAHeight(resaHeight);
-                logger.info("Set RESA Height to "+resaHeight+"m");
-                double resaWidth = Double.parseDouble(runwayToParse.getElementsByTagName("Resa_Width").item(0).getTextContent());
-                runway.setRESAWidth(resaWidth);
-                logger.info("Set RESA width to "+resaWidth+"m");
+            if (dualDirection) {
+                // Get Right-hand runway properties
+                logger.info("Importing right-hand runway properties");
+                Element rightProperties = (Element) runwayToParse.getElementsByTagName("Right_Properties").item(0);
 
-                boolean dualDirection = Boolean.parseBoolean(
-                        runwayToParse.getElementsByTagName("Dual_Direction").item(0).getTextContent()
-                );
-                runway.dualDirectionRunway.set(dualDirection);
+                getProperties(rightProperties);
 
-                if (dualDirection) {
-                    // Get Right-hand runway properties
-                    logger.info("Importing right-hand runway properties");
-                    Element rightProperties = (Element) runwayToParse.getElementsByTagName("Right_Properties").item(0);
-
-                    getProperties(rightProperties);
-
-                    runway.setRunwayDesignatorRight(designator);
-                    runway.setInputRightTora(tora);
-                    runway.setInputRightToda(toda);
-                    runway.setInputRightAsda(asda);
-                    runway.setInputRightLda(lda);
-                    //runway.setClearwayRight(clearway);
-                    //runway.setStopwayRight(stopway);
-                    //runway.setDispThresholdRight(dispThreshold);
-                }
-
-                // Get Left-hand runway properties
-                logger.info("Importing left-hand runway properties");
-                Element leftProperties = (Element) runwayToParse.getElementsByTagName("Left_Properties").item(0);
-
-                getProperties(leftProperties);
-
-                runway.setRunwayDesignatorLeft(designator);
-                runway.setInputLeftTora(tora);
-                runway.setInputLeftToda(toda);
-                runway.setInputLeftAsda(asda);
-                runway.setInputLeftLda(lda);
-
-                airport.addRunway(runway);
+                runway.setRunwayDesignatorRight(designator);
+                runway.setInputRightTora(tora);
+                runway.setInputRightToda(toda);
+                runway.setInputRightAsda(asda);
+                runway.setInputRightLda(lda);
+                //runway.setClearwayRight(clearway);
+                //runway.setStopwayRight(stopway);
+                //runway.setDispThresholdRight(dispThreshold);
             }
 
-            // Get runway obstacles
-            logger.info("Importing runway obstacles");
-            NodeList obstacles = document.getElementsByTagName("Runway_Obstacles");
-            for (int i = 0; i < obstacles.getLength(); i++) {
-                logger.info("Importing obstacle for runway "
-                        +airport.getRunways().get(i).getRunwayDesignatorLeft()
-                        +"/ "
-                        +airport.getRunways().get(i).getRunwayDesignatorRight()
-                );
-                Element obstacleToParse = (Element) obstacles.item(0);
+            // Get Left-hand runway properties
+            logger.info("Importing left-hand runway properties");
+            Element leftProperties = (Element) runwayToParse.getElementsByTagName("Left_Properties").item(0);
 
-                String obstacleDesignator = obstacleToParse
-                        .getElementsByTagName("Obstacle_Designator")
-                        .item(0)
-                        .getTextContent();
-                logger.info("Obstacle designator = "+obstacleDesignator);
-                double obstacleHeight = Double.parseDouble(
-                        obstacleToParse
-                                .getElementsByTagName("Obstacle_Height")
-                                .item(0)
-                                .getTextContent()
-                );
-                logger.info("Obstacle height = "+obstacleHeight);
-                double obstacleWidth = Double.parseDouble(
-                        obstacleToParse
-                                .getElementsByTagName("Obstacle_Width")
-                                .item(0)
-                                .getTextContent()
-                );
-                logger.info("Obstacle width = "+obstacleWidth);
-                double obstacleLength = Double.parseDouble(
-                        obstacleToParse
-                                .getElementsByTagName("Obstacle_Length")
-                                .item(0)
-                                .getTextContent()
-                );
-                logger.info("Obstacle length = "+obstacleLength);
-                double distFromThreshold = Double.parseDouble(
-                        obstacleToParse
-                                .getElementsByTagName("Distance_From_Threshold")
-                                .item(0)
-                                .getTextContent()
-                );
-                logger.info("Obstacle distance from threshold = "+distFromThreshold);
-                airport.getRunways().get(i).runwayObstacle.obstacleDesignatorProperty().set(obstacleDesignator);
-                airport.getRunways().get(i).runwayObstacle.heightProperty().set(obstacleHeight);
-                airport.getRunways().get(i).runwayObstacle.widthProperty().set(obstacleWidth);
-                airport.getRunways().get(i).runwayObstacle.lengthProperty().set(obstacleLength);
-                airport.getRunways().get(i).runwayObstacle.distFromThresholdProperty().set(distFromThreshold);
-                logger.info("Obstacle added to runway");
-            }
+            getProperties(leftProperties);
 
-        } catch (NullPointerException | IOException | SAXException e) {
-            // TODO: Split the errors so that they can be better handled
-            logger.error(e.getMessage());
-            logger.warn("Handle Error");
-            // TODO: Handle Error
+            runway.setRunwayDesignatorLeft(designator);
+            runway.setInputLeftTora(tora);
+            runway.setInputLeftToda(toda);
+            runway.setInputLeftAsda(asda);
+            runway.setInputLeftLda(lda);
+
+            airport.addRunway(runway);
         }
+
+        // Get runway obstacles
+        logger.info("Importing runway obstacles");
+        NodeList obstacles = document.getElementsByTagName("Runway_Obstacles");
+        for (int i = 0; i < obstacles.getLength(); i++) {
+            logger.info("Importing obstacle for runway "
+                    +airport.getRunways().get(i).getRunwayDesignatorLeft()
+                    +"/ "
+                    +airport.getRunways().get(i).getRunwayDesignatorRight()
+            );
+            Element obstacleToParse = (Element) obstacles.item(0);
+
+            String obstacleDesignator = obstacleToParse
+                    .getElementsByTagName("Obstacle_Designator")
+                    .item(0)
+                    .getTextContent();
+            logger.info("Obstacle designator = "+obstacleDesignator);
+            double obstacleHeight = Double.parseDouble(
+                    obstacleToParse
+                            .getElementsByTagName("Obstacle_Height")
+                            .item(0)
+                            .getTextContent()
+            );
+            logger.info("Obstacle height = "+obstacleHeight);
+            double obstacleWidth = Double.parseDouble(
+                    obstacleToParse
+                            .getElementsByTagName("Obstacle_Width")
+                            .item(0)
+                            .getTextContent()
+            );
+            logger.info("Obstacle width = "+obstacleWidth);
+            double obstacleLength = Double.parseDouble(
+                    obstacleToParse
+                            .getElementsByTagName("Obstacle_Length")
+                            .item(0)
+                            .getTextContent()
+            );
+            logger.info("Obstacle length = "+obstacleLength);
+            double distFromThreshold = Double.parseDouble(
+                    obstacleToParse
+                            .getElementsByTagName("Distance_From_Threshold")
+                            .item(0)
+                            .getTextContent()
+            );
+            logger.info("Obstacle distance from threshold = "+distFromThreshold);
+            airport.getRunways().get(i).runwayObstacle.obstacleDesignatorProperty().set(obstacleDesignator);
+            airport.getRunways().get(i).runwayObstacle.heightProperty().set(obstacleHeight);
+            airport.getRunways().get(i).runwayObstacle.widthProperty().set(obstacleWidth);
+            airport.getRunways().get(i).runwayObstacle.lengthProperty().set(obstacleLength);
+            airport.getRunways().get(i).runwayObstacle.distFromThresholdProperty().set(distFromThreshold);
+            logger.info("Obstacle added to runway");
+        }
+
 
         return airport;
     }

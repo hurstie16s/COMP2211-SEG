@@ -6,6 +6,7 @@ import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.ProcessDataModel.Obstacle;
+import comp2211.seg.ProcessDataModel.SchemaFailedException;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
@@ -439,10 +440,12 @@ public abstract class SceneAbstract extends Scene {
       // Add airport to AppWindow
       logger.info("Sending airport: "+airport.getName()+" to AppWindow");
       appWindow.addAirport(airport);
-    } catch (NullPointerException e) {
-      logger.warn(e.getMessage());
+    } catch (SchemaFailedException e) {
+      displayErrorMessage("Import Failure", e.getMessage());
+    } catch (Exception e) {
+      displayErrorMessage("Import Failure", "Failed to parse XML file");
     }
-
+    displayInfoMessage("Import Success", "Obstacle Imported");
   }
 
   protected void importAirportNoObsEvent() {
@@ -454,10 +457,12 @@ public abstract class SceneAbstract extends Scene {
           // Add airport to AppWindow
           logger.info("Sending airport: "+airport.getName()+" to AppWindow");
           appWindow.addAirport(airport);
-      } catch (NullPointerException e) {
-          logger.warn(e.getMessage());
+      } catch (SchemaFailedException e) {
+        displayErrorMessage("Import Failure", e.getMessage());
+      } catch (Exception e) {
+        displayErrorMessage("Import Failure", "Failed to parse XML file");
       }
-
+    displayInfoMessage("Import Success", "Obstacle Imported");
   }
 
   /**
@@ -472,10 +477,12 @@ public abstract class SceneAbstract extends Scene {
       // Add obstacle to AppWindow
       logger.info("Sending obstacle: "+obstacle.getObstacleDesignator()+" to AppWindow");
       appWindow.addObstacle(obstacle);
-    } catch (NullPointerException e) {
-      logger.warn(e.getMessage());
+    } catch (SchemaFailedException e) {
+      displayErrorMessage("Import Failure", e.getMessage());
+    } catch (Exception e) {
+      displayErrorMessage("Import Failure", "Failed to parse XML file");
     }
-
+    displayInfoMessage("Import Success", "Obstacle Imported");
   }
 
   /**
@@ -650,6 +657,14 @@ public abstract class SceneAbstract extends Scene {
 
     // Set the VBox as the content of the alert dialog
     alert.getDialogPane().setContent(vbox);
+    alert.showAndWait();
+  }
+
+  private void displayErrorMessage(String title, String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
     alert.showAndWait();
   }
 }
