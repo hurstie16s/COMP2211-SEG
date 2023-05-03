@@ -545,7 +545,7 @@ public class RunwayScene extends SceneAbstract {
   public TextFlow makeRwyID(SimpleStringProperty designator){
     Group id = new Group();
     Text rwyDir = new Text(designator.getValue());
-    Text rwyLabel = new Text(designator.getValue());
+    Text rwyLabel = new Text("");
     Text bars = new Text("\n||||| |||||");
     rwyDir.setFill(Theme.getLabelFg());
     rwyLabel.setFill(Theme.getLabelFg());
@@ -555,24 +555,36 @@ public class RunwayScene extends SceneAbstract {
       @Override
       public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
         rwyDir.textProperty().set(t1.substring(0,2));
-        rwyLabel.textProperty().set(t1.substring(2));
+        if (designator.length().get() >2) {
+          rwyLabel.textProperty().set(t1.substring(2));
+          rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*3/rwyLabel.getBoundsInLocal().getWidth()));
+        }
       }
     });
     rwyDir.textProperty().set(designator.getValue().substring(0,2));
-    rwyLabel.textProperty().set(designator.getValue().substring(2));
-
+    if (designator.length().get() >2) {
+      rwyLabel.textProperty().set(designator.getValue().substring(2));
+      rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*3/rwyLabel.getBoundsInLocal().getWidth()));
+    }
+    else {
+      rwyLabel.setFont(new Font(0));
+    }
     //rwyDir.setFont(Theme.font);
     appWindow.runway.runwayWidth.addListener(new ChangeListener<Number>() {
       @Override
       public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
         rwyDir.setFont(new Font(appWindow.runway.runwayWidth.get()*5/rwyDir.getBoundsInLocal().getWidth()));
-        rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*3/rwyLabel.getBoundsInLocal().getWidth()));
         bars.setFont(new Font(appWindow.runway.runwayWidth.get()*8/bars.getBoundsInLocal().getWidth()));
 
+        if (designator.length().get() >2) {
+          rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*3/rwyLabel.getBoundsInLocal().getWidth()));
+        }
+        else {
+          rwyLabel.setFont(new Font(0));
+        }
       }
     });
     rwyDir.setFont(new Font(appWindow.runway.runwayWidth.get()*5/rwyDir.getBoundsInLocal().getWidth()));
-    rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*3/rwyLabel.getBoundsInLocal().getWidth()));
     bars.setFont(new Font(appWindow.runway.runwayWidth.get()*8/bars.getBoundsInLocal().getWidth()));
 
     TextFlow data = new TextFlow(rwyDir,new Text("\n"),rwyLabel,bars);
