@@ -448,7 +448,7 @@ public abstract class SceneAbstract extends Scene {
       displayErrorMessage("Import Failure", "Failed to parse XML file");
       success = false;
     }
-    if (success) displayInfoMessage("Import Success", "Obstacle Imported");
+    if (success) displayInfoMessage("Import Success", "Airport with Obstacles Imported");
   }
 
   protected void importAirportNoObsEvent() {
@@ -468,7 +468,7 @@ public abstract class SceneAbstract extends Scene {
         displayErrorMessage("Import Failure", "Failed to parse XML file");
         success = false;
       }
-      if (success) displayInfoMessage("Import Success", "Obstacle Imported");
+      if (success) displayInfoMessage("Import Success", "Airport without Obstacle Imported");
   }
 
   /**
