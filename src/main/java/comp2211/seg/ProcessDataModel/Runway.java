@@ -307,8 +307,10 @@ public class Runway extends RunwayValues{
             }
 
             return newDesignator;
+        } else if (!left){
+            return runwayDesignatorLeft.get();
         } else {
-            return designator;
+            return " ";
         }
     }
 

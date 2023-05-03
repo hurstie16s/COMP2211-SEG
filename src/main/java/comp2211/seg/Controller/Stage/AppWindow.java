@@ -250,9 +250,9 @@ public class AppWindow {
         logger.info("set Runway with: " + runway);
         Runway temp = new Runway();
 
+        temp.dualDirectionRunway.set(this.runway.dualDirectionRunway.get());
         temp.setRunwayDesignatorLeft(this.runway.getRunwayDesignatorLeft());
         temp.setRunwayDesignatorRight(this.runway.getRunwayDesignatorRight());
-        temp.dualDirectionRunway.set(this.runway.dualDirectionRunway.get());
         temp.setInputLeftTora(this.runway.getInputLeftTora());
         temp.setInputLeftToda(this.runway.getInputLeftToda());
         temp.setInputLeftLda(this.runway.getInputLeftLda());
@@ -263,9 +263,9 @@ public class AppWindow {
         temp.setInputRightAsda(this.runway.getInputRightAsda());
 
         if(!(runway == null)) {
+            this.runway.dualDirectionRunway.set(runway.dualDirectionRunway.get());
             this.runway.setRunwayDesignatorLeft(runway.getRunwayDesignatorLeft());
             this.runway.setRunwayDesignatorRight(runway.getRunwayDesignatorRight());
-            this.runway.dualDirectionRunway.set(runway.dualDirectionRunway.get());
             this.runway.setInputLeftTora(runway.getInputLeftTora());
             this.runway.setInputLeftToda(runway.getInputLeftToda());
             this.runway.setInputLeftLda(runway.getInputLeftLda());
@@ -276,9 +276,9 @@ public class AppWindow {
             this.runway.setInputRightAsda(runway.getInputRightAsda());
 
 
+            runway.dualDirectionRunway.set(temp.dualDirectionRunway.get());
             runway.setRunwayDesignatorLeft(temp.getRunwayDesignatorLeft());
             runway.setRunwayDesignatorRight(temp.getRunwayDesignatorRight());
-            runway.dualDirectionRunway.set(temp.dualDirectionRunway.get());
             runway.setInputLeftTora(temp.getInputLeftTora());
             runway.setInputLeftToda(temp.getInputLeftToda());
             runway.setInputLeftLda(temp.getInputLeftLda());
