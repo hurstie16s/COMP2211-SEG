@@ -30,7 +30,7 @@ public abstract class RunwayCalculations {
                             runway.runwayObstacle.heightProperty().multiply(runway.SLOPE),
                             runway.MINRESA.add(runway.runwayObstacle.lengthProperty().divide(2))
                     ))
-                    .subtract(runway.STRIPEND),
+                    .subtract(runway.STRIPEND).subtract(runway.dispThresholdLeft),
                 0
             )
         );
@@ -173,7 +173,7 @@ public abstract class RunwayCalculations {
                         runway.runwayObstacle.distFromThresholdProperty()
                                 .subtract(runway.MINRESA)
                                 .subtract(runway.STRIPEND)
-                                .subtract(runway.runwayObstacle.lengthProperty().divide(2)),
+                                .subtract(runway.runwayObstacle.lengthProperty().divide(2)).subtract(runway.dispThresholdLeft),
                         0
                 )
         );
@@ -224,7 +224,7 @@ public abstract class RunwayCalculations {
                         .subtract(runway.dispThresholdLeft)
                         .subtract(
                                 runway.runwayObstacle.lengthProperty().divide(2)
-                        ),
+                        ).add(runway.dispThresholdRight),
                 0
         ));
 
@@ -311,12 +311,12 @@ public abstract class RunwayCalculations {
                                                                 runway.runwayObstacle.heightProperty()
                                                                         .multiply(runway.SLOPE)
                                                                         .subtract(runway.runwayObstacle.lengthProperty().divide(2)),
-                                                                runway.MINRESA // always choosing this?
+                                                                runway.MINRESA
                                                         )
                                                 )
                                                 .add(runway.STRIPEND),
                                         runway.BLASTZONE.add(runway.runwayObstacle.distFromThresholdProperty())
-                                )
+                                ).add(runway.runwayObstacle.lengthProperty().divide(2)).subtract(runway.dispThresholdRight)
                         ),
                         0
                 )
