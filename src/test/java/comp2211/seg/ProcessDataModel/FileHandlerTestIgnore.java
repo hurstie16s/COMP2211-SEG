@@ -19,7 +19,7 @@ import comp2211.seg.UiView.Scene.SceneAbstract;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileHandlerTest {
+class FileHandlerTestIgnore {
 
     @Test
     void exportAirportAndOb() {

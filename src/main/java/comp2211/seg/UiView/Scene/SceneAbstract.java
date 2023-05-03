@@ -432,6 +432,7 @@ public abstract class SceneAbstract extends Scene {
    * Import airport button event.
    */
   protected void importAirportWithObstacleButtonEvent() {
+    var success = true;
     try {
       logger.info("Import airport");
       File file = Objects.requireNonNull(generateImportFileChooser("airport").showOpenDialog(new Stage()));
@@ -442,13 +443,16 @@ public abstract class SceneAbstract extends Scene {
       appWindow.addAirport(airport);
     } catch (SchemaFailedException e) {
       displayErrorMessage("Import Failure", e.getMessage());
+      success = false;
     } catch (Exception e) {
       displayErrorMessage("Import Failure", "Failed to parse XML file");
+      success = false;
     }
-    displayInfoMessage("Import Success", "Obstacle Imported");
+    if (success) displayInfoMessage("Import Success", "Obstacle Imported");
   }
 
   protected void importAirportNoObsEvent() {
+      var success = true;
       try {
           logger.info("Import airport");
           File file = Objects.requireNonNull(generateImportFileChooser("airport").showOpenDialog(new Stage()));
@@ -459,16 +463,19 @@ public abstract class SceneAbstract extends Scene {
           appWindow.addAirport(airport);
       } catch (SchemaFailedException e) {
         displayErrorMessage("Import Failure", e.getMessage());
+          success = false;
       } catch (Exception e) {
         displayErrorMessage("Import Failure", "Failed to parse XML file");
+        success = false;
       }
-    displayInfoMessage("Import Success", "Obstacle Imported");
+      if (success) displayInfoMessage("Import Success", "Obstacle Imported");
   }
 
   /**
    * Import obstacle button event.
    */
   protected void importObstacleButtonEvent() {
+    var success = true;
     try {
       logger.info("Import obstacle");
       File file = Objects.requireNonNull(generateImportFileChooser("obstacle").showOpenDialog(new Stage()));
@@ -479,10 +486,12 @@ public abstract class SceneAbstract extends Scene {
       appWindow.addObstacle(obstacle);
     } catch (SchemaFailedException e) {
       displayErrorMessage("Import Failure", e.getMessage());
+      success = false;
     } catch (Exception e) {
       displayErrorMessage("Import Failure", "Failed to parse XML file");
+      success = false;
     }
-    displayInfoMessage("Import Success", "Obstacle Imported");
+    if (success) displayInfoMessage("Import Success", "Obstacle Imported");
   }
 
   /**

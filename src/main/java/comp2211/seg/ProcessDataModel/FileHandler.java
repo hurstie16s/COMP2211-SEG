@@ -423,7 +423,7 @@ public abstract class FileHandler {
         Airport airport = null;
 
         // Check given file conforms to the appropriate schema
-        if (fileFormatFailed(inputFile, SchemaType.AIRPORT)) throw new SchemaFailedException(inputFile.getName(), SchemaType.OBSTACLE);
+        if (fileFormatFailed(inputFile, SchemaType.AIRPORT)) throw new SchemaFailedException(inputFile.getName(), SchemaType.AIRPORT);
         logger.info("File Accepted by schema");
 
         if (builder == null) createBuilder();
@@ -514,7 +514,7 @@ public abstract class FileHandler {
         Airport airport = null;
 
         // Check given file conforms to the appropriate schema
-        if (fileFormatFailed(inputFile, SchemaType.AIRPORT_OBSTACLE)) throw new SchemaFailedException(inputFile.getName(), SchemaType.OBSTACLE);
+        if (fileFormatFailed(inputFile, SchemaType.AIRPORT_OBSTACLE)) throw new SchemaFailedException(inputFile.getName(), SchemaType.AIRPORT_OBSTACLE);
         logger.info("File Accepted by schema");
 
         if (builder == null) createBuilder();
@@ -773,6 +773,7 @@ public abstract class FileHandler {
             String rightLda,
             File fileToExportTo
     ) {
+        //TODO: update
         String[] dataComponents = new String[] {
                 leftToraHeader,
                 leftTora,
