@@ -29,6 +29,7 @@
         <xs:sequence>
             <xs:element type="xs:string" name="Resa_Height"/>
             <xs:element type="xs:string" name="Resa_Width"/>
+            <xs:element type="xs:boolean" name="Dual_Direction"/>
             <xs:element type="Right_PropertiesType" name="Right_Properties" minOccurs="0"/>
             <xs:element type="Left_PropertiesType" name="Left_Properties"/>
         </xs:sequence>
