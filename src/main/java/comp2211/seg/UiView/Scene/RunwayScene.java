@@ -753,6 +753,7 @@ public class RunwayScene extends SceneAbstract {
 
   public void makeAlignButton(){
     Button button = new Button("Align");
+    button.setFocusTraversable(false);
 
     Image image = new Image(Objects.requireNonNull(getClass().getResource("/images/compass.png")).toExternalForm());
     ImageView imageView = new ImageView(image);
@@ -788,6 +789,7 @@ public class RunwayScene extends SceneAbstract {
     fullScreen.setPreserveRatio(true);
     fullScreen.setPickOnBounds(false);
     Button button2 = new Button();
+    button2.setFocusTraversable(false);
     button2.setGraphic(fullScreen);
     StackPane transparentPane = new StackPane(box,button2);
     transparentPane.setAlignment(button2, Pos.TOP_RIGHT); // align the icon to the top right corner
