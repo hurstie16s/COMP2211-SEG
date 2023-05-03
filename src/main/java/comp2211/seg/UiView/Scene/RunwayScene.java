@@ -769,7 +769,7 @@ public class RunwayScene extends SceneAbstract {
 
 
     ImageView fullScreen = new ImageView(new Image(Objects.requireNonNull(getClass()
-        .getResource("/images/fullScreen.png")).toExternalForm()));
+        .getResource("/images/close.png")).toExternalForm()));
 
     fullScreen.setOnMouseEntered(event -> {
       fullScreen.setCursor(Cursor.HAND);
@@ -804,7 +804,6 @@ public class RunwayScene extends SceneAbstract {
     button2.setOnMouseClicked(new EventHandler<MouseEvent>() {
                                 @Override
                                 public void handle(MouseEvent mouseEvent) {
-                                  logger.info("click");
                                   appWindow.startBaseScene();
                                 }
     });
