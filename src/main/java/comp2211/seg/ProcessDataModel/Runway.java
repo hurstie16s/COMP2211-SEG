@@ -244,7 +244,7 @@ public class Runway extends RunwayValues{
     public static void main(String[] args) {
         var runway = new Runway("07", 4000, 5000, 3500, 4500, 4000, 5000, 3500, 4500);
         //System.out.println(runway.calculateRunwayDesignator("07", true));
-        System.out.println(runway.toString());
+        System.out.println(runway);
         System.out.println(runway.runwayDesignatorRight);
     }
 
