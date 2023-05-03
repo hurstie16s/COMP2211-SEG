@@ -46,12 +46,12 @@
     </xs:complexType>
     <xs:complexType name="RunwaysType">
         <xs:sequence>
-            <xs:element type="RunwayType" name="Runway"/>
+            <xs:element type="RunwayType" name="Runway" maxOccurs="2"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="Runway_ObstaclesType">
         <xs:sequence>
-            <xs:element type="Runway_ObstacleType" name="Runway_Obstacle"/>
+            <xs:element type="Runway_ObstacleType" name="Runway_Obstacle" maxOccurs="2"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="airportType">
