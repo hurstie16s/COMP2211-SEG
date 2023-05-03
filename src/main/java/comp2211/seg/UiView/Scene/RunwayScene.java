@@ -678,7 +678,7 @@ public class RunwayScene extends SceneAbstract {
 
 
     //RESA Left
-    addCuboid(
+    Box resaLeft = addCuboid(
             appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract( appWindow.runway.stripEndProperty()).subtract(appWindow.runway.RESAWidthProperty().divide(2)),
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(-0.05).multiply(1),
@@ -686,6 +686,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.RESAHeightProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
             Theme.getPhysicalResa());
+    resaLeft.visibleProperty().bind(appWindow.runway.dualDirectionRunway);
 
     //Stopway Left
     addCuboid(
