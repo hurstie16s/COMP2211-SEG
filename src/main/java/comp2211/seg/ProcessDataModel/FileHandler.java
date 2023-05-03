@@ -754,7 +754,7 @@ public abstract class FileHandler {
         }
     }
 
-    private boolean exportBreakdownToTxt (
+    private static boolean exportBreakdownToTxt (
             String leftToraHeader,
             String leftTora,
             String rightToraHeader,
