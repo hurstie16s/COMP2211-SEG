@@ -206,10 +206,10 @@ public class HomeScene extends SceneAbstract{
     runways.minWidthProperty().bind(airports.widthProperty());
     startApplication.maxWidthProperty().bind(airports.widthProperty());
     startApplication.minWidthProperty().bind(airports.widthProperty());
-    importAirportWithObstacle.maxWidthProperty().bind(airports.widthProperty());
-    importAirportWithObstacle.minWidthProperty().bind(airports.widthProperty());
-    importAirportWithoutObs.maxWidthProperty().bind(airports.widthProperty());
-    importAirportWithoutObs.minWidthProperty().bind(airports.widthProperty());
+    importAirportWithObstacle.maxWidth(350);
+    importAirportWithObstacle.minWidth(350);
+    importAirportWithoutObs.maxWidth(350);
+    importAirportWithoutObs.minWidth(350);
     HBox buttonsPane = new HBox(buttons);
     VBox buttonsPane2 = new VBox(buttonsPane);
 
