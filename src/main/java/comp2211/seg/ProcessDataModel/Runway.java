@@ -53,8 +53,14 @@ public class Runway extends RunwayValues{
      * @param rightASDA   the right asda
      */
     public Runway(String designators, double leftTora, double leftToda, double leftLDA, double leftASDA, double rightTora, double rightToda, double rightLDA, double rightASDA){
-        runwayDesignatorLeft.set(designators.split("/")[0]);
-        runwayDesignatorRight.set(designators.split("/")[1]);
+        try {
+            runwayDesignatorLeft.set(designators.split("/")[0]);
+            runwayDesignatorRight.set(designators.split("/")[1]);
+        } catch (Exception e) {
+            runwayDesignatorLeft.set(designators);
+            runwayDesignatorRight.set(calculateRunwayDesignator(designators, true));
+            dualDirectionRunway.set(false);
+        }
         inputLeftTora.set(leftTora);
         inputLeftToda.set(leftToda);
         inputLeftLda.set(leftLDA);
@@ -235,6 +241,13 @@ public class Runway extends RunwayValues{
         return newDesignator;
     }
 
+    public static void main(String[] args) {
+        var runway = new Runway("07", 4000, 5000, 3500, 4500, 4000, 5000, 3500, 4500);
+        //System.out.println(runway.calculateRunwayDesignator("07", true));
+        System.out.println(runway.toString());
+        System.out.println(runway.runwayDesignatorRight);
+    }
+
     /**
      * Swap left right.
      */
@@ -313,7 +326,7 @@ public class Runway extends RunwayValues{
 
         if (hasRunwayObstacle.get()) {
             logger.info("Runway has obstacle: calculation methods will be called");
-            String change = ("Runway " + this.toString() + " recalculated; take-off/landing " + (directionLeft.get() ? "towards" : "away") + " for top, take-off/landing " + (directionRight.get() ? "away" : "towards") + " for bottom");
+            String change = ("Runway " + this + " recalculated; take-off/landing " + (directionLeft.get() ? "towards" : "away") + " for top, take-off/landing " + (directionRight.get() ? "away" : "towards") + " for bottom");
             logChange(change, Boolean.TRUE);
             if (directionLeft.get()) {
                 logger.info("Calculate take-off towards for left");
@@ -623,7 +636,7 @@ public class Runway extends RunwayValues{
             changeHistory.add(0, change);
             if (SystemTray.isSupported() && show) {
                 SystemTray tray = SystemTray.getSystemTray();
-                Image image = new ImageIcon(getClass().getResource("/images/compass.png")).getImage(); // set icon image
+                Image image = new ImageIcon(getClass().getResource("/images/NotificationIcon.png")).getImage(); // set icon image
                 TrayIcon trayIcon = new TrayIcon(image, "Runway Tool"); // create tray icon
                 trayIcon.setImageAutoSize(true);
                 trayIcon.setToolTip("New change: " + change);
@@ -2306,7 +2319,7 @@ public class Runway extends RunwayValues{
      * @param units the units
      */
     public void setUnits(String units) {
-        this.units.set(units);
+        RunwayValues.units.set(units);
     }
 
 

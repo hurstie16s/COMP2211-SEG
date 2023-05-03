@@ -2,6 +2,7 @@ package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Settings;
+import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.ProcessDataModel.Obstacle;
@@ -84,7 +85,7 @@ public abstract class SceneAbstract extends Scene {
   public SceneAbstract(Pane root, AppWindow appWindow, SimpleDoubleProperty width, SimpleDoubleProperty height) {
     super(root, width.get(), height.get(), Color.BLACK);
 
-    logger.info(Double.toString(appWindow.getWidth()) + " " + Double.toString(appWindow.getHeight()));
+    logger.info(appWindow.getWidth() + " " + appWindow.getHeight());
     this.root = root;
     width.bind(root.widthProperty());
     height.bind(root.heightProperty());
@@ -103,7 +104,7 @@ public abstract class SceneAbstract extends Scene {
    */
   public SceneAbstract(Pane root, AppWindow appWindow, SimpleDoubleProperty width, SimpleDoubleProperty height, boolean depthBuffer) {
     super(root, width.get(), height.get(), depthBuffer, SceneAntialiasing.BALANCED);
-    logger.info(Double.toString(appWindow.getWidth()) + " " + Double.toString(appWindow.getHeight()));
+    logger.info(appWindow.getWidth() + " " + appWindow.getHeight());
     this.root = root;
     width.bind(root.widthProperty());
     height.bind(root.heightProperty());
@@ -503,6 +504,7 @@ public abstract class SceneAbstract extends Scene {
     timestampText.setX(20);
     timestampText.setY(40);
     timestampText.getStyleClass().add("font");
+    timestampText.setFill(Theme.getLabelFg());
     runwayScene.scene.root.getChildren().add(timestampText);
 
     WritableImage image = runwayScene.scene.root.snapshot(null,null);
@@ -535,6 +537,7 @@ public abstract class SceneAbstract extends Scene {
     timestampText.setX(20);
     timestampText.setY(40);
     timestampText.getStyleClass().add("font");
+    timestampText.setFill(Theme.getLabelFg());
     runwayScene.scene.root.getChildren().add(timestampText);
 
     WritableImage image = runwayScene.scene.root.snapshot(null, null);
@@ -570,7 +573,7 @@ public abstract class SceneAbstract extends Scene {
         fileChooser.setTitle("Export side view");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase() + " format(*." + format + ")", "*." + format);
         fileChooser.getExtensionFilters().add(extFilter);
-        fileChooser.setInitialFileName("Side_View");
+        fileChooser.setInitialFileName("runway image");
         File file = fileChooser.showSaveDialog(new Stage());
 
         try {

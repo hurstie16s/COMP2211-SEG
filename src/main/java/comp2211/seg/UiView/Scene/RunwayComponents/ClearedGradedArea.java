@@ -13,16 +13,16 @@ import javafx.scene.shape.Polygon;
  * A custom polygon representing a cleared and graded area for an airport runway.
  */
 public class ClearedGradedArea extends Polygon {
-    private Parent parent;
+    private final Parent parent;
 
-    private SimpleDoubleProperty left = new SimpleDoubleProperty(0);
-    private SimpleDoubleProperty leftStart = new SimpleDoubleProperty(0);
-    private SimpleDoubleProperty leftEnd = new SimpleDoubleProperty(0);
-    private SimpleDoubleProperty right = new SimpleDoubleProperty(0);
-    private SimpleDoubleProperty rightStart = new SimpleDoubleProperty(0);
-    private SimpleDoubleProperty innerHeight = new SimpleDoubleProperty(75);
-    private SimpleDoubleProperty outerHeight = new SimpleDoubleProperty(105);
-    private SimpleDoubleProperty rightEnd = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty left = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty leftStart = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty leftEnd = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty right = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty rightStart = new SimpleDoubleProperty(0);
+    private final SimpleDoubleProperty innerHeight = new SimpleDoubleProperty(75);
+    private final SimpleDoubleProperty outerHeight = new SimpleDoubleProperty(105);
+    private final SimpleDoubleProperty rightEnd = new SimpleDoubleProperty(0);
 
     /**
      * Constructs a new instance of the ClearedGradedArea class with the specified parent.

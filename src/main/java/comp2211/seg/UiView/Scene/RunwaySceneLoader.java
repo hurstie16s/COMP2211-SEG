@@ -125,6 +125,8 @@ public class RunwaySceneLoader extends SceneAbstract{
 
         subScene.widthProperty().bind(root.widthProperty());
         subScene.heightProperty().bind(root.heightProperty());
+        subScene.cameraProperty().get().translateZProperty().set(-500);
+
     }
     public void buildmenuless(){
         super.buildmenuless();
@@ -210,9 +212,11 @@ public void buildmenulessalt(){
     fullScreen.setFitHeight(25); // adjust the height and width to your liking
     fullScreen.setFitWidth(25);
     fullScreen.setPreserveRatio(true);
+    fullScreen.setPickOnBounds(false);
     StackPane.setAlignment(fullScreen, Pos.TOP_RIGHT); // align the icon to the top right corner
     StackPane.setMargin(fullScreen, new Insets(10));
     stackPane.getChildren().addAll(fullScreen);
+
 
     root.getChildren().add(stackPane);
     subScene.widthProperty().bind(root.widthProperty());
@@ -222,6 +226,13 @@ public void buildmenulessalt(){
     scene.root.minWidthProperty().bind(root.widthProperty());
     scene.root.maxHeightProperty().bind(root.heightProperty());
     scene.root.minHeightProperty().bind(root.heightProperty());
+
+    Pane overlay = new Pane();
+    overlay.maxWidthProperty().bind(root.widthProperty());
+    overlay.minWidthProperty().bind(root.widthProperty());
+    overlay.maxHeightProperty().bind(root.heightProperty());
+    overlay.minHeightProperty().bind(root.heightProperty());
+    root.getChildren().add(overlay);
 }
 
     public void buildwithTime() {

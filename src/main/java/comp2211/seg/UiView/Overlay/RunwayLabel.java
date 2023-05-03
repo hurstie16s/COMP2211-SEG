@@ -1,8 +1,10 @@
 package comp2211.seg.UiView.Overlay;
 
 import comp2211.seg.Controller.Interfaces.GlobalVariables;
+import comp2211.seg.Controller.Stage.AppWindow;
 import comp2211.seg.Controller.Stage.Theme;
 import comp2211.seg.UiView.Scene.RunwayScene;
+import comp2211.seg.UiView.Scene.RunwaySceneLoader;
 import comp2211.seg.UiView.Scene.Utilities.CssColorParser;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -18,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 
@@ -29,10 +32,10 @@ public class RunwayLabel extends Group {
     private final RunwayScene scene;
     private boolean direction;
     private String name;
-    private Rotate xRotate;
-    private Rotate yRotate;
-    private Rotate zRotate;
-    private Text label;
+    private final Rotate xRotate;
+    private final Rotate yRotate;
+    private final Rotate zRotate;
+    private final Text label;
 
     /**
      * Constructs a new RunwayLabel with the specified name, color, x-offset, y-offset, length, scene, and direction.
@@ -50,7 +53,7 @@ public class RunwayLabel extends Group {
         this.scene = scene;
         this.direction = direction;
         this.name = name;
-        this.visibleProperty().bind(visibility);
+        this.visibleProperty().bind(visibility.and(Bindings.when(new SimpleBooleanProperty(direction)).then(Bindings.lessThan(length,0)).otherwise(Bindings.greaterThan(length,0))));
         /**
         visibleProperty().bind
                 (Bindings.and(
@@ -74,13 +77,27 @@ public class RunwayLabel extends Group {
         label.getStyleClass().add("runwaylabelfg");
         label.setFill(Theme.getLabelFg());
         //label.setFont(Theme.font);
-        label.getStyleClass().add("font");
+        scene.root.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                label.setFont(new Font(t1.doubleValue()/25));
+                if (direction) {
+                    label.yProperty().set((t1.doubleValue()/30) / 2 + 8);
+                    label.xProperty().set(-label.getBoundsInLocal().getWidth() * ((t1.doubleValue()/25) / label.getBoundsInLocal().getHeight()) / 2);
+                } else {
+                    label.yProperty().set(-5);
+                    label.xProperty().set(-label.getBoundsInLocal().getWidth() * ((t1.doubleValue()/25) / label.getBoundsInLocal().getHeight()) / 2 - 10);
+                }
+
+            }
+        });
+        label.setFont(new Font(scene.root.heightProperty().doubleValue()/25));
         if (direction) {
-            label.yProperty().set(label.getBoundsInLocal().getHeight() / 2 + 8);
-            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2);
+            label.yProperty().set((scene.root.heightProperty().doubleValue()/25) / 2 + 8);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() * ((scene.root.heightProperty().doubleValue()/25) / label.getBoundsInLocal().getHeight()) / 2);
         } else {
             label.yProperty().set(-5);
-            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 - 10);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() * ((scene.root.heightProperty().doubleValue()/25) / label.getBoundsInLocal().getHeight()) / 2 - 10);
         }
 
         labelRotateGroup.getTransforms().addAll(
@@ -177,6 +194,7 @@ public class RunwayLabel extends Group {
 
         Group labelRotateGroup = new Group();
         label = new Text();
+        label.autosize();
 
 
         length.addListener(new ChangeListener<Number>() {
@@ -189,14 +207,29 @@ public class RunwayLabel extends Group {
         //label.setFill(Theme.getLabelFg());
         label.getStyleClass().clear();
         label.getStyleClass().add("runwaylabelfg");
+        label.setFill(Theme.getLabelFg());
         //label.setFont(Theme.font);
-        label.getStyleClass().add("font");
+        scene.root.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                label.setFont(new Font(t1.doubleValue()/35));
+                if (direction) {
+                    label.yProperty().set((t1.doubleValue()/35) / 2 + 8);
+                    label.xProperty().set(-label.getBoundsInLocal().getWidth() * ((t1.doubleValue()/35) / label.getBoundsInLocal().getHeight()) / 2);
+                } else {
+                    label.yProperty().set(-5);
+                    label.xProperty().set(-label.getBoundsInLocal().getWidth() * ((t1.doubleValue()/35) / label.getBoundsInLocal().getHeight()) / 2 - 10);
+                }
+
+            }
+        });
+        label.setFont(new Font(scene.root.heightProperty().doubleValue()/35));
         if (direction) {
-            label.yProperty().set(label.getBoundsInLocal().getHeight() / 2 + 8);
-            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2);
+            label.yProperty().set((scene.root.heightProperty().doubleValue()/35) / 2 + 8);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() * ((scene.root.heightProperty().doubleValue()/35) / label.getBoundsInLocal().getHeight()) / 2);
         } else {
             label.yProperty().set(-5);
-            label.xProperty().set(-label.getBoundsInLocal().getWidth() / 2 - 10);
+            label.xProperty().set(-label.getBoundsInLocal().getWidth() * ((scene.root.heightProperty().doubleValue()/35) / label.getBoundsInLocal().getHeight()) / 2 - 10);
         }
 
         labelRotateGroup.getTransforms().addAll(

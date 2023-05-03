@@ -7,6 +7,7 @@ import comp2211.seg.ProcessDataModel.Airport;
 import comp2211.seg.ProcessDataModel.FileHandler;
 import comp2211.seg.ProcessDataModel.Obstacle;
 import comp2211.seg.ProcessDataModel.Runway;
+import comp2211.seg.UiView.Scene.RunwayComponents.Sub;
 import comp2211.seg.UiView.Scene.SceneComponents.*;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -577,14 +578,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         airportData.add(makeTableCell(appWindow.runway.stripEndProperty()),8,3);
         airportData.add(makeTableCell(new SimpleDoubleProperty(500)),9,3);
         for (Node node:airportData.getChildren()) {
-            if (node instanceof Control) {
-                Control control = (Control) node;
+            if (node instanceof Control control) {
                 control.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 //control.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
                 control.getStyleClass().add("fgBorder");
             }
-            if (node instanceof Pane) {
-                Pane pane = (Pane) node;
+            if (node instanceof Pane pane) {
                 pane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 //pane.setBorder(new Border(new BorderStroke(Theme.fg,BorderStrokeStyle.SOLID,null,new BorderWidths(1))));
                 pane.getStyleClass().add("fgBorder");
@@ -1121,8 +1120,12 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         box.setPadding(new Insets(0,5,0,5));
 
         scrollPane.setContent(box); // TODO: Finish
-
-        return box;
+        Pane pane = new Pane(scrollPane);
+        scrollPane.maxHeightProperty().bind(pane.heightProperty());
+        scrollPane.minHeightProperty().bind(pane.heightProperty());
+        scrollPane.maxWidthProperty().bind(pane.widthProperty());
+        scrollPane.minWidthProperty().bind(pane.widthProperty());
+        return pane;
 
     }
 
@@ -1399,6 +1402,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         HBox segment = new HBox();
         ToggleButton button = new ToggleButton(label1);
         ToggleButton button2 = new ToggleButton(label2);
+        button.setPadding(new Insets(0));
+        button2.setPadding(new Insets(0));
 
         button.getStyleClass().add("font");
         button.getStyleClass().add("toggleButtonNotFocused");

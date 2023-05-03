@@ -35,8 +35,8 @@ public class AppWindow {
     private static final Logger logger = LogManager.getLogger(AppWindow.class);
 
     private final Stage stage;
-    private SimpleDoubleProperty width = new SimpleDoubleProperty(1280);
-    private SimpleDoubleProperty height = new SimpleDoubleProperty(720);
+    private final SimpleDoubleProperty width = new SimpleDoubleProperty(1280);
+    private final SimpleDoubleProperty height = new SimpleDoubleProperty(720);
     /**
      * The Current scene.
      */
@@ -82,7 +82,8 @@ public class AppWindow {
         this.width.set(width);
         this.height.set(height);
         setupResources("/style/darkStyle.css","/style/lightStyle.css", "/style/blueYellowCB.css", "/style/redGreenCB.css");
-
+        stage.minWidthProperty().set(960);
+        stage.minHeightProperty().set(640);
 
         airports = AirportsData.getAirports();
         obstaclePresets = new ArrayList<>();
@@ -389,10 +390,10 @@ public class AppWindow {
 
     public void setStyle(String pathToStyle,String style) {
 
-        if(!(pathToStyle.equals(this.pathToStyle.get()))) {
+        if(!(pathToStyle.equals(AppWindow.pathToStyle.get()))) {
 
             logger.info("theme changed to "+ pathToStyle);
-            this.pathToStyle.set(pathToStyle);
+            AppWindow.pathToStyle.set(pathToStyle);
             if (style.equals("d")) {
                 theme.setThemeColors(cssDarkColors);
             } else if (style.equals("e")) {
