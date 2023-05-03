@@ -94,4 +94,5 @@ class FileHandlerTest {
             assertEquals(height, exportedImage.getHeight(), "Exported image height is incorrect");
         });
     }
+
 }

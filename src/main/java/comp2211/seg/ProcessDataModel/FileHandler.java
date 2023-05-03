@@ -22,7 +22,9 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -750,5 +752,56 @@ public abstract class FileHandler {
             // TODO: Handle Error
             throw new RuntimeException(e);
         }
+    }
+
+    private boolean exportBreakdownToTxt (
+            String leftToraHeader,
+            String leftTora,
+            String rightToraHeader,
+            String rightTora,
+            String leftTodaHeader,
+            String leftToda,
+            String rightTodaHeader,
+            String rightToda,
+            String leftAsdaHeader,
+            String leftAsda,
+            String rightAsdaHeader,
+            String rightAsda,
+            String leftLdaHeader,
+            String leftLda,
+            String rightLdaHeader,
+            String rightLda,
+            File fileToExportTo
+    ) {
+        String[] dataComponents = new String[] {
+                leftToraHeader,
+                leftTora,
+                rightToraHeader,
+                rightTora,
+                leftTodaHeader,
+                leftToda,
+                rightTodaHeader,
+                rightToda,
+                leftAsdaHeader,
+                leftAsda,
+                rightAsdaHeader,
+                rightAsda,
+                leftLdaHeader,
+                leftLda,
+                rightLdaHeader,
+                rightLda
+        };
+
+        String data = "Calculation Breakdowns:\n" + String.join("\n", dataComponents)+"\nEnd of Calculation Breakdowns";
+
+        boolean success = true;
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileToExportTo));
+            writer.write(data);
+            writer.close();
+        } catch (IOException e) {
+            success = false;
+        }
+        return success;
     }
 }
