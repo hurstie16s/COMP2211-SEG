@@ -9,6 +9,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.control.Label;
@@ -88,6 +89,7 @@ public class RunwaySceneLoader extends SceneAbstract{
             scene.y = event.getSceneY();
             scene.anglex = scene.angleXProperty.get();
             scene.angley = scene.angleZProperty.get();
+
         });
         setOnMouseDragged(event ->{
             scene.angleXProperty.set(Math.min(Math.max(scene.anglex + scene.y - event.getSceneY(), -90), 0));
@@ -140,35 +142,7 @@ public class RunwaySceneLoader extends SceneAbstract{
         scene.root.maxHeightProperty().bind(root.heightProperty());
         scene.root.minHeightProperty().bind(root.heightProperty());
     }
-//    public void buildmenulessalt(){
-//        super.buildmenuless();
-//        type = "buildmenulessalt";
-//        Pane runwayPane = new Pane();
-//        Pane subPane = new Pane();
-//
-//        scene = new RunwayScene(runwayPane,appWindow, root.widthProperty().get(), root.heightProperty().get(),false);
-//        scene.buildmenulessalt();
-//        scene.initialise();
-//        subScene = new Sub(subPane, root.getWidth(), root.getHeight());
-//        subPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-//        subPane.getStylesheets().add(AppWindow.pathToStyle.get());
-//        runwayPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-//        getRoot().getStyleClass().add("transparent");
-//        root.getStyleClass().add("sky");
-//        mainPane.getStyleClass().add("transparent");
-//        subPane.getChildren().add(runwayPane);
-//        root.getChildren().removeAll(root.getChildren());
-//        root.getChildren().add(subScene);
-//
-//        root.getChildren().add(mainPane);
-//        subScene.widthProperty().bind(root.widthProperty());
-//        subScene.heightProperty().bind(root.heightProperty());
-//
-//        scene.root.maxWidthProperty().bind(root.widthProperty());
-//        scene.root.minWidthProperty().bind(root.widthProperty());
-//        scene.root.maxHeightProperty().bind(root.heightProperty());
-//        scene.root.minHeightProperty().bind(root.heightProperty());
-//    }
+
 public void buildmenulessalt(){
     super.buildmenuless();
     type = "buildmenulessalt";
@@ -288,4 +262,6 @@ public void buildmenulessalt(){
         scene.refresh();
     }
 
+
 }
+

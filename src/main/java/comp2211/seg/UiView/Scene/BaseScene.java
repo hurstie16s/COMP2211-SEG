@@ -557,8 +557,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         airportData.add(desl,0,2);
         airportData.add(makeTableCell(appWindow.runway.runwayLengthProperty()),1,2);
         airportData.add(makeTableCell(appWindow.runway.runwayWidthProperty()),2,2);
-        airportData.add(makeTableCell(appWindow.runway.stopwayLeftProperty()),3,2);
-        airportData.add(makeTableCell(appWindow.runway.clearwayLeftProperty()),4,2);
+        airportData.add(makeTableCell(appWindow.runway.stopwayRightProperty()),3,2);
+        airportData.add(makeTableCell(appWindow.runway.clearwayRightProperty()),4,2);
         airportData.add(makeTableCell(appWindow.runway.RESAWidthProperty()),5,2);
         airportData.add(makeTableCell(appWindow.runway.RESAHeightProperty()),6,2);
         airportData.add(makeTableCell(appWindow.runway.dispThresholdLeftProperty()),7,2);
@@ -570,8 +570,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         airportData.add(desr,0,3);
         airportData.add(makeTableCell(appWindow.runway.runwayLengthProperty()),1,3);
         airportData.add(makeTableCell(appWindow.runway.runwayWidthProperty()),2,3);
-        airportData.add(makeTableCell(appWindow.runway.stopwayRightProperty()),3,3);
-        airportData.add(makeTableCell(appWindow.runway.clearwayRightProperty()),4,3);
+        airportData.add(makeTableCell(appWindow.runway.stopwayLeftProperty()),3,3);
+        airportData.add(makeTableCell(appWindow.runway.clearwayLeftProperty()),4,3);
         airportData.add(makeTableCell(appWindow.runway.RESAWidthProperty()),5,3);
         airportData.add(makeTableCell(appWindow.runway.RESAHeightProperty()),6,3);
         airportData.add(makeTableCell(appWindow.runway.dispThresholdRightProperty()),7,3);
