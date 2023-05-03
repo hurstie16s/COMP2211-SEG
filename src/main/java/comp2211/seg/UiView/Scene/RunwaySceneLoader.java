@@ -1,7 +1,6 @@
 package comp2211.seg.UiView.Scene;
 
 import comp2211.seg.Controller.Stage.AppWindow;
-import comp2211.seg.Controller.Stage.HandlerPane;
 import comp2211.seg.UiView.Scene.RunwayComponents.Sub;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;

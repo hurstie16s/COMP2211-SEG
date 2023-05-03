@@ -196,7 +196,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         //root.setBackground(new Background(new BackgroundFill(Theme.unfocusedBG,null,null)));
         root.getStyleClass().add("unfocusedBG");
         mainPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
-        if (tabLayout == null) {
+        if (tabLayout == null || AppWindow.currentScene instanceof HomeScene) {
             ArrayList<Pair<String, Pane>> tabs = new ArrayList<>();
             tabs.add(new Pair<>("Airport Configuration", makeAirportConfig()));
 
