@@ -366,13 +366,17 @@ public class Runway extends RunwayValues{
         runwayObstacle.lengthProperty().set(obstacleToAdd.lengthProperty().get());
         runwayObstacle.widthProperty().set(obstacleToAdd.widthProperty().get());
         //runwayObstacle.distFromThresholdProperty().set(obstacleToAdd.distFromThresholdProperty().get());
-        runwayObstacle.distFromThresholdProperty().set(runwayLength.get()/2);
+        runwayObstacle.distFromThresholdProperty().set(runwayLength.get() / 2);
         //Aleks - ^ replaced with default setting which place obstacle in the middle.
 
         //hasRunwayObstacle.set(true); // Listener will call recalculate
         //Aleks - ^ removed as it is not needed at all here. Visibility is triggered by yes/no button.
-        logger.info("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
-        logChange("Added Obstacle "+ runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get(), Boolean.TRUE);
+        logger.info("Added Obstacle " + runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
+        if ((runwayObstacle.getObstacleDesignator().length() >= 2) && (runwayObstacle.getObstacleDesignator().substring(0, 2).equals("ob"))) {
+            logChange("Added Obstacle " + runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get(), Boolean.FALSE);
+        } else {
+            logChange("Added Obstacle " + runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get(), Boolean.TRUE);
+        }
 
     }
 
@@ -720,6 +724,7 @@ public class Runway extends RunwayValues{
                 trayIcon.setToolTip("New change: " + change);
                 try {
                     tray.add(trayIcon);
+                    trayIcon.displayMessage("Runway Tool New Change", change, TrayIcon.MessageType.INFO);
                     //JOptionPane.showMessageDialog(null, "New change: " + change, "Runway Tool", JOptionPane.INFORMATION_MESSAGE);
                 } catch (AWTException e) {
                     System.err.println(e);
