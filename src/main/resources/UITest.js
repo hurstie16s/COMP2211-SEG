@@ -2,7 +2,8 @@
 //testing changing airports and scroll bar in base scene
 function Test1()
 {
- TestedApps.run1.Run(1, true);
+  TestedApps.run.Run(1, true);
+  Aliases.explorer.wndShell_TrayWnd.ReBarWindow32.MSTaskSwWClass.MSTaskListWClass.Click(420, 26);
   let java = Aliases.java;
   let stage = java.stageHeathrowLhr;
   OCR.Recognize(stage.homescene).BlockByText("Application").Click();
@@ -14,26 +15,28 @@ function Test1()
   
 }
 
+
+
 // Testing changing airport and runway in base scene
 function Test2()
 {
- // OCR.Recognize(Aliases.explorer.wndShell_TrayWnd.ReBarWindow32.MSTaskSwWClass.MSTaskListWClass).BlockByText("lila").Click();
-  TestedApps.run1.Run(1, true);
   let java = Aliases.java;
   let stage = java.stageHeathrowLhr;
-  stage.homescene.Click(849, 567);
-  stage.basescene.Click(387, 147);
+  OCR.Recognize(stage.homescene).BlockByText("Application").Click();
+  aqObject.CheckProperty(Aliases.java.stageHeathrowLhr.basescene, "Enabled", cmpEqual, true);
+  let baseScene = stage.basescene;
+  baseScene.Click(383, 134);
+  baseScene.Click(310, 211);
   let comboBoxPopupControl_3 = java.comboboxpopupcontrol3;
-  comboBoxPopupControl_3.scene21.list_view.comboboxlistviewskin21StanstedSt.Click(201, 9);
-  java.stageGatwickLgw.basescene.Click(285, 210);
-  OCR.Recognize(comboBoxPopupControl_3).BlockByText("26L").Click();
-  stage.Close();
+  comboBoxPopupControl_3.Click(143, 39);
+  comboBoxPopupControl_3.Click(141, 25);
+  baseScene.Click(326, 133);
+  comboBoxPopupControl_3.scene21.list_view.comboboxlistviewskin21Manchester.Click(194, 11);
 }
 
 // testing all exporting UI
 function Test3()
 {
-  TestedApps.run1.Run(1, true);
   let java = Aliases.java;
   let stage = java.stageHeathrowLhr;
   OCR.Recognize(stage.homescene).BlockByText("Application").Click();
@@ -132,6 +135,7 @@ function Test6()
 // Testing dragging the obstacle configuration boxes
 function Test7()
 {
+  TestedApps.run.Run(1, true);
   let stage = Aliases.java.stageHeathrowLhr;
   OCR.Recognize(stage.homescene).BlockByText("Application").Click();
   let baseScene = stage.basescene;
@@ -155,6 +159,7 @@ function Test7()
 //Testing the ESC key on each scene and exiting app via ESC
 function Test8()
 {
+  TestedApps.run.Run(1, true);
   let stage = Aliases.java.stageHeathrowLhr;
   let homeScene = stage.homescene;
   OCR.Recognize(homeScene).BlockByText("Application").Click();
@@ -176,6 +181,7 @@ function Test8()
 // Testing TopView 3D model manipulation
 function Test9()
 {
+  TestedApps.run.Run(1, true);
   let stage = Aliases.java.stageHeathrowLhr;
   let homeScene = stage.homescene;
   OCR.Recognize(homeScene).BlockByText("Application").Click();
@@ -196,6 +202,7 @@ function Test9()
 // Testing SideView 3D model manipulation 
 function Test10()
 {
+  TestedApps.run.Run(1, true);
   let stage = Aliases.java.stageHeathrowLhr;
   OCR.Recognize(stage.homescene).BlockByText("Start Application").Click();
   let baseScene = stage.basescene;
@@ -219,6 +226,7 @@ function Test10()
 //Testing 3D modelling re-Allignment
 function Test11()
 {
+  TestedApps.run.Run(1, true);
   let stage = Aliases.java.stageHeathrowLhr;
   OCR.Recognize(stage.homescene).BlockByText("Application").Click();
   let baseScene = stage.basescene;
@@ -246,6 +254,7 @@ function Test11()
 // Testing help menu toggle
 function Test12()
 {
+  TestedApps.run.Run(1, true);
   let java = Aliases.java;
   let stage = java.stageHeathrowLhr;
   OCR.Recognize(stage.homescene).BlockByText("Application").Click();
@@ -256,19 +265,27 @@ function Test12()
   stage.Close();
 }
 
-// Testing changing the theme
+//Testing the colourBlind options
 function Test13()
 {
+  TestedApps.run.Run(1, true);
   let java = Aliases.java;
   let stage = java.stageHeathrowLhr;
   OCR.Recognize(stage.homescene).BlockByText("Application").Click();
   let baseScene = stage.basescene;
   OCR.Recognize(baseScene.tabbuttonAirportConfiguration).BlockByText("Options").Click();
-//  OCR.Recognize(java.contextmenu3.scene21).BlockByText("Colour").Click();
+  OCR.Recognize(java.contextmenu3.scene21).BlockByText("Colour").Click();
+  baseScene.menubar.JavaFXMenu.Click("Options|Colour Schemes|Light Theme");
+  OCR.Recognize(baseScene.tabbuttonAirportConfiguration).BlockByText("Options").Click();
+  stage.Close();
+  
+
+  OCR.Recognize(stage.homescene).BlockByText("Application").Click();
+  OCR.Recognize(baseScene.tabbuttonAirportConfiguration).BlockByText("Options").Click();
+  OCR.Recognize(java.contextmenu3.scene21).BlockByText("Colour").Click();
   baseScene.menubar.JavaFXMenu.Click("Options|Colour Schemes|Light Theme");
   OCR.Recognize(baseScene.tabbuttonAirportConfiguration).BlockByText("Options").Click();
   stage.Close();
 }
-
 
 
