@@ -53,8 +53,13 @@ public class Runway extends RunwayValues{
      * @param rightASDA   the right asda
      */
     public Runway(String designators, double leftTora, double leftToda, double leftLDA, double leftASDA, double rightTora, double rightToda, double rightLDA, double rightASDA){
-        runwayDesignatorLeft.set(designators.split("/")[0]);
-        runwayDesignatorRight.set(designators.split("/")[1]);
+        try {
+            runwayDesignatorLeft.set(designators.split("/")[0]);
+            runwayDesignatorRight.set(designators.split("/")[1]);
+        } catch (Exception e) {
+            runwayDesignatorLeft.set(designators);
+            dualDirectionRunway.set(false);
+        }
         inputLeftTora.set(leftTora);
         inputLeftToda.set(leftToda);
         inputLeftLda.set(leftLDA);
