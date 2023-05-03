@@ -111,6 +111,7 @@ public abstract class SceneAbstract extends Scene {
     this.appWindow = appWindow;
   }
 
+
   /**
    * Abstract method for initialization.
    */
@@ -510,15 +511,28 @@ public abstract class SceneAbstract extends Scene {
     WritableImage image = runwayScene.scene.root.snapshot(null,null);
     exportImage(format,image);
   }
+  /**Generic method for all formats. Currently, app uses png only.
+   * Method uses RunwaySceneLoader object to build the 3D runway scene, rotates it accordingly
+   * and after adding time stamp creates WritableImage object,which is exported
+   * using helper method exportImage
+   */
   /**
-   * Export Top-down View button event
+   * Exports a side view of the current scene as an image in the specified format.
+   *
+   * @param format The format in which to export the image (e.g. "png", "jpg", etc.).
    */
   protected void exportSideViewButtonEvent(String format) {
     logger.info("exporting SideView ... ");
+
+    // Define the width and height of the output image
     double outputWidth = 1280;
     double outputHeight = 720;
+
+    // Create a new RunwaySceneLoader with the specified dimensions and build a menu-less alternative view
     RunwaySceneLoader runwayScene = new RunwaySceneLoader(new Pane(), appWindow, outputWidth, outputHeight);
     runwayScene.buildmenulessalt();
+
+    // Set the view orientation if the 'portrait' setting is enabled, otherwise toggle the view orientation
     if (Settings.portrait.get()) {
       runwayScene.scene.angleYProperty().set(90);
       runwayScene.scene.angleXProperty().set(90);
@@ -526,43 +540,43 @@ public abstract class SceneAbstract extends Scene {
     } else {
       runwayScene.scene.toggleView();
     }
+
+    // Add a CSS style class to the root node of the scene
     runwayScene.scene.root.getStyleClass().add("sky");
 
-    // Add timestamp to scene
+    // Add a timestamp text element to the scene
     LocalDateTime now = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd" + "\n" + "HH:mm:ss");
     String timestamp = now.format(formatter);
     Text timestampText = new Text(timestamp);
-
     timestampText.setX(20);
     timestampText.setY(40);
     timestampText.getStyleClass().add("font");
     timestampText.setFill(Theme.getLabelFg());
     runwayScene.scene.root.getChildren().add(timestampText);
 
+    // Capture a snapshot of the root node as a writable image
     WritableImage image = runwayScene.scene.root.snapshot(null, null);
+
+    // Export the image in the specified format
     exportImage(format, image);
   }
 
-  protected void exportImage(String format, WritableImage image) {
 
+  public void exportImage(String format, WritableImage image) {
     // Create an ImageView to display the preview image
     ImageView preview = new ImageView(image);
     preview.setPreserveRatio(true);
     preview.setFitWidth(600);
-
     // Create a dialog to display the preview
     Dialog<Void> previewDialog = new Dialog<>();
     previewDialog.setTitle("Preview");
     previewDialog.getDialogPane().setContent(preview);
-
     // Add a "Export" button to the dialog
     ButtonType exportButtonType = new ButtonType("Export", ButtonBar.ButtonData.OK_DONE);
     previewDialog.getDialogPane().getButtonTypes().add(exportButtonType);
-
     // Add a "Cancel" button to the dialog
     previewDialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-
     // Show the preview dialog and wait for a button to be clicked
     Optional result = previewDialog.showAndWait();
 
@@ -571,16 +585,21 @@ public abstract class SceneAbstract extends Scene {
       if (result.get() == exportButtonType) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Export side view");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase() + " format(*." + format + ")", "*." + format);
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(format.toUpperCase()
+            + " format(*." + format + ")", "*." + format);
         fileChooser.getExtensionFilters().add(extFilter);
         fileChooser.setInitialFileName("runway image");
         File file = fileChooser.showSaveDialog(new Stage());
 
         try {
+          // Write the image to the specified file using the specified format
           ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
-          logger.info("image exported");
-        } catch (IOException e) {
-          logger.error(e);
+
+          // Log a success message if the export was successful
+          logger.info("Image exported successfully");
+        } catch (IOException exportException) {
+          // Log an error message if an exception occurs during export
+          logger.error("Export error: " + exportException.getMessage(), exportException);
         }
       }
     }

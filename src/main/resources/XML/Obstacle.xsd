@@ -7,7 +7,7 @@
             <xs:element type="xs:double" name="Height"/>
             <xs:element type="xs:double" name="Length"/>
             <xs:element type="xs:double" name="Width"/>
-            <xs:element type="xs:string" name="Distance_From_Threshold"/>
+            <xs:element type="xs:string" name="Distance_From_Threshold" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

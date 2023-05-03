@@ -11,6 +11,7 @@ import comp2211.seg.UiView.Scene.RunwayComponents.Sub;
 import comp2211.seg.UiView.Scene.SceneComponents.*;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -911,7 +912,8 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
         HBox posSlider = new HBox(leftButton,slider,rightButton);
         posSlider.setAlignment(Pos.CENTER);
-        Node l = makeOutputLabel(appWindow.runway.runwayObstacle.distFromThresholdProperty(),new SimpleBooleanProperty(true),5);
+
+        Node l = makeOutputLabel(appWindow.runway.runwayObstacle.distFromThresholdProperty(),appWindow.runway.dispThresholdLeftProperty().multiply(-1),new SimpleBooleanProperty(true),5);
         Node r = makeOutputLabel(appWindow.runway.runwayObstacle.distFromOtherThresholdProperty(),new SimpleBooleanProperty(true),5);
 
         VBox posLeft = new VBox(makeOutputLabel(new SimpleStringProperty("Left"),new SimpleBooleanProperty(true),18),l);
@@ -987,6 +989,44 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
             }
         });
         data.textProperty().set(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
+                SimpleStringProperty("Error")).get());
+        data.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                logger.info("clicked " + data.textProperty().get());
+            }
+        });
+        return data;
+
+    }
+    private Node makeOutputLabel(SimpleDoubleProperty property,DoubleBinding propertyoffset, SimpleBooleanProperty visibility, int i) {
+        Label data = new Label();
+        //data.setFont(Theme.fontsmall);
+        data.getStyleClass().add("fontsmall");
+        //data.setTextFill(Theme.fg);
+        data.getStyleClass().add("fg");
+        data.setText(String.valueOf(property.getValue()));
+        property.addListener((observableValue, number, t1) -> {
+            if (!t1.equals(number)){
+                if (visibility.get()){
+                    data.textProperty().set(Math.round(property.get()+propertyoffset.get())+appWindow.runway.unitsProperty().get());
+                }else {
+                    data.textProperty().set("Error");
+                }
+                logger.info(data.textProperty().get());
+            }
+        });
+        propertyoffset.addListener((observableValue, number, t1) -> {
+            if (!t1.equals(number)){
+                if (visibility.get()){
+                    data.textProperty().set(Math.round(property.get()+propertyoffset.get())+appWindow.runway.unitsProperty().get());
+                }else {
+                    data.textProperty().set("Error");
+                }
+                logger.info(data.textProperty().get());
+            }
+        });
+        data.textProperty().set(Bindings.when(visibility).then(new SimpleStringProperty(Long.toString(Math.round(property.get()+propertyoffset.get()))).concat(appWindow.runway.unitsProperty())).otherwise(new
                 SimpleStringProperty("Error")).get());
         data.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override

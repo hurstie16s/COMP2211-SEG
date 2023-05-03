@@ -102,6 +102,8 @@ public class AppWindow {
         //startMainScene();
         //startRunwayScene();
     }
+
+
     /**
      * Sets up the resources for the application.
      */
