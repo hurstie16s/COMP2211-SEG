@@ -27,7 +27,7 @@ public class AirportsData {
         airports.add(apMAN);
         Airport apDEMO = (new Airport("Demo Airport", "09L/27R", 4000, 5000, 3500, 4500, 4000, 5000, 3500, 4500));
         apDEMO.addRunway(new Runway("08/26", 4000, 5000, 3500, 4500, 4000, 5000, 3500, 4500));
-//        apDEMO.addRunway(new Runway("07", 4000, 5000, 3500, 4500, 4000, 5000, 3500, 4500));
+        apDEMO.addRunway(new Runway("07", 4000, 5000, 3500, 4500));
 
         airports.add(apDEMO);
         //        airports.add(new Airport("Stansted (STN)","04/22",3048,3048,2908,3048,3048,3128,3048,3048));

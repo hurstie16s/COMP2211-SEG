@@ -103,9 +103,60 @@ public class Runway extends RunwayValues{
         recalculate();
         validityChecks();
         logChange("Runway Initialised", Boolean.FALSE);
+    }public Runway(String designators, double leftTora, double leftToda, double leftLDA, double leftASDA){
+        try {
+            runwayDesignatorLeft.set(designators.split("/")[0]);
+            runwayDesignatorRight.set(designators.split("/")[1]);
+        } catch (Exception e) {
+            runwayDesignatorLeft.set(designators);
+            dualDirectionRunway.set(false);
+        }
 
-        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
-        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
+        runwayDesignatorLeft.set(designators);
+        runwayDesignatorRight.set("  ");
+        inputLeftTora.set(leftTora);
+        inputLeftToda.set(leftToda);
+        inputLeftLda.set(leftLDA);
+        inputLeftAsda.set(leftASDA);
+        inputRightTora.set(0);
+        inputRightToda.set(0);
+        inputRightLda.set(0);
+        inputRightAsda.set(0);
+        dualDirectionRunway.set(false);
+
+
+        for (Property prop: new Property[] {
+                runwayDesignatorLeft,
+                runwayLength,
+                hasRunwayObstacle,
+                directionLeft,
+                directionRight
+        }) {
+            prop.addListener((observableValue, o, t1) -> recalculate());
+        }
+        logger.info("Created Runway object");
+
+        logger.info("Created initial VOID runway obstacle");
+
+        runwayLength.bind(Bindings.when(Bindings.greaterThan(inputLeftTora,inputRightTora)).then(inputLeftTora).otherwise(inputRightTora));
+        runwayObstacle = new Obstacle("VOID", 5,runwayLength.get()/2);
+        clearwayLeft.bind(inputRightToda.subtract(inputRightTora));
+        stopwayLeft.bind(inputRightAsda.subtract(inputRightTora));
+        dispThresholdRight.bind(inputRightTora.subtract(inputRightLda));
+        clearwayRight.bind(inputLeftToda.subtract(inputLeftTora));
+        stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
+        dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
+        //direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
+        slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2)).greaterThan(runwayObstacle.lengthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2))).otherwise(runwayObstacle.lengthProperty().divide(2).add(240)));
+        //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
+
+
+        runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
+
+
+        recalculate();
+        validityChecks();
+        logChange("Runway Initialised", Boolean.FALSE);
     }
 
     /**
@@ -165,8 +216,6 @@ public class Runway extends RunwayValues{
         recalculate();
         validityChecks();
 
-        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
-        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
     }
 
     /**
@@ -2321,6 +2370,7 @@ public class Runway extends RunwayValues{
     public void setUnits(String units) {
         RunwayValues.units.set(units);
     }
+
 
 
 }
