@@ -4,6 +4,8 @@ import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -116,6 +118,8 @@ public class Runway extends RunwayValues{
         );
         //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
 
+        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
+        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
 
         runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
 
@@ -123,16 +127,9 @@ public class Runway extends RunwayValues{
         recalculate();
         validityChecks();
         logChange("Runway Initialised", Boolean.FALSE);
-    }public Runway(String designators, double leftTora, double leftToda, double leftLDA, double leftASDA){
-        try {
-            runwayDesignatorLeft.set(designators.split("/")[0]);
-            runwayDesignatorRight.set(designators.split("/")[1]);
-        } catch (Exception e) {
-            runwayDesignatorLeft.set(designators);
-            dualDirectionRunway.set(false);
-        }
+    }public Runway(String designator, double leftTora, double leftToda, double leftLDA, double leftASDA){
 
-        runwayDesignatorLeft.set(designators);
+        runwayDesignatorLeft.set(designator);
         runwayDesignatorRight.set("  ");
         inputLeftTora.set(leftTora);
         inputLeftToda.set(leftToda);
@@ -231,7 +228,8 @@ public class Runway extends RunwayValues{
 
         runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
 
-
+        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
+        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
 
         recalculate();
         validityChecks();
