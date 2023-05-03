@@ -372,7 +372,7 @@ public class Runway extends RunwayValues{
         //hasRunwayObstacle.set(true); // Listener will call recalculate
         //Aleks - ^ removed as it is not needed at all here. Visibility is triggered by yes/no button.
         logger.info("Added Obstacle " + runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get());
-        if ((runwayObstacle.getObstacleDesignator().length() >= 2) && (runwayObstacle.getObstacleDesignator().substring(0, 2).equals("ob"))) {
+        if ((runwayObstacle.getObstacleDesignator().length() >= 2) && (runwayObstacle.getObstacleDesignator().startsWith("ob"))) {
             logChange("Added Obstacle " + runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get(), Boolean.FALSE);
         } else {
             logChange("Added Obstacle " + runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get(), Boolean.TRUE);
@@ -724,8 +724,7 @@ public class Runway extends RunwayValues{
                 trayIcon.setToolTip("New change: " + change);
                 try {
                     tray.add(trayIcon);
-                    trayIcon.displayMessage("Runway Tool New Change", change, TrayIcon.MessageType.INFO);
-                    //JOptionPane.showMessageDialog(null, "New change: " + change, "Runway Tool", JOptionPane.INFORMATION_MESSAGE);
+                    trayIcon.displayMessage("Runway Tool: New Change", change, TrayIcon.MessageType.INFO);
                 } catch (AWTException e) {
                     System.err.println(e);
                 }
