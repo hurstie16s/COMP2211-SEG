@@ -145,10 +145,10 @@ public class RunwayTestIgnoreTemp {
     // TODO: Write Tests
     /*
     Tests
-    R2 O1
-    R1 O2
-    R1 O3
-    R2 O4
+    R2 O1 done
+    R1 O2 maths done
+    R1 O3 maths done
+    R2 O4 maths done
     R3 O5
     R3 O6
     R4 O7
@@ -164,6 +164,7 @@ public class RunwayTestIgnoreTemp {
 
         runway.addObstacle(obstacle);
         runway.runwayObstacle.distFromThresholdProperty().set(-50);
+        runway.runwayObstacle.lengthProperty().set(100);
         // Land towards
         RunwayCalculations.calculateLandTowardLeft(runway);
         RunwayCalculations.calculateLandTowardRight(runway);
@@ -183,6 +184,7 @@ public class RunwayTestIgnoreTemp {
 
         runway.addObstacle(obstacle);
         runway.runwayObstacle.distFromThresholdProperty().set(-50);
+        runway.runwayObstacle.lengthProperty().set(100);
         // Takeoff towards
         RunwayCalculations.calculateTakeOffTowardLeft(runway);
         RunwayCalculations.calculateTakeOffTowardRight(runway);
@@ -211,6 +213,7 @@ public class RunwayTestIgnoreTemp {
 
         runway.addObstacle(obstacle);
         runway.runwayObstacle.distFromThresholdProperty().set(-50);
+        runway.runwayObstacle.lengthProperty().set(100);
         // Land Over
         RunwayCalculations.calculateLandOverLeft(runway);
         RunwayCalculations.calculateLandOverRight(runway);
@@ -231,6 +234,7 @@ public class RunwayTestIgnoreTemp {
 
         runway.addObstacle(obstacle);
         runway.runwayObstacle.distFromThresholdProperty().set(-50);
+        runway.runwayObstacle.lengthProperty().set(100);
         // Takeoff away
         RunwayCalculations.calculateTakeOffAwayLeft(runway);
         RunwayCalculations.calculateTakeOffAwayRight(runway);

@@ -22,6 +22,15 @@ public abstract class RunwayCalculations {
      * @param runway the runway
      */
     public static void calculateTakeOffTowardLeft(Runway runway) {
+
+        var toraCalc = runway.runwayObstacle.distFromThresholdProperty()
+                .add(runway.dispThresholdLeft)
+                .subtract(Bindings.max(
+                        runway.runwayObstacle.heightProperty().multiply(runway.SLOPE),
+                        runway.MINRESA.add(runway.runwayObstacle.lengthProperty().divide(2))
+                ))
+                .subtract(runway.STRIPEND).subtract(runway.dispThresholdLeft);
+
         runway.leftTora.bind(
             Bindings.max(
                 runway.runwayObstacle.distFromThresholdProperty()
@@ -214,6 +223,18 @@ public abstract class RunwayCalculations {
      */
     public static void calculateTakeOffAwayLeft(Runway runway) {
         // Calculate left take-off values, taking off away from the obstacle
+
+        var toraCalc = runway.inputLeftTora
+                .subtract(runway.runwayObstacle.distFromThresholdProperty())
+                .subtract(Bindings.max(
+                                runway.BLASTZONE, runway.STRIPEND.add(runway.MINRESA)
+                        )
+                )
+                .subtract(runway.dispThresholdLeft)
+                .subtract(
+                        runway.runwayObstacle.lengthProperty().divide(2)
+                ).add(runway.dispThresholdLeft);
+
         runway.leftTora.bind(Bindings.max(
                 runway.inputLeftTora
                         .subtract(runway.runwayObstacle.distFromThresholdProperty())
@@ -270,7 +291,11 @@ public abstract class RunwayCalculations {
                         .concat(new SimpleStringProperty(" - Right displaced threshold - (Runway length / 2)"))
         );
 
-        runway.leftAsda.bind(runway.leftTora.add(runway.stopwayRight));
+        runway.leftAsda.bind(Bindings.max(
+                toraCalc.add(runway.stopwayRight)
+                ,0
+                )
+        );
         runway.leftAsdaBreakdown.bind(
                 new SimpleStringProperty("Left ASDA = ")
                         .concat(runway.leftTora.intValue())
@@ -281,7 +306,12 @@ public abstract class RunwayCalculations {
         );
         runway.leftAsdaBreakdownHeader.bind(new SimpleStringProperty("Left ASDA = Left TORA + Right stopway"));
 
-        runway.leftToda.bind(runway.leftTora.add(runway.clearwayRight));
+        runway.leftToda.bind(
+                Bindings.max(
+                        toraCalc.add(runway.clearwayRight),
+                        0
+                )
+        );
         runway.leftTodaBreakdown.bind(
                 new SimpleStringProperty("Left TODA = ")
                         .concat(runway.leftTora.intValue())
@@ -541,6 +571,16 @@ public abstract class RunwayCalculations {
      */
     public static void calculateTakeOffAwayRight(Runway runway) {
         // Calculate right take-off values, taking off away from the obstacle
+
+        var toraCalc = runway.runwayObstacle.distFromThresholdProperty()
+                .subtract(
+                        Bindings.max(
+                                runway.BLASTZONE,
+                                runway.STRIPEND.add(runway.MINRESA)
+                        ))
+                //.add(runway.dispThresholdLeft.subtract(runway.dispThresholdRight))
+                .subtract(runway.runwayObstacle.lengthProperty().divide(2));
+
         runway.rightTora.bind(Bindings.max(
                 runway.runwayObstacle.distFromThresholdProperty()
                         .subtract(
@@ -609,7 +649,12 @@ public abstract class RunwayCalculations {
 
         }
 
-        runway.rightAsda.bind(runway.rightTora.add(runway.stopwayLeft));
+        runway.rightAsda.bind(
+                Bindings.max(
+                        toraCalc.add(runway.stopwayLeft),
+                        0
+                )
+        );
         runway.rightAsdaBreakdown.bind(
                 new SimpleStringProperty("Right ASDA = ")
                         .concat(runway.rightTora.intValue())
@@ -622,7 +667,12 @@ public abstract class RunwayCalculations {
                 new SimpleStringProperty("Right ASDA = Right TORA + Left stopway")
         );
 
-        runway.rightToda.bind(runway.rightTora.add(runway.clearwayLeft));
+        runway.rightToda.bind(
+                Bindings.max(
+                        toraCalc.add(runway.clearwayLeft),
+                        0
+                )
+        );
         runway.rightTodaBreakdown.bind(
                 new SimpleStringProperty("Right TODA = ")
                         .concat(runway.rightTora.intValue())
