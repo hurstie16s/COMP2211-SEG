@@ -6,6 +6,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.io.TempDir;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -32,8 +33,28 @@ class FileHandlerTest {
     void exportObstacle() {
     }
 
+    @DisplayName("Airbus A320-200 Import Test")
     @Test
-    void importObstacle() {
+    void importAirbusA320ObstacleTest() {
+        var obstacleTest = new Obstacle("Airbus A320-200", 11.76, 0, 37.57, 35.8);
+        File testFile = new File("src/test/resources/AirbusA320-200.xml");
+        Obstacle importedObstacle = null;
+        try {
+            importedObstacle = FileHandler.importObstacle(testFile);
+        } catch (Exception ignored) {}
+        assertEquals(obstacleTest, importedObstacle, "Obstacle Import not correct");
+    }
+
+    @DisplayName("Boeing 737-800 Import Test")
+    @Test
+    void importBoeing737ObstacleTest() {
+        var obstacleTest = new Obstacle("Boeing 737-800", 12.6, 0, 34.32, 39.5);
+        File testFile = new File("src/test/resources/Boeing737-800.xml");
+        Obstacle importedObstacle = null;
+        try {
+            importedObstacle = FileHandler.importObstacle(testFile);
+        } catch (Exception ignored) {}
+        assertEquals(obstacleTest, importedObstacle, "Obstacle Import not correct");
     }
 
     @Test

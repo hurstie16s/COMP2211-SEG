@@ -50,6 +50,13 @@ public class Obstacle {
         this.distFromThreshold.set(distFromThreshold);
     }
 
+    public Obstacle(String obstacleDesignator, double height, double distFromThreshold, double length, double width) {
+        this(obstacleDesignator, height, distFromThreshold);
+        this.length.set(length);
+        this.width.set(width);
+
+    }
+
     /**
      * Gets obstacle designator.
      *
