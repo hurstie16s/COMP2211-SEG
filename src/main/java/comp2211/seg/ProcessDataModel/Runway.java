@@ -58,6 +58,7 @@ public class Runway extends RunwayValues{
             runwayDesignatorRight.set(designators.split("/")[1]);
         } catch (Exception e) {
             runwayDesignatorLeft.set(designators);
+            runwayDesignatorRight.set(calculateRunwayDesignator(designators, true));
             dualDirectionRunway.set(false);
         }
         inputLeftTora.set(leftTora);
@@ -238,6 +239,13 @@ public class Runway extends RunwayValues{
         }
 
         return newDesignator;
+    }
+
+    public static void main(String[] args) {
+        var runway = new Runway("07", 4000, 5000, 3500, 4500, 4000, 5000, 3500, 4500);
+        //System.out.println(runway.calculateRunwayDesignator("07", true));
+        System.out.println(runway.toString());
+        System.out.println(runway.runwayDesignatorRight);
     }
 
     /**
