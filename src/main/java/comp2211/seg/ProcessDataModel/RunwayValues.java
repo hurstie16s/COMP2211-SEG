@@ -30,11 +30,11 @@ public abstract class RunwayValues {
      * The Clearway left.
      */
 // Runway dimensions and properties
-    public final SimpleDoubleProperty clearwayLeft = new SimpleDoubleProperty(500);
+    public SimpleDoubleProperty clearwayLeft = new SimpleDoubleProperty(500);
     /**
      * The Clearway right.
      */
-    public final SimpleDoubleProperty clearwayRight = new SimpleDoubleProperty(500);
+    public SimpleDoubleProperty clearwayRight = new SimpleDoubleProperty(500);
     /**
      * The Clearway height.
      */
@@ -42,11 +42,11 @@ public abstract class RunwayValues {
     /**
      * The Stopway left.
      */
-    public final SimpleDoubleProperty stopwayLeft = new SimpleDoubleProperty(150);
+    public SimpleDoubleProperty stopwayLeft = new SimpleDoubleProperty(150);
     /**
      * The Stopway right.
      */
-    public final SimpleDoubleProperty stopwayRight = new SimpleDoubleProperty(150);
+    public SimpleDoubleProperty stopwayRight = new SimpleDoubleProperty(150);
     /**
      * The Strip end.
      */
@@ -144,11 +144,11 @@ public abstract class RunwayValues {
     /**
      * The Disp threshold left.
      */
-    public final SimpleDoubleProperty dispThresholdLeft = new SimpleDoubleProperty(0);
+    public SimpleDoubleProperty dispThresholdLeft = new SimpleDoubleProperty(0);
     /**
      * The Disp threshold right.
      */
-    public final SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(60);
+    public SimpleDoubleProperty dispThresholdRight = new SimpleDoubleProperty(60);
 
 
     /**

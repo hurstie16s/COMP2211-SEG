@@ -93,7 +93,27 @@ public class Runway extends RunwayValues{
         stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
         //direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
-        slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2)).greaterThan(runwayObstacle.lengthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2))).otherwise(runwayObstacle.lengthProperty().divide(2).add(240)));
+        slopeLength.bind(
+                Bindings.when(
+                        runwayObstacle.heightProperty()
+                                .multiply(SLOPE)
+                                .subtract(
+                                        runwayObstacle.lengthProperty().divide(2)
+                                ).greaterThan(
+                                        runwayObstacle.lengthProperty().divide(2)
+                                                .add(240)
+                                )
+                ).then(
+                        runwayObstacle.heightProperty()
+                                .multiply(SLOPE)
+                                .subtract(
+                                        runwayObstacle.lengthProperty().divide(2)
+                                )
+                ).otherwise(
+                        runwayObstacle.lengthProperty().divide(2)
+                                .add(240)
+                )
+        );
         //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
 
 
@@ -272,7 +292,18 @@ public class Runway extends RunwayValues{
         temp = inputLeftLda;
         inputLeftLda = inputRightLda;
         inputRightLda = temp;
-
+        //dispthreshold
+        temp = dispThresholdLeft;
+        dispThresholdLeft = dispThresholdRight;
+        dispThresholdRight = temp;
+        // clearway
+        temp = clearwayLeft;
+        clearwayLeft = clearwayRight;
+        clearwayRight = temp;
+        //stopway
+        temp = stopwayLeft;
+        stopwayLeft = stopwayRight;
+        stopwayRight = temp;
         recalculate();
     }
 
