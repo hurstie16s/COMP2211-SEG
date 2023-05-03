@@ -473,20 +473,27 @@ public abstract class FileHandler {
                 runway.setRESAWidth(resaWidth);
                 logger.info("Set RESA width to "+resaWidth+"m");
 
-                // Get Right-hand runway properties
-                logger.info("Importing right-hand runway properties");
-                Element rightProperties = (Element) runwayToParse.getElementsByTagName("Right_Properties").item(0);
+                boolean dualDirection = Boolean.parseBoolean(
+                        runwayToParse.getElementsByTagName("Dual_Direction").item(0).getTextContent()
+                );
+                runway.dualDirectionRunway.set(dualDirection);
 
-                getProperties(rightProperties);
+                if (dualDirection) {
+                    // Get Right-hand runway properties
+                    logger.info("Importing right-hand runway properties");
+                    Element rightProperties = (Element) runwayToParse.getElementsByTagName("Right_Properties").item(0);
 
-                runway.setRunwayDesignatorRight(designator);
-                runway.setInputRightTora(tora);
-                runway.setInputRightToda(toda);
-                runway.setInputRightAsda(asda);
-                runway.setInputRightLda(lda);
-                //runway.setClearwayRight(clearway);
-                //runway.setStopwayRight(stopway);
-                //runway.setDispThresholdRight(dispThreshold);
+                    getProperties(rightProperties);
+
+                    runway.setRunwayDesignatorRight(designator);
+                    runway.setInputRightTora(tora);
+                    runway.setInputRightToda(toda);
+                    runway.setInputRightAsda(asda);
+                    runway.setInputRightLda(lda);
+                    //runway.setClearwayRight(clearway);
+                    //runway.setStopwayRight(stopway);
+                    //runway.setDispThresholdRight(dispThreshold);
+                }
 
                 // Get Left-hand runway properties
                 logger.info("Importing left-hand runway properties");
@@ -566,20 +573,27 @@ public abstract class FileHandler {
                 runway.setRESAWidth(resaWidth);
                 logger.info("Set RESA width to "+resaWidth+"m");
 
-                // Get Right-hand runway properties
-                logger.info("Importing right-hand runway properties");
-                Element rightProperties = (Element) runwayToParse.getElementsByTagName("Right_Properties").item(0);
+                boolean dualDirection = Boolean.parseBoolean(
+                        runwayToParse.getElementsByTagName("Dual_Direction").item(0).getTextContent()
+                );
+                runway.dualDirectionRunway.set(dualDirection);
 
-                getProperties(rightProperties);
+                if (dualDirection) {
+                    // Get Right-hand runway properties
+                    logger.info("Importing right-hand runway properties");
+                    Element rightProperties = (Element) runwayToParse.getElementsByTagName("Right_Properties").item(0);
 
-                runway.setRunwayDesignatorRight(designator);
-                runway.setInputRightTora(tora);
-                runway.setInputRightToda(toda);
-                runway.setInputRightAsda(asda);
-                runway.setInputRightLda(lda);
-                //runway.setClearwayRight(clearway);
-                //runway.setStopwayRight(stopway);
-                //runway.setDispThresholdRight(dispThreshold);
+                    getProperties(rightProperties);
+
+                    runway.setRunwayDesignatorRight(designator);
+                    runway.setInputRightTora(tora);
+                    runway.setInputRightToda(toda);
+                    runway.setInputRightAsda(asda);
+                    runway.setInputRightLda(lda);
+                    //runway.setClearwayRight(clearway);
+                    //runway.setStopwayRight(stopway);
+                    //runway.setDispThresholdRight(dispThreshold);
+                }
 
                 // Get Left-hand runway properties
                 logger.info("Importing left-hand runway properties");
