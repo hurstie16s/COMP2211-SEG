@@ -14,6 +14,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.Button;
@@ -545,7 +546,7 @@ public class RunwayScene extends SceneAbstract {
   public TextFlow makeRwyID(SimpleStringProperty designator){
     Group id = new Group();
     Text rwyDir = new Text(designator.getValue());
-    Text rwyLabel = new Text(designator.getValue());
+    Text rwyLabel = new Text("");
     Text bars = new Text("\n||||| |||||");
     rwyDir.setFill(Theme.getLabelFg());
     rwyLabel.setFill(Theme.getLabelFg());
@@ -555,24 +556,36 @@ public class RunwayScene extends SceneAbstract {
       @Override
       public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
         rwyDir.textProperty().set(t1.substring(0,2));
-        rwyLabel.textProperty().set(t1.substring(2));
+        if (designator.length().get() >2) {
+          rwyLabel.textProperty().set(t1.substring(2));
+          rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*3/rwyLabel.getBoundsInLocal().getWidth()));
+        }
       }
     });
     rwyDir.textProperty().set(designator.getValue().substring(0,2));
-    rwyLabel.textProperty().set(designator.getValue().substring(2));
-
+    if (designator.length().get() >2) {
+      rwyLabel.textProperty().set(designator.getValue().substring(2));
+      rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*3/rwyLabel.getBoundsInLocal().getWidth()));
+    }
+    else {
+      rwyLabel.setFont(new Font(0));
+    }
     //rwyDir.setFont(Theme.font);
     appWindow.runway.runwayWidth.addListener(new ChangeListener<Number>() {
       @Override
       public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
         rwyDir.setFont(new Font(appWindow.runway.runwayWidth.get()*5/rwyDir.getBoundsInLocal().getWidth()));
-        rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*3/rwyLabel.getBoundsInLocal().getWidth()));
         bars.setFont(new Font(appWindow.runway.runwayWidth.get()*8/bars.getBoundsInLocal().getWidth()));
 
+        if (designator.length().get() >2) {
+          rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*3/rwyLabel.getBoundsInLocal().getWidth()));
+        }
+        else {
+          rwyLabel.setFont(new Font(0));
+        }
       }
     });
     rwyDir.setFont(new Font(appWindow.runway.runwayWidth.get()*5/rwyDir.getBoundsInLocal().getWidth()));
-    rwyLabel.setFont(new Font(appWindow.runway.runwayWidth.get()*3/rwyLabel.getBoundsInLocal().getWidth()));
     bars.setFont(new Font(appWindow.runway.runwayWidth.get()*8/bars.getBoundsInLocal().getWidth()));
 
     TextFlow data = new TextFlow(rwyDir,new Text("\n"),rwyLabel,bars);
@@ -665,7 +678,7 @@ public class RunwayScene extends SceneAbstract {
 
 
     //RESA Left
-    addCuboid(
+    Box resaLeft = addCuboid(
             appWindow.runway.runwayLengthProperty().multiply(-0.5).subtract( appWindow.runway.stripEndProperty()).subtract(appWindow.runway.RESAWidthProperty().divide(2)),
             new SimpleDoubleProperty(0).multiply(1),
             new SimpleDoubleProperty(-0.05).multiply(1),
@@ -673,6 +686,7 @@ public class RunwayScene extends SceneAbstract {
             appWindow.runway.RESAHeightProperty().multiply(1),
             new SimpleDoubleProperty(5).multiply(1),
             Theme.getPhysicalResa());
+    resaLeft.visibleProperty().bind(appWindow.runway.dualDirectionRunway);
 
     //Stopway Left
     addCuboid(
@@ -740,6 +754,8 @@ public class RunwayScene extends SceneAbstract {
 
   public void makeAlignButton(){
     Button button = new Button("Align");
+    button.setFocusTraversable(false);
+
     Image image = new Image(Objects.requireNonNull(getClass().getResource("/images/compass.png")).toExternalForm());
     ImageView imageView = new ImageView(image);
     imageView.setFitWidth(50);
@@ -751,10 +767,49 @@ public class RunwayScene extends SceneAbstract {
     //HBox box = new HBox(region,gui);
     HBox box = new HBox(gui);
     //HBox.setHgrow(region,Priority.ALWAYS);
-    box.setAlignment(Pos.CENTER_LEFT);
-    AppWindow.currentScene.topMenu.getChildren().add(box);
+    //box.setAlignment(Pos.TOP_RIGHT);
 
 
+    ImageView fullScreen = new ImageView(new Image(Objects.requireNonNull(getClass()
+        .getResource("/images/close.png")).toExternalForm()));
+
+    fullScreen.setOnMouseEntered(event -> {
+      fullScreen.setCursor(Cursor.HAND);
+    });
+
+    // Set the default cursor when the mouse leaves the ImageView
+    fullScreen.setOnMouseExited(event -> {
+      fullScreen.setCursor(Cursor.DEFAULT);
+    });
+
+
+    // Create an ImageView of the icon and add it to the StackPane
+    //ImageView iconView = new ImageView(icon);
+    fullScreen.setFitHeight(25); // adjust the height and width to your liking
+    fullScreen.setFitWidth(25);
+    fullScreen.setPreserveRatio(true);
+    fullScreen.setPickOnBounds(false);
+    Button button2 = new Button();
+    button2.setFocusTraversable(false);
+    button2.setGraphic(fullScreen);
+    StackPane transparentPane = new StackPane(box,button2);
+    transparentPane.setAlignment(button2, Pos.TOP_RIGHT); // align the icon to the top right corner
+    transparentPane.setAlignment(box, Pos.BOTTOM_RIGHT); // align the icon to the bottom right corner
+    transparentPane.setMargin(button2, new Insets(10));
+    transparentPane.setMargin(box, new Insets(10));
+    transparentPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,null,null)));
+    transparentPane.maxWidthProperty().bind(root.widthProperty());
+    transparentPane.minWidthProperty().bind(root.widthProperty());
+    transparentPane.maxHeightProperty().bind(root.heightProperty());
+    transparentPane.minHeightProperty().bind(root.heightProperty());
+    AppWindow.currentScene.mainPane.getChildren().add(transparentPane);
+
+    button2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                  appWindow.startBaseScene();
+                                }
+    });
     button.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent mouseEvent) {

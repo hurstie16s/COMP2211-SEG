@@ -102,6 +102,8 @@ public class AppWindow {
         //startMainScene();
         //startRunwayScene();
     }
+
+
     /**
      * Sets up the resources for the application.
      */
@@ -247,8 +249,10 @@ public class AppWindow {
     public void setRunway(Runway runway){
         logger.info("set Runway with: " + runway);
         Runway temp = new Runway();
+
         temp.setRunwayDesignatorLeft(this.runway.getRunwayDesignatorLeft());
         temp.setRunwayDesignatorRight(this.runway.getRunwayDesignatorRight());
+        temp.dualDirectionRunway.set(this.runway.dualDirectionRunway.get());
         temp.setInputLeftTora(this.runway.getInputLeftTora());
         temp.setInputLeftToda(this.runway.getInputLeftToda());
         temp.setInputLeftLda(this.runway.getInputLeftLda());
@@ -261,6 +265,7 @@ public class AppWindow {
         if(!(runway == null)) {
             this.runway.setRunwayDesignatorLeft(runway.getRunwayDesignatorLeft());
             this.runway.setRunwayDesignatorRight(runway.getRunwayDesignatorRight());
+            this.runway.dualDirectionRunway.set(runway.dualDirectionRunway.get());
             this.runway.setInputLeftTora(runway.getInputLeftTora());
             this.runway.setInputLeftToda(runway.getInputLeftToda());
             this.runway.setInputLeftLda(runway.getInputLeftLda());
@@ -273,6 +278,7 @@ public class AppWindow {
 
             runway.setRunwayDesignatorLeft(temp.getRunwayDesignatorLeft());
             runway.setRunwayDesignatorRight(temp.getRunwayDesignatorRight());
+            runway.dualDirectionRunway.set(temp.dualDirectionRunway.get());
             runway.setInputLeftTora(temp.getInputLeftTora());
             runway.setInputLeftToda(temp.getInputLeftToda());
             runway.setInputLeftLda(temp.getInputLeftLda());

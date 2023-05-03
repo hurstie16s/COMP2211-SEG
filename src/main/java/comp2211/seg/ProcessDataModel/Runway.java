@@ -4,6 +4,8 @@ import comp2211.seg.Controller.Stage.Theme;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -93,6 +95,75 @@ public class Runway extends RunwayValues{
         stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
         dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
         //direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
+        slopeLength.bind(
+                Bindings.when(
+                        runwayObstacle.heightProperty()
+                                .multiply(SLOPE)
+                                .subtract(
+                                        runwayObstacle.lengthProperty().divide(2)
+                                ).greaterThan(
+                                        runwayObstacle.lengthProperty().divide(2)
+                                                .add(240)
+                                )
+                ).then(
+                        runwayObstacle.heightProperty()
+                                .multiply(SLOPE)
+                                .subtract(
+                                        runwayObstacle.lengthProperty().divide(2)
+                                )
+                ).otherwise(
+                        runwayObstacle.lengthProperty().divide(2)
+                                .add(240)
+                )
+        );
+        //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
+
+        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
+        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
+
+        runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
+
+
+        recalculate();
+        validityChecks();
+        logChange("Runway Initialised", Boolean.FALSE);
+    }public Runway(String designator, double leftTora, double leftToda, double leftLDA, double leftASDA){
+
+        runwayDesignatorLeft.set(designator);
+        runwayDesignatorRight.set("  ");
+        inputLeftTora.set(leftTora);
+        inputLeftToda.set(leftToda);
+        inputLeftLda.set(leftLDA);
+        inputLeftAsda.set(leftASDA);
+        inputRightTora.set(0);
+        inputRightToda.set(0);
+        inputRightLda.set(0);
+        inputRightAsda.set(0);
+        dualDirectionRunway.set(false);
+
+
+        for (Property prop: new Property[] {
+                runwayDesignatorLeft,
+                runwayLength,
+                hasRunwayObstacle,
+                directionLeft,
+                directionRight
+        }) {
+            prop.addListener((observableValue, o, t1) -> recalculate());
+        }
+        logger.info("Created Runway object");
+
+        logger.info("Created initial VOID runway obstacle");
+
+        runwayLength.bind(Bindings.when(Bindings.greaterThan(inputLeftTora,inputRightTora)).then(inputLeftTora).otherwise(inputRightTora));
+        runwayObstacle = new Obstacle("VOID", 5,runwayLength.get()/2);
+        clearwayLeft.bind(inputRightToda.subtract(inputRightTora));
+        stopwayLeft.bind(inputRightAsda.subtract(inputRightTora));
+        dispThresholdRight.bind(inputRightTora.subtract(inputRightLda));
+        clearwayRight.bind(inputLeftToda.subtract(inputLeftTora));
+        stopwayRight.bind(inputLeftAsda.subtract(inputLeftTora));
+        dispThresholdLeft.bind(inputLeftTora.subtract(inputLeftLda));
+        //direction.bind(runwayObstacle.distFromThresholdProperty().greaterThan(runwayObstacle.distFromOtherThresholdProperty()));
         slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2)).greaterThan(runwayObstacle.lengthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2))).otherwise(runwayObstacle.lengthProperty().divide(2).add(240)));
         //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
 
@@ -103,9 +174,6 @@ public class Runway extends RunwayValues{
         recalculate();
         validityChecks();
         logChange("Runway Initialised", Boolean.FALSE);
-
-        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
-        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
     }
 
     /**
@@ -160,13 +228,12 @@ public class Runway extends RunwayValues{
 
         runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
 
-
+        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
+        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
 
         recalculate();
         validityChecks();
 
-        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
-        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
     }
 
     /**
@@ -272,7 +339,18 @@ public class Runway extends RunwayValues{
         temp = inputLeftLda;
         inputLeftLda = inputRightLda;
         inputRightLda = temp;
-
+        //dispthreshold
+        temp = dispThresholdLeft;
+        dispThresholdLeft = dispThresholdRight;
+        dispThresholdRight = temp;
+        // clearway
+        temp = clearwayLeft;
+        clearwayLeft = clearwayRight;
+        clearwayRight = temp;
+        //stopway
+        temp = stopwayLeft;
+        stopwayLeft = stopwayRight;
+        stopwayRight = temp;
         recalculate();
     }
 
@@ -2321,6 +2399,7 @@ public class Runway extends RunwayValues{
     public void setUnits(String units) {
         RunwayValues.units.set(units);
     }
+
 
 
 }
