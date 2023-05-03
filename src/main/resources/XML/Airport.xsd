@@ -34,24 +34,9 @@
             <xs:element type="Left_PropertiesType" name="Left_Properties"/>
         </xs:sequence>
     </xs:complexType>
-    <xs:complexType name="Runway_ObstacleType">
-        <xs:sequence>
-            <xs:element type="xs:string" name="Obstacle_Designator"/>
-            <xs:element type="xs:string" name="Obstacle_Height"/>
-            <xs:element type="xs:string" name="Obstacle_Width"/>
-            <xs:element type="xs:string" name="Obstacle_Length"/>
-            <xs:element type="xs:string" name="Distance_From_Threshold"/>
-            <xs:element type="xs:string" name="Distance_From_Other_Threshold" minOccurs="0"/>
-        </xs:sequence>
-    </xs:complexType>
     <xs:complexType name="RunwaysType">
         <xs:sequence>
             <xs:element type="RunwayType" name="Runway"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="Runway_ObstaclesType">
-        <xs:sequence>
-            <xs:element type="Runway_ObstacleType" name="Runway_Obstacle"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="airportType">
@@ -60,7 +45,6 @@
             <xs:element type="xs:string" name="Latitude"/>
             <xs:element type="xs:string" name="Longitude"/>
             <xs:element type="RunwaysType" name="Runways"/>
-            <xs:element type="Runway_ObstaclesType" name="Runway_Obstacles"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>
