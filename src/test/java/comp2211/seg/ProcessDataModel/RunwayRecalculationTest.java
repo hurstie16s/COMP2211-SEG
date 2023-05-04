@@ -641,12 +641,12 @@ public class RunwayRecalculationTest {
                 runway.getRightToda(),
                 runway.getLeftAsda(),
                 runway.getRightAsda(),
-                266,
-                267,
-                266,
-                267,
-                266,
-                267
+                657,
+                658,
+                657,
+                658,
+                657,
+                658
         );
     }
 
@@ -666,8 +666,8 @@ public class RunwayRecalculationTest {
         assertValues(
                 runway.getLeftLda(),
                 runway.getRightLda(),
-                267,
-                266
+                458,
+                457
         );
     }
 

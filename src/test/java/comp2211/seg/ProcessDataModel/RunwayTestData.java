@@ -25,7 +25,6 @@ public class RunwayTestData {
      * The constant runway5.
      */
 // 04C and 22C
-    static Runway runway5 = new Runway();
 
     /**
      * Sets up runways.
@@ -78,18 +77,6 @@ public class RunwayTestData {
                 1953,
                 1953,
                 runway4
-        );
-        setProperties(
-                "04C",
-                968,
-                968,
-                968,
-                968,
-                968,
-                968,
-                968,
-                968,
-                runway5
         );
     }
 
@@ -158,7 +145,7 @@ public class RunwayTestData {
     /**
      * The Obstacle 7.
      */
-    static Obstacle obstacle7 = new Obstacle("ob7", 13, 976);
+    static Obstacle obstacle7 = new Obstacle("ob7", 3, 976);
     /**
      * The Obstacle 8.
      */
@@ -166,6 +153,5 @@ public class RunwayTestData {
     /**
      * The Obstacle 9.
      */
-    static Obstacle obstacle9 = new Obstacle("ob9", 8, 484);
 
 }
