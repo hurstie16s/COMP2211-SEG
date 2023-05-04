@@ -108,8 +108,9 @@ class FileHandlerTest {
 
 
 
+    @DisplayName("Test the import and export of every Airport in the Uk")
     @Test
-    void importExportAirportsTest() {
+    public void importExportAirportsTest() {
         File file = new File("src/test/resources/AirportHoldingFile.xml");
         var airports = AirportsData.getAirports();
         Airport airportCheck;
