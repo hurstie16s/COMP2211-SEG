@@ -167,9 +167,10 @@ public class Runway extends RunwayValues{
         slopeLength.bind(Bindings.when(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2)).greaterThan(runwayObstacle.lengthProperty().divide(2).add(240))).then(runwayObstacle.heightProperty().multiply(SLOPE).subtract(runwayObstacle.lengthProperty().divide(2))).otherwise(runwayObstacle.lengthProperty().divide(2).add(240)));
         //runwayObstacle.distFromOtherThresholdProperty().bind(runwayLength.subtract(runwayObstacle.distFromThresholdProperty()));
 
+        runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
+        runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
 
         runwayObstacle.distFromOtherThresholdProperty().bind(inputLeftTora.subtract(dispThresholdLeft).subtract(runwayObstacle.distFromThresholdProperty()));
-
 
         recalculate();
         validityChecks();
@@ -230,6 +231,7 @@ public class Runway extends RunwayValues{
 
         runwayDesignatorLeft.addListener((observableValue, s, t1) -> runwayDesignatorRight.set(calculateRunwayDesignator(runwayDesignatorLeft.get(), true)));
         runwayDesignatorRight.addListener((observableValue, s, t1) -> runwayDesignatorLeft.set(calculateRunwayDesignator(runwayDesignatorRight.get(), false)));
+
 
         recalculate();
         validityChecks();
@@ -383,7 +385,26 @@ public class Runway extends RunwayValues{
         } else {
             logChange("Added Obstacle " + runwayObstacle.getObstacleDesignator() + " to runway " + runwayDesignatorLeft.get(), Boolean.TRUE);
         }
+        addObstacleListeners();
+    }
 
+    /**
+     * Adding listeners to Obstacle
+     */
+    public void addObstacleListeners() {
+        runwayObstacle.distFromThresholdProperty().addListener((obs, oldDist, newDist) -> {
+            logChange("Obstacle distances from thresholds updated; left: " + (newDist.intValue() - dispThresholdLeft.intValue())  + " right: " + runwayObstacle.distFromOtherThresholdProperty().intValue(), Boolean.FALSE);
+        });
+        runwayObstacle.heightProperty().addListener((obs, oldHeight, newHeight) -> {
+            logger.info("Obstacle height updated");
+            logChange("Obstacle height updated to " + newHeight, Boolean.FALSE);
+        });
+        runwayObstacle.lengthProperty().addListener((obs, oldLength, newLength) -> {
+            logChange("Obstacle length updated to " + newLength, Boolean.FALSE);
+        });
+        runwayObstacle.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+            logChange("Obstacle width updated to " + newWidth, Boolean.FALSE);
+        });
     }
 
     /**
@@ -721,6 +742,15 @@ public class Runway extends RunwayValues{
      */
     public void logChange(String change, Boolean show) {
         if (changeHistory.isEmpty() || !change.equals(changeHistory.get(0))) {
+            if (change.startsWith("Obstacle distance") && changeHistory.get(0).startsWith("Obstacle distance")) {
+                changeHistory.remove(0);
+            } else if (change.startsWith("Obstacle height") && changeHistory.get(0).startsWith("Obstacle height")) {
+                changeHistory.remove(0);
+            } else if (change.startsWith("Obstacle length") && changeHistory.get(0).startsWith("Obstacle length")) {
+                changeHistory.remove(0);
+            } else if (change.startsWith("Obstacle width") && changeHistory.get(0).startsWith("Obstacle width")) {
+                changeHistory.remove(0);
+            }
             changeHistory.add(0, change);
             if (SystemTray.isSupported() && show) {
                 SystemTray tray = SystemTray.getSystemTray();
