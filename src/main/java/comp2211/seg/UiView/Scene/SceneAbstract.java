@@ -343,8 +343,8 @@ public abstract class SceneAbstract extends Scene {
         logger.info(file.getAbsolutePath());
       }
 
-      if (FileHandler.exportAirport(file, appWindow.airport, appWindow.runway.runwayObstacle)) {
-        FileHandler.exportAirport(file, appWindow.airport,appWindow.runway.runwayObstacle);
+      if (FileHandler.exportAirport(file, appWindow.airport)) {
+        FileHandler.exportAirport(file, appWindow.airport);
         logger.info("Exporting Successful");
       } else {
         logger.info("Exporting Airport failed");

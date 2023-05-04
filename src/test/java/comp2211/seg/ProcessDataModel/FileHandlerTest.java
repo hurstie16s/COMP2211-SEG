@@ -1,4 +1,5 @@
 package comp2211.seg.ProcessDataModel;
+import comp2211.seg.Controller.Interfaces.AirportsData;
 import comp2211.seg.Controller.Stage.AppWindow;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -6,7 +7,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.api.io.TempDir;
@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
@@ -21,19 +22,7 @@ import comp2211.seg.UiView.Scene.SceneAbstract;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileHandlerTestIgnore {
-
-    @Test
-    void exportAirportAndOb() {
-    }
-
-    @Test
-    void exportAirport() {
-    }
-
-    @Test
-    void exportObstacle() {
-    }
+class FileHandlerTest {
 
     @DisplayName("Airbus A320-200 Import Test")
     @Test
@@ -119,10 +108,46 @@ class FileHandlerTestIgnore {
 
 
 
+    @DisplayName("Test the import and export of every Airport in the Uk")
     @Test
-    void importAirport() {
+    public void importExportAirportsTest() {
+        File file = new File("src/test/resources/AirportHoldingFile.xml");
+        var airports = AirportsData.getAirports();
+        Airport airportCheck;
+        PrintWriter writer;
+        for (var airport : airports) {
+            // Erase file contents
+            try {
+                // Erase file contents
+                writer = new PrintWriter(file);
+                writer.print("");
+                writer.close();
+
+                // Export Airport with no obstacle
+                FileHandler.exportAirport(file, airport);
+                // Check Import
+                airportCheck = FileHandler.importAirport(file);
+
+                assertEquals(airport.toString(), airportCheck.toString(), "Export Import without Obstacle failed for "+airport.toString());
+
+                // Erase file contents
+                writer.print("");
+                writer.close();
+
+                // Export Airport with obstacle
+                FileHandler.exportAirportAndOb(file, airport, new Obstacle("Piper M350", 3.4, 0, 8.8, 13.1));
+                // Check Import
+                airportCheck = FileHandler.importAirportWithObstacles(file);
+
+                assertEquals(airport.toString(), airportCheck.toString(), "Export Import with Obstacle failed for "+airport.toString());
+
+            }catch (Exception e) {
+                assert false;
+            }
+        }
     }
 
+    @DisplayName("Test Exporting Runway View to Image")
     @Test
     public void testExportImage(@TempDir Path tempDir) throws IOException {
         // Create an instance of the SceneAbstract class

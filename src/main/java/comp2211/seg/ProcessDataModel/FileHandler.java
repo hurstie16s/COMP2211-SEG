@@ -209,7 +209,7 @@ public abstract class FileHandler {
      * @param obstacle the obstacle
      * @return the boolean
      */
-    public static boolean exportAirport(File file, Airport airport, Obstacle obstacle) {
+    public static boolean exportAirport(File file, Airport airport) {
 
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();

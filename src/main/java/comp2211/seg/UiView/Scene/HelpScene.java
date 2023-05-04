@@ -32,7 +32,7 @@ public class HelpScene extends Scene {
     private final VBox root;
 
     /**
-     * Constructor to create a SceneAbstract object.
+     * Constructor to create a HelpScene object.
      *
      * @param root      the root pane of the scene
      * @param appWindow the application window of the scene
