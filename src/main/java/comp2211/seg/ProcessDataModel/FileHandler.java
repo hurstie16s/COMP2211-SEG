@@ -641,6 +641,7 @@ public abstract class FileHandler {
             airport.getRunways().get(i).runwayObstacle.lengthProperty().set(obstacleLength);
             airport.getRunways().get(i).runwayObstacle.distFromThresholdProperty().set(distFromThreshold);
             logger.info("Obstacle added to runway");
+
         }
 
 
