@@ -68,7 +68,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
 
 
     /**
-     * Constructor to create a SceneAbstract object.
+     * Constructor to create a BaseScene object.
      *
      * @param root      the root pane of the scene
      * @param appWindow the application window of the scene
