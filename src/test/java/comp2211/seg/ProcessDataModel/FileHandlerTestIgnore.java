@@ -6,7 +6,9 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.api.io.TempDir;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -56,6 +58,74 @@ class FileHandlerTestIgnore {
         } catch (Exception ignored) {}
         assertEquals(obstacleTest, importedObstacle, "Obstacle Import not correct");
     }
+
+    @DisplayName("Boeing 777-9 Import Test")
+    @Test
+    void importBoeing777ObstacleTest() {
+        var obstacleTest = new Obstacle("Boeing 777-9", 19.68, 0, 76.72, 64.84);
+        File testFile = new File("src/test/resources/Boeing777-9.xml");
+        Obstacle importedObstacle = null;
+        try {
+            importedObstacle = FileHandler.importObstacle(testFile);
+        } catch (Exception ignored) {}
+        assertEquals(obstacleTest, importedObstacle, "Obstacle Import not correct");
+    }
+
+    @DisplayName("Piper M350 Import Test")
+    @Test
+    void importPiperM350ObstacleTest() {
+        var obstacleTest = new Obstacle("Piper M350", 3.4, 0, 8.8, 13.1);
+        File testFile = new File("src/test/resources/PiperM350.xml");
+        Obstacle importedObstacle = null;
+        try {
+            importedObstacle = FileHandler.importObstacle(testFile);
+        } catch (Exception ignored) {}
+        assertEquals(obstacleTest, importedObstacle, "Obstacle Import not correct");
+    }
+
+    @DisplayName("Pothole Import Fail Test")
+    @Test
+    void importPotholeObstacleFailTest() {
+        File testFile = new File("src/test/resources/PotholeFail.xml");
+        try {
+            assertThrows(SchemaFailedException.class, (Executable) FileHandler.importObstacle(testFile));
+        } catch (Exception e) {
+            assert false;
+        }
+    }
+
+    @DisplayName("Pushback tug Import Fail Test")
+    @Test
+    void importPushbackTugObstacleFailTest() {
+        File testFile = new File("src/test/resources/PushbackTugFail.xml");
+        try {
+            assertThrows(SchemaFailedException.class, (Executable) FileHandler.importObstacle(testFile));
+        } catch (Exception e) {
+            assert false;
+        }
+    }
+    @DisplayName("Maintenance Truck Import Fail Test")
+    @Test
+    void importMaintenanceTruckObstacleFailTest() {
+        File testFile = new File("src/test/resources/MaintenanceTruck.xml");
+        try {
+            assertThrows(SchemaFailedException.class, (Executable) FileHandler.importObstacle(testFile));
+        } catch (Exception e) {
+            assert false;
+        }
+    }
+    @DisplayName("Default Import Fail Test")
+    @Test
+    void importDefaultObstacleFailTest() {
+        File testFile = new File("src/test/resources/DefaultFail.xml");
+        try {
+            assertThrows(SchemaFailedException.class, (Executable) FileHandler.importObstacle(testFile));
+        } catch (Exception e) {
+            assert false;
+        }
+    }
+
+
 
     @Test
     void importAirport() {
