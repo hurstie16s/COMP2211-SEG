@@ -36,7 +36,7 @@
     </xs:complexType>
     <xs:complexType name="RunwaysType">
         <xs:sequence>
-            <xs:element type="RunwayType" name="Runway" maxOccurs="2"/>
+            <xs:element type="RunwayType" name="Runway" maxOccurs="5"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="airportType">
