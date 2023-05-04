@@ -886,6 +886,7 @@ public class BaseScene extends SceneAbstract implements GlobalVariables{
         slider.minProperty().bind(appWindow.runway.runwayObstacle.lengthProperty().divide(-2));
         slider.maxProperty().bind(appWindow.runway.runwayLengthProperty().add(appWindow.runway.runwayObstacle.lengthProperty().divide(2)));
         slider.valueProperty().bindBidirectional(appWindow.runway.runwayObstacle.distFromThresholdProperty());
+        appWindow.runway.addObstacleListeners();
         Button leftButton = new Button("<");
         leftButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override

@@ -744,12 +744,16 @@ public class Runway extends RunwayValues{
         if (changeHistory.isEmpty() || !change.equals(changeHistory.get(0))) {
             if (change.startsWith("Obstacle distance") && changeHistory.get(0).startsWith("Obstacle distance")) {
                 changeHistory.remove(0);
+                show = false;
             } else if (change.startsWith("Obstacle height") && changeHistory.get(0).startsWith("Obstacle height")) {
                 changeHistory.remove(0);
+                show = false;
             } else if (change.startsWith("Obstacle length") && changeHistory.get(0).startsWith("Obstacle length")) {
                 changeHistory.remove(0);
+                show = false;
             } else if (change.startsWith("Obstacle width") && changeHistory.get(0).startsWith("Obstacle width")) {
                 changeHistory.remove(0);
+                show = false;
             }
             changeHistory.add(0, change);
             if (SystemTray.isSupported() && show) {

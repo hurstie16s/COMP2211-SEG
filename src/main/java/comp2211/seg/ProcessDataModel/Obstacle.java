@@ -54,7 +54,6 @@ public class Obstacle {
         this(obstacleDesignator, height, distFromThreshold);
         this.length.set(length);
         this.width.set(width);
-
     }
 
     /**
