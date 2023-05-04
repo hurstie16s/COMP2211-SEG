@@ -18,8 +18,11 @@ To run the application, you will need to have Java 17 or later installed on your
 
 If you are using the provided "fat" jar file to run the application, please note that it will load all required dependencies. However, if you are using the source code in an IDE, it is recommended to use Maven to manage dependencies. Please check the dependencies section in this README.md file to ensure compatibility.
 
-To run the application, follow these steps:
+To run the application:
 
+ - Double-click on the provided `runwaytool.jar` file.
+
+Alternatively, you can run the JAR file from the command line. Follow these steps:
 1. Open the command line.
 2. Navigate to the directory where you saved `runwaytool.jar`.
 3. Type `java -jar runwaytool.jar` and press Enter.
