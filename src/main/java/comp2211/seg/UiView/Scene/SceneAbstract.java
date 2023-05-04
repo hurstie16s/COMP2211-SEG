@@ -488,7 +488,7 @@ public abstract class SceneAbstract extends Scene {
       displayErrorMessage("Import Failure", e.getMessage());
       success = false;
     } catch (Exception e) {
-      displayErrorMessage("Import Failure", "Failed to parse XML file");
+      displayErrorMessage("Import Failure", "Failed to Import XML file");
       success = false;
     }
     if (success) displayInfoMessage("Import Success", "Obstacle Imported");
