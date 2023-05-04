@@ -141,6 +141,7 @@ public abstract class FileHandler {
 //
                 appendElementWithNewline(runwayElement, "Resa_Height", Double.toString(runway.getRESAHeight()), document);
                 appendElementWithNewline(runwayElement, "Resa_Width", Double.toString(runway.getRESAWidth()), document);
+                appendElementWithNewline(runwayElement, "Dual_Direction", Boolean.toString(runway.dualDirectionRunway.get()), document);
 //
                 Element rightElement = document.createElement("Right_Properties");
                 runwayElement.appendChild(rightElement);
@@ -245,6 +246,7 @@ public abstract class FileHandler {
 //
                 appendElementWithNewline(runwayElement, "Resa_Height", Double.toString(runway.getRESAHeight()), document);
                 appendElementWithNewline(runwayElement, "Resa_Width", Double.toString(runway.getRESAWidth()), document);
+                appendElementWithNewline(runwayElement, "Dual_Direction", Boolean.toString(runway.dualDirectionRunway.get()), document);
 //
                 Element rightElement = document.createElement("Right_Properties");
                 runwayElement.appendChild(rightElement);
