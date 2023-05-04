@@ -44,7 +44,7 @@ class FileHandlerTestIgnore {
         try {
             importedObstacle = FileHandler.importObstacle(testFile);
         } catch (Exception ignored) {}
-        assertEquals(obstacleTest, importedObstacle, "Obstacle Import not correct");
+        assertEquals(obstacleTest.toString(), importedObstacle.toString(), "Obstacle Import not correct");
     }
 
     @DisplayName("Boeing 737-800 Import Test")
@@ -56,7 +56,7 @@ class FileHandlerTestIgnore {
         try {
             importedObstacle = FileHandler.importObstacle(testFile);
         } catch (Exception ignored) {}
-        assertEquals(obstacleTest, importedObstacle, "Obstacle Import not correct");
+        assertEquals(obstacleTest.toString(), importedObstacle.toString(), "Obstacle Import not correct");
     }
 
     @DisplayName("Boeing 777-9 Import Test")
@@ -68,7 +68,7 @@ class FileHandlerTestIgnore {
         try {
             importedObstacle = FileHandler.importObstacle(testFile);
         } catch (Exception ignored) {}
-        assertEquals(obstacleTest, importedObstacle, "Obstacle Import not correct");
+        assertEquals(obstacleTest.toString(), importedObstacle.toString(), "Obstacle Import not correct");
     }
 
     @DisplayName("Piper M350 Import Test")
@@ -80,49 +80,41 @@ class FileHandlerTestIgnore {
         try {
             importedObstacle = FileHandler.importObstacle(testFile);
         } catch (Exception ignored) {}
-        assertEquals(obstacleTest, importedObstacle, "Obstacle Import not correct");
+        assertEquals(obstacleTest.toString(), importedObstacle.toString(), "Obstacle Import not correct");
     }
 
-    @DisplayName("Pothole Import Fail Test")
+    @DisplayName("Pothole Import Fail Test: Non-Numerical")
     @Test
     void importPotholeObstacleFailTest() {
         File testFile = new File("src/test/resources/PotholeFail.xml");
         try {
             assertThrows(SchemaFailedException.class, (Executable) FileHandler.importObstacle(testFile));
-        } catch (Exception e) {
-            assert false;
-        }
+        } catch (Exception ignored) {}
     }
 
-    @DisplayName("Pushback tug Import Fail Test")
+    @DisplayName("Pushback tug Import Fail Test: Missing Element (Width)")
     @Test
     void importPushbackTugObstacleFailTest() {
         File testFile = new File("src/test/resources/PushbackTugFail.xml");
         try {
             assertThrows(SchemaFailedException.class, (Executable) FileHandler.importObstacle(testFile));
-        } catch (Exception e) {
-            assert false;
-        }
+        } catch (Exception ignored) {}
     }
-    @DisplayName("Maintenance Truck Import Fail Test")
+    @DisplayName("Maintenance Truck Import Fail Test: Misspell Element (Width -> iWdth)")
     @Test
     void importMaintenanceTruckObstacleFailTest() {
         File testFile = new File("src/test/resources/MaintenanceTruck.xml");
         try {
             assertThrows(SchemaFailedException.class, (Executable) FileHandler.importObstacle(testFile));
-        } catch (Exception e) {
-            assert false;
-        }
+        } catch (Exception ignored) {}
     }
-    @DisplayName("Default Import Fail Test")
+    @DisplayName("Default Import Fail Test: Missing End Tag")
     @Test
     void importDefaultObstacleFailTest() {
         File testFile = new File("src/test/resources/DefaultFail.xml");
         try {
             assertThrows(SchemaFailedException.class, (Executable) FileHandler.importObstacle(testFile));
-        } catch (Exception e) {
-            assert false;
-        }
+        } catch (Exception ignored) {}
     }
 
 

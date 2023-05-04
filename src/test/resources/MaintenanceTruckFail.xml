@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Obstacle>
+    <Obstacle_Designator>Maintenance truck</Obstacle_Designator>
+    <Height>3</Height>
+    <Length>6</Length>
+    <iWdth>2.5</iWdth>
+    <Distance_From_Threshold>0.0</Distance_From_Threshold>
+</Obstacle>

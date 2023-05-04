@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Obstacle>
+    <Obstacle_Designator>Airbus A320-200</Obstacle_Designator>
+    <Height>11.6</Height>
+    <Length>37.57</Length>
+    <Width>35.8</Width>
+    <Distance_From_Threshold>0.0</Distance_From_Threshold>
+</Obstacle>

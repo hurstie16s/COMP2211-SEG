@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Obstacle>
+    <Obstacle_Designator>Piper M350</Obstacle_Designator>
+    <Height>3.4</Height>
+    <Length>8.8</Length>
+    <Width>13.1</Width>
+    <Distance_From_Threshold>0.0</Distance_From_Threshold>
+</Obstacle>

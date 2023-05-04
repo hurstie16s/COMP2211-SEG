@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Obstacle>
+    <Obstacle_Designator>Pothole</Obstacle_Designator>
+    <Height>0</Height>
+    <Length>0</Length>
+    <Width>non numerical</Width>
+    <Distance_From_Threshold>0.0</Distance_From_Threshold>
+</Obstacle>

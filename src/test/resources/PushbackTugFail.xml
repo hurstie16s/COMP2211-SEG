@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Obstacle>
+    <Obstacle_Designator>Pushback tag</Obstacle_Designator>
+    <Height>2.5</Height>
+    <Length>5</Length>
+    <Distance_From_Threshold>0.0</Distance_From_Threshold>
+</Obstacle>
