@@ -449,7 +449,8 @@ public abstract class FileHandler {
         logger.info("Set longitude of "+airportName+" to "+longitude);
 
         // Get Runways
-        NodeList runways = document.getElementsByTagName("Runways");
+        NodeList runways = document.getElementsByTagName("Runway");
+        logger.info("Number of Runways: "+runways.getLength());
         for (int i = 0; i < runways.getLength(); i++) {
             Runway runway = new Runway();
 
