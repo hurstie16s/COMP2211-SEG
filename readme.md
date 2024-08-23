@@ -3,12 +3,12 @@
 RunwayTool is an application that allows you to modify the parameters of a runway and add/remove objects to the scene.
 
 ### Authors
-- Josh Douglas (jod1n21) 
-- Lam Giang (lg1n20) 
-- Samuel Hurst (shjh1g21)
-- David Kuc (drk1g21)
-- Aleksander Pilski (ajp1e19)
-- Josh Willson (jjrw1g21)
+- Josh Douglas
+- Lam Giang
+- Samuel Hurst
+- David Kuc
+- Aleksander Pilski
+- Josh Willson
 
 
 
